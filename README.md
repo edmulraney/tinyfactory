@@ -1,6 +1,8 @@
 # tinyfactory
 
-**Prove your idea before you pay for it.**
+**The software factory for rapidly validating an idea at zero cost.**
+
+AI agents take a technical founder's idea to a validated MVP on free tiers, with a human near the loop, without letting the codebase degenerate into agentic slop.
 
 ```sh
 npx tinyfactory my-idea

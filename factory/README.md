@@ -4,7 +4,7 @@ A ticket goes in; a reviewed, tested, deployed change comes out. A human decides
 
 ## Mission
 
-**Prove your idea before you pay for it.**
+**Rapidly validate an idea at zero cost.**
 
 The factory lets a founder bootstrap a software factory and verify their idea as fast as possible, free of charge, without producing AI slop.
 
