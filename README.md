@@ -10,7 +10,7 @@ One command sets up, on free tiers:
 
 - a GitHub repository and a project board;
 - a factory in it, with sandboxed AI agents for product, engineering, research, architecture review and correctness review;
-- a web app hosted on Vercel;
+- a Next.js web app hosted on Vercel;
 - a database and sign-in on Neon Postgres and Better Auth (through Neon Auth).
 
 You bring a Claude subscription. Nothing else costs anything.

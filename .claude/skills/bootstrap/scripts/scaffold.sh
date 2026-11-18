@@ -2,7 +2,7 @@
 # Scaffolds the monorepo in the current directory: a Next.js app with shadcn/ui on a closed
 # grey-scale theme, the factory's own files (skills, workflows, ticket templates, check scripts,
 # test tooling) and the seed docs.
-# Then proves it lints, typechecks, passes its tests and builds.
+# Then proves it lints, typechecks, passes the app's tests and builds.
 # Safe to re-run: each part is skipped if it already exists.
 # Usage: scaffold.sh [name]   (name defaults to the directory name)
 set -euo pipefail
@@ -166,6 +166,8 @@ git rev-parse --git-dir >/dev/null 2>&1 || git init -q -b main
 git rev-parse --quiet --verify HEAD >/dev/null 2>&1 || git add -A
 pnpm lint
 pnpm typecheck
-pnpm test
+# The app's tests alone. `pnpm test` also runs the factory's own script tests, which take minutes
+# and prove the factory, not this project: they run where the factory is built.
+pnpm -r test
 pnpm build
 echo "scaffold ok: $name"
