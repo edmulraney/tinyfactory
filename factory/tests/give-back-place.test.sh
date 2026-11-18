@@ -24,8 +24,9 @@ github
 give_back 12
 expect_status 0
 expect_call "gh issue edit 12 --remove-label in-progress --add-label needs-human"
-expect_call "gh issue comment 12 --body The build of this ticket never began"
-expect_call "Add the \`ready\` label again to start it. See https://github.com/owner/myapp/actions/runs/900"
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again: the build starts when a place is free."
+expect_call "The build of this ticket never began"
+expect_call "its place among the tickets in flight was given back. See https://github.com/owner/myapp/actions/runs/900"
 
 scenario "says nothing more to a ticket that was told why it was not built"
 github

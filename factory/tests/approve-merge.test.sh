@@ -77,8 +77,8 @@ for words in "pr view 7 --json state,headRefOid,reviews" "run list --workflow ci
   expect_failure
   expect_no_call "gh pr merge"
   expect_calls 1 "gh pr comment 7"
-  expect_call "gh pr comment 7 --body Not merged: GitHub did not return "
-  expect_call "Approving this pull request again retries it."
+  expect_call "Not merged: GitHub did not return "
+  expect_first_line "gh pr comment 7 --body" "Approve this pull request again: the merge is tried again then."
   expect_call "gh pr edit 7 --add-label needs-human"
 done
 
@@ -90,7 +90,7 @@ echo '{"jobs":[{"name":"checks","conclusion":"failure"},{"name":"e2e","conclusio
 approve
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: the checks for 5555555 have not passed (ci failed: checks, adam). Approving this pull request again retries it."
+expect_call "Not merged: the checks for 5555555 have not passed (ci failed: checks, adam)."
 
 scenario "says so and does not merge while the checks are still running"
 ready_to_ship
@@ -98,7 +98,7 @@ echo '[{"databaseId":900,"status":"in_progress","conclusion":""}]' > "$T/runs/$h
 approve
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: the checks for 5555555 have not passed (ci: none has finished)."
+expect_call "Not merged: the checks for 5555555 have not passed (ci: none has finished)."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 for words in "pr comment 7" "pr edit 7 --add-label needs-human"; do
@@ -139,7 +139,7 @@ echo '[{"databaseId":901,"status":"completed","conclusion":"skipped"}]' > "$T/ru
 approve
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: the checks for 5555555 have not passed (ci: none has finished)."
+expect_call "Not merged: the checks for 5555555 have not passed (ci: none has finished)."
 
 scenario "retries the merge when the ci run failed only because its merge did"
 ready_to_ship
@@ -166,7 +166,7 @@ approve
 expect_failure
 expect_no_call "gh pr merge"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return the jobs of the checks"
+expect_call "Not merged: GitHub did not return the jobs of the checks"
 
 scenario "passes on what ship.sh says when it does not merge"
 ready_to_ship
@@ -174,4 +174,4 @@ echo "pr merge 7" > "$T/fail"
 approve
 expect_failure
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub failed or refused the merge three times"
+expect_call "Not merged: GitHub failed or refused the merge three times"

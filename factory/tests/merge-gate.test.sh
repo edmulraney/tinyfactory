@@ -37,13 +37,12 @@ installer() {
 expect_held_as_owners() {
   expect_status 0
   expect_no_call "gh pr merge"
-  expect_call "gh pr comment 7 --body Both reviews passed, but this pull request changes what only the repo owner may decide:
+  expect_first_line "gh pr comment 7 --body" "Approve this pull request: it merges as soon as the repo owner approves."
+  expect_call "Both reviews passed, but this pull request changes what only the repo owner may decide:
 
 \`\`\`
 $1
-\`\`\`
-
-Approve it to ship it: it merges as soon as the repo owner approves."
+\`\`\`"
   expect_call "gh pr edit 7 --add-label needs-human"
   expect_call "gh issue edit 12 --remove-label in-progress --add-label needs-human"
 }
@@ -55,7 +54,7 @@ factory_change factory/scripts/ship.sh .claude/skills/implement/SKILL.md .github
 gate
 expect_status 0
 expect_call "gh pr merge 7 --squash --delete-branch --match-head-commit $head"
-expect_no_call "gh pr comment 7 --body Both reviews passed"
+expect_no_call "Both reviews passed"
 expect_no_call "--add-label needs-human"
 
 scenario "holds a product ticket's change to the theme for the owner, though Esme may make it"
@@ -134,7 +133,7 @@ rm "$T/patch"
 gate
 expect_failure
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return this pull request's diff, so whether it changes what only the owner may decide is not known."
+expect_call "Not merged: GitHub did not return this pull request's diff, so whether it changes what only the owner may decide is not known."
 
 scenario "ships a factory ticket's change to a workflow, when the installer that runs is the one main holds"
 ready_to_ship
@@ -153,7 +152,7 @@ installer " as it was"
 gate
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Both reviews passed, but this pull request changes a workflow while the installer that runs is not yet the one \`main\` holds, and that one may refuse a change nobody approved:
+expect_call "Both reviews passed, but this pull request changes a workflow while the installer that runs is not yet the one \`main\` holds, and that one may refuse a change nobody approved:
 
 \`\`\`
 factory/workflows/ci.yml
@@ -222,7 +221,7 @@ rm "$T/patch"
 gate
 expect_failure
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return this pull request's diff, so whether it changes what only the owner may decide is not known."
+expect_call "Not merged: GitHub did not return this pull request's diff, so whether it changes what only the owner may decide is not known."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "does not ship, and says why, when the ticket's labels cannot be read: that is not a factory ticket, nor a product one"
@@ -233,7 +232,7 @@ echo "issue view 12 --json labels" > "$T/fail"
 gate
 expect_failure
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return the labels of ticket #12, so whether it is a \`factory\` ticket, which may change the factory's files, is not known."
+expect_call "Not merged: GitHub did not return the labels of ticket #12, so whether it is a \`factory\` ticket, which may change the factory's files, is not known."
 
 scenario "holds a product ticket's pull request that touches the factory's files for the owner, and says which files"
 ready_to_ship
@@ -242,9 +241,9 @@ printf 'apps/web/src/app/page.tsx\nfactory/scripts/ship.sh\nCLAUDE.md\n' > "$T/d
 gate
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
+expect_call "Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
 expect_call "factory/scripts/ship.sh"
-expect_call "Approve it to ship it: it merges as soon as the repo owner approves."
+expect_first_line "gh pr comment 7 --body" "Approve this pull request: it merges as soon as the repo owner approves."
 expect_no_call "apps/web/src/app/page.tsx"
 expect_no_call "CLAUDE.md"
 expect_call "gh pr edit 7 --add-label needs-human"
@@ -259,7 +258,9 @@ verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[{"a
 gate
 expect_status 0
 expect_no_call "gh pr merge"
-expect_call "gh pr comment 7 --body **Before you approve, what the reviewers could not check:**
+expect_call "gh pr comment 7 --body Approve this pull request: it merges as soon as the repo owner approves.
+
+**Before you approve, what the reviewers could not check:**
 
 - **Adam (architecture and taste):** Assumes: GitHub accepts \`queue: max\` on a job.
   If wrong: Every merge stops.
@@ -280,7 +281,7 @@ verdict "Adam (architecture and taste)" '{"verdict":"pass","findings":[],"assump
 verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[]}'
 gate
 expect_status 0
-expect_call "gh pr comment 7 --body Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
+expect_call "Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
 expect_no_call "could not check"
 
 scenario "says nothing about assumptions after reviews from before there was a list"
@@ -290,7 +291,7 @@ echo factory/decisions.md > "$T/diff"
 echo '{"comments":[{"body":"**Adam (architecture and taste): PASS**\n\nFits."},{"body":"**Ryan (correctness): PASS**\n\nCorrect."}]}' > "$T/comments"
 gate
 expect_status 0
-expect_call "gh pr comment 7 --body Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
+expect_call "Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
 expect_no_call "could not check"
 
 scenario "shows only each reviewer's latest list: an assumption settled in a fix round is gone"
@@ -324,7 +325,9 @@ verdict "Adam (architecture and taste)" '{"findings":[],"assumptions":[{"assumes
 jq '.comments += [{body: "**Ryan (correctness): PASS**\n\n**Not verified**\n\n1. An old claim.\n   Not confirmed: No page.\n   If it is false: Something.\n\n<!-- factory:reviewed 5555555555555555555555555555555555555555 -->\n<!-- factory:unverified [{\"claim\":\"An old claim.\",\"why\":\"No page.\",\"risk\":\"Something.\"},{\"claim\":\"A second.\",\"why\":\"Not run.\",\"risk\":\"Something else.\"},{\"claim\":\"A third.\",\"why\":\"x\",\"risk\":\"y\"},{\"claim\":\"A fourth.\",\"why\":\"x\",\"risk\":\"z\"}] -->"}]' "$T/comments" > "$T/comments.new"; mv "$T/comments.new" "$T/comments"
 gate
 expect_status 0
-expect_call "gh pr comment 7 --body **Before you approve, what the reviewers could not check:**
+expect_call "gh pr comment 7 --body Approve this pull request: it merges as soon as the repo owner approves.
+
+**Before you approve, what the reviewers could not check:**
 
 - **Adam (architecture and taste):** Assumes: Vercel skips a docs-only build.
   If wrong: The gate waits ten minutes.
@@ -361,7 +364,7 @@ gate
 expect_failure
 expect_no_call "gh pr merge"
 expect_no_call "Both reviews passed"
-expect_call "gh pr comment 7 --body Not merged: The reviewers' assumptions could not be read from their verdicts"
+expect_call "Not merged: The reviewers' assumptions could not be read from their verdicts"
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "holds a protected pull request that closes no ticket, and labels no ticket"
@@ -404,7 +407,8 @@ owner_said() {
 expect_held_for_owner() {
   expect_status 0
   expect_no_call "gh pr merge"
-  expect_call "gh pr comment 7 --body Both reviews passed, but the repo owner asked for changes to this pull request, so only they can say it is now right. Approve it to ship it, or submit a \"Request changes\" review to send it back again."
+  expect_first_line "gh pr comment 7 --body" "Approve this pull request, or submit a \"Request changes\" review: an approval merges it, and a review sends it back to its engineer."
+  expect_call "Both reviews passed, but the repo owner asked for changes to this pull request, so only they can say it is now right."
   expect_no_call "Both reviews passed, but this pull request"
   expect_call "gh pr edit 7 --add-label needs-human"
   expect_call "gh issue edit 12 --remove-label in-progress --add-label needs-human"
@@ -481,7 +485,7 @@ gate
 expect_failure
 expect_no_call "gh pr merge"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return this pull request's reviews, so whether the owner approved it or sent it back is not known."
+expect_call "Not merged: GitHub did not return this pull request's reviews, so whether the owner approved it or sent it back is not known."
 
 scenario "fails when the owner could not be told that a pull request they sent back waits for them"
 ready_to_ship
@@ -507,7 +511,7 @@ gate
 expect_failure
 expect_no_call "gh pr merge"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not list the files this pull request changes, so whether it needs a person is not known. Approving this pull request again retries it."
+expect_call "Not merged: GitHub did not list the files this pull request changes, so whether it needs a person is not known."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "does not ship a protected pull request, and says why, when its reviews cannot be read"
@@ -518,7 +522,7 @@ gate
 expect_failure
 expect_no_call "gh pr merge"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return this pull request's reviews"
+expect_call "Not merged: GitHub did not return this pull request's reviews"
 
 scenario "fails when the owner could not be told that a protected pull request waits for them"
 ready_to_ship
@@ -535,4 +539,4 @@ echo "pr merge 7" > "$T/fail"
 gate
 expect_failure
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub failed or refused the merge three times"
+expect_call "Not merged: GitHub failed or refused the merge three times"

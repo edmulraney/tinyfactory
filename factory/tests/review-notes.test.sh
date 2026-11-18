@@ -248,7 +248,8 @@ echo "workflow run" > "$T/fail"
 run "$scripts/review-notes.sh" start
 expect_status 1
 expect_output "The build of issue #40 could not be started."
-[[ "$(cat "$T/kept")" == *'Add the `ready` label to start it.'* ]] || fail "expected the ticket to be told how to start it"
+[ "$(head -n 1 "$T/kept")" = 'Add the `ready` label: the build of this ticket starts when a place is free.' ] \
+  || fail "expected the comment's first line to say how to start it, got: $(head -n 1 "$T/kept")"
 expect_call "gh issue edit 40 --remove-label ready --add-label needs-human"
 
 scenario "start: a ticket that cannot be labelled ready is not started, and is told and flagged the same way"

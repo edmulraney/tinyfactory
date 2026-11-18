@@ -408,3 +408,31 @@ expect_output "gh: could not connect"
 expect_no_output "Section"
 expect_no_output "No ticket type"
 expect_no_output "The title"
+
+scenario "passes a complete draft without calling GitHub"
+printf '%s\n' "$factory_body" > draft.md
+run "$scripts/check-ticket.sh" --draft factory "$name" draft.md
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+[ ! -s "$T/calls" ] || fail "expected no outside call"
+
+scenario "refuses a draft with a section missing, a title too long or a type that is none of the six"
+printf '## Change\nAdd a check.\n' > draft.md
+run "$scripts/check-ticket.sh" --draft factory "$name, and a second clause" draft.md
+expect_status 1
+expect_output 'Section "## How we will know it works" is missing or empty.'
+expect_output "has a comma"
+run "$scripts/check-ticket.sh" --draft ready "$name" draft.md
+expect_status 1
+expect_output "No ticket type"
+
+scenario "counts a draft's \"Change\" section against the limit"
+change_of 121 > draft.md
+run "$scripts/check-ticket.sh" --draft factory "$name" draft.md
+expect_status 1
+expect_output "is 121 words long"
+
+scenario "stops when a draft's body is not a file"
+run "$scripts/check-ticket.sh" --draft factory "$name" missing.md
+expect_status 2
+expect_output "missing.md is not a file"

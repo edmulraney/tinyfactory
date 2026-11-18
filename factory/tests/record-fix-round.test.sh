@@ -56,7 +56,8 @@ record ""
 expect_status 1
 expect_count 1
 expect_call "gh pr edit 7 --add-label needs-human"
-expect_call "gh pr comment 7 --body The fix round did not run: no engineer's session began, so nothing was fixed and the round is not counted."
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
+expect_call "The fix round did not run: no engineer's session began, so nothing was fixed and the round is not counted."
 expect_output "The fix round did not run"
 expect_no_call "gh issue edit"
 
@@ -186,7 +187,7 @@ scenario "the comment for a round that did not run links the run, and is not one
 github
 run env GH_TOKEN=workflow-token GITHUB_RUN_ID=900 GITHUB_SERVER_URL=https://github.example GITHUB_REPOSITORY=owner/myapp "$scripts/record-fix-round.sh" 7 ""
 expect_status 1
-expect_call "The log says which: https://github.example/owner/myapp/actions/runs/900 This needs a person."
+expect_call "The log says which: https://github.example/owner/myapp/actions/runs/900"
 ! grep '^gh pr comment' "$T/calls" | grep -qF "factory:fix-round" || fail "expected the comment to carry no marker"
 expect_count 0
 

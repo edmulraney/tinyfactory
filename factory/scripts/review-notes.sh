@@ -74,7 +74,9 @@ $notes"
       exit 0
     fi
     echo "The build of issue #$ticket could not be started." >&2
-    gh issue comment "$ticket" --body "This week's build of this ticket could not be started. Add the \`ready\` label to start it." >/dev/null \
+    gh issue comment "$ticket" --body "Add the \`ready\` label: the build of this ticket starts when a place is free.
+
+This week's build of this ticket could not be started by itself." >/dev/null \
       && gh issue edit "$ticket" --remove-label ready --add-label needs-human >/dev/null \
       || echo "Issue #$ticket could not be told so, or flagged for a person." >&2
     exit 1

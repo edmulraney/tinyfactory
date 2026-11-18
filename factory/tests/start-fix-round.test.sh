@@ -56,7 +56,7 @@ expect_status 0
 expect_no_call "fix.yml"
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
-expect_call "gh pr comment 7 --body Three fix rounds have not got this pull request to green. Stopping here; it needs a human."
+expect_call "Three fix rounds have not got this pull request to green, and no fourth starts by itself."
 expect_call "gh workflow run retro.yml -f pr=7"
 expect_output "pull request #7 has used its three fix rounds: no fix round was started"
 

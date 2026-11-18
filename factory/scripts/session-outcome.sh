@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Prints how an agent's session ended, the id to continue it with, and the cause in words (decisions A69a).
 # Usage: session-outcome.sh <execution-file>
-#        Prints four lines, in the form a workflow step's outputs take:
+#        Prints five lines, in the form a workflow step's outputs take:
 #          ended=completed | api_error | usage_limit | max_turns | none | <another terminal_reason>
 #          session=<the id to continue the session with, or nothing>
 #          cause=<one clause for a comment: "the model's API was overloaded (error 529)">
 #          resets=<when a usage limit that ended it resets, in seconds since 1970, or nothing>
+#          answer=<the first line of what an agent that ended its own session answered, or nothing>
 set -uo pipefail
 
 file="${1:-}"
@@ -17,7 +18,7 @@ ended=$("$script_dir/session-ending.sh" "$file") || ended=none
 [[ "$ended" =~ ^[a-z_]+$ ]] || ended=none
 
 # Not the action's `session_id` output: it is set only for a session that succeeded, and those continued did not.
-session=""; status=""; resets=""; message=""
+session=""; status=""; resets=""; message=""; answer=""
 if [ "$ended" != none ]; then
   facts=$(jq -r '
     (if type == "array" then . else [.] end) as $all
@@ -28,15 +29,20 @@ if [ "$ended" != none ]; then
     | ($all[-1].result | if type == "string" then . else "" end
         | split(". ")[0] // "" | gsub("[^A-Za-z0-9 .,:·\u0027()/+-]"; "") | .[0:120]) as $message
     | [ ($all[-1].session_id // $init.session_id // ""), ($all[-1].api_error_status // "" | tostring),
-        ($resets | tostring), $message ]
+        ($resets | tostring), $message,
+        # A stray mention would start another agent run.
+        ($all[-1].result | if type == "string" then . else "" end
+          | [split("\n")[] | select(test("[^[:space:]]"))][0] // "" | gsub("@claude"; "claude") | .[0:300]) ]
     | join("|")' "$file" 2>/dev/null) || facts=""
   # A bar and not a tab: read folds neighbouring tabs into one, which would move the field after an empty one.
-  IFS='|' read -r session status resets message <<<"$facts"
+  # The answer is last, as it may hold a bar.
+  IFS='|' read -r session status resets message answer <<<"$facts"
 fi
 # The id goes into the arguments of the run that continues the session, so anything unlike one is dropped.
 [[ "$session" =~ ^[A-Za-z0-9-]+$ ]] || session=""
 [[ "$status" =~ ^[0-9]+$ ]] || status=""
 [[ "$resets" =~ ^[0-9]{1,12}$ ]] && [ "$ended" = usage_limit ] || resets=""
+[ "$ended" = completed ] || answer=""
 
 case "$ended" in
   none) cause="the agent left no result that could be read" ;;
@@ -53,4 +59,4 @@ case "$ended" in
   *) cause="the agent's session ended with an error ($ended)" ;;
 esac
 
-printf 'ended=%s\nsession=%s\ncause=%s\nresets=%s\n' "$ended" "$session" "$cause" "$resets"
+printf 'ended=%s\nsession=%s\ncause=%s\nresets=%s\nanswer=%s\n' "$ended" "$session" "$cause" "$resets" "$answer"

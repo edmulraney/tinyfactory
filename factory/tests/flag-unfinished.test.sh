@@ -282,7 +282,8 @@ run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
 [ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
 expect_posted "The build ended with no pull request ready for review: the model's API was overloaded (error 529)."
-expect_posted "What the engineer had is on the branch \`$branch\`, unfinished and unverified; its pull request, if it has one, is still a draft. The next build starts from it: add the \`ready\` label again."
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again: the next build starts from the branch \`$branch\`."
+expect_posted "What the engineer had is on the branch \`$branch\`, unfinished and unverified; its pull request, if it has one, is still a draft."
 expect_posted "See https://github.com/owner/repo/actions/runs/900"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
 
@@ -322,7 +323,8 @@ echo "export" > export.ts
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 0
 [ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
-[ "$(head -n 1 "$T/posted" | cut -c1-41)" = "<!-- factory:usage-limit 1795431600 -->Th" ] || fail "expected the comment to start with the reset time start-build.sh reads"
+[ "$(head -n 1 "$T/posted")" = "<!-- factory:usage-limit 1795431600 -->Add the \`ready\` label again after 2026-11-23 11:00 UTC: the next build starts from the branch \`$branch\`." ] \
+  || fail "expected the comment to start with the reset time start-build.sh reads, then what a person must do and when, got: $(head -n 1 "$T/posted")"
 expect_posted "The build ended with no pull request ready for review: the Claude usage limit was reached (\"You've hit your Fable limit · resets Nov 23, 11am (UTC)\"). What the engineer had is on the branch \`$branch\`"
 [ "$(grep -c "^gh issue comment" "$T/calls")" = 1 ] || fail "expected one comment"
 [ "$(grep -c -- "--add-label needs-human" "$T/calls")" = 1 ] || fail "expected one flag"
@@ -346,6 +348,7 @@ scenario "a fix round the usage limit ended says so with the reset time, flags o
 fix_ended usage-limit
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\` after 2026-11-23 11:00 UTC: a new fix round starts."
 expect_posted "The fix round ended without pushing a fix: the Claude usage limit was reached (\"You've hit your Fable limit · resets Nov 23, 11am (UTC)\")."
 [ "$(grep -c -- "--add-label needs-human" "$T/calls")" = 1 ] || fail "expected one flag"
 
@@ -354,6 +357,7 @@ ended api-error
 git checkout -q main
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again: the build starts again from the beginning."
 expect_posted "the model's API was overloaded (error 529). There was no work to keep: the engineer had not started a branch, or had changed nothing on it."
 expect_not_posted "is on the branch"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
@@ -364,6 +368,7 @@ no_pushing
 echo "export" > export.ts
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again: the build starts again from the beginning."
 expect_posted "What the engineer had could not be pushed, and is lost with the runner."
 expect_not_posted "is on the branch"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
@@ -422,7 +427,8 @@ fix_ended completed
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
 expect_posted "The fix round pushed nothing: the engineer ended the session with no change to the pull request, which is as the checks and reviews last saw it."
-expect_posted "This needs a person. See https://github.com/owner/repo/actions/runs/900"
+expect_first_line "gh pr comment 7 --body" "Read the engineer's comment above, then submit a \"Request changes\" review saying what to change: that starts a fix round that is not one of the three."
+expect_posted "the reasons are in the comments above. See https://github.com/owner/repo/actions/runs/900"
 expect_not_posted "unverified"
 expect_not_posted "is on the branch"
 expect_not_posted "before the work was handed over"
@@ -430,13 +436,24 @@ expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh issue edit"
 [ "$(on_github rev-parse "$branch")" = "$before" ] || fail "expected the branch on GitHub to be left alone"
 
+scenario "a fix round whose engineer answered what it needs starts its comment with the first line of that answer"
+fix_ended completed
+jq -c '.[-1].result = "Switch Magic Link on in Neon for branch `main`, then run the `e2e` job again.\n\nThe rest."' "$T/session.json" > "$T/answered.json"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/answered.json" "$before"
+expect_status 0
+expect_first_line "gh pr comment 7 --body" "Switch Magic Link on in Neon for branch \`main\`, then run the \`e2e\` job again."
+expect_posted "The fix round pushed nothing"
+expect_not_posted "The rest."
+expect_not_posted "Read the engineer's comment above"
+
 scenario "a fix round whose engineer labelled the pull request waits-for-main says the next merge tests it, and asks for no person"
 fix_ended completed
 echo '[{"name":"waits-for-main"}]' > "$T/pr-labels.json"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
-expect_posted "The fix round pushed nothing: the engineer labelled this pull request \`waits-for-main\`, as what failed lies outside it, and the comment above says what it waits for. The next merge to \`main\` tests it again. See https://github.com/owner/repo/actions/runs/900"
-expect_not_posted "This needs a person."
+expect_first_line "gh pr comment 7 --body" "Nothing to do: the next merge to \`main\` tests this pull request again."
+expect_posted "The fix round pushed nothing: the engineer labelled this pull request \`waits-for-main\`, as what failed lies outside it, and the comment above says what it waits for. See https://github.com/owner/repo/actions/runs/900"
+expect_not_posted "gh workflow run fix.yml"
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh issue edit"
 
@@ -445,8 +462,8 @@ fix_ended api-error
 echo '[{"name":"waits-for-main"}]' > "$T/pr-labels.json"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
 expect_posted "The fix round ended without pushing a fix: the model's API was overloaded (error 529)."
-expect_posted "This needs a person."
 
 scenario "the owner's round that pushed nothing flags the ticket it had unflagged, with the pull request"
 fix_ended completed
@@ -488,6 +505,7 @@ scenario "a fix round cut short with nothing changed says the cause, reports no 
 fix_ended api-error
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
 expect_posted "The fix round ended without pushing a fix: the model's API was overloaded (error 529). The engineer left no work to keep"
 expect_not_posted "unverified"
 expect_call "gh pr edit 7 --add-label needs-human"
@@ -498,7 +516,15 @@ echo "more" >> export.ts
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
 [ "$(on_github log -1 --format=%s "$branch")" = "chore: keep the unfinished work on pull request #7" ] || fail "expected the work on GitHub"
+expect_first_line "gh pr comment 7 --body" "Submit a \"Request changes\" review saying what is left to do: the engineer carries on from the branch in a fix round that is not one of the three."
 expect_posted "The fix round ended without handing over a fix: the model's API was overloaded (error 529). What the engineer had is on the branch \`$branch\`, unfinished and unverified; no checks ran on it."
+
+scenario "a fix round the usage limit ended with work kept asks for the review after the reset time"
+fix_ended usage-limit
+echo "more" >> export.ts
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
+expect_status 0
+expect_first_line "gh pr comment 7 --body" "Submit a \"Request changes\" review after 2026-11-23 11:00 UTC saying what is left to do: the engineer carries on from the branch in a fix round that is not one of the three."
 
 scenario "a fix the engineer committed, never pushed, and ended the session on is pushed and said to be unverified"
 fix_ended completed
@@ -522,6 +548,7 @@ no_pushing
 echo "more" >> export.ts
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
 expect_posted "What the engineer had could not be pushed, and is lost with the runner."
 expect_not_posted "is on the branch"
 

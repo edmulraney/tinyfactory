@@ -42,7 +42,8 @@ expect_output "gave up with: []"
 scenario "not_merged says why on the pull request, adds needs-human and stops the script"
 sourcing 'not_merged "GitHub was out"; echo "went on"'
 expect_status 1
-expect_call "gh pr comment 7 --body Not merged: GitHub was out. Approving this pull request again retries it."
+expect_first_line "gh pr comment 7 --body" "Approve this pull request again: the merge is tried again then."
+expect_call "Not merged: GitHub was out."
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_output "went on"
 expect_no_call "actions/runs"
@@ -51,7 +52,7 @@ expect_no_call "actions/runs"
 scenario "not_merged points at the log of the run it is in"
 sourcing 'not_merged "GitHub was out"' GITHUB_RUN_ID=900 GITHUB_SERVER_URL=https://github.example GITHUB_REPOSITORY=owner/myapp
 expect_status 1
-expect_call "Approving this pull request again retries it. The log has what GitHub answered: https://github.example/owner/myapp/actions/runs/900"
+expect_call "Not merged: GitHub was out. The log has what GitHub answered: https://github.example/owner/myapp/actions/runs/900"
 
 scenario "not_merged still fails, with the reason in the log, when GitHub takes no comment"
 echo 99 > "$_base/$((_count))/failures"
@@ -63,7 +64,7 @@ expect_output "and the pull request could not be told so"
 scenario "notify_not_merged says why and flags the pull request, and the script goes on"
 sourcing 'notify_not_merged "the checks have not passed"; echo "went on"'
 expect_status 0
-expect_call "gh pr comment 7 --body Not merged: the checks have not passed. Approving this pull request again retries it."
+expect_call "Not merged: the checks have not passed."
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_output "went on"
 

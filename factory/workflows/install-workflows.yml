@@ -169,7 +169,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # The first line says what a person must do (decisions A371a).
           {
+            if [ -s "$RUNNER_TEMP/refused.md" ]; then
+              printf 'File the two `factory` tickets described below: the factory installs nothing until the second merges.\n\n'
+            else
+              printf 'Read the log linked below, then start `install-workflows` again with this pull request'"'"'s number: the changes are installed when that run passes.\n\n'
+            fi
             printf 'The workflow changes in this pull request were **not installed**, so `.github/workflows/` still runs the earlier versions and `pnpm lint` fails on `%s` until the two folders match.\n\n' "$DEFAULT_BRANCH"
             if [ -s "$RUNNER_TEMP/refused.md" ]; then
               cat "$RUNNER_TEMP/refused.md"

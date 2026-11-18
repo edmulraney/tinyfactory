@@ -40,5 +40,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr comment "$PR" --body "\`fits-main\` could not be started again, so this pull request has not been tested with \`main\` as it is now and will not merge by itself. The log says why: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          # The first line says what a person must do (decisions A371a).
+          gh pr comment "$PR" --body "Run \`gh workflow run rerun-fits-main.yml -f pr=$PR\`: \`fits-main\` then tests this pull request with \`main\` as it is now, and the merge gate decides again.
+
+          \`fits-main\` could not be started again, so this pull request has not been tested with \`main\` as it is now and will not merge by itself. The log says why: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           gh pr edit "$PR" --add-label needs-human

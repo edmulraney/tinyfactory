@@ -31,29 +31,31 @@ Every decision in the record (`decisions.md`) should follow from one of these. W
 
 ## Using it
 
-The `ready` label starts a build. Dragging a card starts nothing: the order of the Backlog column is the order in which waiting tickets start.
+The `ready` label starts a build. Dragging a card starts nothing.
 
-1. **File a ticket.** Ask a Claude Code session in this repo (the `ticket` skill), or use an issue template. Initiative, Bug and Tweak change behaviour and carry numbered acceptance criteria; Chore changes none; Research answers a question in `product/`; Factory changes the factory. It appears in **Backlog**.
+1. **File a ticket.** Ask a Claude Code session in this repo (the `ticket` skill), or use an issue template. Initiative, Bug and Tweak change behaviour and carry numbered acceptance criteria; Chore changes none; Research answers a question in `product/`; Factory changes the factory.
 2. **Add the `ready` label,** or ask the `promote` skill to. Three tickets are built or checked at once at most, and a pull request that waits for you is not one of them (T64a). Five pull requests wait for you at most: while five do, no build starts (T361a). A ticket with no place waits with `ready`, a comment on it says which limit holds it, and when a place frees the waiting ticket highest in Backlog starts first: drag a card up to build it sooner (T335a). A ticket whose body has a line `After #<n>` waits with `ready` until #<n> has closed (T339a).
-3. **Watch or walk away.** The issue goes `in-progress` and a draft pull request appears, the engineer marks it ready, checks and reviews run, and it merges. The issue closes with `deployed` once production reports the merged commit; a change to the factory's own folders alone deploys nothing, and closes without the label. The card is in **In progress** from the draft until the issue closes, built or in review alike, then in **Deployed**, shipped or not: the label says which.
-4. **Look for `needs-human`,** on the **Needs you** tab. The ticket was unclear, three fix rounds did not reach green, a session was cut short, nothing was working on it, or the change is one only you may decide; a comment says which.
+3. **Watch or walk away.** The issue goes `in-progress` and a draft pull request appears, the engineer marks it ready, checks and reviews run, and it merges. The issue closes with `deployed` once production reports the merged commit; a change to the factory's own folders alone deploys nothing, and closes without the label. The card is in **In progress** from the draft until the issue closes, then in **Deployed**, shipped or not: the label says which.
+4. **Look for `needs-human`,** on the **Needs you** tab. The ticket was unclear, three fix rounds did not reach green, a session was cut short, nothing was working on it, or only you may decide the change; a comment says what to do.
    - **A pull request that waits for you:** approve it and it ships.
    - **A pull request you want changed:** submit a "Request changes" review saying what. The engineer makes or answers each change, and it comes back for your approval.
    - **A pull request labelled `waits-for-main`:** what failed lies outside it, and its comment says what. The next merge to `main` tests it again (A368a).
    - **A ticket you accept:** add `ready`.
    - **A shipped ticket you want back out:** `gh workflow run revert.yml -f number=<ticket>` has an engineer open the pull request that reverts it. Once that merges the ticket reopens as `reverted`; add `ready` to build it again.
-5. **Read what the factory suggests,** on the **Proposals** tab, each written to be built as it is: add `ready` to accept it, or close it.
+5. **Read what the factory suggests,** on the **Proposals** tab: add `ready` to accept one, or close it.
 6. **Confirm what only use can show,** on the **Proofs** tab. When only a later run can show that a merged ticket works, you or the session driving the backlog file a `proof` ticket titled "Confirm …"; the engineer never does (T170). Close it once you have seen the run. A changed workflow needs none: a retro of its first run says on the pull request what it found (T185).
 7. **Hand a whole backlog to a session.** It follows the `operate` skill, keeps the state in one issue, and never approves a pull request, pushes to `main` or edits a protected file (A120d).
 8. **Share a user interview** in a session: the `intake` skill files tickets only where the evidence is strong.
 9. **When an agent run fails with no clear error,** run the `agent-check` workflow: it prints the API error.
-10. **Judge a model as the reviewers** with the `benchmark` workflow; a `factory` ticket adds each problem both reviewers missed (A345d).
+10. **Ask for help** in any comment that holds `@claude`: an agent replies (A372a).
+11. **Open an Idea:** Peta proposes slices, then files them unstarted once you answer (A353a).
+12. **Judge a model as the reviewers** with the `benchmark` workflow; a `factory` ticket adds each problem both reviewers missed (A345d).
 
 ## Where things are
 
 | What | Where |
 |---|---|
-| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `bootstrap` |
+| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `bootstrap` |
 | The factory's files, and what only the owner decides, the product's bar included | `factory/scripts/protected-paths.sh`, `factory/scripts/owner-decides.sh`; the merge gate runs `main`'s copies (M2, M272a, M272e) |
 | Workflows | Written in `factory/workflows/`. GitHub runs the copies in `.github/workflows/`, installed once a change merges and never edited (W1) |
 | The events: what starts each workflow, and what it does | `factory/scripts/events.sh` prints them from `factory/workflows/` (H293a) |

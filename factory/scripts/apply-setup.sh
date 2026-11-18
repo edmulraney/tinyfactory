@@ -77,6 +77,11 @@ done <<<"$changed"
 [ -s "$body" ] || exit 0
 issue=""
 [ "$waiting" -eq 0 ] || issue=$("$script_dir/linked-issue.sh" "$pr")
+# The first line says what a person must do (decisions A371a).
+if [ "$waiting" -eq 1 ]; then
+  printf 'Run by hand, with your own logins, each setup script below that failed or was not run: the factory does not run it again.\n\n' | cat - "$body" > "$body.todo"
+  mv "$body.todo" "$body"
+fi
 # A failure is told to the ticket, and fails this script (decisions U9).
 if [ "$failed" -eq 1 ] && [ -n "$issue" ]; then gh issue comment "$issue" --body-file "$body"
 else gh pr comment "$pr" --body-file "$body"

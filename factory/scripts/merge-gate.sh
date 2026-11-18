@@ -67,10 +67,13 @@ assumptions=$(jq -r '
   | "- **\($reviewer):** Assumes: \(.assumes // .claim)\n  If wrong: \(.if_wrong // .risk)"' <<<"$reviews") \
   || not_merged "The reviewers' assumptions could not be read from their verdicts, so the owner cannot be shown them"
 [ -z "$assumptions" ] || assumptions="**Before you approve, what the reviewers could not check:**"$'\n\n'"$assumptions"$'\n\n'
+# The first line says what a person must do (decisions A371a).
 if [ -n "$hold" ]; then
-  body=$(printf '%sBoth reviews passed, but this pull request %s:\n\n```\n%s\n```\n\nApprove it to ship it: it merges as soon as the repo owner approves.\n' "$assumptions" "$hold" "$shown")
+  body=$(printf 'Approve this pull request: it merges as soon as the repo owner approves.\n\n%sBoth reviews passed, but this pull request %s:\n\n```\n%s\n```\n' "$assumptions" "$hold" "$shown")
 else
-  body="${assumptions}Both reviews passed, but the repo owner asked for changes to this pull request, so only they can say it is now right. Approve it to ship it, or submit a \"Request changes\" review to send it back again."
+  body="Approve this pull request, or submit a \"Request changes\" review: an approval merges it, and a review sends it back to its engineer.
+
+${assumptions}Both reviews passed, but the repo owner asked for changes to this pull request, so only they can say it is now right."
 fi
 retry gh pr comment "$pr" --body "$body" >/dev/null
 retry gh pr edit "$pr" --add-label needs-human >/dev/null

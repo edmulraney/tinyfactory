@@ -26,9 +26,10 @@ stop_rounds
 expect_status 0
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
-expect_call "gh pr comment 7 --body Three fix rounds have not got this pull request to green. Stopping here; it needs a human."
+expect_first_line "gh pr comment 7 --body" "Submit a \"Request changes\" review saying what to change, or close this pull request: a review starts a fix round that is not one of the three."
+expect_call "Three fix rounds have not got this pull request to green, and no fourth starts by itself."
 expect_call "gh workflow run retro.yml -f pr=7"
-[ "$(wc -l < "$T/calls")" -eq 5 ] || fail "expected those calls, the read of the description, and no other"
+[ "$(grep -c '^gh ' "$T/calls")" -eq 5 ] || fail "expected those calls, the read of the description, and no other"
 
 scenario "flags no ticket for a pull request that closes none"
 github

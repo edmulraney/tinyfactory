@@ -29,6 +29,9 @@ fi
 
 run_link=""
 [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-gh issue comment "$issue" --body "The build of this ticket never began: its job ended before the engineer started. Nothing was built, and its place among the tickets in flight was given back. Add the \`ready\` label again to start it.$run_link" >/dev/null \
+# The first line says what a person must do (decisions A371a).
+gh issue comment "$issue" --body "Add the \`ready\` label again: the build starts when a place is free.
+
+The build of this ticket never began: its job ended before the engineer started. Nothing was built, and its place among the tickets in flight was given back.$run_link" >/dev/null \
   || die "The build of issue #$issue never began and its place was given back, but it could not be told so."
 echo "gave back the place of issue #$issue: its build never began"

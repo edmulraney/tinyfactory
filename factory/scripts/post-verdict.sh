@@ -60,7 +60,10 @@ if [ -z "$verdict" ] || [ -n "$long" ]; then
   fi
   run_link=""
   [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" in $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-  gh pr comment "$pr" --body "**$reviewer: review not finished.** $message Run the failed job again$run_link to have it reviewed."
+  # The first line says what a person must do, after the name a reviewer's comment is found by (decisions A371a, A371c).
+  gh pr comment "$pr" --body "**$reviewer: review not finished.** Run the failed job again$run_link: the reviewer then reviews this pull request.
+
+$message"
   gh pr edit "$pr" --add-label needs-human >/dev/null
   echo "$reviewer: review not finished. $message"
   exit 1

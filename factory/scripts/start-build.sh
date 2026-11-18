@@ -79,7 +79,10 @@ if [[ " $labels " == *" needs-human "* ]]; then
   resets=$(tail -n 1 <<<"$resets")
   if [ -n "$resets" ] && [ "$(date +%s)" -lt "$resets" ]; then
     when=$(jq -rn --argjson at "$resets" '$at | strftime("%Y-%m-%d %H:%M UTC")')
-    gh issue comment "$issue" --body "Not started: the Claude usage limit ended this ticket's last build, and it resets on $when. Add the \`ready\` label again after that. If the limit was lifted sooner, take \`needs-human\` off first." >/dev/null \
+    # The first line says what a person must do (decisions A371a).
+    gh issue comment "$issue" --body "Add the \`ready\` label again after $when: the build starts then.
+
+Not started: the Claude usage limit ended this ticket's last build, and it resets on $when. If the limit was lifted sooner, take \`needs-human\` off first." >/dev/null \
       || die "Issue #$issue was not started, because the Claude usage limit has not reset, but it could not be told so. It keeps the ready label."
     gh issue edit "$issue" --remove-label ready >/dev/null \
       || die "Issue #$issue was not started, because the Claude usage limit has not reset, but the ready label could not be taken off it."

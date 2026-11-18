@@ -53,7 +53,8 @@ pull 112 feat/64-three-in-flight 200
 run "$scripts/flag-idle.sh"
 expect_status 0
 expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress"
-expect_call "gh issue comment 64 --body Nothing is working on this ticket. It is in flight (pull request #112), no run is going or queued for it, and nothing has happened on it since "
+expect_first_line "gh issue comment 64 --body" "Run \`gh pr checks 112\` and run again the job it shows stopped: the pull request merges once its checks and reviews pass."
+expect_call "Nothing is working on this ticket. It is in flight (pull request #112), no run is going or queued for it, and nothing has happened on it since "
 expect_call ", 200 minutes ago. Pull request #112 is ready for review"
 expect_output "flagged: #64 (pull request #112), last touched 200 minutes ago"
 [ "$(flags)" = 1 ] || fail "expected one flag, got $(flags)"
@@ -233,8 +234,9 @@ github
 ticket 64 61
 run "$scripts/flag-idle.sh"
 expect_status 0
-expect_call "gh issue comment 64 --body Nothing is working on this ticket. It is in flight (being built), no run"
-expect_call "No build of it is going. Add the \`ready\` label again to start one."
+expect_first_line "gh issue comment 64 --body" "Add the \`ready\` label again: a build starts when a place is free."
+expect_call "Nothing is working on this ticket. It is in flight (being built), no run"
+expect_call "No build of it is going."
 
 scenario "flags a ticket whose build left a draft, and says how to start its build"
 github
@@ -243,7 +245,7 @@ pull 130 feat/64-three-in-flight 200 MERGEABLE true
 run "$scripts/flag-idle.sh"
 expect_status 0
 expect_call "It is in flight (being built, in draft pull request #130)"
-expect_call "Add the \`ready\` label again to start one."
+expect_first_line "gh issue comment 64 --body" "Add the \`ready\` label again: a build starts when a place is free."
 
 scenario "says of a conflict that no fix round is going, and how to start one"
 github
@@ -251,7 +253,8 @@ ticket 64 300
 pull 112 feat/64-three-in-flight 200 CONFLICTING
 run "$scripts/flag-idle.sh"
 expect_status 0
-expect_call "Pull request #112 conflicts with \`main\`, and no fix round is going for it. To start one: \`gh workflow run fix.yml -f pr=112\`."
+expect_first_line "gh issue comment 64 --body" "Run \`gh workflow run fix.yml -f pr=112\`: a fix round starts and fits the branch to \`main\`."
+expect_call "Pull request #112 conflicts with \`main\`, and no fix round is going for it."
 
 scenario "names the run that found it, in a workflow"
 github

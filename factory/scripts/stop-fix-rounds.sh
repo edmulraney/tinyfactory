@@ -15,7 +15,10 @@ gh pr edit "$pr" --add-label needs-human >/dev/null \
   || die "Pull request #$pr has used its three fix rounds, and needs-human could not be added to it."
 # The ticket waits with its pull request (decisions A48e).
 "$script_dir/flag-ticket.sh" "$pr" || die "Pull request #$pr has used its three fix rounds, and the ticket it closes could not be flagged."
-gh pr comment "$pr" --body "Three fix rounds have not got this pull request to green. Stopping here; it needs a human." >/dev/null \
+# The first line says what a person must do (decisions A371a).
+gh pr comment "$pr" --body "Submit a \"Request changes\" review saying what to change, or close this pull request: a review starts a fix round that is not one of the three.
+
+Three fix rounds have not got this pull request to green, and no fourth starts by itself." >/dev/null \
   || die "Pull request #$pr has used its three fix rounds, and could not be told so."
 gh workflow run retro.yml -f pr="$pr" >/dev/null \
   || die "Pull request #$pr has used its three fix rounds and was told so, but the retro could not be started."

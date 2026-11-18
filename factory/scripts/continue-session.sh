@@ -27,7 +27,7 @@ case "$kind" in
       || skip "issue #$number could not be read from GitHub, so it is not known whether the engineer stopped on purpose" 1
     [ "$flagged" != true ] || skip "the engineer stopped on purpose and flagged issue #$number"
     missing="No pull request is ready for review for issue #$number."
-    finish="Do not end your turn until the pull request is marked ready for review, or until you have said on the issue why it cannot be and added the needs-human label."
+    finish="Do not end your turn until the pull request is marked ready for review, or until you have added the needs-human label and said on the issue why it cannot be, in a comment whose first line is what a person must do, or \"Nothing to do\", then what the factory does next and when."
     ;;
   fix)
     key="pr-$number"
@@ -35,7 +35,8 @@ case "$kind" in
       || skip "pull request #$number could not be read from GitHub, so it is not known whether a fix was pushed" 1
     [ "$head" = "$before" ] || skip "a fix was pushed to pull request #$number"
     missing="Nothing has been pushed to pull request #$number."
-    finish="Do not end your turn until the fix is pushed. If nothing needs pushing, because you rebutted every finding or stopped on purpose, and you have said so on the pull request, answer with that alone."
+    finish="Do not end your turn until the fix is pushed. If nothing needs pushing, because you rebutted every finding or stopped on purpose, and you have said so on the pull request, answer with one line and nothing else: what a person must do now, or \"Nothing to do\", then what the factory does next and when."
+    # flag-unfinished.sh puts that line first in its comment (decisions A371b).
     ;;
   answer)
     key="pr-$number"

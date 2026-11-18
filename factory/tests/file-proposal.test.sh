@@ -263,7 +263,8 @@ github
 echo "issue create --title Fail a build that pushes untyped code --label factory --label proposal" > "$T/fail"
 file
 expect_status 0
-expect_call "gh issue create --title Fail a build that pushes untyped code --label factory --label needs-human --body ## Change"
+expect_first_line "gh issue create --title Fail a build that pushes untyped code --label factory --label needs-human --body" "Add the \`ready\` label to have this proposal built, or close it: nothing is built until then."
+expect_call "## Change"
 expect_output "It proposes a change to the factory: https://github.example/50"
 
 scenario "stops with a message when the comment fails, and files no second copy"

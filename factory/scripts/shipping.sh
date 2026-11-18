@@ -24,7 +24,10 @@ run_log() {
 # notify_not_merged <why>: tells the pull request and flags it for the owner; fails when either could not be done.
 notify_not_merged() {
   local body failed=0
-  body="Not merged: $1. Approving this pull request again retries it.$(run_log)"
+  # The first line says what a person must do (decisions A371a).
+  body="Approve this pull request again: the merge is tried again then.
+
+Not merged: $1.$(run_log)"
   echo "$body" >&2
   retry gh pr comment "$pr" --body "$body" >/dev/null || { echo "and the pull request could not be told so" >&2; failed=1; }
   retry gh pr edit "$pr" --add-label needs-human >/dev/null || { echo "and needs-human could not be added to it" >&2; failed=1; }

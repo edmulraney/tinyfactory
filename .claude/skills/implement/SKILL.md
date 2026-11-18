@@ -31,4 +31,4 @@ A check or review failed, or the owner sent it back with a "Request changes" rev
 
 - Work only on your branch. Never push to `main`.
 - File a ticket only for a defect you saw happen, linking what shows it (`factory/decisions.md` T223), or as `CLAUDE.md` asks for a decision off limits to you.
-- If you cannot finish, say so in a comment and add `needs-human`.
+- If you cannot finish, say so in a comment and add `needs-human`. A comment that leaves work to a person starts with one line: what they must do, or "Nothing to do", then what the factory does next and when (A371a).

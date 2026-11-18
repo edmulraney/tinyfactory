@@ -70,7 +70,7 @@ run "$scripts/continue-session.sh" build "$T/session.json" 120 fred 12
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
 [ "$(grep -c '^prompt=' "$T/outputs")" = 1 ] || fail "expected the prompt on exactly one line"
 for words in "the model's API was overloaded (error 529)" "No pull request is ready for review for issue #12." \
-  "do not start again" "Run every command in the foreground." "Do not end your turn until the pull request is marked ready for review"; do
+  "do not start again" "Run every command in the foreground." "Do not end your turn until the pull request is marked ready for review" "in a comment whose first line is what a person must do, or \"Nothing to do\", then what the factory does next and when."; do
   [[ "$prompt" == *"$words"* ]] || fail "expected the prompt to hold: $words"
 done
 
@@ -229,7 +229,7 @@ expect_written "continue=true"
 expect_written "session=c22ab626"
 expect_saved "esme-fix pr-7"
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
-for words in "Nothing has been pushed to pull request #7." "Do not end your turn until the fix is pushed." "answer with that alone"; do
+for words in "Nothing has been pushed to pull request #7." "Do not end your turn until the fix is pushed." "answer with one line and nothing else: what a person must do now, or \"Nothing to do\", then what the factory does next and when."; do
   [[ "$prompt" == *"$words"* ]] || fail "expected the prompt to hold: $words"
 done
 

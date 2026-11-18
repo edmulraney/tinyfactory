@@ -21,7 +21,7 @@ expect_stopped() {
   [ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
   expect_call "gh pr edit 7 --add-label needs-human"
   expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
-  expect_call "gh pr comment 7 --body Three fix rounds have not got this pull request to green. Stopping here; it needs a human."
+  expect_call "Three fix rounds have not got this pull request to green, and no fourth starts by itself."
   expect_call "gh workflow run retro.yml -f pr=7"
   expect_no_call "is addressing what failed"
 }

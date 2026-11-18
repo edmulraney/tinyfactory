@@ -61,9 +61,9 @@ case "$kind" in
   *) echo "usage: flag-unfinished.sh build <issue-number> <execution-file> | fix <pr-number> <execution-file> <head-before>" >&2; exit 2 ;;
 esac
 
-ended=""; cause=""; resets=""
+ended=""; cause=""; resets=""; answer=""
 while IFS='=' read -r name value; do
-  case "$name" in ended) ended=$value ;; cause) cause=$value ;; resets) resets=$value ;; esac
+  case "$name" in ended) ended=$value ;; cause) cause=$value ;; resets) resets=$value ;; answer) answer=$value ;; esac
 done < <("$script_dir/session-outcome.sh" "$file")
 
 # kept: `branch` (the work is on a branch on GitHub), `nothing` (there was none), or `lost`.
@@ -81,17 +81,29 @@ fi
 run_link=""
 [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 lost="What the engineer had could not be pushed, and is lost with the runner."
+# Nothing starts before the usage limit resets (decisions A231b).
+after=""
+[ -z "$resets" ] || after=" after $(jq -rn --argjson at "$resets" '$at | strftime("%Y-%m-%d %H:%M UTC")')"
 
+# Each comment's first line says what a person must do (decisions A371a).
 if [ "$kind" = build ]; then
   case "$kept" in
-    branch)  message="What the engineer had is on the branch \`$branch\`, unfinished and unverified; its pull request, if it has one, is still a draft. The next build starts from it: add the \`ready\` label again." ;;
-    nothing) message="There was no work to keep: the engineer had not started a branch, or had changed nothing on it." ;;
-    lost)    message=$lost ;;
+    branch)
+      todo="Add the \`ready\` label again$after: the next build starts from the branch \`$branch\`."
+      message="What the engineer had is on the branch \`$branch\`, unfinished and unverified; its pull request, if it has one, is still a draft." ;;
+    nothing)
+      todo="Add the \`ready\` label again$after: the build starts again from the beginning."
+      message="There was no work to keep: the engineer had not started a branch, or had changed nothing on it." ;;
+    lost)
+      todo="Add the \`ready\` label again$after: the build starts again from the beginning."
+      message=$lost ;;
   esac
-  # start-build.sh reads the reset time from this comment's first line (decisions A231b).
+  # start-build.sh reads the reset time from the start of this comment (decisions A231b).
   until=""
   [ -z "$resets" ] || until="<!-- factory:usage-limit $resets -->"
-  gh issue comment "$number" --body "${until}The build ended with no pull request ready for review: $cause. $message$run_link" >/dev/null \
+  gh issue comment "$number" --body "${until}$todo
+
+The build ended with no pull request ready for review: $cause. $message$run_link" >/dev/null \
     || die "Could not comment on issue #$number: the build ended with no pull request ready for review ($cause)."
   gh issue edit "$number" --add-label needs-human --remove-label in-progress >/dev/null \
     || die "Could not add needs-human to issue #$number."
@@ -108,22 +120,31 @@ if [ "$kind" = build ]; then
   exit 1
 fi
 
-needs=" This needs a person."
+again="Run \`gh workflow run fix.yml -f pr=$number\`$after: a new fix round starts."
 case "$kept" in
-  branch)  message="The fix round ended without handing over a fix: $cause. What the engineer had is on the branch \`$branch\`, unfinished and unverified; no checks ran on it." ;;
-  lost)    message="The fix round ended without handing over a fix: $cause. $lost" ;;
+  branch)
+    todo="Submit a \"Request changes\" review$after saying what is left to do: the engineer carries on from the branch in a fix round that is not one of the three."
+    message="The fix round ended without handing over a fix: $cause. What the engineer had is on the branch \`$branch\`, unfinished and unverified; no checks ran on it." ;;
+  lost)
+    todo=$again
+    message="The fix round ended without handing over a fix: $cause. $lost" ;;
   nothing)
     if [ "$ended" = completed ] && [ "$marked" = true ]; then
       # Flagged all the same, so that it holds no place while it waits (decisions A368b).
-      needs=""
-      message="The fix round pushed nothing: the engineer labelled this pull request \`waits-for-main\`, as what failed lies outside it, and the comment above says what it waits for. The next merge to \`main\` tests it again."
+      todo="Nothing to do: the next merge to \`main\` tests this pull request again."
+      message="The fix round pushed nothing: the engineer labelled this pull request \`waits-for-main\`, as what failed lies outside it, and the comment above says what it waits for."
     elif [ "$ended" = completed ]; then
+      # The engineer stopped on purpose, so its answer says what it needs (decisions A371b).
+      todo=${answer:-"Read the engineer's comment above, then submit a \"Request changes\" review saying what to change: that starts a fix round that is not one of the three."}
       message="The fix round pushed nothing: the engineer ended the session with no change to the pull request, which is as the checks and reviews last saw it. If the findings were rebutted, the reasons are in the comments above."
     else
+      todo=$again
       message="The fix round ended without pushing a fix: $cause. The engineer left no work to keep, and the pull request is as the checks and reviews last saw it."
     fi ;;
 esac
-gh pr comment "$number" --body "$message$needs$run_link" >/dev/null \
+gh pr comment "$number" --body "$todo
+
+$message$run_link" >/dev/null \
   || die "Could not comment on pull request #$number: the fix round pushed nothing ($cause)."
 gh pr edit "$number" --add-label needs-human >/dev/null \
   || die "Could not add needs-human to pull request #$number."

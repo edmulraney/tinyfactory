@@ -164,6 +164,10 @@ expect_no_output() {
 expect_call() {
   [[ "$(cat "$T/calls")" == *"$1"* ]] || fail "expected the call: $1"
 }
+# expect_first_line <call> <line>: the comment the call posts starts with the line, on a line of its own (decisions A371a).
+expect_first_line() {
+  [[ "$(cat "$T/calls")" == *"$1 $2"$'\n\n'* ]] || fail "expected the comment of \`$1\` to start with the line: $2"
+}
 expect_no_call() {
   [[ "$(cat "$T/calls")" != *"$1"* ]] || fail "expected no call like: $1"
 }

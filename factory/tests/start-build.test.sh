@@ -585,7 +585,8 @@ expect_no_call "gh workflow run"
 expect_status 0
 expect_written false
 expect_output "not started: the Claude usage limit ended the last build of issue #12, and resets on $when"
-expect_call "gh issue comment 12 --body Not started: the Claude usage limit ended this ticket's last build, and it resets on $when. Add the \`ready\` label again after that."
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again after $when: the build starts then."
+expect_call "Not started: the Claude usage limit ended this ticket's last build, and it resets on $when."
 expect_call "gh issue edit 12 --remove-label ready"
 expect_no_call "--remove-label needs-human"
 expect_no_call "--add-label in-progress"

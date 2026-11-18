@@ -53,4 +53,4 @@ You are given a pull request number because a check or a review failed, or the r
 ## Always
 
 - Work only on your branch. Never push to `main`.
-- If you cannot finish, say so in a comment on the issue or pull request and add `needs-human`.
+- If you cannot finish, say so in a comment on the issue or pull request and add `needs-human`. A comment that leaves work to a person starts with one line: what they must do, or "Nothing to do", then what the factory does next and when (A371a).

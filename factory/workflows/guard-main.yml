@@ -22,7 +22,8 @@ jobs:
           COMPARE: ${{ github.event.compare }}
           AFTER: ${{ github.sha }}
         run: |
-          printf '`%s` pushed straight to `main`, which only the merge gate may do.\n\nCommits: %s\nHead is now `%s`.\n\nNothing was reverted. Read the commits, then revert or keep them.\n' \
+          # The first line says what a person must do (decisions A371a).
+          printf 'Read the commits below, then revert or keep them: the factory reverts nothing.\n\n`%s` pushed straight to `main`, which only the merge gate may do.\n\nCommits: %s\nHead is now `%s`.\n' \
             "$ACTOR" "$COMPARE" "$AFTER" > "$RUNNER_TEMP/alarm.md"
           gh issue create -R "$GITHUB_REPOSITORY" --title "A bot pushed straight to main (${AFTER:0:7})" \
             --label needs-human --body-file "$RUNNER_TEMP/alarm.md"

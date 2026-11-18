@@ -63,8 +63,11 @@ done <<<"$cited"
 title=$(jq -r '.lesson.title // "" | split("\n")[0] // "" | gsub("^\\s+|\\s+$"; "")' "$lesson" | cut -c1-256)
 [ -n "$title" ] || title=$(jq -r '.lesson.summary | split("\n")[0]' "$lesson" | cut -c1-60)
 # `retro` stays for good (decisions T218). Until setup has made the labels GitHub refuses them (decisions A85b).
+# A ticket flagged for a person says first what they must do (decisions A371a).
 url=$(gh issue create --title "$title" --label factory --label proposal --label retro --body "$body") \
-  || url=$(gh issue create --title "$title" --label factory --label needs-human --body "$body") \
+  || url=$(gh issue create --title "$title" --label factory --label needs-human --body "Add the \`ready\` label to have this proposal built, or close it: nothing is built until then.
+
+$body") \
   || die "Could not file the proposal of the lesson in $lesson. The lesson is saved."
 
 number=${url##*/}

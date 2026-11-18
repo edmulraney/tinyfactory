@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 # Checks that an issue follows its ticket template: prints one line per problem and exits 1 if any.
 # Usage: check-ticket.sh <issue-number>   (needs GH_TOKEN or a gh login, inside the repo)
+#        check-ticket.sh --draft <type> <title> <body-file>   checks a ticket before it is filed, and calls nothing
 set -euo pipefail
 
-issue="$1"
-json=$(gh issue view "$issue" --json title,body,labels,createdAt)
+if [ "$1" = --draft ]; then
+  usage="Usage: check-ticket.sh --draft <type> <title> <body-file>"
+  [ -f "${4:?$usage}" ] || { echo "$4 is not a file, so the draft was not checked." >&2; exit 2; }
+  # A draft has no opening time, so the limit on "Change" counts it.
+  json=$(jq -n --arg type "$2" --arg title "$3" --rawfile body "$4" '{title: $title, body: $body, labels: [{name: $type}]}')
+else
+  json=$(gh issue view "$1" --json title,body,labels,createdAt)
+fi
 title=$(jq -r '.title // ""' <<<"$json")
 body=$(jq -r '.body // ""' <<<"$json" | tr -d '\r')
 labels=" $(jq -r '[.labels[].name] | join(" ")' <<<"$json") "

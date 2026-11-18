@@ -152,7 +152,7 @@ expect_failure
 expect_output "Could not read pull request #7"
 expect_no_call "gh pr merge"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not return this pull request's description"
+expect_call "Not merged: GitHub did not return this pull request's description"
 
 scenario "tries a refused merge three times, then says on the pull request that it did not merge and why, and marks nothing deployed"
 ready_to_ship
@@ -161,8 +161,8 @@ ship
 expect_failure
 expect_calls 3 "gh pr merge 7"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub failed or refused the merge three times, and \`main\` holds no commit for this pull request. Its last answer was: gh: failed: pr merge 7"
-expect_call "Approving this pull request again retries it."
+expect_call "Not merged: GitHub failed or refused the merge three times, and \`main\` holds no commit for this pull request. Its last answer was: gh: failed: pr merge 7"
+expect_first_line "gh pr comment 7 --body" "Approve this pull request again: the merge is tried again then."
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh issue edit"
 expect_no_call "curl"
@@ -468,7 +468,8 @@ tested_with_an_older_main
 echo "{\"comments\":[{\"body\":\"<!-- factory:fits-main $main -->Not merged yet\"}]}" > "$T/comments"
 ship
 expect_failure
-expect_call "gh pr comment 7 --body Not merged: \`fits-main\` was already run again"
+expect_first_line "gh pr comment 7 --body" "Read why the \`fits-main\` job of the ci run for 5555555 left no result, then push a commit to this pull request: the new commit is checked and merged like any other."
+expect_call "Not merged: \`fits-main\` was already run again"
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh run rerun"
 expect_no_call "gh pr merge"
@@ -544,7 +545,7 @@ for words in "pr view 7 --json baseRefName" "api repos/{owner}/{repo}/commits/ma
   expect_no_call "gh run rerun"
   expect_calls 6 "gh $words"
   expect_calls 1 "gh pr comment 7"
-  expect_call "gh pr comment 7 --body Not merged: GitHub did not "
+  expect_call "Not merged: GitHub did not "
   expect_call "gh pr edit 7 --add-label needs-human"
 done
 
@@ -560,7 +561,7 @@ for words in "api repos/{owner}/{repo}/actions/runs/900/jobs" "pr view 7 --json 
   expect_no_call "gh pr merge"
   expect_no_call "gh run rerun"
   expect_calls 1 "gh pr comment 7"
-  expect_call "gh pr comment 7 --body Not merged: GitHub did not "
+  expect_call "Not merged: GitHub did not "
 done
 
 scenario "fails and says so on the pull request when fits-main could not be started again"
@@ -569,7 +570,7 @@ tested_with_an_older_main
 echo "run rerun" > "$T/fail"
 ship
 expect_failure
-expect_call "gh pr comment 7 --body Not merged: \`main\` has moved to aaaaaaa since this pull request was last tested with it, and \`fits-main\` could not be started again."
+expect_call "Not merged: \`main\` has moved to aaaaaaa since this pull request was last tested with it, and \`fits-main\` could not be started again."
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "Not merged yet"
 expect_no_call "gh pr merge"
@@ -630,7 +631,8 @@ ship
 expect_status 1
 expect_no_call "gh pr merge"
 expect_call "gh issue edit 12 --add-label deployed"
-expect_call "gh pr comment 7 --body Merged as abcdef0, but not everything that follows a merge finished:"
+expect_first_line "gh pr comment 7 --body" "Close this pull request and its ticket by hand: the factory leaves both open."
+expect_call "Merged as abcdef0, but not everything that follows a merge finished:"
 expect_call "- GitHub does not show this pull request as merged, though \`main\` holds its commit. It was not merged a second time"
 expect_call "gh pr edit 7 --add-label needs-human"
 
@@ -650,7 +652,7 @@ ship
 expect_failure
 expect_calls 1 "gh pr merge 7"
 expect_calls 1 "gh pr comment 7"
-expect_call "gh pr comment 7 --body Not merged: GitHub did not list the commits on \`main\`, so whether this pull request is already merged there is not known"
+expect_call "Not merged: GitHub did not list the commits on \`main\`, so whether this pull request is already merged there is not known"
 expect_no_call "curl"
 
 scenario "does not merge when main cannot be read before the merge"
@@ -813,7 +815,7 @@ ship_second
 expect_status 0
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run install-workflows.yml"
-expect_call "gh pr comment 7 --body Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6 after this pull request's diff of it was made. The installer would refuse the change once merged, and \`pnpm lint\` would fail on \`main\` for every pull request. Its engineer merges \`main\` into the branch first: a fix round was started for pull request #7. The new commit is then checked and merged like any other."
+expect_call "Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6 after this pull request's diff of it was made. The installer would refuse the change once merged, and \`pnpm lint\` would fail on \`main\` for every pull request. Its engineer merges \`main\` into the branch first: a fix round was started for pull request #7. The new commit is then checked and merged like any other."
 expect_calls 1 "gh workflow run"
 expect_call "gh workflow run fix.yml -f pr=7"
 expect_calls 1 "gh pr comment 7"
@@ -844,8 +846,9 @@ ship_second
 expect_status 0
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run"
-expect_call "gh pr comment 7 --body Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6"
-expect_call "This pull request gets no fix round to merge \`main\` into the branch, so a person does: \`git fetch origin main && git merge origin/main\`, then push. The new commit is then checked and merged like any other."
+expect_call "Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6"
+expect_first_line "gh pr comment 7 --body" "On this pull request's branch, run \`git fetch origin main && git merge origin/main\`, then push: the new commit is checked and merged like any other."
+expect_call "This pull request gets no fix round to merge \`main\` into the branch."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "an overtaken workflow change whose head already had its round for a conflict waits for a person"
@@ -865,7 +868,7 @@ ship_second
 expect_status 0
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run"
-expect_call "This pull request gets no fix round to merge \`main\` into the branch, so a person does: \`git fetch origin main && git merge origin/main\`"
+expect_first_line "gh pr comment 7 --body" "On this pull request's branch, run \`git fetch origin main && git merge origin/main\`, then push: the new commit is checked and merged like any other."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "says so, and fails, when who opened an overtaken change cannot be read"
@@ -875,7 +878,7 @@ ship_second
 expect_status 1
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run"
-expect_call "GitHub did not say who opened this pull request, so no fix round was started to merge \`main\` into the branch. Approving this pull request again retries it."
+expect_call "GitHub did not say who opened this pull request, so no fix round was started to merge \`main\` into the branch."
 
 scenario "a round for a conflict at an earlier head does not use up the round for this one"
 changes_a_workflow; merge_first
@@ -893,7 +896,7 @@ while IFS='|' read -r call; do
   expect_status 1
   expect_no_call "gh pr merge"
   expect_no_call "gh workflow run"
-  expect_call "gh pr comment 7 --body Not merged: GitHub did not say whether \`main\` has changed a workflow source this pull request changes, and the installer refuses such a change once it is merged. Approving this pull request again retries it."
+  expect_call "Not merged: GitHub did not say whether \`main\` has changed a workflow source this pull request changes, and the installer refuses such a change once it is merged."
   expect_call "gh pr edit 7 --add-label needs-human"
 done <<'CALLS'
 api repos/{owner}/{repo}/pulls/7/files
@@ -909,8 +912,8 @@ ship_second
 expect_status 1
 expect_no_call "gh pr merge"
 expect_calls 1 "gh workflow run fix.yml"
-expect_call "gh pr comment 7 --body Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6"
-expect_call "The fix round that merges \`main\` into the branch could not be started. Approving this pull request again retries it."
+expect_call "Not merged: \`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6"
+expect_call "The fix round that merges \`main\` into the branch could not be started."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "says so, and fails, when the fix rounds of an overtaken change cannot be counted"
@@ -920,7 +923,7 @@ ship_second
 expect_status 1
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run"
-expect_call "Its fix rounds could not be counted, so none was started to merge \`main\` into the branch. Approving this pull request again retries it."
+expect_call "Its fix rounds could not be counted, so none was started to merge \`main\` into the branch."
 
 scenario "a merged revert reopens the ticket it took back as reverted, before the wait for production"
 ready_to_ship

@@ -7,10 +7,10 @@ session() {
   printf '[{"type":"system","subtype":"init","session_id":"c22ab626"},{"type":"assistant"},%s]\n' "$1" > "$T/session.json"
 }
 
-# expect_lines <ended> <session> <cause> [resets]: exactly these four lines and nothing else.
+# expect_lines <ended> <session> <cause> [resets] [answer]: exactly these five lines and nothing else.
 expect_lines() {
   local expected
-  expected=$(printf 'ended=%s\nsession=%s\ncause=%s\nresets=%s' "$1" "$2" "$3" "${4:-}")
+  expected=$(printf 'ended=%s\nsession=%s\ncause=%s\nresets=%s\nanswer=%s' "$1" "$2" "$3" "${4:-}" "${5:-}")
   [ "$out" = "$expected" ] || fail "expected exactly:"$'\n'"$expected"
 }
 
@@ -89,6 +89,25 @@ session '{"type":"result","subtype":"success","is_error":false,"terminal_reason"
 run "$scripts/session-outcome.sh" "$T/session.json"
 expect_status 0
 expect_lines completed c22ab626 "the agent ended its session before the work was handed over"
+
+scenario "a session the agent ended itself gives the first line of its answer, with no mention in it"
+session '{"type":"result","subtype":"success","is_error":false,"terminal_reason":"completed","result":"\nNothing to do: the checks run again when #363 merges | ask @claude.\n\nThe rest.","session_id":"c22ab626"}'
+run "$scripts/session-outcome.sh" "$T/session.json"
+expect_status 0
+expect_lines completed c22ab626 "the agent ended its session before the work was handed over" "" "Nothing to do: the checks run again when #363 merges | ask claude."
+
+scenario "an answer is cut at 300 characters, and one that is no text gives none"
+session "{\"type\":\"result\",\"terminal_reason\":\"completed\",\"result\":\"$(printf 'a%.0s' $(seq 1 400))\",\"session_id\":\"c22ab626\"}"
+run "$scripts/session-outcome.sh" "$T/session.json"
+expect_lines completed c22ab626 "the agent ended its session before the work was handed over" "" "$(printf 'a%.0s' $(seq 1 300))"
+session '{"type":"result","terminal_reason":"completed","result":{"text":"Do this"},"session_id":"c22ab626"}'
+run "$scripts/session-outcome.sh" "$T/session.json"
+expect_lines completed c22ab626 "the agent ended its session before the work was handed over"
+
+scenario "a session cut short gives no answer: what it printed last is an error, not what the agent needs"
+session '{"type":"result","is_error":true,"terminal_reason":"api_error","api_error_status":529,"result":"API Error: Overloaded","session_id":"c22ab626"}'
+run "$scripts/session-outcome.sh" "$T/session.json"
+expect_lines api_error c22ab626 "the model's API was overloaded (error 529)"
 
 scenario "a missing result file is none, not a session that completed"
 run "$scripts/session-outcome.sh" "$T/nothing-here.json"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Creates or updates the labels the factory uses, and deletes the ones GitHub gives every new
 # repo, which nothing uses. Safe to re-run: --force updates a label that exists, and a default
-# label that is gone is not looked for again. Which labels, and why: decisions T85a to T85e, T33a, T218, T19a.
+# label that is gone is not looked for again. Which labels, and why: decisions T85a to T85e, T33a, T218, T19a, T353a.
 # It is its own script, called by github.sh during setup, because it is a setup step the
 # factory can re-apply by itself: factory/scripts/apply-setup.sh runs it after a merged change,
 # with the workflow's own token. So it must need nothing but `issues: write` on the repo (which
@@ -26,6 +26,7 @@ gh label create proposal    -R "$repo" --force --color BFD4F2 --description "A c
 gh label create retro       -R "$repo" --force --color D4C5F9 --description "Filed by a retro; it stays once the proposal is accepted"
 gh label create waits-for-main -R "$repo" --force --color C2E0C6 --description "What failed lies outside this pull request; the next merge tests it again"
 gh label create proof       -R "$repo" --force --color FEF2C0 --description "Something to confirm once a merged change has run; nothing to build"
+gh label create idea        -R "$repo" --force --color F9D0C4 --description "A rough idea; Peta turns it into tickets with the owner"
 
 # GitHub's default labels sit beside the real ones in every picker (decisions T85e). One that an
 # open ticket or pull request carries is left, and said, because deleting a label takes it off

@@ -31,7 +31,10 @@ if [ -n "$overtaken" ]; then
     || not_merged "$why. GitHub did not say who opened this pull request, so no fix round was started to merge \`$base\` into the branch"
   if [ "$author" != app/claude ] || [ "$rounds" -ge 3 ] || [ "$before" -gt 0 ]; then
     # A person's own gets no round, nor one with none left, as for a conflict (decisions A124c, A124g).
-    retry gh pr comment "$pr" --body "Not merged: $why. This pull request gets no fix round to merge \`$base\` into the branch, so a person does: \`git fetch origin $base && git merge origin/$base\`, then push. The new commit is then checked and merged like any other." >/dev/null
+    # Each comment that flags it says first what a person must do (decisions A371a).
+    retry gh pr comment "$pr" --body "On this pull request's branch, run \`git fetch origin $base && git merge origin/$base\`, then push: the new commit is checked and merged like any other.
+
+Not merged: $why. This pull request gets no fix round to merge \`$base\` into the branch." >/dev/null
     retry gh pr edit "$pr" --add-label needs-human >/dev/null
     exit 0
   fi
@@ -67,7 +70,9 @@ if ! grep -qxF "tested-with-main-$main" <<<"$tested"; then
       || not_merged "GitHub did not return this pull request's comments, so whether \`fits-main\` was already run again for \`$base\` at ${main:0:7} is not known"
     if [ "$rerun_requests" -ne 0 ]; then
       # Decisions M24.
-      retry gh pr comment "$pr" --body "Not merged: \`fits-main\` was already run again for \`$base\` at ${main:0:7} and left no result for that commit. Asking again would go round in a circle, so this needs a person." >/dev/null
+      retry gh pr comment "$pr" --body "Read why the \`fits-main\` job of the ci run for ${head:0:7} left no result, then push a commit to this pull request: the new commit is checked and merged like any other.
+
+Not merged: \`fits-main\` was already run again for \`$base\` at ${main:0:7} and left no result for that commit. Asking again would go round in a circle." >/dev/null
       retry gh pr edit "$pr" --add-label needs-human >/dev/null
       exit 1
     fi
@@ -221,15 +226,18 @@ if [ -n "$issue" ]; then
 fi
 
 # GitHub may still show as open a pull request an earlier call merged: it is left open for a person (decisions M29).
+# The comment that flags it says first what a person must do (decisions A371a).
+todo=""
 if [ "$called" = no ]; then
   state=$(retry gh pr view "$pr" --json state --jq .state) || state=""
   if [ "$state" != MERGED ]; then
-    unfinished "GitHub does not show this pull request as merged, though \`$base\` holds its commit. It was not merged a second time, which would add an empty commit. Close it and its ticket by hand"
+    unfinished "GitHub does not show this pull request as merged, though \`$base\` holds its commit. It was not merged a second time, which would add an empty commit"
+    todo="Close this pull request and its ticket by hand: the factory leaves both open."$'\n\n'
     retry gh pr edit "$pr" --add-label needs-human >/dev/null || true
   fi
 fi
 
 [ -n "$incomplete" ] || exit 0
-body=$(printf 'Merged as %s, but not everything that follows a merge finished:\n\n%s\n%s' "${commit:0:7}" "$incomplete" "$(run_log)")
+body=$(printf '%sMerged as %s, but not everything that follows a merge finished:\n\n%s\n%s' "$todo" "${commit:0:7}" "$incomplete" "$(run_log)")
 retry gh pr comment "$pr" --body "$body" >/dev/null || echo "and the pull request could not be told so" >&2
 exit 1

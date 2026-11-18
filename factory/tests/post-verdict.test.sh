@@ -215,7 +215,7 @@ expect_refused_for() {
   local reviewer="Ryan (correctness)"
   [ "${2:-bug}" = bug ] || reviewer="Adam (architecture and taste)"
   expect_status 1
-  expect_posted "**$reviewer: review not finished.** Its verdict was refused, because each of its findings is \`${2:-bug}\` or \`out-of-scope\`, and these are not: $1. It is not posted, so no fix round starts"
+  expect_posted "Its verdict was refused, because each of its findings is \`${2:-bug}\` or \`out-of-scope\`, and these are not: $1. It is not posted, so no fix round starts"
   expect_posted "Run the failed job again in https://github.com/owner/repo/actions/runs/900"
   [[ "$(cat "$T/posted")" != *": FAIL**"* && "$(cat "$T/posted")" != *": PASS**"* ]] || fail "expected it to be posted as neither a pass nor a fail"
   [[ "$(cat "$T/posted")" != *"Wrong."* ]] || fail "expected no finding to be posted"
@@ -378,7 +378,7 @@ scenario "a fail with a finding over 40 words is refused: nothing of it is poste
 a_review
 OUTPUT="{\"findings\":[{\"file\":\"a.ts\",\"kind\":\"misbehaves\",\"problem\":\"Wrong.\",\"fix\":\"Right it.\"},{\"file\":\"b.ts\",\"kind\":\"misbehaves\",\"problem\":\"Wrong.\",\"fix\":\"$(words 41)\"}],\"assumptions\":[]}" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7 "$T/session.json"
 expect_status 1
-expect_posted "**Ryan (correctness): review not finished.** Its verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: finding 2's \`fix\` is 41 words."
+expect_posted "Its verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: finding 2's \`fix\` is 41 words."
 expect_posted "no fix round starts"
 expect_posted "Run the failed job again in https://github.com/owner/repo/actions/runs/900"
 [[ "$(cat "$T/posted")" != *": FAIL**"* ]] || fail "expected it not to be posted as a fail"
@@ -422,7 +422,7 @@ scenario "a pass with a fourth assumption is refused, and the job fails: nothing
 a_review
 OUTPUT=$(assuming 4) run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_status 1
-expect_posted "**Adam (architecture and taste): review not finished.** Its verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: it gives 4 assumptions, and 3 is the most. It is not posted"
+expect_posted "Its verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: it gives 4 assumptions, and 3 is the most. It is not posted"
 [[ "$(cat "$T/posted")" != *": PASS**"* ]] || fail "expected it not to be posted as a pass"
 [[ "$(cat "$T/posted")" != *"Claim 1 holds."* ]] || fail "expected none of the assumptions to be posted"
 [[ "$(cat "$T/posted")" != *"factory:assumptions"* ]] || fail "expected no hidden list a script could take for a verdict's"
@@ -548,6 +548,8 @@ git remote set-url origin "$T/nowhere"
 OUTPUT="" run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_status 1
 expect_posted "review not finished"
+[ "$(sed -n 1p "$T/posted")" = "**Adam (architecture and taste): review not finished.** Run the failed job again in https://github.com/owner/repo/actions/runs/900: the reviewer then reviews this pull request." ] && [ -z "$(sed -n 2p "$T/posted")" ] \
+  || fail "expected the comment's first line to say what a person must do, got: $(head -n 1 "$T/posted")"
 expect_call "gh pr edit 7 --add-label needs-human"
 grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
 
@@ -556,7 +558,7 @@ for result in '{"verdict":"fail"}' '{"verdict":"pass","findings":"none"}' '[]' '
   a_review
   OUTPUT="$result" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7 "$T/session.json"
   expect_status 1
-  expect_posted "**Ryan (correctness): review not finished.** The review ended without a verdict"
+  expect_posted "The review ended without a verdict"
   grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs for: $result"
   [[ "$(cat "$T/posted")" != *": FAIL**"* && "$(cat "$T/posted")" != *": PASS**"* ]] || fail "expected it not to be posted as a verdict: $result"
 done

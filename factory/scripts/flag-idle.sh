@@ -75,13 +75,16 @@ while IFS= read -r line; do
     continue
   fi
   if [ -n "$conflict" ]; then
-    next="Pull request #$conflict conflicts with \`main\`, and no fix round is going for it. To start one: \`gh workflow run fix.yml -f pr=$conflict\`."
+    todo="Run \`gh workflow run fix.yml -f pr=$conflict\`: a fix round starts and fits the branch to \`main\`."
+    next="Pull request #$conflict conflicts with \`main\`, and no fix round is going for it."
   elif [ -n "$ready" ]; then
-    next="Pull request #$ready is ready for review, and no check, review, fix round or merge is going for it: \`gh pr checks $ready\` shows where it stopped."
+    todo="Run \`gh pr checks $ready\` and run again the job it shows stopped: the pull request merges once its checks and reviews pass."
+    next="Pull request #$ready is ready for review, and no check, review, fix round or merge is going for it."
   else
-    next="No build of it is going. Add the \`ready\` label again to start one."
+    todo="Add the \`ready\` label again: a build starts when a place is free."
+    next="No build of it is going."
   fi
-  to_flag+="$ticket $minutes $touched $about"$'\t'"$next"$'\n'
+  to_flag+="$ticket $minutes $touched $about"$'\t'"$next"$'\t'"$todo"$'\n'
 done <<<"$in_flight"
 
 if [ -z "$to_flag" ]; then
@@ -93,7 +96,7 @@ run_link=""
 [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" Found by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 status=0
 flagged=""
-while IFS=$'\t' read -r found next; do
+while IFS=$'\t' read -r found next todo; do
   [ -n "$found" ] || continue
   read -r ticket minutes touched about <<<"$found"
   # The label first: it is what keeps the next look from flagging the ticket again (decisions T271d).
@@ -103,7 +106,10 @@ while IFS=$'\t' read -r found next; do
     continue
   fi
   flagged=yes
-  if gh issue comment "$ticket" --body "Nothing is working on this ticket. It is in flight ($about), no run is going or queued for it, and nothing has happened on it since $touched, $minutes minutes ago. $next$run_link" >/dev/null; then
+  # The first line says what a person must do (decisions A371a).
+  if gh issue comment "$ticket" --body "$todo
+
+Nothing is working on this ticket. It is in flight ($about), no run is going or queued for it, and nothing has happened on it since $touched, $minutes minutes ago. $next$run_link" >/dev/null; then
     echo "flagged: #$ticket ($about), last touched $minutes minutes ago"
   else
     echo "Ticket #$ticket was flagged needs-human, with nothing working on it, but it could not be told why." >&2

@@ -88,6 +88,7 @@ expect_status 0
 comment_says '`board.sh` changed, and this run was not given the `BOARD_TOKEN` secret'
 comment_says "\`$setup/board.sh myapp\`"
 comment_lacks "the merged copy of board.sh ran"
+[ "$(sed -n 1p "$T/comment")" = "Run by hand, with your own logins, each setup script below that failed or was not run: the factory does not run it again." ] && [ -z "$(sed -n 2p "$T/comment")" ] || fail "expected the comment's first line to say what a person must do, got: $(head -n 1 "$T/comment")"
 expect_call "gh issue edit 12 --add-label needs-human"
 
 scenario "runs the merged copy of labels.sh with the workflow's own token, and keeps the board token from it"
@@ -114,6 +115,7 @@ apply
 expect_status 1
 ticket_says 'Ran `labels.sh` (as merged in abcdef0 by pull request #7) and it failed with exit 3'
 ticket_says "could not create the label"
+[ "$(head -n 1 "$T/ticket-comment")" = "Run by hand, with your own logins, each setup script below that failed or was not run: the factory does not run it again." ] || fail "expected the comment's first line to say what a person must do, got: $(head -n 1 "$T/ticket-comment")"
 expect_call "gh issue edit 12 --add-label needs-human"
 expect_no_call "gh pr comment"
 expect_output "a setup script failed after the merge of pull request #7"
