@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Runs the whole bootstrap in order, in the current directory. `npx tinyfactory <name>` makes the
-# folder and runs this in it. Each step is safe to re-run, so after fixing a failure just run this again.
+# folder and runs this in it. Each step is safe to re-run and leaves alone what an earlier run
+# finished, so after fixing a failure the same command carries on from where it stopped.
 # It opens the purpose interview (what are we building, and its mission), then needs only browser
 # approvals: the Neon sign-in, the board token, the workflow app, the Claude token, and two settings no API
 # exposes (Vercel's preview retention and the board's automations).
@@ -12,6 +13,16 @@ name="${1:-$(basename "$PWD")}"
 
 for step in preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token; do
   printf '\n== %s ==\n' "$step"
-  "$here/$step.sh" "$name"
+  # The scaffold ends by proving the project, which takes minutes. A project that has its first
+  # commit was scaffolded and proven by the run that made the commit.
+  if [ "$step" = scaffold ] && [ "$(git rev-parse --show-toplevel 2>/dev/null)" = "$(pwd -P)" ] \
+    && git rev-parse --quiet --verify HEAD >/dev/null 2>&1; then
+    echo "scaffold ok: $name has its first commit already"
+    continue
+  fi
+  if ! "$here/$step.sh" "$name"; then
+    printf '\nSetup stopped at %s. Fix what it reports, then run the same command again: it carries on from here.\n' "$step" >&2
+    exit 1
+  fi
 done
 printf '\nbootstrap complete: %s\n' "$name"

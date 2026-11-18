@@ -92,7 +92,7 @@ The factory you get improves itself while it builds your product. After a run th
 ## What you need
 
 - **Accounts:** GitHub (a personal account), Vercel (the free Hobby plan is enough), and a Claude subscription, which the agents run on. The database is created through Vercel's marketplace, so you need no separate Neon account.
-- **The Claude GitHub App** installed on your GitHub account: <https://github.com/apps/claude>.
+- **The Claude and Vercel GitHub Apps** installed on your GitHub account, with access to all repositories: <https://github.com/apps/claude> and <https://github.com/apps/vercel>. Where an app can see selected repositories only, setup stops and asks you to add the new one.
 - **On your machine:** macOS or Linux, Node 20 or later, pnpm, git, jq, python3, Claude Code, the GitHub CLI (`gh`) logged in with the `repo`, `workflow` and `project` scopes, and a Vercel login (`npx vercel login`).
 
 ## Getting started
@@ -101,7 +101,7 @@ The factory you get improves itself while it builds your product. After a run th
 npx tinyfactory my-idea
 ```
 
-The command makes the folder `my-idea` and runs the setup in it. It checks your tools and logins, creates the app, interviews you about the product and writes `PURPOSE.md`. It then sets up the repository, hosting, the database, sign-in, the board and the agents' access, and asks you for a few approvals in the browser. Every step is safe to run again, so after fixing what a step reports, run the same command again. The scripts are written never to print a secret or write one to disk. `.claude/skills/bootstrap/SKILL.md` describes every step.
+The command makes the folder `my-idea` and runs the setup in it. It checks your tools and logins, creates the app, interviews you about the product and writes `PURPOSE.md`. It then sets up the repository, hosting, the database, sign-in, the board and the agents' access, and asks you for a few approvals in the browser. Every step leaves alone what an earlier run finished, so after fixing what a step reports, run the same command again and it carries on from there. Inside the project's folder, `npx tinyfactory` alone does the same. The scripts are written never to print a secret or write one to disk. `.claude/skills/bootstrap/SKILL.md` describes every step.
 
 To run the newest commit of this repository instead of the published package: `npx github:edmulraney/tinyfactory my-idea`.
 

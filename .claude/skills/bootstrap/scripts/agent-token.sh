@@ -2,6 +2,8 @@
 # Creates a Claude subscription token and stores it as the repo secret CLAUDE_CODE_OAUTH_TOKEN.
 # The token is never printed or written to disk. The human only approves in the browser.
 # Then runs the agent-check workflow to prove the token and model work in Actions.
+# Safe to re-run: skips making a token when the secret exists (FORCE=1 replaces it), and skips the
+# proof as well once agent-check has passed.
 # Usage: agent-token.sh [name]   (name defaults to the directory name)
 set -uo pipefail
 
@@ -12,6 +14,7 @@ repo="$owner/$name"
 # `claude setup-token` draws a terminal UI and hard-wraps the token at the terminal width;
 # copying it by hand loses everything after the first line. Run it in a very wide pseudo-terminal
 # and pull the token straight out of the output stream.
+make_token() {
 script -q /dev/null sh -c 'stty cols 1000 rows 50; claude setup-token' </dev/null 2>&1 \
   | REPO="$repo" python3 -u -c '
 import os, re, select, subprocess, sys
@@ -39,7 +42,18 @@ if not token:
 subprocess.run(["gh", "secret", "set", "CLAUDE_CODE_OAUTH_TOKEN", "-R", os.environ["REPO"]],
                input=token, check=True, stdout=subprocess.DEVNULL)
 print("secret CLAUDE_CODE_OAUTH_TOKEN stored (%d characters)" % len(token))
-' || exit 1
+'
+}
+
+if [ "${FORCE:-}" != 1 ] && gh secret list -R "$repo" --json name --jq '.[].name' | grep -qx CLAUDE_CODE_OAUTH_TOKEN; then
+  if [ "$(gh run list -R "$repo" --workflow agent-check --limit 1 --json conclusion --jq '.[0].conclusion')" = success ]; then
+    echo "agent ok: secret CLAUDE_CODE_OAUTH_TOKEN already set, and agent-check has passed (FORCE=1 to replace the token)"
+    exit 0
+  fi
+  echo "secret CLAUDE_CODE_OAUTH_TOKEN already set (FORCE=1 to replace it); agent-check has not passed yet"
+else
+  make_token || exit 1
+fi
 
 gh workflow run agent-check -R "$repo" >/dev/null
 echo "started agent-check; waiting for the result"
