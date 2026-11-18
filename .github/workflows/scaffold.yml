@@ -1,6 +1,8 @@
-# Proves this repository can still start a project: runs the scaffold in an empty directory on Linux.
-# The scaffold ends by linting, type-checking, testing and building the new project, the factory's own
-# tests among them. None of the factory's workflows (factory/workflows/) runs in this repository.
+# Proves that the package `npx tinyfactory` runs can still start a project. It packs this repository as
+# npm would, starts the command from the unpacked package, and runs the scaffold from it in an empty
+# directory on Linux. The scaffold ends by linting, type-checking, testing and building the new
+# project, the factory's own tests among them. None of the factory's workflows (factory/workflows/)
+# runs in this repository.
 name: scaffold
 
 on:
@@ -24,9 +26,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Scaffold a project in an empty directory
+      - name: Pack the repository as npm would
+        run: |
+          cd tinyfactory
+          npm pack --pack-destination "$RUNNER_TEMP"
+          tar -xzf "$RUNNER_TEMP"/tinyfactory-*.tgz -C "$RUNNER_TEMP"
+      - name: Refuse a name that cannot be a repository
+        run: |
+          if node "$RUNNER_TEMP/package/bin/tinyfactory.mjs" "Some Fun Idea"; then
+            echo "the command accepted a name with spaces and capitals"
+            exit 1
+          fi
+      - name: Start the bootstrap in a new folder
+        run: |
+          # Nothing is logged in on this runner, so the bootstrap stops at its first step, which changes nothing.
+          if node "$RUNNER_TEMP/package/bin/tinyfactory.mjs" started > started.log 2>&1; then
+            cat started.log
+            echo "the bootstrap passed on a runner where nothing is logged in"
+            exit 1
+          fi
+          cat started.log
+          [ -d started ]
+          grep -qF "== preflight ==" started.log
+      - name: Scaffold a project from the package in an empty directory
         run: |
           git config --global user.name scaffold-check
           git config --global user.email scaffold-check@users.noreply.github.com
           mkdir demo && cd demo
-          "$GITHUB_WORKSPACE/tinyfactory/.claude/skills/bootstrap/scripts/scaffold.sh" demo
+          "$RUNNER_TEMP/package/.claude/skills/bootstrap/scripts/scaffold.sh" demo

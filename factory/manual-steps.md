@@ -13,7 +13,7 @@ The bootstrap skill (`.claude/skills/bootstrap/`) is now the record of what is a
 | Letting the workflow installer through a ruleset on `main` | Not built | Where GitHub does lock `main` (public repo or paid plan), the ruleset `github.sh` sets lets only the admin push, so `install-workflows.yml`'s push would be refused. The project's workflow app has to be added to the ruleset's bypass list. Like the ruleset itself, this has never run: this repo is on the free plan |
 | Sign-in on a real database | `sign-in.sh`, trusted domains included, was written against Neon's documentation, its CLI's source (neonctl 9.6.0) and a stand-in; it has not run against a real database | The first run, in a session with the owner's logins, is the test. What it must show is under Gotchas, Neon Auth |
 | Greptile | Not installed | Browser approval, then Ryan already reads its comments |
-| The `npx factory <name>` command | Not built | A thin wrapper that runs `bootstrap.sh` |
+| Publishing the package to npm | A person's step | `npx tinyfactory <name>` (`bin/tinyfactory.mjs`) runs the package of that name on npm, and `npm publish` needs the owner's npm login. `npx github:<owner>/tinyfactory <name>` runs the same command from the repository |
 | Bootstrap run end to end in one go | Each script is tested; the whole sequence has never run on a brand-new repo | Delete everything and run it for a fresh project |
 | Setting a passphrase-free signing key | Preflight detects the hang but does not fix it | `git config --local user.signingkey` in `github.sh`, choosing a key loaded in ssh-agent |
 | `gh repo create` path in `github.sh` | Never exercised: the first project's repo already existed | Covered by the end-to-end run above |

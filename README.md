@@ -2,9 +2,22 @@
 
 **Prove your idea before you pay for it.**
 
+```sh
+npx tinyfactory my-idea
+```
+
+One command sets up, on free tiers:
+
+- a GitHub repository;
+- a factory in it, with sandboxed AI agents for product, engineering, research, architecture review and correctness review;
+- a web app hosted on Vercel;
+- a database and sign-in on Neon Postgres and Better Auth (through Neon Auth).
+
+You bring a Claude subscription. Nothing else costs anything.
+
 tinyfactory is a small software factory for a technical founder with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
 
-It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. You bring a Claude subscription, and everything else runs on the free tiers of a small, fixed stack: GitHub, Vercel, Neon Postgres and Better Auth (through Neon Auth). If the idea gets traction, you carry on building in the same factory.
+It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
 > **Status: early.** tinyfactory is being built with tinyfactory. It grew inside one private project in November 2026, where agents wrote all but two of its first 150 pull requests, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
@@ -72,12 +85,12 @@ After a run that went wrong or cost more than it should, the retro finds the cau
 ## Getting started
 
 ```sh
-git clone https://github.com/edmulraney/tinyfactory.git
-mkdir my-product && cd my-product
-../tinyfactory/.claude/skills/bootstrap/scripts/bootstrap.sh
+npx tinyfactory my-idea
 ```
 
-`bootstrap.sh` checks your tools and logins, creates the app, interviews you about the product and writes `PURPOSE.md`. It then sets up the repository, hosting, the database, sign-in, the board and the agents' access, and asks you for a few approvals in the browser. Each step is a script that is safe to run again, so after fixing a failure you run `bootstrap.sh` again. The scripts are written never to print a secret or write one to disk. `.claude/skills/bootstrap/SKILL.md` describes every step.
+The command makes the folder `my-idea` and runs the setup in it. It checks your tools and logins, creates the app, interviews you about the product and writes `PURPOSE.md`. It then sets up the repository, hosting, the database, sign-in, the board and the agents' access, and asks you for a few approvals in the browser. Every step is safe to run again, so after fixing what a step reports, run the same command again. The scripts are written never to print a secret or write one to disk. `.claude/skills/bootstrap/SKILL.md` describes every step.
+
+To run the newest commit of this repository instead of the published package: `npx github:edmulraney/tinyfactory my-idea`.
 
 ## Using it
 
@@ -90,9 +103,15 @@ mkdir my-product && cd my-product
 
 `factory/README.md` is the full guide.
 
-## Free plans
+## Built around the free tiers
 
-The factory is designed for the free plans of GitHub Actions, Vercel and Neon. It is not yet tuned to stay inside them under heavy use, and cutting the Actions minutes each ticket uses is current work. A public repository has no limit on Actions minutes; `bootstrap.sh` creates a private one. `factory/free-tier.md` records each limit and every setting made to stretch it.
+The free tiers are the constraint the factory is designed around, so it is tuned to stretch them and keep you shipping without reaching a limit:
+
+- **GitHub Actions minutes:** it runs only the checks a change can affect, and moves the board's cards with GitHub's own automations.
+- **Vercel deployments:** it builds no preview for a change that touches no app code.
+- **Neon database branches:** it keeps previews for a day, and builds three tickets at a time at most.
+
+That tuning is still going on, and heavy use can still reach a limit. A public repository has no limit on Actions minutes; setup creates a private one. `factory/free-tier.md` records each limit and every setting made to stretch it.
 
 ## Known gaps
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Runs the whole bootstrap in order, in the current directory. This is what `npx factory <name>`
-# will wrap. Each step is safe to re-run, so after fixing a failure just run this again.
+# Runs the whole bootstrap in order, in the current directory. `npx tinyfactory <name>` makes the
+# folder and runs this in it. Each step is safe to re-run, so after fixing a failure just run this again.
 # It opens the purpose interview (what are we building, and its mission), then needs only browser
 # approvals: the Neon sign-in, the board token, the workflow app, the Claude token, and two settings no API
 # exposes (Vercel's preview retention and the board's automations).
