@@ -6,7 +6,7 @@ tinyfactory is a small software factory for the first version of a product. You 
 
 It is for a technical founder who wants working software in front of users quickly, with tests, review and written decisions from the first commit, so the codebase is still worth keeping when the idea works.
 
-> **Status: early.** tinyfactory was built inside one private project in five days in November 2026, and this repository is a copy of the factory's files from that project. There, agents wrote about 150 merged pull requests. Nobody has yet set up a second project from this repository from start to finish. Read [What works and what does not](#what-works-and-what-does-not) before you rely on it.
+> **Status: early.** tinyfactory was built inside one private project in five days in November 2026, and this repository is a copy of the factory's files from that project. There, agents wrote about 150 merged pull requests. Nobody has yet set up a second project from this repository from start to finish. Read [What works and what does not](#what-works-and-what-does-not) before you rely on it. [What I learnt from three days of letting AI agents ship my code](https://emul.dev/writing/letting-ai-agents-ship-my-code/) tells how it was built and what broke.
 
 ## How a change gets made
 
@@ -119,7 +119,7 @@ The mission is to test an idea on free plans. These are the limits, and what one
 | Neon, Free | 10 database branches | One for each open pull request |
 | Claude subscription | The plan's usage limits | Every agent. This is the one part that is not free |
 
-In its first week the first project merged 55 tickets. Each took 51 Actions minutes and $6.68 of Claude usage at API prices, on average. At that rate 2,000 minutes build about 39 tickets a month. That project went through 2,000 minutes in three days of heavy use, and reached its Claude usage limit twice.
+In its first week the first project merged 56 tickets. Each took 53 Actions minutes and $6.87 of Claude usage at API prices, on average. At that rate 2,000 minutes build about 37 tickets a month. That project went through 2,000 minutes in three days of heavy use, and reached its Claude usage limit twice.
 
 So at a few tickets a week it fits the free plans, and at dozens a day it does not. Cutting the minutes each ticket takes is the main work in progress. A public repository has no limit on Actions minutes; `bootstrap.sh` creates a private one.
 
@@ -137,7 +137,7 @@ So at a few tickets a week it fits the free plans, and at dozens a day it does n
 
 **Not done, or not known**
 
-- **One project and one account have run it.** From this repository, only the first two setup steps (`preflight` and `scaffold`) have been run. The others are the scripts that set the first project up, unchanged apart from names.
+- **One project and one account have run it.** From this repository, only the first two setup steps (`preflight` and `scaffold`) have been run; a check runs `scaffold` on Linux for every pull request here. The others are the scripts that set the first project up, unchanged apart from names.
 - **A personal GitHub account only.** "The owner" is the account that owns the repository. In an organisation that is the organisation, so your approvals would not count. Vercel's free plan also refuses to deploy a private repository that an organisation owns.
 - **There is no `npx` installer.** You clone this repository and run a script.
 - **You cannot yet set the order of waiting tickets by dragging cards.** The token the factory holds cannot read which ticket a card belongs to in a private repository. The ticket that has waited longest starts first.
