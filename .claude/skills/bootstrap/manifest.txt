@@ -1,0 +1,30 @@
+# Files the factory owns. scaffold.sh copies them from the factory's repo into a new project.
+# They are the same in every project and are replaced by factory upgrades, unlike the seeds in
+# templates/ (CLAUDE.md, ARCHITECTURE.md, DESIGN.md, TASTE.md), which each project edits after creation.
+# One path per line; a directory means everything under it.
+# A file listed under apps/ imports nothing but a package, a listed file or a seed (decisions S309).
+# .github/workflows is not listed: scaffold.sh makes it from factory/workflows.
+.claude/skills
+.claude/package.json
+.github/package.json
+factory/package.json
+.github/actions
+.github/ISSUE_TEMPLATE
+.github/PULL_REQUEST_TEMPLATE.md
+factory/scripts
+factory/tests
+factory/workflows
+factory/README.md
+factory/free-tier.md
+factory/free-tier
+factory/decisions.md
+factory/decisions
+factory/manual-steps.md
+factory/rule-files.txt
+apps/web/eslint.config.mjs
+apps/web/vitest.config.ts
+apps/web/playwright.config.ts
+apps/web/e2e/smoke.spec.ts
+apps/web/e2e/test.ts
+apps/web/e2e/acceptance/README.md
+apps/web/src/app/api/health/route.ts

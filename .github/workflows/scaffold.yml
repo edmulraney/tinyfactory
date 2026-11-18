@@ -1,0 +1,32 @@
+# Proves this repository can still start a project: runs the scaffold in an empty directory on Linux.
+# The scaffold ends by linting, type-checking, testing and building the new project, the factory's own
+# tests among them. None of the factory's workflows (factory/workflows/) runs in this repository.
+name: scaffold
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: tinyfactory
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Scaffold a project in an empty directory
+        run: |
+          git config --global user.name scaffold-check
+          git config --global user.email scaffold-check@users.noreply.github.com
+          mkdir demo && cd demo
+          "$GITHUB_WORKSPACE/tinyfactory/.claude/skills/bootstrap/scripts/scaffold.sh" demo

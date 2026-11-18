@@ -1,0 +1,26 @@
+# Proves the agent can run in Actions: the secret is set, the token is accepted, the model answers.
+# Usage: run by the bootstrap after it stores the secret, and by hand when agent runs fail without a clear error.
+name: agent-check
+
+on: workflow_dispatch
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Ask the agent for one word
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "::error::Secret CLAUDE_CODE_OAUTH_TOKEN is not set"; exit 1
+          fi
+          echo "token length: ${#CLAUDE_CODE_OAUTH_TOKEN} characters, whitespace inside: $(printf %s "$CLAUDE_CODE_OAUTH_TOKEN" | grep -c '[[:space:]]' || true)"
+          claude --version
+          claude -p "Reply with the single word: ok" \
+            --model claude-fable-5-2 --effort medium --max-turns 1 --output-format json \
+            | tail -1 | jq '{is_error, result}' | tee result.json
+          jq -e '.is_error == false' result.json >/dev/null

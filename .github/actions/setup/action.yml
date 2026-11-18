@@ -1,0 +1,19 @@
+name: setup
+description: Install pnpm, Node and the workspace dependencies; optionally the Playwright browser.
+inputs:
+  playwright:
+    description: Also install Chromium for Playwright
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: pnpm
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+    - if: inputs.playwright == 'true'
+      run: pnpm --filter web exec playwright install --with-deps chromium
+      shell: bash

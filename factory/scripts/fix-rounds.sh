@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Prints how many fix rounds a pull request has used, so that everything that needs the count counts it one way.
+# Usage: fix-rounds.sh <pr-number> [owner | conflict <head> | fresh-run <ci.yml-id>]
+#        Needs GH_TOKEN (pull-requests: read).
+set -euo pipefail
+
+usage="Usage: fix-rounds.sh <pr-number> [owner | conflict <head> | fresh-run <ci.yml-id>]"
+pr="${1:?$usage}"; whose="${2:-}"; head="${3:-}"
+case "$whose" in
+  # A round is a comment record-fix-round.sh posted, starting with the marker (decisions A89c, A28).
+  "") marker="<!-- factory:fix-round -->" ;;
+  # The owner's rounds are not among the three, and their own marker starts the retro (decisions A48d).
+  owner) marker="<!-- factory:owner-round -->" ;;
+  # A round for only a conflict, at that head, is in neither count above: one refuses another (decisions A124g).
+  conflict)
+    # The commit goes into the filter below, so anything that is not one is refused.
+    [[ "$head" =~ ^[0-9a-f]{7,64}$ ]] || { echo "$usage" >&2; exit 2; }
+    marker="<!-- factory:conflict-round $head -->" ;;
+  # A round only for a ci run with that ci.yml is in no count above: one refuses another (decisions A142b).
+  fresh-run)
+    [[ "$head" =~ ^[0-9a-f]{40,64}$ ]] || { echo "$usage" >&2; exit 2; }
+    marker="<!-- factory:fresh-run-round $head -->" ;;
+  *) echo "$usage" >&2; exit 2 ;;
+esac
+# An id per round and not a length, as gh runs the filter on each page; a failed read is not "no round" (decisions H7).
+# The REST list names the account in full: `gh pr view` shortens it to a login a person could hold.
+rounds=$(gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --paginate \
+    --jq ".[] | select(.user.login == \"github-actions[bot]\" and ((.body // \"\") | startswith(\"$marker\"))) | .id") \
+  || { echo "Could not read the comments of pull request #$pr from GitHub, so its fix rounds are not known." >&2; exit 1; }
+grep -c . <<<"$rounds" || true

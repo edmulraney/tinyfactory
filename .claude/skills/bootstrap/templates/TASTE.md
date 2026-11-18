@@ -1,0 +1,46 @@
+# Taste
+
+What "good" means here. Reviewers reject work that breaks these, and nothing else: no nitpicks.
+
+## Approach
+
+- **The smallest standard route.** The scale is a startup idea being validated as fast as possible, without slop, and it guides the architecture. Take the smallest standard engineering solution that does the job at that scale; anything heavier is over-engineering. A general problem is solved once, where that solution puts it, not at each call site. Depart only for a reason that serves the business, the product or the user, such as testing a hypothesis before building the whole thing, and record it as a decision.
+
+## Code
+
+- **Deep modules.** Small interface, substantial implementation. A wrapper that only forwards calls is noise.
+- **No dead code.** No unused exports, commented-out code, speculative options, or "for later" hooks.
+- **Solve today's problem.** No abstraction until the second real use. Three similar lines beat a premature helper.
+- **Names carry the meaning.** Use the domain language in `ARCHITECTURE.md`. A comment explains why, never what.
+- **An identifier takes the standard engineering term.** Prose stays plain; a variable, function, output or file is named with the word an engineer would search for (`notified`, `failed`, `retry`), never a house word (`told`).
+- **Errors are handled where something can be done about them,** and nowhere else. Never swallow one silently.
+- **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.
+- **No comment that defends not doing something.** A comment explains why something surprising is there. If the simple thing was done, there is nothing to explain.
+- **A provider's number is read from the provider when it is needed, or not used.** A limit, balance, price or count that GitHub, Vercel, Neon or Anthropic holds is never copied into a script, variable or rule file; a record may keep a dated measurement, which no script reads.
+
+## Tests
+
+- **Every acceptance criterion has a test that would fail without the change.**
+- **No tautological tests.** A test that restates the implementation, asserts on mocks it set up itself, or cannot fail proves nothing.
+- **Test behaviour, not structure.** Tests survive a refactor that keeps behaviour the same.
+- **Never weaken a test or a lint rule to get to green.** Fix the code, or say why the rule is wrong.
+
+## Pull requests
+
+- **One ticket, one pull request, as small as the ticket allows.** Unrelated cleanups go in their own ticket.
+- **The description's first sentence says what changed and stands alone.** No file-by-file narration.
+- **Docs move with the code.** The docs named in the ticket are updated in the same pull request.
+
+## Documents
+
+- **A file holds what stays true until someone edits it.** A ticket's state, a date or "for now" is wrong by the next merge. What happened goes in the ticket or a decision row.
+- **A sentence stays only when removing it changes what a reader does.**
+
+## Writing
+
+These rules apply to everything written: code comments, commit messages, tickets, pull request descriptions, comments on tickets and pull requests, decision rows and documents.
+
+- **Write for a reader who has read neither the ticket nor the code.**
+- **Say the thing itself.** Do not point at it.
+- **Name a thing by what it is, and keep that name.**
+- **One idea in each sentence, in the active voice, with its articles.**

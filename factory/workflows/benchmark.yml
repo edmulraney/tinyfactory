@@ -1,0 +1,35 @@
+# Benchmarks a model as the reviewers: Adam and Ryan review each known case, and the summary shows what they found.
+# Usage: gh workflow run benchmark.yml -f model=claude-fable-5-2 -f effort=medium
+name: benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: The model's ID, as `claude --model` takes it
+        required: true
+      effort:
+        description: The effort, as `claude --effort` takes it
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45   # three times what the reviews of 17 November took (free-tier.md entry #345)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # benchmark.sh finds where each case's commit left main
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Review each case
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          MODEL: ${{ inputs.model }}
+          EFFORT: ${{ inputs.effort }}
+        run: |
+          set -euo pipefail
+          factory/scripts/benchmark.sh "$MODEL" "$EFFORT" | tee -a "$GITHUB_STEP_SUMMARY"

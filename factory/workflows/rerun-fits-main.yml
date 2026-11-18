@@ -1,0 +1,44 @@
+# Runs `fits-main` again for a pull request whose `ci` run had not ended when the job was asked for.
+name: rerun-fits-main
+
+on:
+  # GitHub re-runs nothing in a run that is still going, so this waits until the run has ended (decisions M20).
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Open pull request whose ci run should test it with main again
+        required: true
+
+concurrency:
+  group: rerun-fits-main-${{ inputs.pr }}
+
+env:
+  PR: ${{ inputs.pr }}
+
+jobs:
+  rerun:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write         # to run the job again
+      pull-requests: write   # to read the pull request, and to say so on it when this fails
+      issues: write          # to add needs-human when this fails
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the script, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Run fits-main again once the ci run has ended
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # Two minutes: the run that asked had only to finish the job that asked.
+        run: factory/scripts/rerun-fits-main.sh "$PR" 120
+      # The pull request was told it would merge when the re-run passes, so it must not be left waiting in silence.
+      - name: Tell a person when it could not
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment "$PR" --body "\`fits-main\` could not be started again, so this pull request has not been tested with \`main\` as it is now and will not merge by itself. The log says why: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          gh pr edit "$PR" --add-label needs-human

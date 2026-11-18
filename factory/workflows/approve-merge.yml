@@ -1,0 +1,68 @@
+# Ships a pull request when the repo's owner approves it, and sends it back when the owner requests changes.
+name: approve-merge
+
+on:
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number, already approved by the owner
+        required: true
+
+concurrency:
+  group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
+
+jobs:
+  ship:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # One merge at a time, here and at the merge gate in ci.yml, and no waiting merge is dropped (decisions M22).
+    concurrency:
+      group: merge
+      queue: max
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write   # to read the pull request's check runs, run fits-main again and start a retro
+      statuses: read   # to see that Vercel skipped a deployment (decisions M33)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Ship it, if the owner approved this exact commit and its checks passed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets apply-setup.sh re-run a changed board.sh, and start-waiting.sh read the order of the board
+          PR: ${{ inputs.pr || github.event.pull_request.number }}
+          OWNER: ${{ github.repository_owner }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: factory/scripts/approve-merge.sh "$PR" "$OWNER"
+
+  send-back:
+    # Only starts fix.yml, as ci.yml's start-fix job does (decisions A89a); the round is not counted (decisions A48a).
+    if: >-
+      github.event_name == 'pull_request_review' &&
+      github.event.review.state == 'changes_requested' && github.event.review.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read   # to read the owner's review
+      actions: write        # to start fix.yml
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Start the owner's fix round
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          OWNER: ${{ github.repository_owner }}
+        run: factory/scripts/start-fix-round.sh "$PR" "$OWNER"

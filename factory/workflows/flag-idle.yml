@@ -1,0 +1,31 @@
+# Four times a day, runs again the jobs refused for billing, then flags each ticket in flight nothing works on.
+name: flag-idle
+
+on:
+  schedule:
+    # Every six hours (decisions T271e); off the hour, when GitHub starts late.
+    - cron: "43 */6 * * *"
+
+jobs:
+  look:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write         # to flag a ticket and tell it what was found
+      pull-requests: read   # to see which tickets are in flight
+      actions: write        # to run a refused run again (decisions H220a)
+      checks: read          # to read why a job never started
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run again the jobs GitHub refused to start for billing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/rerun-refused.sh
+      # A refused run that could not be read or run again hides no idle ticket (decisions T271f).
+      - name: Flag each ticket in flight that nothing is working on
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
+        run: factory/scripts/flag-idle.sh

@@ -1,0 +1,26 @@
+---
+name: ticket
+description: Turn a conversation, bug report or research note into a GitHub issue that follows the factory's ticket templates. Use when the user wants to file an Initiative, Bug or Tweak.
+---
+
+# Ticket
+
+An agent builds exactly what the ticket says. Never edit one that is `in-progress` or has an open pull request: a change of mind is the owner's "Request changes" review.
+
+1. **Pick the type.** Initiative: a feature or experiment, with a hypothesis and success metric. Bug: behaviour differs from what was intended. Tweak: a small, low-risk change to behaviour. Chore: no change in behaviour. Research: a question answered from public sources, as files in `product/`. Factory: a change to the factory itself.
+2. **Fill every section** of `.github/ISSUE_TEMPLATE/<type>.md`, with `PURPOSE.md` and `product/` for context.
+3. **Before an Initiative,** ask the user, one question at a time, what problem it solves, for whom, and what is out of scope. Push back on scope the hypothesis does not need.
+4. **Acceptance criteria** (Initiative, Bug, Tweak): `- **AC1:** Given <state>, when <action>, then <result>`, each testable through the running app. The result is what a person using the product sees or does, in their words. It never names how the product is built: a class, a token, a colour, an element's id, a function. Were the code rewritten and the product behaved the same, the criterion would still hold. A screenshot shows how something looks; a criterion does not. Bad: "then its text is in the `destructive` colour." Good: "then I see a message that says the password is wrong." A Chore has none. A Factory ticket says what can be run or observed to prove it, a Research ticket what a script can check in its files.
+5. **Title** as `CLAUDE.md` says. A Bug's says what is fixed. A change that needs two clauses is usually two tickets.
+6. **Body:** the change and its reason, "Change" in 120 words at most. Evidence is a link to the run or pull request, never the story. It does not talk to the reader.
+7. **Create:** `gh issue create --title "<title>" --label <type> --body-file <temporary file>`.
+8. **Validate:** `factory/scripts/check-ticket.sh <number>`, and fix what it reports.
+9. Tell the user the number. It is built when it gets `ready`.
+
+A request the factory cannot build waits in the backlog, linked to the `factory` ticket you file to make it possible (`factory/decisions.md` T33f).
+
+An agent nobody asked files a ticket only for a defect it saw happen, with a link to the run or output that shows it: an idea or a risk is not filed (T223). A retro's proposal has its own bar, in the `retro` skill.
+
+## A proof ticket
+
+For what only a later run can show. The owner or the session driving the backlog files it after the merge, never an engineer (`factory/decisions.md` T170). A changed workflow's first run needs none: a retro looks at it (T185). Title: "Confirm" and what the run will show, in the title format. Body: the pull request that left it, what to look for and in which run. Label `proof` alone, and skip step 8, which refuses it. The owner closes it once the run has been seen.
