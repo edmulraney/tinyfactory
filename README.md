@@ -8,14 +8,14 @@ npx tinyfactory my-idea
 
 One command sets up, on free tiers:
 
-- a GitHub repository;
+- a GitHub repository and a project board;
 - a factory in it, with sandboxed AI agents for product, engineering, research, architecture review and correctness review;
 - a web app hosted on Vercel;
 - a database and sign-in on Neon Postgres and Better Auth (through Neon Auth).
 
 You bring a Claude subscription. Nothing else costs anything.
 
-tinyfactory is a small software factory for a technical founder with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
+tinyfactory is a small software factory for a technical founder, or a tiny team, with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
@@ -30,7 +30,7 @@ flowchart LR
 
 | Step | Who | What happens |
 |---|---|---|
-| Idea | You or an agent | A ticket is added to the board. |
+| Idea | You or an agent | A ticket is added to the board. A rough idea is enough: who has the problem, what would change for the business, and notes. |
 | Refine | Peta, the product agent | She turns a rough idea into small tickets with acceptance criteria, and asks you for the decisions that are yours. |
 | Build | Esme, the product engineer | She writes the acceptance tests first, then the change, and opens a pull request. Fred does the same for a change to the factory itself. |
 | Review | Scripts, then Adam and Ryan | Lint, types, unit tests, a build, and end-to-end tests on a preview deployment. Adam reviews architecture and Ryan reviews correctness. A failure starts a fix round; after three, a person is asked. |
@@ -38,6 +38,17 @@ flowchart LR
 | Observe | Not built yet | An incident or a bug in production will become a ticket. |
 
 Two more agents work beside the loop. Rosa answers a research ticket from public sources. The retro looks at a run that went wrong and proposes a change to the factory.
+
+## Product, as well as engineering
+
+The work is geared to customer outcomes, and each project's repository holds what that needs:
+
+- **`PURPOSE.md`** says who the product is for and what it will not do. Setup writes it from an interview with you.
+- **`product/`** holds research, signals and product decisions. Give the `intake` skill the notes of a user interview, and it writes a summary, adds the evidence to the signals, and files a ticket only where the evidence justifies building now.
+- **A feature ticket** states the problem, a hypothesis and a success metric, with acceptance criteria that say what a user sees or does.
+- **The board** shows where every ticket is.
+
+Every agent starts from the purpose and from its ticket, so the engineer acts as a product engineer who knows why a change matters.
 
 ## How it is built
 
@@ -115,6 +126,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 
 ## Known gaps
 
+- **Visual design is not covered.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan. Nothing yet keeps taste in how a product looks, feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
 - **The stack is fixed,** and the model is named in the workflows.
 - **The scripts need bash 4.4 or later.** macOS ships 3.2, and `preflight` asks for a newer one.
