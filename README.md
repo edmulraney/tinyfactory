@@ -2,35 +2,45 @@
 
 **Prove your idea before you pay for it.**
 
-tinyfactory is a small software factory for a technical person with an idea. You write a ticket. AI agents build it test-first, review it, fix what the review finds, merge it and deploy it. You stay near the loop, not in it: you decide what gets built, and you are asked only when the agents cannot proceed or when a change is yours alone to decide.
+tinyfactory is a small software factory for a technical person with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
 
-It exists to take the friction out of getting a prototype in front of real users, so that your time goes on talking to them and thinking about the product. It is built to cost nothing extra: you bring a Claude subscription, and everything else runs on free plans, on a small, fixed stack (GitHub, Vercel, Neon Postgres, and Better Auth through Neon Auth). [What it costs](#what-it-costs) says how far that holds.
+It is built to get a prototype in front of real users at no extra cost. You bring a Claude subscription, and everything else runs on the free tiers of a small, fixed stack: GitHub, Vercel, Neon Postgres and Better Auth (through Neon Auth). If the idea gets traction, you carry on building in the same factory.
 
-Agents left alone make a mess of a codebase. The factory's process is there to stop that: tests first, two reviewers, a written reason for every decision, and a retro that changes the factory when an agent gets something wrong. If the idea gets traction, you keep building in the same factory, on a codebase that is still worth keeping.
+> **Status: early.** The factory was built inside one private project in November 2026, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and where it is heading.
 
-> **Status: early.** tinyfactory was built inside one private project in five days in November 2026, and this repository is a copy of the factory's files from that project. There, agents wrote about 150 merged pull requests. Nobody has yet set up a second project from this repository from start to finish. Read [What works and what does not](#what-works-and-what-does-not) before you rely on it. [tinyfactory: a software factory with a human near the loop](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and what building it has taught so far.
-
-## How a change gets made
+## The loop
 
 ```mermaid
-flowchart TD
-  T[You write a ticket] --> R[You add the ready label]
-  R --> E[An engineer agent builds it: tests first, then a pull request]
-  E --> C[Checks: lint, types, unit tests, build,<br/>end-to-end tests on a preview deployment]
-  E --> V[Two reviewers: one for design, one for correctness]
-  C --> G{Everything passed?}
-  V --> G
-  G -- no --> F[A fix round: three at most, then a person is asked]
-  F --> C
-  G -- yes --> H{Does it change what only you decide?}
-  H -- no --> M[Merged and deployed]
-  H -- yes --> A[Waits for your approval]
-  A --> M
-  M --> P[Production is checked for the merged commit]
-  P --> X[A retro looks at any friction<br/>and may propose a change to the factory]
+flowchart LR
+  I[Idea] --> R[Refine] --> B[Build] --> V[Review] --> S[Ship] --> O[Observe] --> I
 ```
 
-A pull request that passes merges without you. It waits for your approval only when it changes one of these:
+| Step | Who | What happens |
+|---|---|---|
+| Idea | You or an agent | A ticket is added to the board. |
+| Refine | Peta, the product agent | She turns a rough idea into small tickets with acceptance criteria, and asks you for the decisions that are yours. |
+| Build | Esme, the product engineer | She writes the acceptance tests first, then the change, and opens a pull request. Fred does the same for a change to the factory itself. |
+| Review | Scripts, then Adam and Ryan | Lint, types, unit tests, a build, and end-to-end tests on a preview deployment. Adam reviews architecture and Ryan reviews correctness. A failure starts a fix round; after three, a person is asked. |
+| Ship | The factory | The pull request merges and deploys, and the factory checks that production runs the merged commit. |
+| Observe | Not built yet | An incident or a bug in production will become a ticket. |
+
+Two more agents work beside the loop. Rosa answers a research ticket from public sources. The retro looks at a run that went wrong and proposes a change to the factory.
+
+## How it is built
+
+**Events drive it.** The GitHub project board is where you run the factory from. You or an agent add a ticket. You add the `ready` label, and that event starts a workflow in which an engineer picks the ticket up. Every later step starts from an event too: a pull request opens, a check fails, a review passes, a merge lands.
+
+**Skills, then workflows, then the factory.** A skill is the instructions for one job (`.claude/skills/`). A workflow runs an agent with one skill when its event arrives (`factory/workflows/`). The factory is those workflows together.
+
+**Every agent runs in a sandbox.** Each one is a Claude Code session on its own GitHub Actions runner, with only the permissions and tools its workflow grants. A reviewer can read and search; it cannot change a file or run the code it reviews.
+
+## How quality is kept
+
+**A script before an agent.** Whatever a linter, a test or a script can decide, it decides. A script costs no tokens and gives the same answer on every run. Agents are kept for what needs judgement.
+
+**Two reviewers with different jobs.** Adam judges whether the approach fits the codebase's architecture and design rules. Ryan checks that the change does what its ticket asks and that it works.
+
+**As few pull requests as possible wait for you.** A pull request that passes its checks and both reviews merges by itself, unless it changes one of these:
 
 - **spend or limits:** a model, a timeout, a free plan's limit, how many tickets run at once;
 - **secrets or permissions:** a token, a workflow's permissions, the tools an agent may use;
@@ -38,30 +48,20 @@ A pull request that passes merges without you. It waits for your approval only w
 - **the product's quality bar:** `TASTE.md`, `DESIGN.md`, the theme, and the lint, TypeScript and test configuration;
 - **`CLAUDE.md`,** the instructions every agent starts with.
 
-Anything else that needs you is labelled `needs-human`, with a comment that says why.
+Anything else that needs you is labelled `needs-human`, with a comment that says what to do.
 
-## The agents
+**The rules are files.** Each project owns `PURPOSE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md` and `CLAUDE.md`, and every ticket and review is judged against them. An agent starts each task with no memory, so what is written down is all it knows.
 
-| Name | Role | What it does |
-|---|---|---|
-| Esme | Product engineer | Builds a product ticket test-first and opens the pull request. Fixes it when a check or a review fails. |
-| Fred | Factory engineer | Builds a ticket that changes the factory itself: its scripts, skills, workflows and rules. |
-| Adam | Reviewer, design | Judges whether the approach fits the codebase's architecture and design rules, and is sound. |
-| Ryan | Reviewer, correctness | Checks that the pull request builds what its ticket asks and works: bugs, unhandled cases, security, tests that prove nothing. |
-| Rosa | Researcher | Answers a research ticket from public sources and writes what she finds into the repository. |
-| The retro | | After a run with friction, finds the cause, records a lesson, and proposes a change when the fault cost something or has happened before. |
+## How it improves
 
-Each agent is a Claude Code session that a GitHub Actions workflow starts, with one skill file as its instructions (`.claude/skills/`). They run the same model. They differ in their instructions, the tools they may use and the shape of the answer they must give. A reviewer can read and search; it cannot change a file or run the code it is reviewing.
+After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket. The factory builds that ticket like any other. `factory/decisions.md` records every decision with its reason and what was rejected.
 
 ## What a project gets
 
-- **An app:** Next.js with TypeScript and Tailwind, shadcn/ui on a closed grey-scale theme (lint fails a colour that is not in the theme), Vitest, and Playwright with an accessibility scan on every end-to-end test.
-- **Hosting:** a Vercel project. Every pull request that changes the app gets a preview deployment, and a merge deploys to production.
-- **A database:** Neon Postgres, where each preview gets its own copy of the database, so a migration is tried before it reaches production. Sign-in through Neon Auth, unless you say the product has no accounts.
-- **A board:** a GitHub project with the columns Backlog, In progress and Deployed, and views for what needs you and what the factory proposes.
-- **Ticket templates:** Initiative, Bug, Tweak, Chore, Research and Factory. A ticket that changes behaviour carries numbered acceptance criteria, and each becomes a test written before the code.
-- **Rule documents the project owns:** `PURPOSE.md` (written from an interview with you), `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md` and `CLAUDE.md`. Every ticket and review is judged against them.
-- **The factory:** 15 workflows, 75 scripts with tests, 12 skills, and a record of every decision with its reason.
+- **An app:** Next.js with TypeScript, Tailwind and shadcn/ui, with Vitest and Playwright set up and an accessibility scan on every end-to-end test.
+- **Hosting and a database:** a Vercel project and Neon Postgres. Every pull request that changes the app gets a preview deployment with its own copy of the database.
+- **Sign-in:** Neon Auth switched on, for sign-in by an emailed link, unless you say the product has no accounts.
+- **A board and ticket templates:** a GitHub project with the columns Backlog, In progress and Deployed, and templates for Idea, Initiative, Bug, Tweak, Chore, Research and Factory tickets.
 
 ## What you need
 
@@ -77,78 +77,32 @@ mkdir my-product && cd my-product
 ../tinyfactory/.claude/skills/bootstrap/scripts/bootstrap.sh
 ```
 
-`bootstrap.sh` runs these steps in order. Each is a script you can run again safely, so after fixing a failure you run `bootstrap.sh` again.
-
-| Step | What it does | What it asks of you |
-|---|---|---|
-| `preflight` | Checks every tool and login the rest needs. Changes nothing. | To fix what it lists |
-| `scaffold` | Creates the app, copies in the factory's files and the seed documents, then proves the project lints, type-checks, passes its tests and builds. | Nothing |
-| `purpose` | Opens a Claude Code session that interviews you about the product and writes `PURPOSE.md`. | To answer the interview |
-| `github` | Publishes the folder as a private repository under your account and creates the factory's labels. | Nothing |
-| `vercel` | Creates the Vercel project and connects it to the repository. | Nothing |
-| `database` | Creates the Neon database through Vercel and gives each preview its own copy. | A few clicks for one setting no API can change |
-| `database-key` | Stores a Neon key, limited to this one database, as a repository secret. | To approve a Neon sign-in in the browser |
-| `sign-in` | Switches Neon Auth on, unless `PURPOSE.md` says the product has no accounts. | Nothing |
-| `preview-access` | Lets the checks reach preview deployments. | Nothing |
-| `board` | Creates the project board, its columns and its views. | To switch on the board's automations, which no API can do |
-| `board-token` | Stores a token that can edit your project boards and nothing else. | To approve a one-time code in the browser |
-| `workflow-app` | Creates a GitHub App that installs workflow changes, on this repository only. | Two clicks in the browser |
-| `agent-token` | Stores a Claude subscription token as a repository secret, then proves an agent can run. | To approve in the browser |
-
-The scripts are written never to print a secret or write one to disk.
-
-The `bootstrap` skill (`.claude/skills/bootstrap/SKILL.md`) is written so that an agent can drive these steps and pass each approval on to you.
+`bootstrap.sh` checks your tools and logins, creates the app, interviews you about the product and writes `PURPOSE.md`. It then sets up the repository, hosting, the database, sign-in, the board and the agents' access, and asks you for a few approvals in the browser. Each step is a script that is safe to run again, so after fixing a failure you run `bootstrap.sh` again. The scripts are written never to print a secret or write one to disk. `.claude/skills/bootstrap/SKILL.md` describes every step.
 
 ## Using it
 
-1. **File a ticket.** Ask a Claude Code session in your project, which follows the `ticket` skill, or use an issue template.
-2. **Add the `ready` label.** That starts the build. Three tickets are worked on at once at most; a fourth waits and starts by itself when a place frees.
-3. **Watch the board, or walk away.** The ticket closes with the label `deployed` once production reports the merged commit.
-4. **Answer what needs you.** Approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes.
-5. **Read what the factory proposes.** A retro's proposal is a ticket written to be built as it is. Add `ready` to accept it, or close it.
-6. **Take a change back** with `gh workflow run revert.yml -f number=<ticket>`. An engineer opens the pull request that reverts it.
+1. **Start with an idea or a ticket.** Open an issue with the Idea template, and Peta proposes the tickets and the decisions that are yours; answer her, or say "go", and she files them. Or file a ticket yourself with one of the other templates.
+2. **Add the `ready` label** to a ticket to start its build. Three tickets are built at once at most, and the rest wait their turn.
+3. **Answer what needs you:** approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes.
+4. **Read what the factory proposes.** A retro's proposal is a ticket written to be built as it is. Add `ready` to accept it, or close it.
+5. **Ask for help** in a comment that holds `@claude`.
+6. **Take a change back** with `gh workflow run revert.yml -f number=<ticket>`.
 
-`factory/README.md` is the full guide: the factory's mission and principles, every step above in detail, where everything lives and what the factory measures.
+`factory/README.md` is the full guide.
 
-## What it costs
+## Free plans
 
-The mission is to test an idea on free plans. These are the limits, and what one project measured.
+The factory is designed for the free plans of GitHub Actions, Vercel and Neon. It is not yet tuned to stay inside them under heavy use, and cutting the Actions minutes each ticket uses is current work. A public repository has no limit on Actions minutes; `bootstrap.sh` creates a private one. `factory/free-tier.md` records each limit and every setting made to stretch it.
 
-| Service | Free allowance | What uses it |
-|---|---|---|
-| GitHub Actions, private repository | 2,000 minutes a month | Every build, check, review and retro |
-| Vercel, Hobby | 100 deployments a day | One preview for each push to a pull request that changes the app, one production deployment for each merge |
-| Neon, Free | 10 database branches | One for each open pull request |
-| Claude subscription | The plan's usage limits | Every agent. This is the one part that is not free |
+## Known gaps
 
-In its first week the first project merged 56 tickets. Each took 53 Actions minutes and $6.87 of Claude usage at API prices, on average. At that rate 2,000 minutes build about 37 tickets a month. That project went through 2,000 minutes in three days of heavy use, and reached its Claude usage limit twice.
-
-So at a few tickets a week it fits the free plans, and at dozens a day it does not. Cutting the minutes each ticket takes is the main work in progress. A public repository has no limit on Actions minutes; `bootstrap.sh` creates a private one.
-
-`factory/free-tier.md` records each limit and every setting made to stretch it.
-
-## What works and what does not
-
-**Seen working in the first project**
-
-- A product ticket becomes a merged and deployed change with no person in between. The first did on the project's first day.
-- Two reviewers with separate jobs found real problems before a merge, among them a database call that could hang forever and a setting that would have sent signed-in users to a stranger's site.
-- A failed check or review starts a fix round. After three, a person is asked.
-- A pull request merges without approval unless it changes one of the things listed above.
-- After a run with friction, a retro proposes a change to the factory as a ticket ready to build.
-
-**Not done, or not known**
-
-- **One project and one account have run it.** From this repository, only the first two setup steps (`preflight` and `scaffold`) have been run; a check runs `scaffold` on Linux for every pull request here. The others are the scripts that set the first project up, unchanged apart from names.
-- **A personal GitHub account only.** "The owner" is the account that owns the repository. In an organisation that is the organisation, so your approvals would not count. Vercel's free plan also refuses to deploy a private repository that an organisation owns.
-- **There is no `npx` installer.** You clone this repository and run a script.
-- **You cannot yet set the order of waiting tickets by dragging cards.** The token the factory holds cannot read which ticket a card belongs to in a private repository. The ticket that has waited longest starts first.
-- **A freed place is sometimes left empty** until the next event, because GitHub reports a merged ticket as open for a few seconds.
-- **When the Claude usage limit is reached,** each waiting ticket starts in turn and stops. Nothing pauses the queue.
-- **The stack is fixed:** Next.js, Vercel, Neon and GitHub. The model is named in the workflows (`factory/workflows/`).
-- **The factory's scripts need bash 4.4 or later.** They are tested on Linux, as GitHub's runners are. With the bash 3.2 that macOS ships, 39 of their tests fail, so `preflight` asks a Mac for a newer bash.
-- **The decision record cites tickets by number** (`#123`). They are tickets of the private repository this was built in, and you cannot open them. The decision, its reason and what was rejected are in the row itself.
-- **This repository is a snapshot.** The factory is still being developed in the project it came from, and changes are copied here by hand.
+- **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
+- **The stack is fixed,** and the model is named in the workflows.
+- **The scripts need bash 4.4 or later.** macOS ships 3.2, and `preflight` asks for a newer one.
+- **You cannot yet order waiting tickets by dragging cards.** The ticket that has waited longest starts first.
+- **Nothing pauses the queue when the Claude usage limit is reached.**
+- **The decision record cites tickets by number** (`#123`). They belong to the private project this was built in, so you cannot open them; each row carries its reason.
+- **This repository is a snapshot.** The factory is developed in the project it came from, and changes are copied here.
 
 ## Where things are
 
@@ -157,11 +111,10 @@ So at a few tickets a week it fits the free plans, and at dozens a day it does n
 | The agents' instructions, and setup | `.claude/skills/` |
 | Workflows | `factory/workflows/`. Setup copies them into a project's `.github/workflows/`. None of them runs in this repository, whose one workflow checks that the scaffold still works. |
 | Scripts and their tests | `factory/scripts/`, `factory/tests/` |
-| Why it is built this way | `factory/decisions.md` and `factory/decisions/`. `factory/scripts/decisions.sh` prints the whole record. |
+| Why it is built this way | `factory/decisions.md` and `factory/decisions/` |
 | Free plans, and what stretches them | `factory/free-tier.md` and `factory/free-tier/` |
 | What still needs a person | `factory/manual-steps.md` |
 | Ticket and pull request templates | `.github/` |
-| The few app files the factory owns | `apps/web/` |
 | The seed documents for a new project | `.claude/skills/bootstrap/templates/` |
 
 ## Licence
