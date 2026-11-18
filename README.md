@@ -2,11 +2,11 @@
 
 **Prove your idea before you pay for it.**
 
-tinyfactory is a small software factory for a technical person with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
+tinyfactory is a small software factory for a technical founder with an idea. You bring the idea. AI agents refine it into tickets, build them, review them and ship them. You stay near the loop instead of in it: you decide what gets built, and you are asked only when a decision is yours.
 
-It is built to get a prototype in front of real users at no extra cost. You bring a Claude subscription, and everything else runs on the free tiers of a small, fixed stack: GitHub, Vercel, Neon Postgres and Better Auth (through Neon Auth). If the idea gets traction, you carry on building in the same factory.
+It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. You bring a Claude subscription, and everything else runs on the free tiers of a small, fixed stack: GitHub, Vercel, Neon Postgres and Better Auth (through Neon Auth). If the idea gets traction, you carry on building in the same factory.
 
-> **Status: early.** The factory was built inside one private project in November 2026, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and where it is heading.
+> **Status: early.** tinyfactory is being built with tinyfactory. It grew inside one private project in November 2026, where agents wrote all but two of its first 150 pull requests, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
@@ -102,7 +102,7 @@ The factory is designed for the free plans of GitHub Actions, Vercel and Neon. I
 - **You cannot yet order waiting tickets by dragging cards.** The ticket that has waited longest starts first.
 - **Nothing pauses the queue when the Claude usage limit is reached.**
 - **The decision record cites tickets by number** (`#123`). They belong to the private project this was built in, so you cannot open them; each row carries its reason.
-- **This repository is a snapshot.** The factory is developed in the project it came from, and changes are copied here.
+- **The factory does not run in this repository yet.** The files here are a copy from the project the factory was built in. The plan is for tinyfactory to build tinyfactory here.
 
 ## Where things are
 
