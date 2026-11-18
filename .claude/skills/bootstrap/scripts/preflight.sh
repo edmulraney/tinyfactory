@@ -36,14 +36,17 @@ if command -v gh >/dev/null; then
 fi
 
 # A signing key that needs a passphrase makes `git commit` wait forever at a prompt nobody can see.
+# commit-tree signs only when told to (-S). With SSH_ASKPASS forced to a program that fails,
+# ssh-keygen fails at once where it would have asked for the passphrase.
 if command -v git >/dev/null && [ "$(git config --get commit.gpgsign)" = "true" ]; then
   probe=$(git rev-parse --git-dir >/dev/null 2>&1 && pwd || { d=$(mktemp -d); git init -q "$d"; echo "$d"; })
   tree=$(git -C "$probe" hash-object -t tree -w --stdin </dev/null)
-  if perl -e 'alarm 10; exec @ARGV' git -C "$probe" commit-tree "$tree" -m "signing probe" </dev/null >/dev/null 2>&1; then
+  if SSH_ASKPASS=/usr/bin/false SSH_ASKPASS_REQUIRE=force perl -e 'alarm 10; exec @ARGV' \
+    git -C "$probe" commit-tree -S "$tree" -m "signing probe" </dev/null >/dev/null 2>&1; then
     ok "commit signing works without a prompt"
   else
     bad "commit signing needs a passphrase or fails (key: $(git config --get user.signingkey))" \
-        "git config --local user.signingkey <a key loaded in ssh-agent>, or: git config --local commit.gpgsign false"
+        "sign with a key ssh-agent holds (ssh-add -l lists them): git config --global user.signingkey <its .pub file>, or: git config --global commit.gpgsign false"
   fi
 fi
 
