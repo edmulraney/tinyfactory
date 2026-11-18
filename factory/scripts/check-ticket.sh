@@ -79,7 +79,7 @@ for heading in "${required[@]}"; do
   fi
 done
 # A ticket with no opening time is counted: a missing answer must not read as an old ticket.
-words=$(section "Change" | wc -w)
+words=$(section "Change" | wc -w | tr -d ' ')
 if [[ " ${required[*]} " == *" Change "* && "$words" -gt "$change_limit" ]] \
   && [[ -z "$created" || ! "$created" < "$limit_began" ]]; then
   echo "- Section \"## Change\" is $words words long, and the limit is $change_limit. State the change and its reason; evidence is a link to the run or pull request, not the story of it."

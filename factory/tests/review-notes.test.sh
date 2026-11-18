@@ -25,7 +25,12 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-ticket() { echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}${3:+,{\"name\":\"$3\"\}}]}"; }
+# The second label is built apart: inside ${3:+...} a Mac's bash 3.2 keeps the backslash of an escaped brace, which is not JSON.
+ticket() {
+  local second=""
+  [ -z "${3:-}" ] || second=",{\"name\":\"$3\"}"
+  echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}$second]}"
+}
 pull() { echo "{\"number\":$1,\"headRefName\":\"feat/$2-apply-review-notes\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":$3}"; }
 keep() { run "$scripts/review-notes.sh" keep "Ryan (correctness)" 7 <<<"$notes"; }
 notes='1. `a.ts:9`: The name could say more.

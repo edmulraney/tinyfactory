@@ -325,7 +325,7 @@ expect_saved "ryan pr-7"
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
 [[ "$prompt" == *"Your verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: finding 1's \`fix\` is 41 words. Give it again"* ]] || fail "expected the prompt to name the field, got: $prompt"
 [[ "$prompt" != *"You have not given your result."* ]] || fail "expected the prompt not to say the result is missing"
-[ "$(grep -c '^prompt=' "$T/outputs")" = 1 ] && [ "$(wc -l < "$T/outputs")" = 3 ] || fail "expected the prompt on one line, got: $(cat "$T/outputs")"
+[ "$(grep -c '^prompt=' "$T/outputs")" = 1 ] && [ "$(wc -l < "$T/outputs" | tr -d ' ')" = 3 ] || fail "expected the prompt on one line, got: $(cat "$T/outputs")"
 
 scenario "a review whose verdict has a fourth assumption is continued, and told to keep the three that cost most"
 ended completed
@@ -352,7 +352,7 @@ OUTPUT=$(jq -c --arg text "$(printf 'word %.0s' $(seq 41))" '.findings[0] += {"x
 expect_status 0
 expect_written "session=c22ab626"
 expect_not_written "session=stolen"
-[ "$(wc -l < "$T/outputs")" = 3 ] || fail "expected three outputs, got: $(cat "$T/outputs")"
+[ "$(wc -l < "$T/outputs" | tr -d ' ')" = 3 ] || fail "expected three outputs, got: $(cat "$T/outputs")"
 [[ "$(sed -n 's/^prompt=//p' "$T/outputs")" == *"3 assumptions: finding 1's \`fix\` is 41 words. Give it again"* ]] || fail "expected the prompt to name the schema's field alone"
 
 scenario "a review whose verdict has a field of 40 words is not continued"

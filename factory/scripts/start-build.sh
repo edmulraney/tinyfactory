@@ -106,16 +106,17 @@ if [ "${GITHUB_EVENT_NAME:-}" != workflow_dispatch ]; then
 fi
 
 # gh refuses an edit naming a label the repo does not have, so proposal is named only for a ticket that carries it (decisions T158).
+# Each is expanded as ${name[@]+"${name[@]}"}: a Mac's bash 3.2 takes an empty array for an unset variable under `set -u`.
 accepted=() unaccepted=()
 [[ " $labels " != *" proposal "* ]] || { accepted=(--remove-label proposal); unaccepted=(--add-label proposal); }
 
 # needs-human comes off, so that after the engineer's step it means this build stopped on purpose (decisions A69h).
-gh issue edit "$issue" --remove-label ready --remove-label needs-human "${accepted[@]}" --add-label in-progress >/dev/null \
+gh issue edit "$issue" --remove-label ready --remove-label needs-human ${accepted[@]+"${accepted[@]}"} --add-label in-progress >/dev/null \
   || die "Issue #$issue was not started: it could not be labelled in-progress."
 
 # From here the ticket holds a place, and every ending but a start gives it back.
 give_back() {
-  gh issue edit "$issue" --remove-label in-progress "${unaccepted[@]}" >/dev/null \
+  gh issue edit "$issue" --remove-label in-progress ${unaccepted[@]+"${unaccepted[@]}"} >/dev/null \
     || die "Issue #$issue was not started ($1), and in-progress could not be taken off it: it holds a place with no build until the label is removed by hand."
 }
 
@@ -139,7 +140,7 @@ if [ -n "$taken" ]; then
   taken=$(no_place "$in_flight_now")
 fi
 if [ -n "$taken" ]; then
-  gh issue edit "$issue" --remove-label in-progress --add-label ready "${unaccepted[@]}" >/dev/null \
+  gh issue edit "$issue" --remove-label in-progress --add-label ready ${unaccepted[@]+"${unaccepted[@]}"} >/dev/null \
     || die "Issue #$issue was not started (another ticket took the last place at the same moment), and its labels could not be put back: it holds a place with no build until in-progress is removed by hand."
   full "$taken" " Another ticket asked for the last place at the same moment as this one, and took it." \
     || die "Issue #$issue waits, because another ticket took the last place at the same moment, but it could not be told so. Its place was given back, and it is started when a place frees."

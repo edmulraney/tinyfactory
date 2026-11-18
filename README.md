@@ -91,7 +91,7 @@ After a run that went wrong or cost more than it should, the retro finds the cau
 
 - **Accounts:** GitHub (a personal account), Vercel (the free Hobby plan is enough), and a Claude subscription, which the agents run on. The database is created through Vercel's marketplace, so you need no separate Neon account.
 - **The Claude GitHub App** installed on your GitHub account: <https://github.com/apps/claude>.
-- **On your machine:** macOS or Linux, bash 4.4 or later, Node 20 or later, pnpm, git, jq, python3, Claude Code, the GitHub CLI (`gh`) logged in with the `repo`, `workflow` and `project` scopes, and a Vercel login (`npx vercel login`). macOS ships bash 3.2, so on a Mac run `brew install bash` first.
+- **On your machine:** macOS or Linux, Node 20 or later, pnpm, git, jq, python3, Claude Code, the GitHub CLI (`gh`) logged in with the `repo`, `workflow` and `project` scopes, and a Vercel login (`npx vercel login`).
 
 ## Getting started
 
@@ -129,7 +129,6 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 - **Visual design is not covered.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan. Nothing yet keeps taste in how a product looks, feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
 - **The stack is fixed,** and the model is named in the workflows.
-- **The scripts need bash 4.4 or later.** macOS ships 3.2, and `preflight` asks for a newer one.
 - **You cannot yet order waiting tickets by dragging cards.** The ticket that has waited longest starts first.
 - **Nothing pauses the queue when the Claude usage limit is reached.**
 - **The decision record cites tickets by number** (`#123`). They belong to the private project this was built in, so you cannot open them; each row carries its reason.

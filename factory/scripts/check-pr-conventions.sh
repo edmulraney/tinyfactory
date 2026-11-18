@@ -245,7 +245,7 @@ if [ "$headings" != "$(printf '%s\n' "${sections[@]}")" ]; then
     problem "The paragraph on what changed holds a list. Write it as sentences: the diff lists the files, and the checks list the tests."
   fi
   # Why a limit on the whole as well: decisions P170b.
-  total=$(awk -F'\t' '$1 == "T" { print substr($0, 3) }' <<<"$tagged" | wc -w)
+  total=$(awk -F'\t' '$1 == "T" { print substr($0, 3) }' <<<"$tagged" | wc -w | tr -d ' ')
   if [ "$total" -ge 100 ]; then
     problem "The description is $total words long, and the whole of it must be under 100."
   fi
