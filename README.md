@@ -2,11 +2,13 @@
 
 **Prove your idea before you pay for it.**
 
-tinyfactory is a small software factory for the first version of a product. You write a ticket. AI agents build it test-first, review it, fix what the review finds, merge it and deploy it. You decide what gets built, and you are asked only when the agents cannot proceed or when a change is yours alone to decide.
+tinyfactory is a small software factory for a technical person with an idea. You write a ticket. AI agents build it test-first, review it, fix what the review finds, merge it and deploy it. You stay near the loop, not in it: you decide what gets built, and you are asked only when the agents cannot proceed or when a change is yours alone to decide.
 
-It is for a technical founder who wants working software in front of users quickly, with tests, review and written decisions from the first commit, so the codebase is still worth keeping when the idea works.
+It exists to take the friction out of getting a prototype in front of real users, so that your time goes on talking to them and thinking about the product. It is built to cost nothing extra: you bring a Claude subscription, and everything else runs on free plans, on a small, fixed stack (GitHub, Vercel, Neon Postgres, and Better Auth through Neon Auth). [What it costs](#what-it-costs) says how far that holds.
 
-> **Status: early.** tinyfactory was built inside one private project in five days in November 2026, and this repository is a copy of the factory's files from that project. There, agents wrote about 150 merged pull requests. Nobody has yet set up a second project from this repository from start to finish. Read [What works and what does not](#what-works-and-what-does-not) before you rely on it. [What I learnt from three days of letting AI agents ship my code](https://emul.dev/writing/letting-ai-agents-ship-my-code/) tells how it was built and what broke.
+Agents left alone make a mess of a codebase. The factory's process is there to stop that: tests first, two reviewers, a written reason for every decision, and a retro that changes the factory when an agent gets something wrong. If the idea gets traction, you keep building in the same factory, on a codebase that is still worth keeping.
+
+> **Status: early.** tinyfactory was built inside one private project in five days in November 2026, and this repository is a copy of the factory's files from that project. There, agents wrote about 150 merged pull requests. Nobody has yet set up a second project from this repository from start to finish. Read [What works and what does not](#what-works-and-what-does-not) before you rely on it. [tinyfactory: a software factory with a human near the loop](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and what building it has taught so far.
 
 ## How a change gets made
 
@@ -129,7 +131,7 @@ So at a few tickets a week it fits the free plans, and at dozens a day it does n
 
 **Seen working in the first project**
 
-- A product ticket became a deployed change with no person in between. The first was on 17 November 2026.
+- A product ticket becomes a merged and deployed change with no person in between. The first did on the project's first day.
 - Two reviewers with separate jobs found real problems before a merge, among them a database call that could hang forever and a setting that would have sent signed-in users to a stranger's site.
 - A failed check or review starts a fix round. After three, a person is asked.
 - A pull request merges without approval unless it changes one of the things listed above.
