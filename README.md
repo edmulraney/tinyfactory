@@ -19,7 +19,7 @@ tinyfactory is a small software factory for a technical founder, or a tiny team,
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
-> **Status: early.** tinyfactory is being built with tinyfactory. It grew inside one private project in November 2026, where agents wrote all but two of its first 150 pull requests, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
+> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it merged more than 150 pull requests in its first five days, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
@@ -78,7 +78,7 @@ Anything else that needs you is labelled `needs-human`, with a comment that says
 
 ## How it improves
 
-After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket. The factory builds that ticket like any other. `factory/decisions.md` records every decision with its reason and what was rejected.
+The factory you get improves itself while it builds your product. After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket: a new check, a clearer instruction or a better design. The factory builds that ticket like any other, so each kind of mistake should need a person only once. `factory/decisions.md` records every decision with its reason and what was rejected.
 
 ## What a project gets
 
