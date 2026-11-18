@@ -12,6 +12,12 @@ command -v pnpm >/dev/null && ok "pnpm $(pnpm -v)" || bad "pnpm not found" "npm 
 command -v git  >/dev/null && ok "git"             || bad "git not found" "install git"
 command -v gh   >/dev/null && ok "gh"              || bad "gh not found" "https://cli.github.com"
 command -v jq   >/dev/null && ok "jq"              || bad "jq not found" "brew install jq"
+# The later steps call these: the purpose interview and the agents' token (claude), the sign-in
+# secret (openssl), and the scripts that read what GitHub, Vercel and Neon answer (python3, curl).
+command -v claude  >/dev/null && ok "claude"  || bad "claude not found" "install Claude Code: https://claude.com/claude-code"
+command -v python3 >/dev/null && ok "python3" || bad "python3 not found" "install Python 3"
+command -v openssl >/dev/null && ok "openssl" || bad "openssl not found" "install OpenSSL"
+command -v curl    >/dev/null && ok "curl"    || bad "curl not found" "install curl"
 
 if command -v gh >/dev/null; then
   if owner=$(gh api user --jq .login 2>/dev/null); then
