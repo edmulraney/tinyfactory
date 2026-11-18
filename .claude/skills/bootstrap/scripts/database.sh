@@ -69,7 +69,7 @@ fi
 # (`deploymentExpiration`), so it is the one step left for the human; the script reads it back and
 # confirms it.
 team=$(jq -r '.dashboard // empty' <<<"$resource" | sed -E 's|https://vercel.com/([^/]+)/.*|\1|')
-settings="https://vercel.com/${team:-<your-team>}/$name/settings"
+settings="https://vercel.com/${team:-<your-team>}/$name/settings/build-and-deployment#deployment-retention-policy"
 keep=$(vc api "/v9/projects/$name" --raw 2>/dev/null | tail -1 \
   | jq -r '.deploymentExpiration | [.expirationDays, .expirationDaysCanceled, .expirationDaysErrored] | map(. // 30) | max')
 
