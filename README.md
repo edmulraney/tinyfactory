@@ -43,7 +43,7 @@ Two more agents work beside the loop. Rosa answers a research ticket from public
 
 ## Product, as well as engineering
 
-The work is geared to customer outcomes, and each project's repository holds what that needs:
+The factory aims at customer outcomes and business impact, not feature output. Each project's repository holds what that takes:
 
 - **`PURPOSE.md`** says who the product is for and what it will not do. Setup writes it from an interview with you.
 - **`product/`** holds research, signals and product decisions. Give the `intake` skill the notes of a user interview, and it writes a summary, adds the evidence to the signals, and files a ticket only where the evidence justifies building now.
@@ -111,8 +111,8 @@ To run the newest commit of this repository instead of the published package: `n
 2. **Add the `ready` label** to a ticket to start its build. Three tickets are built at once at most, and the rest wait their turn.
 3. **Answer what needs you:** approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes.
 4. **Read what the factory proposes.** A retro's proposal is a ticket written to be built as it is. Add `ready` to accept it, or close it.
-5. **Ask for help** in a comment that holds `@claude`.
-6. **Take a change back** with `gh workflow run revert.yml -f number=<ticket>`.
+5. **Take a change back** from the repository's Actions tab: choose the `revert` workflow, press "Run workflow" and give the ticket's number. An engineer opens the pull request that reverts it.
+6. **Ask Claude for anything else** in a comment that holds `@claude`: something the factory did not handle by itself, or got wrong.
 
 `factory/README.md` is the full guide.
 
@@ -130,10 +130,10 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 
 - **Visual design is not covered.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan. Nothing yet keeps taste in how a product looks, feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
-- **The stack is fixed,** and the model is named in the workflows.
+- **No database code yet.** A project gets a Postgres database, and no ORM or migrations. Drizzle is planned.
+- **No set structure for features yet.** A skill that has the engineer build each feature as its own slice (Feature-Sliced Design) is planned.
 - **You cannot yet order waiting tickets by dragging cards.** The ticket that has waited longest starts first.
 - **Nothing pauses the queue when the Claude usage limit is reached.**
-- **The decision record cites tickets by number** (`#123`). They belong to the private project this was built in, so you cannot open them; each row carries its reason.
 - **The factory does not run in this repository yet.** The files here are a copy from the project the factory was built in. The plan is for tinyfactory to build tinyfactory here.
 
 ## Where things are
