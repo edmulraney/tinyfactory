@@ -29,7 +29,7 @@ github() {
 ticket() {
   local second=""
   [ -z "${3:-}" ] || second=",{\"name\":\"$3\"}"
-  echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}$second]}"
+  echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"user\":{\"login\":\"${4:-github-actions[bot]}\"},\"labels\":[{\"name\":\"factory\"}$second]}"
 }
 pull() { echo "{\"number\":$1,\"headRefName\":\"feat/$2-apply-review-notes\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":$3}"; }
 keep() { run "$scripts/review-notes.sh" keep "Ryan (correctness)" 7 <<<"$notes"; }
@@ -109,6 +109,15 @@ echo '[{"number":60,"title":"Apply the review notes of week 6","pull_request":{}
 keep
 expect_call "gh issue create"
 expect_call "gh issue comment 50 --body"
+
+scenario "a ticket of that label and title that another account opened takes no note: anyone may open one"
+github
+echo "[$(ticket 40 6 "" mallory)]" > "$T/issues"
+keep
+expect_status 0
+expect_call "gh issue create"
+expect_call "gh issue comment 50 --body"
+expect_no_call "issue comment 40"
 
 scenario "no notes: nothing is asked of GitHub"
 github
@@ -237,6 +246,25 @@ echo "[$(ticket 40 6 needs-human),$(ticket 41 7)]" > "$T/issues"
 run "$scripts/review-notes.sh" start
 expect_call "gh workflow run implement.yml -f issue=41"
 expect_no_call "issue=40"
+
+scenario "start: a ticket another account opened is never labelled ready or started; the one the factory filed beside it is"
+github
+echo "[$(ticket 40 6 "" mallory),$(ticket 41 7)]" > "$T/issues"
+run "$scripts/review-notes.sh" start
+expect_status 0
+expect_call "gh issue edit 41 --add-label ready"
+expect_call "gh workflow run implement.yml -f issue=41"
+expect_no_call "issue edit 40"
+expect_no_call "issue=40"
+
+scenario "start: with only a ticket another account opened, nothing is labelled or started"
+github
+echo "[$(ticket 40 6 "" mallory)]" > "$T/issues"
+run "$scripts/review-notes.sh" start
+expect_status 0
+expect_output "nothing was started"
+expect_no_call "issue edit"
+expect_no_call "workflow run"
 
 scenario "start: when the tickets cannot be listed, the job fails and starts nothing"
 github

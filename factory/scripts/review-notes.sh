@@ -11,12 +11,13 @@ titled="Apply the review notes of week "
 die() { echo "$1" >&2; exit 1; }
 
 # The tickets a note may still join, oldest first (decisions A241b). Listed: a search would miss one seconds old.
+# Only those github-actions[bot] opened, as `keep` does: anyone may open an issue of that label and title (decisions A502).
 # collecting unflagged: only those not labelled needs-human, which wait for the owner (decisions A241f).
 collecting() {
   local tickets in_flight held flagged=""
   [ "${1:-}" != unflagged ] || flagged=' and ([.labels[].name] | index("needs-human") == null)'
   tickets=$(gh api "repos/{owner}/{repo}/issues?state=open&labels=factory&per_page=100" --paginate \
-    --jq ".[] | select(.pull_request == null and (.title | startswith(\"$titled\"))$flagged) | .number") || return 1
+    --jq ".[] | select(.pull_request == null and .user.login == \"github-actions[bot]\" and (.title | startswith(\"$titled\"))$flagged) | .number") || return 1
   [ -n "$tickets" ] || return 0
   in_flight=$("$script_dir/in-flight.sh") || return 1
   # A build cut short at a draft starts again from its ticket (decisions T64h).
