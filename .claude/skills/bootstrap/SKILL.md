@@ -25,7 +25,7 @@ Run a script that waits for the human in the background, and pass on the code, U
 
 ## What belongs where
 
-- **`manifest.txt`** lists the files the factory owns, each in its real place in the repo; `scaffold.sh` copies them into new projects, and makes `.github/workflows/` from `factory/workflows/`.
+- **`manifest.txt`** lists the files the factory owns, each by its place in a project; `scaffold.sh` copies them into new projects, those under `apps/` from `templates/`, and makes `.github/workflows/` from `factory/workflows/`.
 - **`templates/`** holds the seeds each project edits afterwards (`CLAUDE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, the first home page, the health service the factory's route calls). `PURPOSE.md` is not a seed.
 - This skill sets a project up and repairs a broken setup. Any later change to the factory is a `factory` ticket. `factory/scripts/apply-setup.sh` applies a merged change to one of these scripts where the factory holds a credential that can; `factory/manual-steps.md` lists the scripts that wait for a session.
 - A change to how setup or the factory works gets a row in the ticket's file in `factory/decisions/`, in the same commit, as the header of `factory/decisions.md` says. A service setting changed for cost or quota gets an entry in the ticket's file in `factory/free-tier/`, as `factory/free-tier.md` says.

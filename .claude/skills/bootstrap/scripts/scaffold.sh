@@ -16,24 +16,27 @@ factory_root="$(cd "$here/../../../.." && pwd)"   # the repo this skill lives in
 # Copies the files listed in manifest.txt from the factory's repo into this project.
 # "overwrite" replaces files a generator just wrote; the default keeps whatever already exists.
 install_factory_files() {
-  local mode="${1:-keep}" path file
+  local mode="${1:-keep}" path file from
   [ "$factory_root" != "$PWD" ] || return 0
   while IFS= read -r path; do
     case "$path" in '' | '#'*) continue ;; esac
-    if [ ! -e "$factory_root/$path" ]; then
+    # The factory's repo holds no app, so a file the factory owns inside one is kept with the seeds.
+    from="$factory_root"
+    case "$path" in apps/*) from="$templates" ;; esac
+    if [ ! -e "$from/$path" ]; then
       # A listed folder under factory/ may hold nothing yet, and git keeps no empty folder:
       # factory/free-tier before the first ticket adds an entry. A mistyped path there is still
       # caught, because the file it meant is then one check-inventory.sh finds no owner for.
       # That check reads nothing outside factory/, so any other path that names nothing stops
       # the scaffold here: skipped, the new project would be built without the file.
       case "$path" in factory/*) continue ;; esac
-      echo "scaffold: manifest.txt lists '$path', which is not in $factory_root. Correct or remove the line." >&2
+      echo "scaffold: manifest.txt lists '$path', which is not in $from. Correct or remove the line." >&2
       exit 1
     fi
-    (cd "$factory_root" && find "$path" -type f 2>/dev/null) | while IFS= read -r file; do
+    (cd "$from" && find "$path" -type f 2>/dev/null) | while IFS= read -r file; do
       if [ "$mode" = overwrite ] || [ ! -e "$file" ]; then
         mkdir -p "$(dirname "$file")"
-        cp "$factory_root/$file" "$file"
+        cp "$from/$file" "$file"
       fi
     done
   done < "$manifest"

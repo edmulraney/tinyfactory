@@ -147,7 +147,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 | Free plans, and what stretches them | `factory/free-tier.md` and `factory/free-tier/` |
 | What still needs a person | `factory/manual-steps.md` |
 | Ticket and pull request templates | `.github/` |
-| The seed documents for a new project | `.claude/skills/bootstrap/templates/` |
+| What a new project starts with: its seed documents, and its app's lint and test setup | `.claude/skills/bootstrap/templates/` |
 
 ## Licence
 
