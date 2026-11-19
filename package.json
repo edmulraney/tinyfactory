@@ -10,6 +10,13 @@
   "bin": {
     "tinyfactory": "bin/tinyfactory.mjs"
   },
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-factory.sh",
+    "typecheck": "node --check bin/tinyfactory.mjs",
+    "test": "factory/scripts/test-factory.sh && pnpm -r test",
+    "build": "npm pack --dry-run"
+  },
   "engines": {
     "node": ">=20"
   }

@@ -1,0 +1,29 @@
+# Starts the tickets that wait with `ready` when a person closes or merges a pull request the factory opened.
+name: start-waiting
+
+on:
+  # `_target` runs main's copy of this file. A merge by ship.sh starts no workflow, so ship.sh runs the script itself.
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  start:
+    # A person's pull request held no place (decisions T64b).
+    if: github.event.pull_request.user.login == 'claude[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write         # to see which tickets wait, and tell one that it waits for another (decisions T339a)
+      pull-requests: read   # to see which tickets are in flight
+      actions: write        # to start implement.yml
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Start the tickets that wait for the place this pull request held
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
+        run: factory/scripts/start-waiting.sh

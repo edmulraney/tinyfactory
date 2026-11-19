@@ -1,0 +1,194 @@
+# Installs a merged workflow change the owner approved or need not, from factory/workflows/ into .github/workflows/.
+name: install-workflows
+
+on:
+  # `_target` runs main's copy of this file; a merge by ship.sh starts no workflow, so ship.sh dispatches this instead.
+  pull_request_target:
+    types: [closed]
+    paths: ['factory/workflows/**']
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Merged pull request whose workflow changes to install
+        required: true
+
+concurrency:
+  group: install-workflows-${{ inputs.pr || github.event.pull_request.number }}
+
+env:
+  PR: ${{ inputs.pr || github.event.pull_request.number }}
+  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+  RULE: 936dad9113afdf52045bffaf51f667b25baa8320   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
+
+jobs:
+  install:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0               # the pull request's diff is measured from where it left main
+          persist-credentials: false   # the push below must use the app's token and no other
+
+      # One script from the repo is run, by the git id above and with no token (decisions W2, W272b).
+      - name: Check that what would be installed was approved, or needs no approval
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          refused="$RUNNER_TEMP/refused.md"
+          : > "$refused"
+
+          view=$(gh pr view "$PR" --json state,baseRefName,headRefOid,mergedBy,reviews)
+          if [ "$(jq -r .state <<<"$view")" != MERGED ] || [ "$(jq -r .baseRefName <<<"$view")" != "$DEFAULT_BRANCH" ]; then
+            echo "pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install"
+            exit 0
+          fi
+          head=$(jq -r .headRefOid <<<"$view")
+
+          # The merged branch is deleted, but GitHub keeps the pull request's last commit here.
+          git fetch --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/pull/$PR/head"
+          [ "$(git rev-parse FETCH_HEAD)" = "$head" ]
+          base=$(git merge-base HEAD "$head")
+          blob() { git rev-parse --quiet --verify "$1:$2" 2>/dev/null || echo absent; }
+
+          # The owner merging it themselves is the same decision as approving the commit that was merged.
+          approved=$(jq -r --arg owner "$OWNER" --arg head "$head" '
+            (.mergedBy.login == $owner) or
+            ([.reviews[] | select(.author.login == $owner)] | last | (.state == "APPROVED" and .commit.oid == $head))' <<<"$view")
+          if [ "$approved" != true ]; then
+            # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).
+            unapproved="\`$OWNER\` neither approved commit \`${head:0:7}\` nor merged it themselves, and"
+            # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.
+            if [ "$(jq -r '.mergedBy.login' <<<"$view")" != app/github-actions ]; then
+              echo "- $unapproved it was not the merge gate that merged it." >> "$refused"
+              exit 1
+            fi
+            if [ "$(blob HEAD factory/scripts/owner-decides.sh)" != "$RULE" ]; then
+              echo "- $unapproved \`factory/scripts/owner-decides.sh\` on \`$DEFAULT_BRANCH\` is not the script this installer names (\`${RULE:0:7}\`), so nothing the owner approved says whether this change needs them." >> "$refused"
+              exit 1
+            fi
+            git cat-file blob "$RULE" > "$RUNNER_TEMP/owner-decides.sh"
+            # It is given the diff and nothing else: no token, and nothing of the environment.
+            if ! theirs=$(git diff "$base" "$head" | env -i PATH="$PATH" bash "$RUNNER_TEMP/owner-decides.sh" 2>&1); then
+              {
+                echo "- $unapproved it changes what only they may decide:"
+                printf '\n  ```\n%s\n  ```\n' "$(sed 's/^/  /' <<<"$theirs")"
+              } >> "$refused"
+              exit 1
+            fi
+          fi
+
+          # main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.
+          mkdir -p .github/workflows
+          while IFS= read -r source; do
+            [ -n "$source" ] || continue
+            name="${source#factory/workflows/}"
+            installed=".github/workflows/$name"
+            read_by_owner=$(blob "$head" "$source")
+            if [ "$(blob HEAD "$installed")" = "$read_by_owner" ]; then
+              echo "$installed is already what was approved"
+            elif [[ "$name" == */* ]]; then
+              echo "- \`$source\` is in a folder. GitHub runs only the files directly in \`.github/workflows/\`." >> "$refused"
+            elif [ "$(blob HEAD "$source")" != "$read_by_owner" ]; then
+              echo "- \`$source\` on \`$DEFAULT_BRANCH\` is not what commit \`${head:0:7}\` held, so it has changed since that commit was reviewed." >> "$refused"
+            elif [ "$(blob HEAD "$installed")" != "$(blob "$base" "$source")" ]; then
+              echo "- \`$installed\` is not what this pull request's diff of \`$source\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run." >> "$refused"
+            elif [ "$read_by_owner" = absent ]; then
+              git rm --quiet "$installed"
+              echo "removed $installed"
+            elif ! git ls-tree "$head" -- "$source" | grep -qE '^100(644|755) blob '; then
+              echo "- \`$source\` is not an ordinary file (a link, perhaps), so its diff does not show what would run." >> "$refused"
+            else
+              # From the commit, not the checked-out file: copying that would follow a link to bytes nobody approved.
+              git update-index --add --cacheinfo "100644,$read_by_owner,$installed"
+              echo "installed $source as $installed"
+            fi
+          done < <(git diff --no-renames --name-only "$base" "$head" -- factory/workflows)
+
+          # All or nothing: a pull request's workflows are reviewed together.
+          [ ! -s "$refused" ] || exit 1
+          if git diff --cached --quiet; then
+            echo "pull request #$PR has no workflow change left to install"
+          else
+            echo "install=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The workflow's own token cannot write a workflow file, by GitHub's design; this one is minted after the checks.
+      - name: Get a short-lived token that may write workflow files
+        id: app
+        if: steps.check.outputs.install == 'true'
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.WORKFLOW_APP_CLIENT_ID }}
+          private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-workflows: write
+
+      - name: Commit the copies
+        if: steps.check.outputs.install == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APP_TOKEN: ${{ steps.app.outputs.token }}
+          BOT: ${{ steps.app.outputs.app-slug }}[bot]
+        run: |
+          set -euo pipefail
+          git -c user.name="$BOT" -c user.email="$BOT@users.noreply.github.com" \
+            commit --quiet -m "ci: install the workflow changes merged in #$PR"
+          # If main moved since the checkout this is refused, and the run can simply be started again.
+          git push --quiet "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$DEFAULT_BRANCH"
+          # The record first-runs.sh reads (decisions A185a); a label that could not be added fails nothing.
+          changed=$(git show --diff-filter=AM --name-only --format= HEAD -- .github/workflows | sed 's|^\.github/workflows/||' | xargs)
+          labelled=yes
+          [ -z "$changed" ] || gh pr edit "$PR" --add-label proof >/dev/null || labelled=no
+          {
+            printf 'Installed in %s, the workflow changes this pull request merged:\n\n```\n' "$(git rev-parse --short HEAD)"
+            git show --name-status --format= HEAD
+            printf '```\n'
+            if [ -n "$changed" ]; then
+              if [ "$labelled" = yes ]; then
+                printf '\nA retro will look at the first run of each and say here whether it did what this pull request claimed.\n'
+              else
+                printf '\nThis pull request could not be labelled `proof`, so no retro will look at the first run of each. Add the label by hand to have one.\n'
+              fi
+              printf '\n<!-- factory:installed %s -->\n' "$changed"
+            fi
+          } > "$RUNNER_TEMP/installed.md"
+          gh pr comment "$PR" --body-file "$RUNNER_TEMP/installed.md"
+
+      - name: Tell a person when the change was not installed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The first line says what a person must do (decisions A371a).
+          {
+            if [ -s "$RUNNER_TEMP/refused.md" ]; then
+              printf 'File the two `factory` tickets described below: the factory installs nothing until the second merges.\n\n'
+            else
+              printf 'Read the log linked below, then start `install-workflows` again with this pull request'"'"'s number: the changes are installed when that run passes.\n\n'
+            fi
+            printf 'The workflow changes in this pull request were **not installed**, so `.github/workflows/` still runs the earlier versions and `pnpm lint` fails on `%s` until the two folders match.\n\n' "$DEFAULT_BRANCH"
+            if [ -s "$RUNNER_TEMP/refused.md" ]; then
+              cat "$RUNNER_TEMP/refused.md"
+              # A new change on top of main would be refused too: its diff would start from a source never installed.
+              printf '\nNothing was installed. To recover, in two `factory` tickets: first put each file above in `factory/workflows/` back to exactly what `.github/workflows/` holds (deleting it if there is none), which makes `pnpm lint` pass again and installs nothing; then make the change again from there, so the whole difference is reviewed in one diff.\n'
+            else
+              printf 'The checks passed or never finished, and a later step failed: the log says which. If it was the push, start `install-workflows` again with this pull request'"'"'s number. If it was the token, the project has no workflow app yet: `.claude/skills/bootstrap/scripts/workflow-app.sh` creates it.\n'
+            fi
+            printf '\n%s/%s/actions/runs/%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
+          } > "$RUNNER_TEMP/not-installed.md"
+          gh pr comment "$PR" --body-file "$RUNNER_TEMP/not-installed.md"
+          # The pull request is merged and its ticket closed, so the label goes on the ticket when there is one.
+          issue=$(gh pr view "$PR" --json body --jq '.body // ""' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1 || true)
+          if [ -n "$issue" ]; then gh issue edit "$issue" --add-label needs-human >/dev/null
+          else gh pr edit "$PR" --add-label needs-human >/dev/null
+          fi

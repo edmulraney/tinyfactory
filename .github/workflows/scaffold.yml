@@ -1,8 +1,4 @@
-# Proves that the package `npx tinyfactory` runs can still start a project. It packs this repository as
-# npm would, starts the command from the unpacked package, and runs the scaffold from it in an empty
-# directory on Linux. The scaffold ends by linting, type-checking, testing and building the new
-# project. The factory's own tests, which the scaffold leaves out, are then run in that project.
-# None of the factory's workflows (factory/workflows/) runs in this repository.
+# Proves on Linux that the package `npx tinyfactory` runs can still set up a project (decisions W501).
 name: scaffold
 
 on:
@@ -54,6 +50,7 @@ jobs:
           git config --global user.email scaffold-check@users.noreply.github.com
           mkdir demo && cd demo
           "$RUNNER_TEMP/package/.claude/skills/bootstrap/scripts/scaffold.sh" demo
+      # The scaffold leaves them out: they take minutes and prove the factory, not the project.
       - name: Run the factory's own tests in the new project
         run: |
           cd demo

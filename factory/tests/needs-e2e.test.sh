@@ -2,9 +2,10 @@
 # Tests for factory/scripts/needs-e2e.sh: whether a pull request's end-to-end tests need to run.
 . "$(dirname "$0")/helpers.sh"
 
-# changes <path>...: the pull request changes these files. A path written old:new was renamed.
+# changes <path>...: the pull request changes these files, in a repo that holds an app. A path written old:new was renamed.
 changes() {
   export GITHUB_REPOSITORY=owner/repo
+  mkdir -p apps
   local path
   for path in "$@"; do
     case "$path" in
@@ -23,6 +24,15 @@ decide() {
   result=$("$scripts/needs-e2e.sh" 7 2>/dev/null) || true
 }
 expect_result() { [ "$result" = "$1" ] || fail "expected stdout to be exactly \"$1\", got \"$result\""; }
+
+scenario "skips in a repo with no app, whatever changed, and asks GitHub nothing"
+changes package.json apps/web/src/app/page.tsx
+rmdir apps
+decide
+expect_status 0
+expect_result "run=false"
+expect_output "This repo has no app"
+expect_no_call "gh "
 
 scenario "skips for a change to a factory script alone"
 changes factory/scripts/ship.sh
@@ -92,6 +102,7 @@ expect_status 0
 expect_result "run=false"
 
 scenario "runs when the changed files cannot be read, and says why"
+mkdir -p apps
 export GITHUB_REPOSITORY=owner/repo
 stub gh 'echo "gh: could not connect" >&2; exit 1'
 decide
@@ -100,6 +111,7 @@ expect_result "run=true"
 expect_output "Could not read the files pull request #7 changes"
 
 scenario "runs when the read fails part-way, whatever it had listed by then"
+mkdir -p apps
 export GITHUB_REPOSITORY=owner/repo
 stub gh 'echo factory/scripts/ship.sh; echo "gh: HTTP 502" >&2; exit 1'
 decide

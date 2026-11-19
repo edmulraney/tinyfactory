@@ -8,8 +8,9 @@ merged=abcdef0123456789abcdef0123456789abcdef01
 main=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 older=0000000000000000000000000000000000000001
 
-# Pull request #7 closes #12; each scenario changes the one $T file it is about, which the gh stand-in below reads.
+# Pull request #7 closes #12, in a repo that holds an app; each scenario changes the one $T file it is about, which the gh stand-in below reads.
 ready_to_ship() {
+  mkdir -p apps
   printf 'Closes #12\n\nThe forecast exports as CSV.\n' > "$T/body"
   echo '[{"filename":"apps/web/src/app/page.tsx"}]' > "$T/files.json"
   echo '{"comments":[{"body":"Looks good."}]}' > "$T/comments"

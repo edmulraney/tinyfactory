@@ -141,7 +141,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 | What | Where |
 |---|---|
 | The agents' instructions, and setup | `.claude/skills/` |
-| Workflows | `factory/workflows/`. Setup copies them into a project's `.github/workflows/`. None of them runs in this repository, whose one workflow checks that the scaffold still works. |
+| Workflows | `factory/workflows/`. Setup copies them into a project's `.github/workflows/`, and this repository's own copies are installed there too. |
 | Scripts and their tests | `factory/scripts/`, `factory/tests/` |
 | Why it is built this way | `factory/decisions.md` and `factory/decisions/` |
 | Free plans, and what stretches them | `factory/free-tier.md` and `factory/free-tier/` |

@@ -34,6 +34,8 @@ install_factory_files() {
       exit 1
     fi
     (cd "$from" && find "$path" -type f 2>/dev/null) | while IFS= read -r file; do
+      # It proves the package tinyfactory publishes, which no project does (decisions W501).
+      [ "$file" != factory/workflows/scaffold.yml ] || continue
       if [ "$mode" = overwrite ] || [ ! -e "$file" ]; then
         mkdir -p "$(dirname "$file")"
         cp "$from/$file" "$file"

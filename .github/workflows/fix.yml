@@ -1,0 +1,191 @@
+# A fix round: the engineer who built a pull request gets a fresh session to fix it, three rounds at most.
+name: fix
+
+on:
+  # A workflow of its own: a run started this way always uses this file as main has it (decisions A89a).
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Open pull request the factory opened, to be fixed by the engineer who built it
+        required: true
+
+concurrency:
+  group: fix-${{ inputs.pr }}
+
+env:
+  PR: ${{ inputs.pr }}
+  OWNER: ${{ github.repository_owner }}
+  # No background commands in a session with nobody in it (decisions A69f).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      # To read the failed jobs' logs, and to start the retro when no round is left (decisions A89h).
+      actions: write
+      # To show the round in the pull request's checks (decisions A124d).
+      statuses: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Main's copy of the scripts, not the pull request's, and main as it is now (decisions A29).
+          ref: ${{ github.event.repository.default_branch }}
+      # The scripts run as main has them, not as the pull request or the engineer left them.
+      - name: Set the scripts aside as they are on main
+        run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
+      - name: Is there a round to run, and who built the pull request?
+        id: round
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/begin-fix-round.sh" "$PR" "$RUNNER_TEMP/failed-checks.txt" "$OWNER"
+      # A status that could not be set does not stop the round (decisions A124e).
+      - name: Show in the pull request's checks that the round is running
+        if: steps.round.outputs.go == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ steps.round.outputs.head }}
+          LABEL: ${{ steps.round.outputs.label }}
+          NAME: ${{ steps.round.outputs.name }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/fix-round-status.sh" "$HEAD" "$LABEL" working "$NAME"
+      # The branch by name: the engineer pushes to it, and keep-work.sh needs to be on it.
+      - uses: actions/checkout@v4
+        if: steps.round.outputs.go == 'true'
+        with:
+          ref: ${{ steps.round.outputs.branch }}
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+        if: steps.round.outputs.go == 'true'
+        with:
+          playwright: "true"
+      - name: Refuse pushes to main from this checkout
+        if: steps.round.outputs.go == 'true'
+        run: |
+          "$RUNNER_TEMP/factory-scripts/guard-main.sh"
+      - name: The engineer fixes the pull request
+        id: agent
+        if: steps.round.outputs.go == 'true'
+        # A session cut short is continued below; the steps after it decide whether the job failed.
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The session's token reads the runs' jobs, timings and logs, which it otherwise may not (decisions A259).
+          additional_permissions: |
+            actions: read
+          # start-fix-round.sh starts this with the workflow's own token, so the actor is a bot.
+          allowed_bots: "*"
+          # begin-fix-round.sh lets this run only on a pull request the factory opened (decisions M4, M13, A89f).
+          restrict_untrusted_prs: "false"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: |
+            You are ${{ steps.round.outputs.name }}. Read ${{ steps.round.outputs.skill }} and follow its "Fixing a pull request" section for pull request #${{ inputs.pr }} in this repository. Its branch, ${{ steps.round.outputs.branch }}, is checked out.
+            What there is to fix is in ${{ runner.temp }}/failed-checks.txt: the tails of the failed job logs, a conflict with main if there is one, and what the repo's owner asked for if they sent the pull request back. Review findings are in the pull request's comments.
+          claude_args: |
+            --model claude-fable-5-2 --effort medium --max-turns 200
+            --allowedTools "${{ steps.round.outputs.tools }}"
+      # Nothing pushed: continued twice at most, with a wait first when the model's API failed (decisions A69a, A69b).
+      - name: Was the session cut short? First look
+        id: cut1
+        if: steps.round.outputs.go == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/continue-session.sh" fix "${{ steps.agent.outputs.execution_file }}" 120 "${{ steps.round.outputs.role }}" "$PR" "${{ steps.round.outputs.head }}"
+      - name: Continue the session
+        id: resume1
+        if: steps.cut1.outputs.continue == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the step it continues
+            actions: read
+          allowed_bots: "*"                 # as for the step it continues
+          restrict_untrusted_prs: "false"   # as for the step it continues
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: ${{ steps.cut1.outputs.prompt }}
+          claude_args: |
+            --resume ${{ steps.cut1.outputs.session }}
+            --model claude-fable-5-2 --effort medium --max-turns 200
+            --allowedTools "${{ steps.round.outputs.tools }}"
+      # `again`: an engineer told once that nothing was pushed is not asked a second time (decisions A69g).
+      - name: Was the session cut short again? Second and last look
+        id: cut2
+        if: steps.cut1.outputs.continue == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/continue-session.sh" fix "${{ steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}" 300 "${{ steps.round.outputs.role }}" "$PR" "${{ steps.round.outputs.head }}" again
+      - name: Continue the session a second time
+        id: resume2
+        if: steps.cut2.outputs.continue == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the step it continues
+            actions: read
+          allowed_bots: "*"                 # as for the step it continues
+          restrict_untrusted_prs: "false"   # as for the step it continues
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: ${{ steps.cut2.outputs.prompt }}
+          claude_args: |
+            --resume ${{ steps.cut2.outputs.session }}
+            --model claude-fable-5-2 --effort medium --max-turns 200
+            --allowedTools "${{ steps.round.outputs.tools }}"
+      # Every run of the action writes the same file, so this saves the last one.
+      - name: Save the session transcript
+        if: always() && steps.round.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/save-session.sh" "${{ steps.round.outputs.role }}" "pr-$PR" "${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}"
+      - name: Keep a second copy of the transcript on this run
+        if: always() && steps.agent.outputs.execution_file != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: session-${{ steps.round.outputs.role }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.agent.outputs.execution_file }}
+            ${{ runner.temp }}/cut-short-sessions
+          retention-days: 90
+      # Counted after the engineer, and only when a session ran (decisions A89c, A89d, A48a, A48d, A124g).
+      - name: Count the round, or fail if the engineer's session never began
+        id: record
+        if: always() && steps.round.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/record-fix-round.sh" "$PR" "$FILE" "${{ steps.round.outputs.counted }}" "${{ steps.round.outputs.head }}"
+      # A round that pushed nothing starts no checks, so nobody would be told (decisions A69d, A20, A48c).
+      - name: Keep the work and ask for a person if the round pushed nothing
+        if: always() && steps.record.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
+          BEFORE: ${{ steps.round.outputs.head }}
+          FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/flag-unfinished.sh" fix "$PR" "$FILE" "$BEFORE" "${{ steps.round.outputs.counted }}"
+      # Last, to tell how the job stands, on the commit the round began with; it cannot fail the job (decisions A124e).
+      - name: Show in the pull request's checks how the round ended
+        if: always() && steps.round.outputs.go == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ steps.round.outputs.head }}
+          LABEL: ${{ steps.round.outputs.label }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/fix-round-status.sh" "$HEAD" "$LABEL" "${{ job.status }}"
