@@ -80,7 +80,7 @@ Anything else that needs you is labelled `needs-human`, with a comment that says
 
 **Only the team can start it.** The factory acts for an account with write access to the repository, and for its own two bots. Anyone else's issue, comment or review starts nothing, and no agent reads it. [`SECURITY.md`](SECURITY.md) says what that protects and what it does not.
 
-**The rules are files.** Each project owns `PURPOSE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md` and `CLAUDE.md`, and every ticket and review is judged against them. An agent starts each task with no memory, so what is written down is all it knows.
+**The rules are files.** Each project owns `PURPOSE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, `SECURITY.md` and `CLAUDE.md`, and every ticket and review is judged against them. An agent starts each task with no memory, so what is written down is all it knows.
 
 ## How it improves
 

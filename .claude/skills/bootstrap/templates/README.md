@@ -34,4 +34,5 @@ The project board shows where every ticket is. `factory/README.md` is the full g
 | How the code is organised | `ARCHITECTURE.md` |
 | How the interface looks and behaves | `DESIGN.md` |
 | What good work looks like | `TASTE.md` |
+| Who the factory acts for, and how to report a vulnerability | `SECURITY.md` |
 | The factory: agents, workflows and scripts | `.claude/skills/`, `.github/`, `factory/` |
