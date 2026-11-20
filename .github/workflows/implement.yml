@@ -21,7 +21,13 @@ env:
 
 jobs:
   implement:
-    if: github.event.label.name == 'ready' || github.event_name == 'workflow_dispatch'
+    # For the label, the event must say a trusted account opened the ticket, or that the owner added it (decisions W563b).
+    # start-build.sh then asks GitHub who opened it, and tells a ticket it refuses (decisions T563f).
+    if: >-
+      github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' &&
+      (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
+      contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login) ||
+      github.event.sender.login == github.repository_owner))
     # The owner's runner when they named one (decisions A426a).
     runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 60
@@ -38,6 +44,14 @@ jobs:
         if: vars.AGENT_RUNNER
         run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
 
       # A limit on the tickets built or checked at once, and never two builds of one ticket (decisions T64a to T64e).
       - name: Take a place among the tickets in flight
@@ -87,7 +101,7 @@ jobs:
                             echo "skill=.claude/skills/factory-engineer/SKILL.md" >> "$GITHUB_OUTPUT" ;;
             *" research "*) echo "name=Rosa" >> "$GITHUB_OUTPUT"; echo "role=rosa" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/research/SKILL.md" >> "$GITHUB_OUTPUT"
-                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
+                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/thread.sh:*),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
             *)              echo "name=Esme" >> "$GITHUB_OUTPUT"; echo "role=esme" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/implement/SKILL.md" >> "$GITHUB_OUTPUT" ;;
           esac
@@ -238,8 +252,9 @@ jobs:
         run: factory/scripts/give-back-place.sh "$ISSUE" "${{ steps.validate.outputs.notified }}"
 
       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      # None for a run an account that is not trusted started (decisions W563c).
       - name: Start a retro when this job failed
-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

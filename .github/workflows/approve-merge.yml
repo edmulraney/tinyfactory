@@ -13,15 +13,15 @@ on:
         description: Pull request number, already approved by the owner
         required: true
 
-concurrency:
-  group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
-
 jobs:
   test-main:
     # The button skips the test with main as it is now, and only the factory's own are taken back (decisions M439a).
     if: >-
       github.event_name == 'pull_request_target' && github.event.pull_request.merged == true &&
       github.event.pull_request.user.login == 'claude[bot]'
+    # One job at a time for a pull request. On each job, so a run whose jobs are skipped takes the place of none that waits (decisions W563h).
+    concurrency:
+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     # It runs code no reviewer may have passed, so it may only read, is given no secret, and starts no retro (decisions M439i).
@@ -41,6 +41,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 2   # the commit before the merge is tested when the merge fails
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
       - name: Did the pull request's checks pass with main as it was before the merge?
         id: tested
         env:
@@ -78,10 +85,13 @@ jobs:
   ship:
     needs: test-main
     # A status function, or the skipped test-main would skip this job too (decisions M75c).
+    # Nobody's review but the owner's; only an account that may write merges, or starts this by number (decisions W563d).
     if: >-
       !cancelled() && (github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) ||
       (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))
+    concurrency:
+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -96,6 +106,13 @@ jobs:
         with:
           # main's copy of the scripts, never the pull request's.
           ref: ${{ github.event.repository.default_branch }}
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
       - name: Let it wait to merge, if the owner approved this exact commit and its checks passed
         if: github.event_name != 'pull_request_target'
         env:
@@ -133,8 +150,9 @@ jobs:
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      # None for a run an account that is not trusted started (decisions W563c).
       - name: Start a retro when this job failed
-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -150,6 +168,8 @@ jobs:
     if: >-
       github.event_name == 'pull_request_review' &&
       github.event.review.state == 'changes_requested' && github.event.review.user.login == github.repository_owner
+    concurrency:
+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -161,6 +181,13 @@ jobs:
         with:
           # main's copy of the scripts, never the pull request's.
           ref: ${{ github.event.repository.default_branch }}
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
       - name: Start the owner's fix round
         env:
           GH_TOKEN: ${{ github.token }}
@@ -186,8 +213,9 @@ jobs:
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      # None for a run an account that is not trusted started (decisions W563c).
       - name: Start a retro when this job failed
-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

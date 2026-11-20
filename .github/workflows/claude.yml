@@ -13,7 +13,10 @@ env:
 jobs:
   claude:
     # Nobody's comment but the owner's, and no ticket's body (decisions A372a).
-    if: contains(github.event.comment.body, '@claude') && github.event.comment.user.login == github.repository_owner
+    # And only on a ticket or pull request a trusted account opened: the session reads it (decisions W563b).
+    if: contains(github.event.comment.body, '@claude') && github.event.comment.user.login == github.repository_owner &&
+      (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association || github.event.pull_request.author_association) ||
+      contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login || github.event.pull_request.user.login))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     # The session holds this token and no other, so GitHub refuses it a push or a merge (decisions A372b).
@@ -27,6 +30,16 @@ jobs:
         with:
           # Main's skills and scripts, never those of the pull request the comment is on (decisions A372f).
           ref: ${{ github.event.repository.default_branch }}
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run, and the one that opened what it is about, may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+          AUTHOR: ${{ github.event.issue.user.login || github.event.pull_request.user.login }}
+        run: |
+          factory/scripts/trusted.sh "$SENDER"
+          factory/scripts/trusted.sh "$AUTHOR"
       # The session runs these copies, which it cannot write (decisions A372f).
       - name: Set the scripts aside as they are on main
         run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
@@ -43,7 +56,7 @@ jobs:
 
             Your session differs from the one those skills describe:
             - Your token changes no file in the repository, approves nothing and merges nothing, and your commands are few. For a step you cannot take, or one that needs the owner's own login, give the owner the exact commands or clicks.
-            - The scripts you may run are main's copies in ${{ runner.temp }}/factory-scripts: `check-ticket.sh`, `in-flight.sh` and `start-waiting.sh`. Run them from there, never from `factory/scripts/`.
+            - The scripts you may run are main's copies in ${{ runner.temp }}/factory-scripts: `thread.sh`, `check-ticket.sh`, `in-flight.sh` and `start-waiting.sh`. Run them from there, never from `factory/scripts/`. Read a ticket or a pull request with `thread.sh <number>`: `gh issue view` and `gh pr view` are not among your commands.
             - A `ready` label you add starts no build. After adding it, run `${{ runner.temp }}/factory-scripts/start-waiting.sh` with no argument. It starts each waiting ticket in its turn, and prints which builds it started and which tickets still wait.
             - `gh workflow run fix.yml -f pr=<n>` starts a fix round, which updates the branch of a pull request the factory opened only when it conflicts with main or a check failed. For any other pull request behind main, give the owner the command `gh pr update-branch <n>`.
             - Keep no state issue and start no watch: the session ends with your reply.
@@ -58,10 +71,11 @@ jobs:
           # `Edit(...)` is the rule a `Write` is checked against, and start-waiting.sh takes no argument (decisions A372c, A372d, A372f).
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }}
-            --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
+            --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/thread.sh:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
       # The reply is the session's own, so a session that fails leaves none (decisions A372e).
+      # Nothing is said in a run an account that is not trusted started (decisions W563c).
       - name: Say that the run failed
-        if: failure() || cancelled()
+        if: steps.trusted.outcome != 'failure' && (failure() || cancelled())
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
