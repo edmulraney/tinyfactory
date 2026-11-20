@@ -31,7 +31,9 @@ while IFS= read -r file; do
   case "$file" in "" | */*) continue ;; esac
   # README.md is the front door each repo writes for itself, so it is neither a seed nor in the manifest.
   # LEARNINGS.md is this repo's own record, as README.md is (decisions H322).
-  [ "$file" = PURPOSE.md ] || [ "$file" = README.md ] || [ "$file" = LEARNINGS.md ] || grep -qxF "$file" <<<"$seeds" || strays+="$file"$'\n'
+  # SECURITY.md is what a repo strangers can see tells them; a project set up is private and has none (decisions U563r).
+  [ "$file" = PURPOSE.md ] || [ "$file" = README.md ] || [ "$file" = LEARNINGS.md ] || [ "$file" = SECURITY.md ] \
+    || grep -qxF "$file" <<<"$seeds" || strays+="$file"$'\n'
 done <<<"$documents"
 
 if [ -n "$strays" ]; then

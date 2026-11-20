@@ -1,1 +1,1 @@
-- **Nothing limits where an agent may send data.** Every agent session holds the Claude token, which it needs to run, so an agent that reads a hostile page could be talked into sending the token out (`SECURITY.md`).
+- **Nothing limits where an agent may send data.** Every agent session holds the Claude token, which it needs to run, so an agent that reads a hostile page could be talked into sending the token out.

@@ -45,8 +45,8 @@ while IFS= read -r line || [ -n "$line" ]; do
       ;;
   esac
   if [ ! -f "$file" ]; then
-    # A project with no interface has no DESIGN.md (decisions H501a).
-    [ "$file" != DESIGN.md ] || continue
+    # A project with no interface has no DESIGN.md (decisions H501a), and a private one no SECURITY.md (U563r).
+    case "$file" in DESIGN.md | SECURITY.md) continue ;; esac
     echo "$list:$number: $file is not a file: take the line out, or correct its path"
     failed=1
     continue

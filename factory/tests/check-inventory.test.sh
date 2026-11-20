@@ -89,9 +89,10 @@ expect_no_output "factory/scripts/ship.sh"
 expect_no_output "factory/workflows/ci.yml"
 expect_no_output "inventory ok"
 
-scenario "fails a Markdown file at the repo root that is not a seed, PURPOSE.md, README.md or LEARNINGS.md, and names it"
+scenario "fails a Markdown file at the repo root that is not a seed, PURPOSE.md, README.md, LEARNINGS.md or SECURITY.md, and names it"
 all_owned
 echo notes > NOTES.md
+echo ours > SECURITY.md
 git add .
 run "$scripts/check-inventory.sh"
 expect_status 1
@@ -101,6 +102,7 @@ expect_no_output "TASTE.md"
 expect_no_output "PURPOSE.md"
 expect_no_output "README.md"
 expect_no_output "LEARNINGS.md"
+expect_no_output "SECURITY.md"
 expect_no_output "docs/guide.md"
 expect_no_output "inventory ok"
 
