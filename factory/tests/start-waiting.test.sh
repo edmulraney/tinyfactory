@@ -41,7 +41,7 @@ github() {
       # A ticket the list of ready does not hold yet.
       "api repos/{owner}/{repo}/issues/"*" --jq "*) json "$(cat "$T/unlisted")" "$@" ;;
       "issue comment "*)
-        jq -cn --arg body "$5" "[{id: 7, body: \$body}]" > "$T/comments-$3" ;;
+        jq -cn --arg body "$5" "[{id: 7, user: {login: \"github-actions[bot]\"}, body: \$body}]" > "$T/comments-$3" ;;
       "workflow run implement.yml -f issue="*) [ "$GH_TOKEN" = workflow-token ] ;;
       "api graphql "*)
         [ "$GH_TOKEN" = board-token ] || { echo "gh: Resource not accessible by integration" >&2; exit 1; }
@@ -71,8 +71,21 @@ after() {
 }
 # open_are <number>...: every open issue and pull request, the waiting tickets among them.
 open_are() { printf '{"number":%s}\n' "$@" | jq -cs . > "$T/open"; }
-# told <ticket> <number>: the ticket was told that it waits for that one.
-told() { jq -cn --arg body "<!-- factory:after $2 -->Waiting: this ticket's body says \`After #$2\`." '[{id: 5, body: "Waiting: 3 tickets are in flight."}, {id: 6, body: $body}]' > "$T/comments-$1"; }
+# told <ticket> <number> [login]: the ticket was told that it waits for that one, by the factory or by that account.
+told() {
+  jq -cn --arg body "<!-- factory:after $2 -->Waiting: this ticket's body says \`After #$2\`." --arg login "${3:-github-actions[bot]}" \
+    '[{id: 5, user: {login: "github-actions[bot]"}, body: "Waiting: 3 tickets are in flight."}, {id: 6, user: {login: $login}, body: $body}]' > "$T/comments-$1"
+}
+# comments_are <ticket> [<login> <body>]...: the comments on the ticket, oldest first.
+comments_are() {
+  local file="$T/comments-$1"
+  shift
+  echo '[]' > "$file"
+  while [ $# -gt 0 ]; do
+    jq -c --arg login "$1" --arg body "$2" '. + [{id: (length + 5), user: {login: $login}, body: $body}]' "$file" > "$file.new" && mv "$file.new" "$file"
+    shift 2
+  done
+}
 in_progress() { printf '{"number":%s}\n' "$@" | jq -cs . > "$T/issues"; }
 # pull <number> <branch> [draft]: one open pull request the factory opened, as gh prints it.
 pull() { echo "{\"number\":$1,\"headRefName\":\"$2\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":${3:-false}}"; }
@@ -301,7 +314,31 @@ github
 in_progress 20 21 27 28 29
 pulls_are "$(pull 42 feat/30-a-ticket true)"
 waits 30 500
-echo '[{"id":5,"body":"Nothing to do: after the Claude usage limit resets, the factory builds this ticket again."},{"id":6,"body":"<!-- factory:no-place -->Waiting: 5 tickets are being built or checked."}]' > "$T/comments-30"
+comments_are 30 "github-actions[bot]" "Nothing to do: after the Claude usage limit resets, the factory builds this ticket again." \
+  "github-actions[bot]" "<!-- factory:no-place -->Waiting: 5 tickets are being built or checked."
+start
+expect_status 0
+expect_no_call "gh issue comment"
+
+scenario "a ticket cut short is told why it waits though another account's comment holds the marker"
+github
+in_progress 20 21 27 28 29
+pulls_are "$(pull 42 feat/30-a-ticket true)"
+waits 30 500
+comments_are 30 "github-actions[bot]" "Nothing to do: after the Claude usage limit resets, the factory builds this ticket again." \
+  stranger "<!-- factory:no-place -->Waiting: 5 tickets are being built or checked." \
+  github-actions "<!-- factory:no-place -->Waiting: 5 tickets are being built or checked."
+start
+expect_status 0
+expect_call "gh issue comment 30 --body <!-- factory:no-place -->Waiting: 5 tickets"
+
+scenario "a ticket cut short and told why it waits is not told again for a comment another account wrote since"
+github
+in_progress 20 21 27 28 29
+pulls_are "$(pull 42 feat/30-a-ticket true)"
+waits 30 500
+comments_are 30 "github-actions[bot]" "<!-- factory:no-place -->Waiting: 5 tickets are being built or checked." \
+  stranger "Nothing to do: the factory builds this ticket again."
 start
 expect_status 0
 expect_no_call "gh issue comment"
@@ -311,7 +348,8 @@ github
 in_progress 20 21 27 28 29
 pulls_are "$(pull 42 feat/30-a-ticket true)"
 waits 30 500
-echo '[{"id":6,"body":"<!-- factory:no-place -->Waiting: 5 tickets are being built or checked."},{"id":8,"body":"Nothing to do: after the Claude usage limit resets, the factory builds this ticket again."}]' > "$T/comments-30"
+comments_are 30 "github-actions[bot]" "<!-- factory:no-place -->Waiting: 5 tickets are being built or checked." \
+  "github-actions[bot]" "Nothing to do: after the Claude usage limit resets, the factory builds this ticket again."
 start
 expect_status 0
 expect_call "gh issue comment 30 --body <!-- factory:no-place -->Waiting: 5 tickets"
@@ -768,6 +806,20 @@ expect_output "no waiting ticket was started"
 expect_no_call "gh workflow run"
 expect_no_call "gh issue comment"
 
+scenario "a ticket is told which ticket it waits for though another account's comment holds the marker"
+for login in stranger github-actions; do
+  github
+  in_progress 20 28 29
+  waits 30 500
+  after 30 20
+  open_are 20 30
+  told 30 20 "$login"
+  start
+  expect_status 0
+  expect_no_call "gh workflow run"
+  expect_call "gh issue comment 30 --body <!-- factory:after 20 -->"
+done
+
 scenario "once the ticket it names has closed, it is started in its turn"
 github
 in_progress 21 28 29
@@ -975,8 +1027,10 @@ grep -qF '"$script_dir/start-waiting.sh"' "$scripts/ship.sh" || fail "ship.sh do
 # The next run that starts after an outage is one of these, and no event says that jobs start again (decisions H386a).
 scenario "start-waiting.yml runs rerun-refused.sh first, and start-waiting.sh even when that failed"
 steps=$(grep 'run: factory/scripts/' "$workflow" | sed 's/.*run: //' | tr '\n' ';')
-[ "$steps" = "factory/scripts/rerun-refused.sh;factory/scripts/start-waiting.sh;" ] || fail "expected rerun-refused.sh then start-waiting.sh, got: $steps"
-grep -B5 'run: factory/scripts/start-waiting.sh' "$workflow" | grep -qF 'if: ${{ !cancelled() }}' \
+[ "$steps" = 'factory/scripts/trusted.sh "$SENDER";factory/scripts/rerun-refused.sh;factory/scripts/start-waiting.sh;' ] \
+  || fail "expected trusted.sh, then rerun-refused.sh, then start-waiting.sh, got: $steps"
+# Not after the step that refuses an account that is not trusted (decisions W563c).
+grep -B5 'run: factory/scripts/start-waiting.sh' "$workflow" | grep -qF "if: steps.trusted.outcome != 'failure' && !cancelled()" \
   || fail "expected the start-waiting.sh step to run after a failed step"
 
 scenario "the token of each job that runs rerun-refused.sh may read why a job never started"

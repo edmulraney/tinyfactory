@@ -15,7 +15,7 @@ reviews() {
   export ADAM_PROMPT="You are Adam. Review pull request #7." ADAM_SCHEMA='{"for":"adam"}'
   export RYAN_PROMPT="You are Ryan. Review pull request #7." RYAN_SCHEMA='{"for":"ryan"}'
   mkdir -p "$T/runner/github"
-  echo '{"title":"feat: a change","body":"Closes #12","comments":[],"reviews":[],"closes":[12]}' > "$T/runner/github/pull-request.json"
+  echo "# Pull request #7: feat: a change" > "$T/runner/github/pull-request.md"
   real_git=$(PATH="$_path" command -v git); export real_git
   "$real_git" init --quiet --initial-branch=main .
   mkdir -p .claude/skills/review-code
@@ -37,8 +37,7 @@ reviews() {
       "pr comment 7 --body-file "*) cat "$5" >> "$T/posted" ;;
       "pr comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
       "pr edit 7 --add-label needs-human") ;;
-      "pr view 7 --json title,body,comments,reviews,closingIssuesReferences "*) json "$(cat "$T/pr.json")" "$@" ;;
-      "issue view 12 --json number,title,body,comments "*) json "$(cat "$T/ticket.json")" "$@" ;;
+      "pr view 7 --json closingIssuesReferences "*) json "{\"closingIssuesReferences\":[$(cat "$T/closes" 2>/dev/null)]}" "$@" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub claude '
@@ -103,7 +102,7 @@ review adam ryan
 expect_status 0
 expect_call "claude -p You are Adam. Review pull request #7."
 expect_call "$there $head has them, are in $T/runner/pull-request: read them there. \`git diff\` and \`git log\` know that commit from this directory."
-expect_call "You have no \`gh\`. What it would print is in $T/runner/github: pull-request.json holds the pull request's title, description, comments and reviews, and ticket-<n>.json the text and comments of the ticket it closes. For the pull request's diff, run \`git diff HEAD...$head\`. --model some-model --max-turns 40 --allowedTools Read,Bash(git diff:*) --json-schema {\"for\":\"adam\"} --output-format stream-json --verbose"
+expect_call "You have no \`gh\`. What it would print is in $T/runner/github: pull-request.md holds the pull request's title, description, comments and reviews, and ticket-<n>.md the text and comments of the ticket it closes, each without what an account with no write access to the repository wrote. For the pull request's diff, run \`git diff HEAD...$head\`. --model some-model --max-turns 40 --allowedTools Read,Bash(git diff:*) --json-schema {\"for\":\"adam\"} --output-format stream-json --verbose"
 expect_call "claude -p You are Ryan. Review pull request #7."
 expect_call "--allowedTools Read,Bash(git diff:*) --json-schema {\"for\":\"ryan\"} --output-format stream-json --verbose"
 expect_calls 2 "claude -p"
@@ -158,47 +157,61 @@ sessions ryan
 expect_status 0
 expect_calls 1 "claude -p"
 
-scenario "context: what GitHub holds of the pull request and of the ticket it closes is written outside the checkout"
+# context: `review.sh context 7` beside a stand-in for thread.sh, which prints one line for the number it is asked for,
+# and fails for the number $T/unread holds. $T/closes holds the tickets the pull request closes, as GitHub lists them.
+context() {
+  rm -rf "$T/scripts"
+  cp -R "$scripts" "$T/scripts"
+  printf '%s\n' '#!/usr/bin/env bash' 'printf "thread.sh %s\n" "$*" >> "$T/calls"' \
+    'if [ "$1" = "$(cat "$T/unread" 2>/dev/null)" ]; then echo "Could not read #$1 from GitHub, so none of its text is printed." >&2; exit 1; fi' \
+    'echo "The text of #$1, with nothing a stranger wrote."' > "$T/scripts/thread.sh"
+  run "$T/scripts/review.sh" context 7
+}
+
+scenario "context: the pull request and the ticket it closes are written outside the checkout, each as thread.sh prints it"
 reviews; rm -rf "$T/runner/github"
-jq -n '{title: "feat: a change", body: "Closes #12", author: {login: "app/claude"},
-  comments: [{author: {login: "repo-owner"}, createdAt: "2026-11-20T10:00:00Z", body: "A comment.", url: "https://example.com"}],
-  reviews: [{author: {login: "repo-owner"}, state: "CHANGES_REQUESTED", submittedAt: "2026-11-20T11:00:00Z", body: "Change this."}],
-  closingIssuesReferences: [{number: 12}]}' > "$T/pr.json"
-jq -n '{number: 12, title: "Change a thing", body: "## How we will know it works", comments: [{author: {login: "repo-owner"}, createdAt: "2026-11-19T10:00:00Z", body: "And this."}]}' > "$T/ticket.json"
-run "$scripts/review.sh" context 7
+echo '{"number":12}' > "$T/closes"
+context
 expect_status 0
-[ "$(jq -c . "$T/runner/github/pull-request.json")" = '{"title":"feat: a change","body":"Closes #12","comments":[{"author":"repo-owner","createdAt":"2026-11-20T10:00:00Z","body":"A comment."}],"reviews":[{"author":"repo-owner","state":"CHANGES_REQUESTED","submittedAt":"2026-11-20T11:00:00Z","body":"Change this."}],"closes":[12]}' ] \
-  || fail "expected the pull request's title, description, comments and reviews, got: $(cat "$T/runner/github/pull-request.json")"
-[ "$(jq -c . "$T/runner/github/ticket-12.json")" = '{"number":12,"title":"Change a thing","body":"## How we will know it works","comments":[{"author":"repo-owner","createdAt":"2026-11-19T10:00:00Z","body":"And this."}]}' ] \
-  || fail "expected the ticket's text and comments, got: $(cat "$T/runner/github/ticket-12.json")"
+[ "$(cat "$T/runner/github/pull-request.md")" = "The text of #7, with nothing a stranger wrote." ] \
+  || fail "expected the pull request as thread.sh prints it, got: $(cat "$T/runner/github/pull-request.md")"
+[ "$(cat "$T/runner/github/ticket-12.md")" = "The text of #12, with nothing a stranger wrote." ] \
+  || fail "expected the ticket as thread.sh prints it, got: $(cat "$T/runner/github/ticket-12.md")"
 case "$T/runner/github/" in "$T/work/"*) fail "expected what GitHub holds outside the checkout" ;; esac
+expect_no_call "gh issue view"
+expect_no_call "--json title"
 expect_no_call "claude"
 
 scenario "context: a pull request that closes no ticket has only its own file"
 reviews; rm -rf "$T/runner/github"
-echo '{"title":"chore: tidy","body":"","comments":[],"reviews":[],"closingIssuesReferences":[]}' > "$T/pr.json"
-run "$scripts/review.sh" context 7
+context
 expect_status 0
-[ "$(ls "$T/runner/github")" = pull-request.json ] || fail "expected only pull-request.json, got: $(ls "$T/runner/github")"
-expect_no_call "gh issue"
+[ "$(ls "$T/runner/github")" = pull-request.md ] || fail "expected only pull-request.md, got: $(ls "$T/runner/github")"
+expect_no_call "thread.sh 12"
 
 scenario "context: GitHub does not answer for the pull request or for its ticket: it fails and leaves no folder, so no session starts and each review is said to be unfinished"
 reviews
-echo '{"title":"feat: a change","body":"Closes #12","comments":[],"reviews":[],"closingIssuesReferences":[{"number":12}]}' > "$T/pr.json"
-echo "issue view" > "$T/fail"
-run "$scripts/review.sh" context 7
+echo '{"number":12}' > "$T/closes"
+echo 12 > "$T/unread"
+context
 expect_status 1
 expect_output "review.sh: ticket #12 could not be read from GitHub, so a reviewer has nothing to read it from, and no review runs."
 [ ! -e "$T/runner/github" ] || fail "expected no folder left when the ticket could not be read"
-echo "pr view" > "$T/fail"
-run "$scripts/review.sh" context 7
+echo 7 > "$T/unread"
+context
 expect_status 1
 expect_output "review.sh: pull request #7 could not be read from GitHub, so a reviewer has nothing to read it from, and no review runs."
 [ ! -e "$T/runner/github" ] || fail "expected no folder left when the pull request could not be read"
+rm "$T/unread"
+echo "pr view" > "$T/fail"
+context
+expect_status 1
+expect_output "review.sh: pull request #7 could not be read from GitHub, so a reviewer has nothing to read it from, and no review runs."
+[ ! -e "$T/runner/github" ] || fail "expected no folder left when the tickets the pull request closes could not be listed"
 : > "$T/fail"
 review ryan
 expect_status 1
-expect_output "review.sh: $T/runner/github holds no pull-request.json, which \`review.sh context\` writes, so a reviewer could not read the pull request, and no review ran."
+expect_output "review.sh: $T/runner/github holds no pull-request.md, which \`review.sh context\` writes, so a reviewer could not read the pull request, and no review ran."
 expect_no_call "claude"
 expect_posted "**Ryan (correctness): review not finished.**"
 expect_cut_short

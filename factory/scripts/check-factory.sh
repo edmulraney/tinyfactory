@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lints the factory's shell scripts and test files, their headers, the reviewers' tools and the lists git merges.
+# Lints the factory's scripts and tests, their headers, who may start a workflow, the reviewers' tools and merged lists.
 # Usage: check-factory.sh   (from the repo root)
 set -euo pipefail
 
@@ -96,6 +96,39 @@ for file in $workflows; do
   ' "$file")
   if [ -n "$found" ]; then
     echo "$file: a reviewer's tools run no script from the repo (H293d). Each Bash entry in the review job's --allowedTools begins \`gh \` or \`git \`:"
+    sed 's/^/  /' <<<"$found"
+    failed=1
+  fi
+done
+# Anyone can raise these five events, so a job one of them starts acts only for a trusted account (decisions W563b).
+for file in $workflows; do
+  found=$(awk -v events="issues|issue_comment|pull_request_review|pull_request_review_comment|pull_request_target" '
+    function close_job() {
+      if (job == "") return
+      if (condition !~ /author_association|github\.repository_owner|claude\[bot\]|github-actions\[bot\]|pull_request\.merged == true/)
+        problems = problems "the job " job ": its `if:` names no account the event vouches for\n"
+      if (!asks) problems = problems "the job " job ": no step runs factory/scripts/trusted.sh\n"
+      job = ""
+    }
+    /^["\047]?on["\047]?:/ {
+      listed = 1
+      inline = $0
+      sub(/^[^:]*:/, "", inline)
+      if (inline ~ "(^|[^a-z_])(" events ")([^a-z_]|$)") outsiders = 1
+      next
+    }
+    /^[^ #]/ { listed = 0; if (in_jobs) close_job(); in_jobs = /^jobs:/ }
+    listed && $0 ~ "^  (" events "):" { outsiders = 1 }
+    !in_jobs { next }
+    /^  [A-Za-z0-9_-]+:/ { close_job(); job = $1; sub(/:.*/, "", job); condition = ""; asks = 0; in_condition = 0; next }
+    /^    if:/ { condition = $0; in_condition = 1; next }
+    in_condition && /^      / { condition = condition " " $0; next }
+    { in_condition = 0 }
+    !/^ *#/ && /factory\/scripts\/trusted\.sh/ { asks = 1 }
+    END { close_job(); if (outsiders) printf "%s", problems }
+  ' "$file")
+  if [ -n "$found" ]; then
+    echo "$file: \`issues\`, \`issue_comment\`, \`pull_request_review\`, \`pull_request_review_comment\` or \`pull_request_target\` starts it, and anyone can raise those. Each job's \`if:\` names the account the event vouches for (\`author_association\`, \`github.repository_owner\`, a bot's full login, or \`pull_request.merged == true\`, which only an account that may write makes true), and a step of it runs \`factory/scripts/trusted.sh\` (decisions W563b):"
     sed 's/^/  /' <<<"$found"
     failed=1
   fi

@@ -80,6 +80,8 @@ Anything else that needs you is labelled `needs-human`, with a comment that says
 
 **Only the team can start it.** The factory acts for an account with write access to the repository, and for its own two bots. Anyone else's issue, comment or review starts nothing, and no agent reads it. [`SECURITY.md`](SECURITY.md) says what that protects and what it does not.
 
+**Built for a private repository.** Setup makes one. If a repository becomes public, the factory still acts only for accounts with write access, but anyone can then read its tickets, its decisions and the agents' transcripts.
+
 **The rules are files.** Each project owns `PURPOSE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md` and `CLAUDE.md`, and every ticket and review is judged against them. An agent starts each task with no memory, so what is written down is all it knows.
 
 ## How it improves

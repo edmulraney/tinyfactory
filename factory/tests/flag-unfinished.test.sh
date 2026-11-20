@@ -439,7 +439,7 @@ at_limit=$(cat "$T/posted")
 
 scenario "a second build in a row stopped at its time limit asks for the ticket to be split, and gives no command"
 ended none
-jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "ready"}}, {event: "commented", body: "Waiting: 5 tickets are being built or checked."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: $body}, {event: "labeled", label: {name: "ready"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: "Waiting: 5 tickets are being built or checked."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
 echo '[{"number":30}]' > "$T/ready"
 echo "export" > export.ts
 run "$scripts/flag-unfinished.sh" build 12 "" true
@@ -455,14 +455,25 @@ split=$(cat "$T/posted")
 
 scenario "a build stopped at its time limit after the ticket was asked to be split asks again"
 ended none
-jq -n --arg first "$at_limit" --arg second "$split" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $first}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $second}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+jq -n --arg first "$at_limit" --arg second "$split" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: $first}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: $second}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
 run "$scripts/flag-unfinished.sh" build 12 "" true
 expect_first_line "gh issue comment 12 --body" "Split this ticket into smaller tickets: two builds in a row reached the job's time limit, so it is too large for one session."
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
 
+for login in stranger github-actions; do
+  scenario "a build stopped at its time limit starts again when the marker before it is in a comment by $login, not the factory"
+  ended none
+  jq -n --arg body "$at_limit" --arg login "$login" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: $login}, body: $body}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+  echo '[{"number":12}]' > "$T/ready"
+  run "$scripts/flag-unfinished.sh" build 12 "" true
+  expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the build starts again from the beginning."
+  expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+  expect_no_call "--add-label needs-human"
+done
+
 scenario "a build stopped at its time limit starts again when the build before it ended another way"
 ended none
-jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: "Add the `ready` label again.\n\nThe build ended with no pull request ready for review: the model'"'"'s API was overloaded (error 529)."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: "Add the `ready` label again.\n\nThe build ended with no pull request ready for review: the model'"'"'s API was overloaded (error 529)."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
 echo '[{"number":12}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "" true
 expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the build starts again from the beginning."
@@ -471,7 +482,7 @@ expect_call "gh workflow run implement.yml -f issue=12"
 
 scenario "a build stopped at its time limit starts again when the engineer stopped the build before it on purpose"
 ended none
-jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: "This ticket cannot be built as written."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", user: {login: "github-actions[bot]"}, body: "This ticket cannot be built as written."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
 echo '[{"number":12}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "" true
 expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the build starts again from the beginning."

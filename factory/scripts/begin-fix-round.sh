@@ -114,7 +114,7 @@ case "$type" in
   factory) name=Fred; role=fred-fix; skill=.claude/skills/factory-engineer/SKILL.md ;;
   research)
     name=Rosa; role=rosa-fix; skill=.claude/skills/research/SKILL.md
-    tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
+    tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/thread.sh:*),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
   *) name=Esme; role=esme-fix; skill=.claude/skills/implement/SKILL.md ;;
 esac
 

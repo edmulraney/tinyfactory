@@ -15,8 +15,10 @@ die() { echo "$1" >&2; exit 1; }
 collecting() {
   local tickets in_flight held flagged=""
   [ "${1:-}" != unflagged ] || flagged=' and ([.labels[].name] | index("needs-human") == null)'
+  # Only one the workflows' own token opened, as `keep` does: anyone can open a ticket with this title (decisions A563g).
   tickets=$(gh api "repos/{owner}/{repo}/issues?state=open&labels=factory&per_page=100" --paginate \
-    --jq ".[] | select(.pull_request == null and (.title | startswith(\"$titled\"))$flagged) | .number") || return 1
+    --jq ".[] | select(.pull_request == null and .user.login == \"github-actions[bot]\" and .user.type == \"Bot\"
+        and (.title | startswith(\"$titled\"))$flagged) | .number") || return 1
   [ -n "$tickets" ] || return 0
   in_flight=$("$script_dir/in-flight.sh") || return 1
   # A build cut short at a draft starts again from its ticket (decisions T64h).
@@ -38,7 +40,7 @@ case "${1:-}" in
       # The engineer is told here, in a ticket read once a week, not in a skill read on every build (decisions A241d).
       # It looks for a note's owner itself (decisions A453).
       body="## Change
-Apply the reviewers' notes: each is in a comment on this ticket headed by a reviewer's name and a pull request's number (\`gh issue view <this ticket> --comments\`); skip any other comment.
+Apply the reviewers' notes: each is in a comment on this ticket headed by a reviewer's name and a pull request's number (\`factory/scripts/thread.sh <this ticket>\`); skip any other comment.
 
 - First search the open tickets and pull requests for each note's subject (\`gh issue list --search\`, \`gh pr list --search\`): a note one of them holds is not applied, and its answer names that number. Apply each other note in the file it names, \`apps/\` included, or answer it in one line saying why not.
 - Put the answers in one comment on this ticket, and name there each kind of note seen three times: a repeat is a rule or a check that is missing.

@@ -27,7 +27,7 @@ Public posts are written by real people who did not agree to be studied.
 
 ## Implementing an issue
 
-1. **Read the ticket:** `gh issue view <n>`, then its comments, `gh issue view <n> --comments`. "Output" names the files to write and "Checks" defines done.
+1. **Read the ticket:** `factory/scripts/thread.sh <n>`. "Output" names the files to write and "Checks" defines done.
 2. **Stop if it cannot be done as written:** the sources need a login, or the output would break a rule above. Comment on the issue with the specific problem, run `gh issue edit <n> --add-label needs-human --remove-label in-progress`, and stop.
 3. **Branch** from `main`: `docs/<n>-<slug>`, the slug two to five words naming what will be known (`runner-profiles`). Then show the ticket as in progress on the board: `git commit --allow-empty -m "chore: start work on #<n>"`, push the branch, and `gh pr create --draft --title "docs: <the ticket's title>" --body "Closes #<n>"`. No checks run on a draft. If the branch already has a draft pull request, from a build that was cut short, carry on in that one.
 4. **Search and read** what "What to read" names, until further pages repeat what you have.
@@ -48,7 +48,7 @@ Public posts are written by real people who did not agree to be studied.
 
 ## Fixing a pull request
 
-You are given a pull request number because a check or a review failed, or the repo's owner sent it back with a "Request changes" review. Read what failed (`gh pr checks <pr>`, `gh pr view <pr> --comments`) and the linked issue, then `gh pr checkout <pr>` (when a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict). Fix each finding with the smallest change that answers it, or rebut it with evidence in one pull request comment; make each change the owner asked for, or answer it with the reason it was not made. Check each sentence you change or cite anew against its page as step 7 says, then run the rest of step 7 and push to the same branch as `fix: <what>`. Do not force-push.
+You are given a pull request number because a check or a review failed, or the repo's owner sent it back with a "Request changes" review. Read what failed (`gh pr checks <pr>`, `factory/scripts/thread.sh <pr>`) and the linked issue the same way, then `gh pr checkout <pr>` (when a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict). Fix each finding with the smallest change that answers it, or rebut it with evidence in one pull request comment; make each change the owner asked for, or answer it with the reason it was not made. Check each sentence you change or cite anew against its page as step 7 says, then run the rest of step 7 and push to the same branch as `fix: <what>`. Do not force-push.
 
 ## Always
 

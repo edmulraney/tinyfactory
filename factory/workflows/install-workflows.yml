@@ -20,11 +20,12 @@ concurrency:
 env:
   PR: ${{ inputs.pr || github.event.pull_request.number }}
   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-  RULE: 67f268772e94f3552d7b308c5492370f417596c3   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
+  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)
 
 jobs:
   install:
+    # Only an account that may write merges a pull request, or starts this by number (decisions W563b).
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -39,6 +40,14 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged
           persist-credentials: false   # the push below must use the app's token and no other
+
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
 
       # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).
       - name: Check that what would be installed was approved, or needs no approval
@@ -235,8 +244,9 @@ jobs:
           } > "$RUNNER_TEMP/installed.md"
           gh pr comment "$PR" --body-file "$RUNNER_TEMP/installed.md"
 
+      # Nothing is said in a run an account that is not trusted started (decisions W563c).
       - name: Tell a person when the change was not installed
-        if: failure()
+        if: steps.trusted.outcome != 'failure' && failure()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -308,8 +318,9 @@ jobs:
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      # None for a run an account that is not trusted started (decisions W563c).
       - name: Start a retro when this job failed
-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

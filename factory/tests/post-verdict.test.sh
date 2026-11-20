@@ -158,7 +158,7 @@ two_notes="{\"findings\":[$note,{\"file\":\"b.ts\",\"kind\":\"note\",\"problem\"
 
 scenario "a verdict with two notes adds one comment to the ticket that collects them, saying whose they are"
 a_review
-echo '[{"number":40,"title":"Apply the review notes of week 6"}]' > "$T/tickets"
+echo '[{"number":40,"title":"Apply the review notes of week 6","user":{"login":"github-actions[bot]","type":"Bot"}}]' > "$T/tickets"
 OUTPUT="$two_notes" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7
 expect_status 0
 [ "$(grep -c '^gh issue comment' "$T/calls")" = 1 ] || fail "expected one comment for the two notes"
@@ -195,7 +195,7 @@ expect_status 1
 scenario "notes that cannot be kept do not fail the review: the verdict is posted, the job passes, and the log says where they are"
 for call in "api repos" "pr list" "issue create" "issue comment"; do
   a_review
-  [ "$call" != "pr list" ] || echo '[{"number":40,"title":"Apply the review notes of week 6"}]' > "$T/tickets"
+  [ "$call" != "pr list" ] || echo '[{"number":40,"title":"Apply the review notes of week 6","user":{"login":"github-actions[bot]","type":"Bot"}}]' > "$T/tickets"
   echo "$call" > "$T/fail"
   OUTPUT="$two_notes" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7
   expect_status 0

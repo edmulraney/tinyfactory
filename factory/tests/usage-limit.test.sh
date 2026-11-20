@@ -22,6 +22,7 @@ github() {
       "issue comment "*" --body "*) printf "#%s: %s\n" "$3" "$5" >> "$T/posted" ;;
       "run rerun "*) ;;
       "issue view 12 --json labels "*) json "{\"labels\":[{\"name\":\"ready\"}]}" "$@" ;;
+      "api repos/{owner}/{repo}/issues/12 --jq .user.login"*) json "{\"user\":{\"login\":\"github-actions[bot]\"}}" "$@" ;;
       "issue edit 12 "*) ;;
       "api repos/{owner}/{repo}/issues/events?per_page=100 "*) json "[]" "$@" ;;
       *) waiting_on_github "$@" ;;

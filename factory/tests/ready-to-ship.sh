@@ -16,7 +16,8 @@ ready_to_ship() {
   mkdir -p apps
   printf 'Closes #12\n\nThe forecast exports as CSV.\n' > "$T/body"
   echo '[{"filename":"apps/web/src/app/page.tsx"}]' > "$T/files.json"
-  echo '{"comments":[{"body":"Looks good."}]}' > "$T/comments"
+  # GitHub's one list of the pull request's comments: $T/rounds holds those a scenario sets whole, $T/comments those `comment` adds.
+  echo '[]' > "$T/comments"
   echo '[{"id":1,"user":{"login":"repo-owner"},"body":"Looks good."}]' > "$T/rounds"
   echo "{\"commit\":\"$merged\"}" > "$T/health"
   : > "$T/fail"
@@ -59,7 +60,7 @@ ready_to_ship() {
       "pr view 7 --json body "*) json "$(jq -Rs "{body: .}" "$T/body")" "$@" ;;
       # Who merged it: $T/merged-by holds the login, a person unless a scenario names the token of the workflows.
       "pr view 7 --json state,mergedBy"*) echo "{\"state\":\"$(cat "$T/state")\",\"mergedBy\":{\"login\":\"$(cat "$T/merged-by" 2>/dev/null || echo repo-owner)\"},\"mergeCommit\":{\"oid\":\"$merged\"}}" ;;
-      "pr view 7 --json state,author,mergedBy,comments") jq --arg state "$(cat "$T/state")" --arg author "$(cat "$T/author" 2>/dev/null || echo app/claude)" --arg by "$(cat "$T/merged-by" 2>/dev/null || echo repo-owner)" ". + {state: \$state, author: {login: \$author}, mergedBy: {login: \$by}}" "$T/comments" ;;
+      "pr view 7 --json state,author,mergedBy") jq -n --arg state "$(cat "$T/state")" --arg author "$(cat "$T/author" 2>/dev/null || echo app/claude)" --arg by "$(cat "$T/merged-by" 2>/dev/null || echo repo-owner)" "{state: \$state, author: {login: \$author}, mergedBy: {login: \$by}}" ;;
       # What revert.sh reads and files to take #7 back: $T/tickets.json holds the tickets filed since the merge, and the next is #30.
       "api graphql -F owner={owner} -F name={repo} -F number=7 "*) json "{\"data\":{\"repository\":{\"issueOrPullRequest\":{\"__typename\":\"PullRequest\",\"number\":7}}}}" "$@" ;;
       "pr view 7 --json state,mergeCommit,mergedAt,title") echo "{\"state\":\"$(cat "$T/state")\",\"mergeCommit\":{\"oid\":\"$merged\"},\"mergedAt\":\"2026-11-16T09:00:00Z\",\"title\":\"feat: export forecast as CSV\"}" ;;
@@ -87,11 +88,10 @@ ready_to_ship() {
       "issue edit 1"[34]" "* | "issue close 1"[34] | "issue comment 1"[34]" "*) ;;
       # The git tree of a commit, for the comparison with what was tested: $T/trees/<commit> when a scenario wrote one.
       "api repos/{owner}/{repo}/commits/"*" --jq .commit.tree.sha") json "{\"commit\":{\"tree\":{\"sha\":\"$(cat "$T/trees/${2##*/}" 2>/dev/null || echo "no tree was given for ${2##*/}")\"}}}" "$@" ;;
-      "pr view 7 --json comments "*) json "$(cat "$T/comments")" "$@" ;;
       "pr view 7 --json author "*) json "{\"author\":{\"login\":\"$(cat "$T/author" 2>/dev/null || echo app/claude)\"}}" "$@" ;;
       "pr view 7 --json baseRefName "*) json "{\"baseRefName\":\"main\"}" "$@" ;;
       "pr view 7 --json state,headRefOid,reviews,isDraft,author") cat "$T/view.json" ;;
-      "pr view 7 --json reviews,comments") jq -s ".[0] + .[1]" "$T/view.json" "$T/comments" ;;
+      "pr view 7 --json reviews") cat "$T/view.json" ;;
       "pr view 7 --json number,"*) json "{\"number\":7,\"title\":\"feat: export forecast as CSV\",\"headRefName\":\"feat/12-export-forecast-csv\",\"state\":\"MERGED\",\"mergedAt\":\"2026-11-16T09:00:00Z\",\"labels\":[],\"comments\":[]}" "$@" ;;
       "run list --workflow ci.yml --branch "*) json "[]" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs -f branch=feat/12-export-forecast-csv "*) json "{\"workflow_runs\":[{\"id\":900}]}" "$@" ;;
@@ -132,7 +132,7 @@ ready_to_ship() {
         commit=${2%/statuses}
         if [ "${commit##*/}" = "$(cat "$T/skipped-commit" 2>/dev/null)" ]; then json "$(cat "$T/skipped-statuses.json")" "$@"; else json "$(cat "$T/statuses.json")" "$@"; fi ;;
       "pr view 7 --json headRefOid "*) json "{\"headRefOid\":\"$head\"}" "$@" ;;
-      "api repos/{owner}/{repo}/issues/7/comments?per_page=100 "*) json "$(cat "$T/rounds")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/7/comments?per_page=100 "*) json "$(jq -s add "$T/rounds" "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 "*) n=${2#*/issues/}; json "$(cat "$T/rounds-${n%/comments*}" 2>/dev/null || echo "[]")" "$@" ;;
       "pr view "*" --json headRefOid "*) json "{\"headRefOid\":\"$(cat "$T/heads/$3")\"}" "$@" ;;
       "pr view "*" --json isDraft,labels "*) json "{\"isDraft\":$(grep -qx "$3" "$T/drafts" 2>/dev/null && echo true || echo false),\"labels\":$(jq -c --argjson n "$3" "[.[] | select(.number == \$n) | .labels[]]" "$T/marked.json" 2>/dev/null || echo "[]")}" "$@" ;;
@@ -198,11 +198,15 @@ tested_with_an_older_main() {
 # shellcheck disable=SC2016
 put_on_main='jq --arg sha "$merged" "[{sha: \$sha, commit: {message: \"feat: export forecast as CSV (#7)\n\nThe forecast exports as CSV.\"}}] + ." "$T/log.json" > "$T/log.new" && mv "$T/log.new" "$T/log.json"'
 on_main() { eval "$put_on_main"; }
-# verdict <reviewer> <review JSON>: the real post-verdict.sh writes it, so a change there fails its readers' tests.
+# comment <body> [login]: a comment on pull request #7, the factory's own unless another account is named.
+comment() {
+  jq --arg body "$1" --arg login "${2:-github-actions[bot]}" '. + [{user: {login: $login}, body: $body}]' "$T/comments" > "$T/comments.new"
+  mv "$T/comments.new" "$T/comments"
+}
+# verdict <reviewer> <review JSON> [login]: the real post-verdict.sh writes it, so a change there fails its readers' tests.
 verdict() {
   OUTPUT="$2" RUNNER_TEMP="$T/tmp" "$scripts/post-verdict.sh" "$1" 7 > /dev/null || true
-  jq --rawfile body "$T/tmp/verdict.md" '.comments += [{body: $body}]' "$T/comments" > "$T/comments.new"
-  mv "$T/comments.new" "$T/comments"
+  comment "$(cat "$T/tmp/verdict.md")" "${3:-}"
   rm "$T/tmp/verdict.md"
   : > "$T/calls"
 }

@@ -288,6 +288,7 @@ apps/web/src/app/page.tsx
 apps/web/e2e/test.tsx
 apps/web/e2e/acceptance/12-export-forecast-csv.spec.ts
 docs/TASTE.md
+docs/SECURITY.md
 CLAUDE.md.bak
 PURPOSE.md
 docs/factory/workflows/build.yml
@@ -312,6 +313,7 @@ the product's bar|apps/web/vitest.config.ts
 the product's bar|apps/web/playwright.config.ts
 the product's bar|apps/web/e2e/test.ts
 the agents' instructions|CLAUDE.md
+secrets or permissions|SECURITY.md
 EOF
 
 scenario "holds the theme moved to another name, and a new file of the bar"

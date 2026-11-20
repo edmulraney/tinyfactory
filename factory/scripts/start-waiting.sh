@@ -65,15 +65,16 @@ started=0
 free() { [ -z "$({ grep -v "^$1 " <<<"$in_flight" || true; } | "$script_dir/in-flight.sh" full)" ]; }
 
 # tell_no_place <ticket>: tells a ticket whose build was cut short, and that no place is left for, which tickets
-# hold the places. Its last comment promised a start, so it is told unless that comment already says this
-# (decisions T505b). It fails when the ticket could not be told.
+# hold the places. The factory's last comment on it promised a start, so it is told unless that comment already
+# says this (decisions T505b, T563m). It fails when the ticket could not be told.
 tell_no_place() {
   local marker="<!-- factory:no-place -->" last taken
   # start-build.sh tells the caller's ticket why it waits.
   [ "$1" != "$mine" ] || return 0
   grep -q "^$1 #$1 (waiting with ready; " <<<"$in_flight" || return 0
+  # A marker counts only in the factory's own comment, named in full by the REST list (decisions U563l).
   last=$(gh api "repos/{owner}/{repo}/issues/$1/comments?per_page=100" --paginate \
-      --jq ".[] | .body | startswith(\"$marker\")" | tail -n 1) \
+      --jq ".[] | select(.user.login == \"github-actions[bot]\") | (.body // \"\") | startswith(\"$marker\")" | tail -n 1) \
     || return 1
   [ "$last" != true ] || return 0
   taken=$({ grep -v "^$1 " <<<"$in_flight" || true; } | "$script_dir/in-flight.sh" full)
@@ -164,8 +165,9 @@ queue=$(printf '%s\n' "$placed"; sort -k1,1n -k2,2n <<<"$since" | cut -d' ' -f3)
 # It fails when the ticket could not be told.
 tell() {
   local marker="<!-- factory:after $2 -->" told
+  # Decisions U563l.
   told=$(gh api "repos/{owner}/{repo}/issues/$1/comments?per_page=100" --paginate \
-      --jq ".[] | select(.body | startswith(\"$marker\")) | .id") \
+      --jq ".[] | select(.user.login == \"github-actions[bot]\" and ((.body // \"\") | startswith(\"$marker\"))) | .id") \
     || return 1
   [ -z "$told" ] || return 0
   gh issue comment "$1" --body "${marker}Waiting: this ticket's body says \`After #$2\`, and #$2 is still open. This ticket keeps the \`ready\` label, and its build starts when a place next frees after #$2 has closed. If #$2 is closed by hand, with no pull request merged, take \`ready\` off this ticket and add it again to start the build." >/dev/null

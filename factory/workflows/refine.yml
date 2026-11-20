@@ -12,13 +12,16 @@ env:
 
 jobs:
   refine:
+    # Only an idea a trusted account opened, on its label and on a comment (decisions A563e).
     # Only the owner's comment takes a place in the queue below, so nobody else's replaces an answer that waits; start-refine.sh checks it again (decisions A353f).
     # A comment that holds @claude is the mention agent's to answer (decisions A372h).
     if: >-
-      (github.event_name == 'issues' && github.event.label.name == 'idea') ||
+      (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
+      contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login)) &&
+      ((github.event_name == 'issues' && github.event.label.name == 'idea') ||
       (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
       contains(github.event.issue.labels.*.name, 'idea') && github.event.comment.user.login == github.repository_owner &&
-      !contains(github.event.comment.body, '@claude'))
+      !contains(github.event.comment.body, '@claude')))
     runs-on: ubuntu-latest
     # One session, never continued (decisions A353d).
     timeout-minutes: 30
@@ -31,6 +34,14 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
 
       # Every step from here runs only for an idea Peta may act on: a refused run ends green.
       - name: Decide whether Peta runs, and write what she reads
@@ -71,8 +82,9 @@ jobs:
           "$RUNNER_TEMP/factory-scripts/save-session.sh" peta "issue-$ISSUE" "${{ steps.agent.outputs.execution_file }}"
 
       # The owner waits for a comment that will not come, so the idea says so (decisions A353d).
+      # Nothing is written to it in a run an account that is not trusted started (decisions W563c).
       - name: Tell the idea that the run failed
-        if: failure() || cancelled()
+        if: steps.trusted.outcome != 'failure' && (failure() || cancelled())
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

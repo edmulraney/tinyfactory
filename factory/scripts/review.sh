@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Runs a pull request's reviews as Claude sessions side by side, and posts each verdict after (decisions A427a, A541d).
 # Usage: review.sh context <pr-number>
-#          Writes what a reviewer reads from GitHub to $RUNNER_TEMP/github: the pull request's title, description,
-#          comments and reviews as pull-request.json, and the text and comments of each ticket it closes as
-#          ticket-<n>.json. Needs GH_TOKEN, to read. If GitHub cannot be read it exits 1 and leaves no folder.
+#          Writes what a reviewer reads from GitHub to $RUNNER_TEMP/github, as thread.sh prints it: the pull request's
+#          title, description, comments and reviews as pull-request.md, and the text and comments of each ticket it
+#          closes as ticket-<n>.md, with nothing an account that is not trusted wrote (decisions A563i, A563k).
+#          Needs GH_TOKEN, to read. If GitHub cannot be read it exits 1 and leaves no folder.
 #        review.sh sessions <pr-number> <head-sha> <adam|ryan>... -- <arguments for each claude session>
 #          From a checkout of the base that holds the commit <head-sha>, whose files it puts outside that checkout,
 #          in $RUNNER_TEMP/pull-request. Each reviewer named is given <NAME>_PROMPT and <NAME>_SCHEMA, as ADAM_PROMPT.
@@ -76,16 +77,13 @@ if [ "$mode" = context ]; then
     echo "review.sh: $1 could not be read from GitHub, so a reviewer has nothing to read it from, and no review runs." >&2
     exit 1
   }
-  comments='[.comments[] | {author: .author.login, createdAt, body}]'
   rm -rf "$github"
   mkdir -p "$github" || { echo "review.sh: could not make $github, so no review runs." >&2; exit 1; }
-  gh pr view "$pr" --json title,body,comments,reviews,closingIssuesReferences --jq "{title, body, comments: $comments,
-    reviews: [.reviews[] | {author: .author.login, state, submittedAt, body}], closes: [.closingIssuesReferences[].number]}" \
-    > "$github/pull-request.json" || unread "pull request #$pr"
-  tickets=$(jq -r '.closes[]' "$github/pull-request.json") || unread "pull request #$pr"
+  "$script_dir/thread.sh" "$pr" > "$github/pull-request.md" || unread "pull request #$pr"
+  # The tickets it closes are numbers GitHub worked out, and none of the description's words.
+  tickets=$(gh pr view "$pr" --json closingIssuesReferences --jq '.closingIssuesReferences[].number') || unread "pull request #$pr"
   for ticket in $tickets; do
-    gh issue view "$ticket" --json number,title,body,comments --jq "{number, title, body, comments: $comments}" \
-      > "$github/ticket-$ticket.json" || unread "ticket #$ticket"
+    "$script_dir/thread.sh" "$ticket" > "$github/ticket-$ticket.md" || unread "ticket #$ticket"
   done
   exit 0
 fi
@@ -127,7 +125,7 @@ review() {
 
 This directory is a checkout of the branch the pull request merges into. The pull request's files, as its commit $head has them, are in $files: read them there. \`git diff\` and \`git log\` know that commit from this directory.
 
-You have no \`gh\`. What it would print is in $github: pull-request.json holds the pull request's title, description, comments and reviews, and ticket-<n>.json the text and comments of the ticket it closes. For the pull request's diff, run \`git diff HEAD...$head\`."
+You have no \`gh\`. What it would print is in $github: pull-request.md holds the pull request's title, description, comments and reviews, and ticket-<n>.md the text and comments of the ticket it closes, each without what an account with no write access to the repository wrote. For the pull request's diff, run \`git diff HEAD...$head\`."
   # The waits before continuing after an API error (decisions A69a, A69b).
   for wait in 120 300; do
     : > "$work/$role/outputs"
@@ -171,8 +169,8 @@ sessions() {
     echo "review.sh: the files of the pull request's commit $head could not be put in $files, so no review ran." >&2
     return
   }
-  [ -f "$github/pull-request.json" ] || {
-    echo "review.sh: $github holds no pull-request.json, which \`review.sh context\` writes, so a reviewer could not read the pull request, and no review ran." >&2
+  [ -f "$github/pull-request.md" ] || {
+    echo "review.sh: $github holds no pull-request.md, which \`review.sh context\` writes, so a reviewer could not read the pull request, and no review ran." >&2
     return
   }
   mkdir -p "$kept" || { echo "review.sh: could not make $kept, so no review ran." >&2; return; }

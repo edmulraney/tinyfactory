@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Decides, as the first step of a build (implement.yml), whether a ticket's build may start: it needs a free place.
+# Decides, in implement.yml, whether a ticket's build may start: a trusted account opened it, and a place is free.
 # Usage: start-build.sh <issue-number>
 #        Needs GH_TOKEN (issues: write; pull requests and contents: read) and GITHUB_REPOSITORY.
 #        GITHUB_EVENT_NAME, which a workflow sets, says whether the ticket's label or another workflow started the run.
@@ -42,6 +42,25 @@ case " $labels " in
   *" ready "*) ;;
   *) refuse "issue #$issue does not carry ready: another run started its build, or the label was taken off" ;;
 esac
+
+# A ticket's text stays its author's to edit, so none is built that an account the factory does not act for opened (decisions T563f).
+author=$(gh api "repos/{owner}/{repo}/issues/$issue" --jq '.user.login // ""') \
+  || die "Issue #$issue was not started: who opened it could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build."
+trusted=0
+"$script_dir/trusted.sh" "$author" || trusted=$?
+if [ "$trusted" -eq 1 ]; then
+  by="\`$author\`"
+  [ -n "$author" ] || by="an account GitHub no longer names"
+  # The first line says what a person must do (decisions A371a). ready comes off, or start-waiting.sh would start it again.
+  gh issue comment "$issue" --body "File this ticket again from an account that may write to this repository, if it is to be built.
+
+Not started: $by opened this ticket and may not write to this repository. A ticket's text stays its author's to change, so the factory builds only a ticket opened by an account that may write here, or by the factory itself. The \`ready\` label was taken off." >/dev/null \
+    && gh issue edit "$issue" --remove-label ready --add-label needs-human >/dev/null \
+    || die "Issue #$issue was not started, because an account that may not write to this repository opened it, but it could not be told so and flagged for a person. It may still carry the ready label."
+  refuse "issue #$issue was opened by ${author:-an account GitHub no longer names}, who may not write to this repository: it was told so and flagged for a person"
+fi
+[ "$trusted" -eq 0 ] \
+  || die "Issue #$issue was not started: whether $author, who opened it, may write to this repository is not known. It keeps the ready label; take it off and add it again to start the build."
 
 in_flight=$("$script_dir/in-flight.sh") \
   || die "Issue #$issue was not started: what is in flight could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build."
