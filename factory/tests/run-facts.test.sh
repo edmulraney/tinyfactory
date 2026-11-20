@@ -33,6 +33,8 @@ github() {
       "api repos/{owner}/{repo}/contents/factory/workflows/"*"?ref=refs/pull/72/head -H Accept: application/vnd.github.raw+json")
         name=${2#*/workflows/}; cat "$T/source-${name%%\?*}" ;;
       "pr comment 72 --body-file "*) ;;
+      # One list on GitHub, asked for twice: $T/comments answers the read of the verdicts, and $T/rounds fix-rounds.sh.
+      "api repos/{owner}/{repo}/issues/72/comments?per_page=100 --paginate --jq "*"{body: "*) json "$(cat "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/72/comments?per_page=100 "*) json "$(cat "$T/rounds")" "$@" ;;
       "run list --workflow ci.yml --branch feat/57-test-with-current-main "*) json "$(cat "$T/ci-runs")" "$@" ;;
       "run view 801 --json jobs "*) json "{\"jobs\":[{\"name\":\"checks\",\"conclusion\":\"success\"},{\"name\":\"review\",\"conclusion\":\"failure\"}]}" "$@" ;;
@@ -468,16 +470,24 @@ expect_failure
 expect_output "Could not read pull request #66 from GitHub"
 expect_no_output '"factory_failure"'
 
+# comment <body> [login]: a comment on pull request #72, the factory's own unless another account is named.
+comment() {
+  jq --arg body "$1" --arg login "${2:-github-actions[bot]}" '. + [{user: {login: $login}, body: $body}]' "$T/comments" > "$T/comments.new" \
+    && mv "$T/comments.new" "$T/comments"
+}
 # Ryan's review and the engineer's reply both quote the fix-round marker, as they did on the real pull request.
 a_pull_request() {
   jq -n '[{id: 1, user: {login: "github-actions[bot]"}, body: "**Ryan (code): FAIL**\nIt counts any comment holding <!-- factory:fix-round -->"},
           {id: 2, user: {login: "github-actions[bot]"}, body: "<!-- factory:fix-round -->Fix round 1 of 3"},
           {id: 3, user: {login: "claude[bot]"}, body: "<!-- factory:fix-round --> is now counted once."}]' > "$T/rounds"
   jq -n '{number: 72, title: "feat: test with main", headRefName: "feat/57-test-with-current-main", state: "MERGED",
-          mergedAt: "2026-11-16T08:30:00Z", labels: [], createdAt: "2026-11-16T08:00:00Z",
-          comments: [{body: "**Adam (architecture): PASS**"}, {body: "**Ryan (code): FAIL**\nfindings"},
-                     {body: "<!-- factory:fix-round -->Fix round 1 of 3"}, {body: "**Ryan (code): PASS**"},
-                     {body: "**Adam (architecture): PASS**"}]}' > "$T/pr"
+          mergedAt: "2026-11-16T08:30:00Z", labels: [], createdAt: "2026-11-16T08:00:00Z"}' > "$T/pr"
+  echo '[]' > "$T/comments"
+  comment "**Adam (architecture): PASS**"
+  comment "**Ryan (code): FAIL**"$'\n'"findings"
+  comment "<!-- factory:fix-round -->Fix round 1 of 3"
+  comment "**Ryan (code): PASS**"
+  comment "**Adam (architecture): PASS**"
   echo '[{"databaseId":801,"conclusion":"failure"},{"databaseId":802,"conclusion":"failure"},{"databaseId":803,"conclusion":"success"}]' > "$T/ci-runs"
   a_session_that_finished issue-57 fred 800 6.82
   a_session_that_finished pr-72 ryan 801 1.84
@@ -509,8 +519,8 @@ expect_no_call "gh run view 803"
 scenario "a pull request: a pass carried forward is counted apart from the passes a reviewer gave"
 github; a_pull_request
 carried='Carried forward from the review of abc1234: every commit since is a merge of `main`. No review ran. <!-- factory:carried -->'
-jq --arg carried "$carried" '.comments += [{body: ("**Adam (architecture): PASS**\n\n" + $carried + "\n\nFits.\n\n<!-- factory:assumptions [] -->")},
-                   {body: ("**Ryan (code): PASS**\n\nIt marks one with\n" + $carried)}]' "$T/pr" > "$T/pr.new" && mv "$T/pr.new" "$T/pr"
+comment "**Adam (architecture): PASS**"$'\n\n'"$carried"$'\n\n'"Fits."$'\n\n'"<!-- factory:assumptions [] -->"
+comment "**Ryan (code): PASS**"$'\n\n'"It marks one with"$'\n'"$carried"
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72 "$T/sessions"
 expect_status 0
 expect_fact '.reviews.adam | "pass \(.pass), carried \(.carried), fail \(.fail)"' "pass 2, carried 1, fail 0"
@@ -519,7 +529,8 @@ expect_fact '.reviews.ryan | "pass \(.pass), carried \(.carried), fail \(.fail)"
 
 # A verdict is its comment's first line (decisions A137).
 a_lone_verdict() {
-  jq --arg body "$1" '.comments = [{body: $body}]' "$T/pr" > "$T/pr.new" && mv "$T/pr.new" "$T/pr"
+  echo '[]' > "$T/comments"
+  comment "$1"
 }
 
 scenario "a pull request: a verdict headed PASS that quotes a failing one is one pass and no failure"
@@ -545,10 +556,10 @@ expect_status 0
 expect_fact '.reviews.ryan | "pass \(.pass), fail \(.fail)"' "pass 0, fail 0"
 expect_fact '.reviews.ryan.assumptions | length' 0
 
-# verdict <reviewer> <json>: posted by the real post-verdict.sh, so a change to what that script writes fails here.
+# verdict <reviewer> <json> [login]: posted by the real post-verdict.sh, so a change to what that script writes fails here.
 verdict() {
   OUTPUT="$2" RUNNER_TEMP="$T/tmp" "$scripts/post-verdict.sh" "$1" 72 > /dev/null || true
-  jq --rawfile body "$T/tmp/verdict.md" '.comments += [{body: $body}]' "$T/pr" > "$T/pr.new" && mv "$T/pr.new" "$T/pr"
+  comment "$(cat "$T/tmp/verdict.md")" "${3:-}"
   rm "$T/tmp/verdict.md"
   : > "$T/calls"
 }
@@ -584,17 +595,38 @@ expect_fact '.reviews | "\(.adam.pass) \(.adam.fail) \(.ryan.pass) \(.ryan.fail)
 
 scenario "a pull request: a list quoted in a comment that is no verdict is not a fact"
 github; a_pull_request
-jq --arg quoted "The retro reads this:"$'\n'"<!-- factory:assumptions [$queue] -->" '.comments += [{body: $quoted}, {body: ("**Ryan (code): PASS**\n" + $quoted + "\nas its last line.")}]' "$T/pr" > "$T/pr.new" && mv "$T/pr.new" "$T/pr"
+quoted="The retro reads this:"$'\n'"<!-- factory:assumptions [$queue] -->"
+comment "$quoted"
+comment "**Ryan (code): PASS**"$'\n'"$quoted"$'\n'"as its last line."
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72 "$T/sessions"
 expect_status 0
 expect_fact '.reviews | "\(.adam.assumptions | length) \(.ryan.assumptions | length)"' "0 0"
 
 scenario "a pull request: stops with a message, and prints no facts, when a verdict's list cannot be read"
 github; a_pull_request
-jq '.comments += [{body: "**Ryan (code): PASS**\nFine.\n\n<!-- factory:assumptions [{\"claim\": -->"}]' "$T/pr" > "$T/pr.new" && mv "$T/pr.new" "$T/pr"
+comment "**Ryan (code): PASS**"$'\n'"Fine."$'\n\n''<!-- factory:assumptions [{"claim": -->'
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72 "$T/sessions"
 expect_failure
 expect_output "A verdict on pull request #72 holds a list of assumptions that could not be read"
+expect_no_output '"fix_rounds"'
+
+scenario "a pull request: a verdict, and a list of assumptions, in another account's comment is no fact, and the factory's own still is"
+github; a_pull_request
+verdict "Ryan (correctness)" "{\"verdict\":\"pass\",\"findings\":[],\"assumptions\":[$queue]}"
+verdict "Ryan (correctness)" "{\"findings\":[{\"file\":\"a.sh\",\"kind\":\"misbehaves\",\"problem\":\"Wrong.\",\"fix\":\"Right it.\"}],\"assumptions\":[$token]}" stranger
+verdict "Adam (architecture and taste)" "{\"verdict\":\"pass\",\"findings\":[],\"assumptions\":[$token]}" github-actions
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72 "$T/sessions"
+expect_status 0
+expect_fact '.reviews.ryan.assumptions | tojson' "$(jq -c . <<<"[$queue]")"
+expect_fact '.reviews.adam.assumptions | tojson' "[]"
+expect_fact '.reviews | "\(.adam.pass) \(.adam.fail) \(.ryan.pass) \(.ryan.fail)"' "2 0 2 1"
+
+scenario "a pull request: stops with a message, and prints no facts, when its comments cannot be read"
+github; a_pull_request
+echo 'api repos/{owner}/{repo}/issues/72/comments?per_page=100 --paginate --jq .[] | select(.user.login == "github-actions[bot]") | {body: (.body // "")}' > "$T/fail-exactly"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72 "$T/sessions"
+expect_failure
+expect_output "Could not read the comments of pull request #72 from GitHub, so its reviewers' verdicts are not known."
 expect_no_output '"fix_rounds"'
 
 scenario "a pull request: the sessions saved for it and for its ticket, and what they cost together"

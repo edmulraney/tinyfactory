@@ -37,9 +37,11 @@ for pr in $waiting; do
     marker="<!-- factory:first-run $file -->"
     if jq -se --arg marker "$marker" 'any(.[]; .body | startswith($marker))' <<<"$comments" >/dev/null; then continue; fi
 
+    # A run of a fork's pull request ran the fork's copy of the workflow, and its log holds what the fork wrote.
     if ! runs=$(retry gh api --method GET "repos/{owner}/{repo}/actions/workflows/$file/runs" \
         -f status=completed -f created=">=$at" -f per_page=100 --paginate \
-        --jq '.workflow_runs[] | select(.conclusion != "skipped" and .conclusion != "cancelled") | "\(.created_at) \(.id) \(.html_url)"'); then
+        --jq '.workflow_runs[] | select(.conclusion != "skipped" and .conclusion != "cancelled" and .head_repository.full_name == .repository.full_name)
+              | "\(.created_at) \(.id) \(.html_url) \(.event) \(.actor.login)"'); then
       failed "Could not list the runs of $file since pull request #$pr changed it, so its first run was not looked for. If the workflow is gone, take the \`proof\` label off #$pr."
       pending=1
       continue
@@ -49,7 +51,29 @@ for pr in $waiting; do
       pending=1
       continue
     fi
-    read -r _ id url <<<"$(sort <<<"$runs" | head -n 1)"
+    # Of the events anyone can raise, only a run a trusted account started counts: any other shows only a refusal.
+    id="" unknown=""
+    while read -r _ run link event actor; do
+      case "$event" in
+        issues | issue_comment | pull_request | pull_request_review | pull_request_review_comment | pull_request_target)
+          trusted=0
+          "$script_dir/trusted.sh" "$actor" 2>/dev/null || trusted=$?
+          [ "$trusted" -ne 1 ] || continue
+          [ "$trusted" -eq 0 ] || { unknown="$run"; break; } ;;
+      esac
+      id="$run"; url="$link"
+      break
+    done < <(sort <<<"$runs")
+    if [ -n "$unknown" ]; then
+      failed "Whether a trusted account started run $unknown of $file could not be read from GitHub, so the first run since pull request #$pr changed it was not looked for."
+      pending=1
+      continue
+    fi
+    if [ -z "$id" ]; then
+      echo "no run of $file that a trusted account started has finished since pull request #$pr changed it"
+      pending=1
+      continue
+    fi
 
     # Started once and not retried: a call that failed may still have started it (decisions M26).
     if ! gh workflow run retro.yml -f pr="$pr" -f run="$id"; then

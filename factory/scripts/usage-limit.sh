@@ -7,8 +7,9 @@
 #                                                    as the first step of an agent's run: when the limit holds, it
 #                                                    keeps the run's place, tells issue or pull request <number>
 #                                                    (none when empty) when <what> starts, prints one sentence and
-#                                                    writes held=true to GITHUB_OUTPUT. With `failed` it then exits
-#                                                    1: only the failed jobs of that run are run again.
+#                                                    writes held=true to GITHUB_OUTPUT, and kept=true once the run
+#                                                    has its place. With `failed` it then exits 1: only the failed
+#                                                    jobs of that run are run again.
 #        usage-limit.sh resume [now]                 once the limit has reset, or at once with `now`: removes the
 #                                                    hold, runs each run that waited again and starts the tickets
 #                                                    that wait with `ready`. Prints nothing when no hold is recorded.
@@ -100,6 +101,7 @@ case "${1:-}" in
     line="${rerun:-run} $GITHUB_RUN_ID"
     push_to_sessions "usage limit: run $GITHUB_RUN_ID waits" add_run \
       || die "The Claude usage limit holds every agent until $when, and the place of run $GITHUB_RUN_ID could not be written to the sessions branch: nothing starts $what again."
+    echo "kept=true" >> "${GITHUB_OUTPUT:-/dev/null}"
     # The first line says what a person must do (decisions A371a).
     [ -z "$number" ] || gh issue comment "$number" --body "Nothing to do: $what starts after the Claude usage limit resets on $when.
 

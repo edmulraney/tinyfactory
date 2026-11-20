@@ -265,7 +265,7 @@ fi
 
 pr="${1:?Usage: run-facts.sh <pr-number> [sessions-dir]}"; sessions="${2:-}"
 
-view=$(gh pr view "$pr" --json number,title,headRefName,state,mergedAt,labels,comments,createdAt) \
+view=$(gh pr view "$pr" --json number,title,headRefName,state,mergedAt,labels,createdAt) \
   || die "Could not read pull request #$pr from GitHub, so its facts are not known."
 branch=$(jq -r .headRefName <<<"$view")
 issue=$("$script_dir/linked-issue.sh" "$pr")
@@ -273,6 +273,10 @@ rounds=$("$script_dir/fix-rounds.sh" "$pr") \
   || die "Could not count the fix rounds of pull request #$pr, so its facts are not known."
 owner_rounds=$("$script_dir/fix-rounds.sh" "$pr" owner) \
   || die "Could not count the owner's fix rounds of pull request #$pr, so its facts are not known."
+# A verdict is the factory's own comment, and the REST list names its account in full (decisions U563l).
+bodies=$(gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --paginate \
+    --jq '.[] | select(.user.login == "github-actions[bot]") | {body: (.body // "")}' | jq -cs 'map(.body)') \
+  || die "Could not read the comments of pull request #$pr from GitHub, so its reviewers' verdicts are not known."
 
 # Each read is on its own line, so that a failed read stops here and is not taken for "nothing failed" (decisions H7).
 runs=$(gh run list --workflow ci.yml --branch "$branch" --limit 20 --json databaseId,conclusion \
@@ -295,12 +299,11 @@ if [ -n "$sessions" ]; then
   [ "${#files[@]}" -eq 0 ] || agents=$(sessions_of "$sessions" "${files[@]}")
 fi
 
-jq -n --argjson view "$view" --arg issue "$issue" --argjson rounds "$rounds" --argjson owner_rounds "$owner_rounds" --argjson failed "$failed" --argjson agents "$agents" '
-  ($view.comments | map(.body)) as $bodies
+jq -n --argjson view "$view" --argjson bodies "$bodies" --arg issue "$issue" --argjson rounds "$rounds" --argjson owner_rounds "$owner_rounds" --argjson failed "$failed" --argjson agents "$agents" '
   # The assumptions of a verdict: the hidden last line post-verdict.sh wrote (decisions A55b, A55c).
   # A verdict from before that line has none; one from before the install holds `unverified`
   # claims in three parts (decisions A224b).
-  | def assumptions: [split("\n")[] | select(. != "")] | last
+  def assumptions: [split("\n")[] | select(. != "")] | last
       | capture("^<!-- factory:(assumptions|unverified) (?<list>.*) -->$") | .list | fromjson | .[]
       | {assumes: (.assumes // .claim), if_wrong: (.if_wrong // .risk)};
     # A verdict is known by the first line of its comment: the rest may quote another (decisions

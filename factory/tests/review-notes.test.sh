@@ -30,8 +30,10 @@ github() {
 ticket() {
   local second=""
   [ -z "${3:-}" ] || second=",{\"name\":\"$3\"}"
-  echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}$second]}"
+  echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}$second],\"user\":{\"login\":\"github-actions[bot]\",\"type\":\"Bot\"}}"
 }
+# opened_by <login> <type> <ticket>: the ticket, opened by that account.
+opened_by() { jq -c --arg login "$1" --arg type "$2" '.user = {login: $login, type: $type}' <<<"$3"; }
 pull() { echo "{\"number\":$1,\"headRefName\":\"feat/$2-apply-review-notes\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":$3}"; }
 keep() { run "$scripts/review-notes.sh" keep "Ryan (correctness)" 7 <<<"$notes"; }
 notes='1. `a.ts:9`: The name could say more.
@@ -59,7 +61,7 @@ stub gh 'case "$*" in "issue view 50 --json title,body,labels,createdAt") cat "$
 echo "$made" > "$T/ticket.json"
 run "$scripts/check-ticket.sh" 50
 expect_status 0
-for expected in "--comments" "headed by a reviewer's name" "skip any other comment" "or answer it in one line" "seen three times" '`apps/` included' \
+for expected in "factory/scripts/thread.sh <this ticket>" "headed by a reviewer's name" "skip any other comment" "or answer it in one line" "seen three times" '`apps/` included' \
   '`gh issue list --search`' '`gh pr list --search`' "a note one of them holds is not applied, and its answer names that number"; do
   grep -qF -- "$expected" "$T/body" || fail "expected the ticket to say: $expected"
 done
@@ -105,9 +107,45 @@ keep
 expect_call "gh issue comment 40 --body"
 expect_no_call "issue create"
 
+scenario "a ticket with the label and the title that another account opened is never joined by a note: a new one is made"
+for other in "stranger User" "owner User" "claude[bot] Bot" "github-actions User" "github-actions[bot] User"; do
+  github
+  # shellcheck disable=SC2086
+  echo "[$(opened_by $other "$(ticket 40 6)")]" > "$T/issues"
+  keep
+  expect_status 0
+  expect_call "gh issue create"
+  expect_call "gh issue comment 50 --body"
+  expect_no_call "issue comment 40"
+done
+
+scenario "a ticket with the label and the title that another account opened is never given ready or started"
+github
+echo "[$(opened_by stranger User "$(ticket 40 6)")]" > "$T/issues"
+run "$scripts/review-notes.sh" start
+expect_status 0
+expect_output "no ticket holds review notes that wait to be applied"
+expect_no_call "issue edit"
+expect_no_call "workflow run"
+
+scenario "of a stranger's ticket and the factory's own, only the factory's is started, though the stranger's is older"
+github
+echo "[$(opened_by stranger User "$(ticket 39 6)"),$(ticket 40 6)]" > "$T/issues"
+run "$scripts/review-notes.sh" start
+expect_status 0
+expect_call "gh issue edit 40 --add-label ready"
+expect_call "gh workflow run implement.yml -f issue=40"
+expect_no_call "issue edit 39"
+expect_no_call "issue=39"
+keep
+expect_call "gh issue comment 40 --body"
+expect_no_call "issue comment 39"
+
 scenario "a pull request of that title, and a ticket of another, are not the ticket"
 github
-echo '[{"number":60,"title":"Apply the review notes of week 6","pull_request":{}},{"number":12,"title":"Keep review notes in one ticket a week"}]' > "$T/issues"
+jq -c '. + {pull_request: {}}' <<<"$(ticket 60 6)" > "$T/pull"
+jq -c '.title = "Keep review notes in one ticket a week"' <<<"$(ticket 12 6)" > "$T/other"
+echo "[$(cat "$T/pull"),$(cat "$T/other")]" > "$T/issues"
 keep
 expect_call "gh issue create"
 expect_call "gh issue comment 50 --body"
@@ -296,7 +334,7 @@ grep -qF 'run: factory/scripts/review-notes.sh start' "$root/factory/workflows/r
 workflow="$root/factory/workflows/implement.yml"
 grep -A3 -F 'workflow_dispatch:' "$workflow" | grep -qxF '      issue:' || fail "implement.yml takes no issue to be started with"
 grep -qF 'ISSUE: ${{ github.event.issue.number || inputs.issue }}' "$workflow" || fail "implement.yml does not build the issue it is started with"
-grep -qF "if: github.event.label.name == 'ready' || github.event_name == 'workflow_dispatch'" "$workflow" \
+grep -A1 -xF '    if: >-' "$workflow" | grep -qF "      github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' &&" \
   || fail "implement.yml's job does not run when it is started with an issue"
 # review-notes.sh starts the build with the workflow's own token, and the action refuses a bot it was not told to allow.
 steps=$(grep -cF 'uses: anthropics/claude-code-action@v1' "$workflow")

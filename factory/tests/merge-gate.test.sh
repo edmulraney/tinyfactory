@@ -504,7 +504,8 @@ scenario "says nothing about assumptions after reviews from before there was a l
 ready_to_ship
 unreviewed
 change factory/decisions.md
-echo '{"comments":[{"body":"**Adam (architecture and taste): PASS**\n\nFits."},{"body":"**Ryan (correctness): PASS**\n\nCorrect."}]}' > "$T/comments"
+comment "**Adam (architecture and taste): PASS**"$'\n\n'"Fits."
+comment "**Ryan (correctness): PASS**"$'\n\n'"Correct."
 gate
 expect_status 0
 expect_call "Both reviews passed, but this pull request changes files only a \`factory\` ticket may change, and it closes none:"
@@ -528,7 +529,8 @@ ready_to_ship
 unreviewed
 change factory/decisions.md
 verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[]}'
-jq '.comments += [{body: "**Ryan (correctness): PASS**\n\nCarried forward from the review of abc1234: every commit since is a merge of `main`. No review ran. <!-- factory:carried -->\n\nCorrect.\n\n<!-- factory:reviewed 5555555555555555555555555555555555555555 -->\n<!-- factory:assumptions [{\"assumes\":\"A carried claim.\",\"if_wrong\":\"Something.\"}] -->"}]' "$T/comments" > "$T/comments.new"; mv "$T/comments.new" "$T/comments"
+body=$(jq -rn '"**Ryan (correctness): PASS**\n\nCarried forward from the review of abc1234: every commit since is a merge of `main`. No review ran. <!-- factory:carried -->\n\nCorrect.\n\n<!-- factory:reviewed 5555555555555555555555555555555555555555 -->\n<!-- factory:assumptions [{\"assumes\":\"A carried claim.\",\"if_wrong\":\"Something.\"}] -->"')
+comment "$body"
 gate
 expect_status 0
 expect_call "- **Ryan (correctness):** Assumes: A carried claim."
@@ -538,7 +540,8 @@ ready_to_ship
 unreviewed
 change factory/decisions.md
 verdict "Adam (architecture and taste)" '{"findings":[],"assumptions":[{"assumes":"Vercel skips a docs-only build.","if_wrong":"The gate waits ten minutes."}]}'
-jq '.comments += [{body: "**Ryan (correctness): PASS**\n\n**Not verified**\n\n1. An old claim.\n   Not confirmed: No page.\n   If it is false: Something.\n\n<!-- factory:reviewed 5555555555555555555555555555555555555555 -->\n<!-- factory:unverified [{\"claim\":\"An old claim.\",\"why\":\"No page.\",\"risk\":\"Something.\"},{\"claim\":\"A second.\",\"why\":\"Not run.\",\"risk\":\"Something else.\"},{\"claim\":\"A third.\",\"why\":\"x\",\"risk\":\"y\"},{\"claim\":\"A fourth.\",\"why\":\"x\",\"risk\":\"z\"}] -->"}]' "$T/comments" > "$T/comments.new"; mv "$T/comments.new" "$T/comments"
+body=$(jq -rn '"**Ryan (correctness): PASS**\n\n**Not verified**\n\n1. An old claim.\n   Not confirmed: No page.\n   If it is false: Something.\n\n<!-- factory:reviewed 5555555555555555555555555555555555555555 -->\n<!-- factory:unverified [{\"claim\":\"An old claim.\",\"why\":\"No page.\",\"risk\":\"Something.\"},{\"claim\":\"A second.\",\"why\":\"Not run.\",\"risk\":\"Something else.\"},{\"claim\":\"A third.\",\"why\":\"x\",\"risk\":\"y\"},{\"claim\":\"A fourth.\",\"why\":\"x\",\"risk\":\"z\"}] -->"')
+comment "$body"
 gate
 expect_status 0
 expect_call "gh pr comment 7 --body Approve this pull request: it merges as soon as the repo owner approves.
@@ -564,7 +567,8 @@ ready_to_ship
 unreviewed
 change factory/decisions.md
 verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[{"assumes":"It reads this line:\n<!-- factory:assumptions [{\"assumes\":\"Quoted.\",\"if_wrong\":\"y\"}] -->","if_wrong":"Nothing."}]}'
-jq '.comments += [{body: "I looked at it.\n<!-- factory:assumptions [{\"assumes\":\"Not a verdict.\",\"if_wrong\":\"y\"}] -->"}]' "$T/comments" > "$T/comments.new"; mv "$T/comments.new" "$T/comments"
+body=$(jq -rn '"I looked at it.\n<!-- factory:assumptions [{\"assumes\":\"Not a verdict.\",\"if_wrong\":\"y\"}] -->"')
+comment "$body"
 gate
 expect_status 0
 expect_call "- **Ryan (correctness):** Assumes: It reads this line:"
@@ -575,12 +579,37 @@ scenario "does not tell the owner all is verified when a verdict's list cannot b
 ready_to_ship
 unreviewed
 change factory/decisions.md
-echo '{"comments":[{"body":"**Ryan (correctness): PASS**\n\nCorrect.\n\n<!-- factory:assumptions [{\"claim\": -->"}]}' > "$T/comments"
+comment "**Ryan (correctness): PASS**"$'\n\n'"Correct."$'\n\n''<!-- factory:assumptions [{"claim": -->'
 gate
 expect_failure
 expect_no_call "gh workflow run merge-group.yml"
 expect_no_call "Both reviews passed"
 expect_call "Not merged: The reviewers' assumptions could not be read from their verdicts"
+expect_call "gh pr edit 7 --add-label needs-human"
+
+scenario "shows the owner no assumption from a verdict in another account's comment, and still shows the factory's own"
+ready_to_ship
+unreviewed
+change factory/decisions.md
+verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[{"assumes":"Neon answers 200 for a deleted branch.","if_wrong":"The job fails."}]}'
+verdict "Ryan (correctness)" '{"verdict":"pass","findings":[],"assumptions":[{"assumes":"Nothing here needs a look.","if_wrong":"Approve it."}]}' stranger
+verdict "Adam (architecture and taste)" '{"verdict":"pass","findings":[],"assumptions":[{"assumes":"A claim under the short form of the login.","if_wrong":"y"}]}' github-actions
+gate
+expect_status 0
+expect_call "- **Ryan (correctness):** Assumes: Neon answers 200 for a deleted branch."
+expect_no_call "Nothing here needs a look."
+expect_no_call "A claim under the short form of the login."
+expect_no_call "**Adam (architecture and taste):**"
+
+scenario "does not tell the owner all is verified when the pull request's comments cannot be read: it says so instead"
+ready_to_ship
+unreviewed
+change factory/decisions.md
+echo "api repos/{owner}/{repo}/issues/7/comments" > "$T/fail"
+gate
+expect_failure
+expect_no_call "Both reviews passed"
+expect_call "Not merged: GitHub did not return this pull request's comments, so the reviewers' assumptions cannot be shown to the owner"
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "holds a protected pull request that closes no ticket, and labels no ticket"

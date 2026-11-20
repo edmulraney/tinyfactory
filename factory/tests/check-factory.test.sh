@@ -258,6 +258,94 @@ run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
 
+# started_by <on>... -- <job line>...: a workflow those lines of `on:` start, with one job, build, of these lines.
+started_by() {
+  [ -d .git ] || repo_with one.test.sh 'true'
+  mkdir -p factory/workflows
+  {
+    echo '# Builds a ticket.'
+    while [ "$1" != -- ]; do echo "$1"; shift; done
+    shift
+    printf '%s\n' 'jobs:' '  build:' "$@"
+  } > factory/workflows/build.yml
+  git add .
+}
+asks='      - run: factory/scripts/trusted.sh "$SENDER"'
+vouched="    if: github.event.label.name == 'ready' && github.event.issue.author_association == 'OWNER'"
+
+scenario "fails on a job an issue's label starts whose if: names no account, naming the file and the job"
+started_by 'on:' '  issues:' '    types: [labeled]' -- "    if: github.event.label.name == 'ready'" '    steps:' "$asks"
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/workflows/build.yml: \`issues\`, \`issue_comment\`, \`pull_request_review\`, \`pull_request_review_comment\` or \`pull_request_target\` starts it"
+expect_output "  the job build: its \`if:\` names no account the event vouches for"
+expect_no_output "no step runs"
+expect_no_output "factory scripts ok"
+
+scenario "fails on such a job with no if: at all, and on one whose only condition is on a step"
+started_by 'on:' '  issues:' -- '    steps:' "$asks"
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "  the job build: its \`if:\` names no account the event vouches for"
+started_by 'on:' '  issues:' -- '    steps:' "$asks" "        if: github.event.issue.author_association == 'OWNER'"
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "  the job build: its \`if:\` names no account the event vouches for"
+
+scenario "fails on such a job that never asks trusted.sh: a comment that names the script is not a step that runs it"
+started_by 'on:' '  issues:' -- "$vouched" '    steps:' '      # factory/scripts/trusted.sh is asked by the script below.' '      - run: make'
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "  the job build: no step runs factory/scripts/trusted.sh"
+expect_no_output "names no account"
+
+scenario "fails for each event anyone can raise, however on: lists it"
+for event in issues issue_comment pull_request_review pull_request_review_comment pull_request_target; do
+  started_by 'on:' '  push:' "  $event:" '    types: [created]' -- '    steps:' '      - run: make'
+  run "$scripts/check-factory.sh"
+  expect_status 1
+  expect_output "  the job build: its \`if:\` names no account the event vouches for"
+  expect_output "  the job build: no step runs factory/scripts/trusted.sh"
+  started_by "on: $event" -- '    steps:' '      - run: make'
+  run "$scripts/check-factory.sh"
+  expect_status 1
+  started_by "on: [push, $event]" -- '    steps:' '      - run: make'
+  run "$scripts/check-factory.sh"
+  expect_status 1
+done
+
+scenario "passes a job whose if: names an account the event vouches for, on one line or folded over several, and that asks trusted.sh"
+for condition in "$vouched" "    if: github.event.review.user.login == github.repository_owner" \
+    "    if: github.event.pull_request.user.login == 'claude[bot]'" "    if: github.event.issue.user.login == 'github-actions[bot]'" \
+    "    if: github.event.pull_request.merged == true"; do
+  started_by 'on:' '  issues:' '  pull_request_review:' '  pull_request_target:' -- "$condition" '    steps:' "$asks"
+  run "$scripts/check-factory.sh"
+  expect_status 0
+  expect_output "factory scripts ok"
+done
+started_by 'on:' '  issues:' -- '    if: >-' "      github.event.label.name == 'ready' &&" \
+  "      contains(fromJSON('[\"OWNER\"]'), github.event.issue.author_association)" '    steps:' "$asks"
+run "$scripts/check-factory.sh"
+expect_status 0
+
+scenario "names only the job that lacks the condition, of two"
+started_by 'on:' '  issue_comment:' -- "$vouched" '    steps:' "$asks" '  tell:' '    steps:' '      - run: gh issue comment'
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "  the job tell: its \`if:\` names no account the event vouches for"
+expect_output "  the job tell: no step runs factory/scripts/trusted.sh"
+expect_no_output "the job build"
+
+scenario "leaves alone a workflow none of the five events starts, though it names one elsewhere"
+started_by 'on:' '  pull_request:' '    types: [opened]' '  workflow_dispatch:' '  schedule:' '    - cron: "17 6 * * 5"' \
+  'permissions:' '  issues: write' -- '    permissions:' '      issues: write' '    steps:' '      - run: gh api repos/o/r/issues'
+run "$scripts/check-factory.sh"
+expect_status 0
+expect_output "factory scripts ok"
+started_by 'on: [push, pull_request]' -- '    steps:' '      - run: make'
+run "$scripts/check-factory.sh"
+expect_status 0
+
 scenario "fails on an ordered list numbered by hand in a file .gitattributes marks merge=list, naming the file and the line"
 repo_with one.test.sh 'true'
 printf 'factory/guide.md merge=list\n' > .gitattributes

@@ -37,6 +37,9 @@ while read -r workflow job; do
   [ "$(grep -cF -- "- name: $name" <<<"$found")" = 1 ] || fail "expected the job to hold the step once"
   case "$workflow" in
     ci) condition="failure()" ;;
+    # A job an outsider's event can start asks no retro for a run an account that is not trusted started (decisions W563c).
+    implement | approve-merge | install-workflows)
+      condition="steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))" ;;
     *) condition="failure() || (cancelled() && steps.limit.outputs.reached == 'true')" ;;
   esac
   grep -qxF "        if: $condition" <<<"$found" || fail "expected the step to run only when the job failed or stopped at its time limit"

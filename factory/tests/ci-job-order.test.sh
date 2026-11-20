@@ -13,20 +13,15 @@ scenario "ci.yml starts the reviews when e2e has passed, without waiting for che
 ! job review | grep '^    if:' | grep -qE 'always\(|cancelled\(|failure\(|success\(' \
   || fail "expected the review job to carry no status function, so that a failed or skipped e2e skips it"
 
-scenario "ci.yml posts the verdicts after the sessions, also when their job failed, and never when it was skipped"
-[ "$(needs verdicts)" = "[e2e, review]" ] || fail "expected verdicts to need the review job, and e2e for whether screenshots were taken, got: $(needs verdicts)"
-[ "$(job verdicts | grep '^    if:')" = "    if: \${{ !cancelled() && needs.review.result != 'skipped' }}" ] \
-  || fail "expected verdicts to run after a failed review job and to be skipped with a skipped one"
-
 scenario "ci.yml lets a pull request merge only when every job passed, and starts a fix round when any failed"
 for last in merge start-fix; do
-  [ "$(needs "$last")" = "[checks, e2e, review, verdicts]" ] || fail "expected $last to need every other job, got: $(needs "$last")"
+  [ "$(needs "$last")" = "[checks, e2e, review]" ] || fail "expected $last to need every other job, got: $(needs "$last")"
 done
 # With a status function it would have to name each job's result, or run after one that failed or was skipped (decisions M75c).
 ! job merge | grep '^    if:' | grep -qE 'always\(|cancelled\(|failure\(|success\(' \
   || fail "expected merge to carry no status function, so that a job that failed or was skipped skips it"
 fix=$(job start-fix | sed -n '/^    if: >-$/,/^    runs-on:/p')
-for failed in checks e2e verdicts; do
+for failed in checks e2e review; do
   grep -qF "needs.$failed.result == 'failure'" <<<"$fix" || fail "expected start-fix to run when $failed failed"
 done
 

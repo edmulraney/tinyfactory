@@ -8,7 +8,12 @@ on:
 jobs:
   revert:
     # A job skipped here costs no minute, where a step would for every label on every ticket (decisions M443b).
-    if: github.event.label.name == 'revert'
+    # The event must say a trusted account opened the ticket, or that the owner added the label (decisions W563b).
+    if: >-
+      github.event.label.name == 'revert' &&
+      (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
+      contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login) ||
+      github.event.sender.login == github.repository_owner)
     # One at a time for a ticket: a second start must find the ticket the first one filed. On the job, so a skipped run cancels none that waits.
     concurrency:
       group: revert-${{ github.event.issue.number }}
@@ -21,6 +26,13 @@ jobs:
       actions: write        # to start implement.yml (decisions A241c)
     steps:
       - uses: actions/checkout@v4
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
       - name: File the ticket that reverts its commit, and start the build
         env:
           GH_TOKEN: ${{ github.token }}

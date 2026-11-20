@@ -45,7 +45,7 @@ Merged with GitHub's merge button, and nothing that follows a merge was done: $1
       retry gh pr comment "$pr" --body "$body" >/dev/null || echo "and the pull request could not be told so" >&2
       exit 1
     }
-    view=$(retry gh pr view "$pr" --json state,author,mergedBy,comments) \
+    view=$(retry gh pr view "$pr" --json state,author,mergedBy) \
       || stop "GitHub did not return this pull request, so whether the factory opened it is not known"
     # Only the factory's own are tested and taken back (decisions M439a). `app/claude` is how gh writes the app that
     # opens them, and `app/github-actions` the workflows' own token, whose merge ship.sh finished.
@@ -59,11 +59,15 @@ Merged with GitHub's merge button, and nothing that follows a merge was done: $1
         status=0
         # Each reviewer's latest verdict counts (decisions A55b). The button overrides them, and says so once (decisions M439b).
         said="Merged with GitHub's merge button before both reviews had passed"
-        unpassed=$(jq -r --arg said "$said" '
-          if any(.comments[].body; startswith($said)) then "said"
-          else reduce (.comments[].body | capture("^\\*\\*(?<who>[^*\n]+): (?<verdict>PASS|FAIL)\\*\\*")) as $last ({}; .[$last.who] = $last.verdict)
+        # A verdict, and that line, is the factory's own comment, and the REST list names its account in full (decisions U563l).
+        comments=$(retry gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --paginate \
+            --jq '.[] | select(.user.login == "github-actions[bot]") | {body: (.body // "")}') \
+          || stop "GitHub did not return this pull request's comments, so whether both reviews had passed is not known"
+        unpassed=$(jq -rs --arg said "$said" '
+          if any(.[].body; startswith($said)) then "said"
+          else reduce (.[].body | capture("^\\*\\*(?<who>[^*\n]+): (?<verdict>PASS|FAIL)\\*\\*")) as $last ({}; .[$last.who] = $last.verdict)
             | if ([.[] | select(. == "PASS")] | length) < 2 then "yes" else "no" end
-          end' <<<"$view") || stop "the reviewers' verdicts could not be read from this pull request's comments"
+          end' <<<"$comments") || stop "the reviewers' verdicts could not be read from this pull request's comments"
         if [ "$unpassed" = yes ]; then
           retry gh pr comment "$pr" --body "$said. The button counts as the owner's approval, so it ships like any other." >/dev/null \
             || { echo "Pull request #$pr could not be told that it merged before both reviews had passed." >&2; status=1; }

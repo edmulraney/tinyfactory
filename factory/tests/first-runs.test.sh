@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # Tests for factory/scripts/first-runs.sh, which starts a retro for each changed workflow (decisions A185a to A185c).
 . "$(dirname "$0")/helpers.sh"
+. "$(dirname "$0")/trusted-on-github.sh"
 
 # $T/waiting, $T/comments-<n> and $T/runs-<file> answer gh; $T/fail lists the gh calls, by their first words, that fail.
+# $T/writers lists the accounts that may write to the repo.
 github() {
   : > "$T/fail"; : > "$T/waiting"
+  echo owner > "$T/writers"
   stub gh '
     while IFS= read -r words; do
       case "$*" in "$words"*) echo "gh: failed: $*" >&2; exit 1 ;; esac
@@ -14,6 +17,7 @@ github() {
       "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate "*) n=${2#*/issues/}; json "$(cat "$T/comments-${n%/comments*}")" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/workflows/"*"/runs -f status=completed -f created=>=2026-11-16T10:00:00Z -f per_page=100 --paginate "*)
         file=${4#*/workflows/}; json "{\"workflow_runs\":$(cat "$T/runs-${file%/runs}" 2>/dev/null || echo "[]")}" "$@" ;;
+      "api repos/{owner}/{repo}/collaborators/"*) permission_on_github "$@" ;;
       "workflow run retro.yml "* | "pr comment "* | "pr edit "*) ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -31,8 +35,12 @@ waits() {
   echo "$n" >> "$T/waiting"
   printf '%s\n' "$@" | jq -sc . > "$T/comments-$n"
 }
-# a_run <id> <hh:mm> <conclusion>
-a_run() { echo "{\"id\":$1,\"created_at\":\"2026-11-16T$2:00Z\",\"conclusion\":\"$3\",\"html_url\":\"https://github.example/runs/$1\"}"; }
+# a_run <id> <hh:mm> <conclusion> [event] [actor] [head repository]: a run in this repo that the owner's push started, unless said.
+a_run() {
+  jq -nc --argjson id "$1" --arg at "2026-11-16T$2:00Z" --arg conclusion "$3" --arg event "${4:-push}" --arg actor "${5:-owner}" --arg head "${6-owner/myapp}" \
+    '{id: $id, created_at: $at, conclusion: $conclusion, html_url: "https://github.example/runs/\($id)", event: $event, actor: {login: $actor},
+      repository: {full_name: "owner/myapp"}, head_repository: (if $head == "" then null else {full_name: $head} end)}'
+}
 runs_of() { local file="$1"; shift; printf '%s\n' "$@" | jq -sc . > "$T/runs-$file"; }
 first_runs() { run env GH_TOKEN=workflow-token "$scripts/first-runs.sh"; }
 
@@ -57,6 +65,68 @@ runs_of ci.yml "$(a_run 904 10:40 success)" "$(a_run 903 10:30 failure)" "$(a_ru
 first_runs
 expect_call "gh workflow run retro.yml -f pr=40 -f run=903"
 expect_no_call "run=904"
+
+scenario "a run of a fork's pull request is never the first run, whoever started it: the next run of this repo is"
+github; waits 40 "$(installed ci.yml)"
+runs_of ci.yml "$(a_run 901 10:10 failure pull_request stranger stranger/myapp)" "$(a_run 902 10:20 success pull_request_review owner stranger/myapp)" \
+  "$(a_run 903 10:30 success pull_request owner "")" "$(a_run 904 10:40 success pull_request 'claude[bot]')"
+first_runs
+expect_status 0
+expect_call "gh workflow run retro.yml -f pr=40 -f run=904"
+expect_no_call "run=901"
+expect_no_call "run=902"
+expect_no_call "run=903"
+
+scenario "with only a fork's runs the pull request keeps its label, and no retro is started"
+github; waits 40 "$(installed ci.yml)"
+runs_of ci.yml "$(a_run 901 10:10 failure pull_request stranger stranger/myapp)"
+first_runs
+expect_status 0
+expect_output "no run of ci.yml has finished since pull request #40 changed it"
+expect_no_call "workflow run"
+expect_no_call "gh pr comment"
+expect_no_call "gh pr edit"
+
+scenario "with only runs that accounts not trusted started, the pull request keeps its label, and no retro is started"
+github; waits 40 "$(installed claude.yml)"
+runs_of claude.yml "$(a_run 901 10:10 failure issue_comment stranger)"
+first_runs
+expect_status 0
+expect_output "no run of claude.yml that a trusted account started has finished since pull request #40 changed it"
+expect_no_call "workflow run"
+expect_no_call "gh pr edit"
+
+scenario "a run an account that is not trusted started, by an event anyone can raise, is never the first run"
+for event in issues issue_comment pull_request pull_request_review pull_request_review_comment pull_request_target; do
+  github; waits 40 "$(installed claude.yml)"
+  : > "$T/calls"
+  runs_of claude.yml "$(a_run 901 10:10 failure "$event" stranger)" "$(a_run 902 10:20 success "$event" owner)"
+  first_runs
+  expect_status 0
+  expect_call "gh workflow run retro.yml -f pr=40 -f run=902"
+  expect_no_call "run=901"
+done
+
+scenario "a run that a schedule, a push or a start by number began counts whoever GitHub names for it: no outsider raises those"
+for event in schedule push workflow_dispatch; do
+  github; waits 40 "$(installed flag-idle.yml)"
+  : > "$T/calls"
+  runs_of flag-idle.yml "$(a_run 901 10:10 success "$event" 'workflow-app[bot]')"
+  first_runs
+  expect_status 0
+  expect_call "gh workflow run retro.yml -f pr=40 -f run=901"
+  expect_no_call "collaborators"
+done
+
+scenario "fails and keeps the label when GitHub would not say whether a trusted account started the run: not known is not trusted"
+github; waits 40 "$(installed claude.yml)"
+runs_of claude.yml "$(a_run 901 10:10 success issue_comment owner)" "$(a_run 902 10:20 success push owner)"
+touch "$T/permission-fails"
+first_runs
+expect_status 1
+expect_output "Whether a trusted account started run 901 of claude.yml could not be read from GitHub"
+expect_no_call "workflow run"
+expect_no_call "gh pr edit"
 
 scenario "a pull request that changed two workflows keeps its label until both have run"
 github; waits 40 "$(installed ci.yml fix.yml)"

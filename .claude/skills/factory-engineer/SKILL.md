@@ -18,7 +18,7 @@ Read the mission and principles at the top of `factory/README.md`, then the deci
 
 ## Implementing an issue
 
-1. **Read the ticket:** `gh issue view <n>`, then its comments, `gh issue view <n> --comments`. "How we will know it works" defines done.
+1. **Read the ticket:** `factory/scripts/thread.sh <n>`. "How we will know it works" defines done.
 2. **If it cannot be done as written,** comment on the issue with the specific problem, `gh issue edit <n> --add-label needs-human`, and stop. If building it as written would break `main` or production once it merges, because it needs a hand step or rests on a pull request still open, do the hand step first, or build the part that is safe now and file a ticket for the part that waits (the `ticket` skill, [A367b](../../../factory/decisions/367.md)): its body holds a line `After #<n>` for the pull request it waits for and one for this ticket, and it takes `ready`, so its build starts once both have closed. The description names that ticket ([A367a](../../../factory/decisions/367.md)).
 3. **Branch** from `main`: `<type>/<n>-<slug>`, the type `chore`, `docs`, `fix` or `feat`, the slug naming what changes for whoever uses the factory. Then `git commit --allow-empty -m "chore: start work on #<n>"`, push, and `gh pr create --draft --title "<type>: <the ticket's title>" --body "Closes #<n>"`. If the branch already has a draft pull request, carry on in it.
 4. **Make the change.**
@@ -33,7 +33,7 @@ Read the mission and principles at the top of `factory/README.md`, then the deci
 
 ## Fixing a pull request
 
-A check or review failed, or the owner sent it back with a "Request changes" review. Read `gh pr checks <pr>` and `gh pr view <pr> --comments`, then `gh pr checkout <pr>`. Fix each finding or rebut it with evidence; a fix is the smallest change that answers it: a new script, rule or decision row needs a finding that asks for one. Make each change the owner asked for, or answer it with the reason it was not made. If a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict or fix what the comment shows; rows that conflict in `factory/decisions.md` move to `factory/decisions/<ticket>.md`, and the file is `main`'s copy. Re-run step 5 and push to the same branch as `fix: <what>`. No force-push.
+A check or review failed, or the owner sent it back with a "Request changes" review. Read `gh pr checks <pr>` and `factory/scripts/thread.sh <pr>`, then `gh pr checkout <pr>`. Fix each finding or rebut it with evidence; a fix is the smallest change that answers it: a new script, rule or decision row needs a finding that asks for one. Make each change the owner asked for, or answer it with the reason it was not made. If a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict or fix what the comment shows; rows that conflict in `factory/decisions.md` move to `factory/decisions/<ticket>.md`, and the file is `main`'s copy. Re-run step 5 and push to the same branch as `fix: <what>`. No force-push.
 
 ## Always
 

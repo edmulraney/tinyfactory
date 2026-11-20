@@ -33,6 +33,8 @@ exec awk '
         path ~ "(^|/)(eslint\\.config\\.[a-z]+|tsconfig[^/]*\\.json|vitest\\.config\\.[a-z]+|playwright\\.config\\.[a-z]+|globals\\.css|components\\.json|e2e/test\\.ts)$")
       hold("the product\047s bar", path)
     if (path == "CLAUDE.md") hold("the agents\047 instructions", path)
+    # What a repository tells strangers about whom the factory acts for (decisions M563y).
+    if (path == "SECURITY.md") hold("secrets or permissions", path)
   }
   function changed(text,    low, said) {
     low = tolower(text)

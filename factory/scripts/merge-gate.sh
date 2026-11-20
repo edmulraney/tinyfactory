@@ -28,8 +28,8 @@ if grep -q '^factory/workflows/' <<<"$files" \
   behind=true
 fi
 
-# Read on a line of its own (decisions H7). The comments hold the reviewers' assumptions.
-reviews=$(retry gh pr view "$pr" --json reviews,comments) \
+# Read on a line of its own (decisions H7).
+reviews=$(retry gh pr view "$pr" --json reviews) \
   || not_merged "GitHub did not return this pull request's reviews, so whether the owner approved it or sent it back is not known"
 # The commit the owner's latest review approved, if it approves. The gate runs again for a commit already approved (decisions M23).
 approved=$(jq -r --arg owner "$owner" \
@@ -105,13 +105,17 @@ fi
 
 # Each reviewer's latest verdict counts, and its list is the hidden last line of it (decisions A55b, A55c).
 # A verdict from before the install holds `unverified` claims in three parts (decisions A224b).
-assumptions=$(jq -r '
-  reduce (.comments[].body | select(test("^\\*\\*[^*\n]+: (PASS|FAIL)\\*\\*"))) as $body ({};
+# A verdict is the factory's own comment, and the REST list names its account in full (decisions U563l).
+verdicts=$(retry gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --paginate \
+    --jq '.[] | select(.user.login == "github-actions[bot]") | {body: (.body // "")}') \
+  || not_merged "GitHub did not return this pull request's comments, so the reviewers' assumptions cannot be shown to the owner"
+assumptions=$(jq -rs '
+  reduce (.[].body | select(test("^\\*\\*[^*\n]+: (PASS|FAIL)\\*\\*"))) as $body ({};
     .[$body | capture("^\\*\\*(?<who>[^*\n]+): ").who] =
       [$body | [split("\n")[] | select(. != "")] | last
        | capture("^<!-- factory:(assumptions|unverified) (?<list>.*) -->$") | .list | fromjson | .[]])
   | to_entries[] | .key as $reviewer | .value[]
-  | "- **\($reviewer):** Assumes: \(.assumes // .claim)\n  If wrong: \(.if_wrong // .risk)"' <<<"$reviews") \
+  | "- **\($reviewer):** Assumes: \(.assumes // .claim)\n  If wrong: \(.if_wrong // .risk)"' <<<"$verdicts") \
   || not_merged "The reviewers' assumptions could not be read from their verdicts, so the owner cannot be shown them"
 [ -z "$assumptions" ] || assumptions="**Before you approve, what the reviewers could not check:**"$'\n\n'"$assumptions"$'\n\n'
 # The first line says what a person must do (decisions A371a).

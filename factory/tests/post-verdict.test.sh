@@ -158,7 +158,7 @@ two_notes="{\"findings\":[$note,{\"file\":\"b.ts\",\"kind\":\"note\",\"problem\"
 
 scenario "a verdict with two notes adds one comment to the ticket that collects them, saying whose they are"
 a_review
-echo '[{"number":40,"title":"Apply the review notes of week 6"}]' > "$T/tickets"
+echo '[{"number":40,"title":"Apply the review notes of week 6","user":{"login":"github-actions[bot]","type":"Bot"}}]' > "$T/tickets"
 OUTPUT="$two_notes" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7
 expect_status 0
 [ "$(grep -c '^gh issue comment' "$T/calls")" = 1 ] || fail "expected one comment for the two notes"
@@ -195,7 +195,7 @@ expect_status 1
 scenario "notes that cannot be kept do not fail the review: the verdict is posted, the job passes, and the log says where they are"
 for call in "api repos" "pr list" "issue create" "issue comment"; do
   a_review
-  [ "$call" != "pr list" ] || echo '[{"number":40,"title":"Apply the review notes of week 6"}]' > "$T/tickets"
+  [ "$call" != "pr list" ] || echo '[{"number":40,"title":"Apply the review notes of week 6","user":{"login":"github-actions[bot]","type":"Bot"}}]' > "$T/tickets"
   echo "$call" > "$T/fail"
   OUTPUT="$two_notes" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7
   expect_status 0
@@ -652,7 +652,7 @@ limit_ended 99999999999
 OUTPUT="" run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_status 1
 [ "$(the_hold)" = "99999999999"$'\n'"failed 900" ] || fail "expected the reset time, and run 900 to be run again for its failed jobs, got: $(the_hold)"
-[ "$(sort -u "$T/outputs")" = "cut-short=true"$'\n'"held=true" ] || fail "expected the job to be marked cut short and held, so no fix round starts, got: $(cat "$T/outputs")"
+[ "$(sort -u "$T/outputs")" = "cut-short=true"$'\n'"held=true"$'\n'"kept=true" ] || fail "expected the job to be marked cut short and held, its place kept, so no fix round starts, got: $(cat "$T/outputs")"
 [[ "$(cat "$T/kept")" == "Nothing to do: Adam's review starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."* ]] \
   || fail "expected the pull request to be told when the review starts, got: $(cat "$T/kept")"
 expect_no_call "needs-human"

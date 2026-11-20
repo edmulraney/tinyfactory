@@ -195,6 +195,17 @@ git add --all
 check
 refuses "DESIGN.md: it holds 10 words and its budget is 5"
 
+scenario "passes a project with no SECURITY.md, and still holds one that exists to its budget"
+repo
+append_line factory/rule-files.txt "5 SECURITY.md"
+check
+expect_status 0
+expect_output "rule files ok: 2 files"
+printf '# Security\n\nThe factory acts only for the team here.\n' > SECURITY.md
+git add --all
+check
+refuses "SECURITY.md: it holds 10 words and its budget is 5"
+
 scenario "reports every problem in one run"
 repo
 printf '5 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt

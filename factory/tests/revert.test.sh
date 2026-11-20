@@ -517,7 +517,7 @@ cd "$root"
 run "$scripts/events.sh"
 expect_status 0
 expect_output "| \`revert.yml\` | issues (types: labeled) | The \`revert\` label on a shipped ticket takes it back: an engineer opens the pull request that reverts it. | no script or workflow |"
-[ "$(grep -c '^    if: ' "$workflow")" = 1 ] && grep -qxF "    if: github.event.label.name == 'revert'" "$workflow" \
+[ "$(grep -c '^    if: ' "$workflow")" = 1 ] && grep -A1 -xF '    if: >-' "$workflow" | grep -qxF "      github.event.label.name == 'revert' &&" \
   || fail "the job of revert.yml does not run for the \`revert\` label alone"
 [ "$(grep -c '^  [a-z-]*:$' <<<"$(sed -n '/^jobs:/,$p' "$workflow")")" = 1 ] || fail "revert.yml has a second job, which the label does not guard"
 grep -qxF '          NUMBER: ${{ github.event.issue.number }}' "$workflow" || fail "revert.yml does not take the number of the labelled ticket"

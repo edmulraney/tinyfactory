@@ -20,7 +20,7 @@ description: Add the `ready` label, which starts an unattended build, to a backl
 
 ## Steps
 
-1. `gh issue view <n>`, and check every point, afresh for each ticket.
+1. `factory/scripts/thread.sh <n>`, and check every point, afresh for each ticket.
 2. **Met:** `gh issue edit <n> --add-label ready`, the same for an accepted `proposal` or a ticket waiting with `needs-human`. Tell the owner which ticket you started, or that it waits for a place, in a line why it met the bar, and whether it is likely to edit the same lines as a ticket in flight.
 3. **Not met:** do not label it. Fix what you can in the ticket (a vague criterion, a missing section) and check again, unless it is `in-progress` or has an open pull request: that one is never edited. Otherwise tell the owner which point failed and what you need.
 

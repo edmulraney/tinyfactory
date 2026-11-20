@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 # Tests for factory/scripts/start-build.sh, which decides whether a build may start.
 . "$(dirname "$0")/helpers.sh"
+. "$(dirname "$0")/trusted-on-github.sh"
 
 # $T/fail lists the gh calls that fail, $T/after those that fail once the ticket has its place; $T/rival lists rivals.
-# $T/labels holds the ticket's labels.
+# $T/labels holds the ticket's labels, $T/ticket who opened it, and $T/writers the accounts that may write to the repo.
 # $T/events holds the repo's issue events, newest first.
 # $T/ready holds the open issues labelled ready, for start-waiting.sh: a lower number has carried ready longer.
 github() {
   echo '[]' > "$T/issues"
   echo '[]' > "$T/pulls"
   echo '{"labels":[{"name":"ready"}]}' > "$T/labels"
+  echo '{"user":{"login":"owner"}}' > "$T/ticket"
+  printf '%s\n' owner colleague > "$T/writers"
   echo '[]' > "$T/events"
   : > "$T/fail"; : > "$T/after"; : > "$T/rival"
   stub gh '
@@ -22,6 +25,8 @@ github() {
       "pr list --state open "*) cat "$T/pulls" ;;
       "issue comment "*) ;;
       "issue view $3 --json labels "*) json "$(cat "$T/labels")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/"*" --jq .user.login"*) json "$(cat "$T/ticket")" "$@" ;;
+      "api repos/{owner}/{repo}/collaborators/"*) permission_on_github "$@" ;;
       "api repos/{owner}/{repo}/issues/events?per_page=100 "*) json "$(cat "$T/events")" "$@" ;;
       "issue edit "*)
         case "$*" in
@@ -34,6 +39,8 @@ github() {
       *) waiting_on_github "$@" || exit 1 ;;
     esac'
 }
+# opened_by <login>: the account that opened the ticket.
+opened_by() { jq -cn --arg login "$1" '{user: {login: $login}}' > "$T/ticket"; }
 # proposal: the ticket is a retro's proposal the owner accepted.
 proposal() { echo '{"labels":[{"name":"factory"},{"name":"proposal"},{"name":"retro"},{"name":"ready"}]}' > "$T/labels"; }
 # wait_with_ready <number>...: every open ticket labelled ready, the one being started among them.
@@ -87,6 +94,98 @@ expect_no_call "gh issue comment"
 # gh refuses a whole edit that names a label the repo does not have, so a ticket without proposal never names it.
 expect_no_call "proposal"
 expect_place 12
+
+scenario "a ticket another account opened takes no place and starts no session: it is told why, loses ready and is flagged for a person"
+github
+opened_by stranger
+start
+expect_status 0
+expect_written false
+expect_output "not started: issue #12 was opened by stranger, who may not write to this repository"
+expect_first_line "gh issue comment 12 --body" "File this ticket again from an account that may write to this repository, if it is to be built."
+expect_call 'Not started: `stranger` opened this ticket and may not write to this repository.'
+expect_call "gh issue edit 12 --remove-label ready --add-label needs-human"
+expect_no_call "in-progress"
+expect_no_call "workflow run"
+expect_no_place 12
+
+scenario "a ticket another account opened is refused the same way when the waiting are started from it"
+github
+opened_by stranger
+start 12 workflow_dispatch
+expect_status 0
+expect_written false
+expect_calls 1 "gh issue comment 12 --body File this ticket again"
+expect_call "gh issue edit 12 --remove-label ready --add-label needs-human"
+expect_no_call "in-progress"
+
+scenario "a ticket whose author GitHub no longer names is refused the same way"
+github
+echo '{"user":null}' > "$T/ticket"
+start
+expect_status 0
+expect_written false
+expect_call "Not started: an account GitHub no longer names opened this ticket"
+expect_call "gh issue edit 12 --remove-label ready --add-label needs-human"
+expect_no_call "collaborators"
+
+scenario "a ticket opened by the owner, by another account that may write, by the Claude app or by a workflow is built as before"
+for author in owner colleague 'claude[bot]' 'github-actions[bot]'; do
+  github
+  opened_by "$author"
+  start
+  expect_status 0
+  expect_written true
+  expect_call "gh issue edit 12 --remove-label ready --remove-label needs-human --add-label in-progress"
+  expect_no_call "gh issue comment"
+  expect_place 12
+done
+
+scenario "a short form of a bot's login is not the bot: a ticket by an account named so is refused"
+github
+opened_by github-actions
+start
+expect_status 0
+expect_written false
+expect_call "gh issue edit 12 --remove-label ready --add-label needs-human"
+
+scenario "stops, with ready left on, when who opened the ticket cannot be read"
+github
+echo "api repos/{owner}/{repo}/issues/12 " > "$T/fail"
+start
+expect_status 1
+expect_written false
+expect_output "Issue #12 was not started: who opened it could not be read from GitHub. It keeps the ready label"
+expect_untouched
+expect_no_call "collaborators"
+
+scenario "stops, with ready left on, when GitHub would not say whether its author may write: not known is not trusted"
+github
+touch "$T/permission-fails"
+start
+expect_status 1
+expect_written false
+expect_output "Issue #12 was not started: whether owner, who opened it, may write to this repository is not known. It keeps the ready label"
+expect_untouched
+expect_no_call "labels=in-progress"
+
+scenario "stops when a ticket another account opened cannot be told why, or cannot be flagged"
+github
+opened_by stranger
+echo "issue comment" > "$T/fail"
+start
+expect_status 1
+expect_written false
+expect_output "it could not be told so and flagged for a person"
+expect_no_call "gh issue edit"
+github
+opened_by stranger
+echo "issue edit" > "$T/fail"
+start
+expect_status 1
+expect_written false
+expect_output "it could not be told so and flagged for a person"
+expect_no_place 12
 
 scenario "an accepted proposal loses proposal as it takes its place, with ready and needs-human"
 github
@@ -209,6 +308,7 @@ expect_written false
 expect_output "not started: issue #12 does not carry ready"
 expect_untouched
 expect_no_call "labels=in-progress"
+expect_no_call "user.login"
 start
 expect_written false
 expect_untouched
@@ -753,7 +853,7 @@ unguarded() {
     /^        id: place$/ { placed = 1 }
     /^        if: / && index($0, needs) { guarded = 1 }
     # The run of a refused build is green, so a step for a failed or cancelled job does not run in it (decisions A20).
-    /^        if: (cancelled\(\)$|failure\(\) \|\| \(cancelled\(\) && )/ { guarded = 1 }
+    /^        if: (cancelled\(\)$|steps\.trusted\.outcome != \047failure\047 && \(failure\(\) \|\| \(cancelled\(\) && )/ { guarded = 1 }
     END { check(); if (!after) print "(no step follows the one with id: place)" }' "$1"
 }
 unguarded_steps=$(unguarded "$workflow")

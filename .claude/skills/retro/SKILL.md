@@ -12,7 +12,7 @@ Find the cause of the run's friction and write it down. Fix nothing and change n
 - **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their "Request changes" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.
 - **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.
 - **Earlier lessons**, one JSON file each, in the folder the prompt names.
-- `gh pr view <n> --comments`, `gh issue view <n> --comments` and, for a failed run, `gh run view <id> --log-failed`.
+- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.
 
 ## Steps
 

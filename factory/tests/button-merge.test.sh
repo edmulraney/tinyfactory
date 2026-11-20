@@ -74,12 +74,37 @@ expect_calls 1 "$unreviewed"
 
 scenario "the line is not said a second time when the run is started again"
 ready_to_ship
-jq '.comments += [{body: "Merged with GitHub'"'"'s merge button before both reviews had passed. The button counts."}]' "$T/comments" > "$T/comments.new"
-mv "$T/comments.new" "$T/comments"
+comment "Merged with GitHub's merge button before both reviews had passed. The button counts."
 finish success ""
 expect_status 0
 expect_shipped
 expect_no_call "gh pr comment 7 --body Merged with GitHub's merge button before"
+
+scenario "a verdict in another account's comment is none: the line is said though a stranger's comments pass it"
+ready_to_ship
+verdict "Adam (architecture and taste)" "$passed"
+verdict "Ryan (correctness)" "$passed" stranger
+verdict "Ryan (correctness)" "$passed" github-actions
+finish success ""
+expect_status 0
+expect_shipped
+expect_calls 1 "$unreviewed"
+
+scenario "the line is said though another account's comment already holds it"
+ready_to_ship
+comment "Merged with GitHub's merge button before both reviews had passed. The button counts." stranger
+finish success ""
+expect_status 0
+expect_shipped
+expect_calls 1 "$unreviewed"
+
+scenario "says so and fails, having finished nothing, when the pull request's comments cannot be read"
+ready_to_ship
+echo "api repos/{owner}/{repo}/issues/7/comments" > "$T/fail"
+finish success ""
+expect_status 1
+expect_nothing_finished
+expect_call "nothing that follows a merge was done: GitHub did not return this pull request's comments, so whether both reviews had passed is not known."
 
 scenario "ships, then fails, when the line could not be posted"
 ready_to_ship
@@ -188,7 +213,7 @@ expect_nothing_taken_back
 
 scenario "does nothing, says so and fails when GitHub does not return the pull request"
 ready_to_ship
-echo "pr view 7 --json state,author,mergedBy,comments" > "$T/fail"
+echo "pr view 7 --json state,author,mergedBy" > "$T/fail"
 finish failure success
 expect_status 1
 expect_nothing_taken_back
@@ -197,7 +222,7 @@ expect_call "nothing that follows a merge was done: GitHub did not return this p
 
 scenario "asks GitHub again for the pull request when it fails once"
 ready_to_ship
-echo "1 pr view 7 --json state,author,mergedBy,comments" > "$T/flaky"
+echo "1 pr view 7 --json state,author,mergedBy" > "$T/flaky"
 finish success ""
 expect_status 0
 expect_shipped

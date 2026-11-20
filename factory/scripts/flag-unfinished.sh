@@ -103,8 +103,9 @@ if [ "$kind" = build ]; then
   if [ "$at_limit" = true ] && [ -z "$until" ]; then
     cause="the job reached its time limit"; marker="<!-- factory:time-limit -->"
     # The timeline holds each such ending's comment and each build's start, in order (decisions A467c).
+    # The marker counts only in the factory's own comment, named in full (decisions U563l).
     earlier=$(gh api "repos/{owner}/{repo}/issues/$number/timeline?per_page=100" --paginate \
-        --jq ".[] | if .event == \"commented\" and (.body | contains(\"$marker\")) then \"limit\"
+        --jq ".[] | if .event == \"commented\" and .user.login == \"github-actions[bot]\" and ((.body // \"\") | contains(\"$marker\")) then \"limit\"
           elif .event == \"labeled\" and .label.name == \"in-progress\" then \"build\" else empty end") \
       || die "The timeline of issue #$number could not be read from GitHub, so it is not known whether its last build stopped at the time limit too. It keeps in-progress until \`flag-idle.sh\` flags it."
     if awk '$1 == "limit" { at_limit = 1; builds = 0 } $1 == "build" { builds++ } END { exit !(at_limit && builds <= 1) }' <<<"$earlier"; then

@@ -72,8 +72,8 @@ if [ "$kind" = fix ] && [ "$retried" = again ] && [ "$ended" = completed ]; then
   skip "the engineer was told nothing had been pushed, and ended the session again without pushing: nothing is taken to need pushing"
 fi
 
-# Saved before the wait, so that a job cancelled while it waits has kept the transcript. A review's job holds no
-# token that writes, so the job that posts its verdict saves the copy kept below (decisions A427f).
+# Saved before the wait, so that a job cancelled while it waits has kept the transcript. A review's session is
+# given no GitHub token, so the step that posts its verdict saves the copy kept below (decisions A541d).
 [ "$kind" = answer ] || "$script_dir/save-session.sh" "$role" "$key" "$file"
 if [ -n "${RUNNER_TEMP:-}" ]; then
   mkdir -p "$RUNNER_TEMP/cut-short-sessions"

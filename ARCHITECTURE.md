@@ -28,7 +28,7 @@ Setup copies two things into a new project, and nothing else:
 - **The paths in `.claude/skills/bootstrap/manifest.txt`.** The factory owns them, and they are the same in every project.
 - **The templates.** Each project edits its copies afterwards.
 
-Everything at the root of this repository (`PURPOSE.md`, this file, `TASTE.md`, `CLAUDE.md`, `README.md`, `package.json`, `product/`) is tinyfactory's own and reaches no project. The copy is one-way and happens once: a project owns its files from then on.
+Everything at the root of this repository (`PURPOSE.md`, this file, `TASTE.md`, `SECURITY.md`, `CLAUDE.md`, `README.md`, `package.json`, `product/`) is tinyfactory's own and reaches no project. The copy is one-way and happens once: a project owns its files from then on.
 
 So a change to a file in the manifest changes every project set up afterwards. What only this repository needs is kept out of a project by name, where the script that copies decides (`scaffold.sh`).
 

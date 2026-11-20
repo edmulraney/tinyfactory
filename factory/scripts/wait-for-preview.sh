@@ -28,15 +28,20 @@ for _ in $(seq 1 60); do   # up to 10 minutes
 done
 [ "$state" = success ] || die "Timed out waiting for Vercel to deploy $sha (last state: $state)"
 
-# Three lines, any empty: the URL in Vercel's newest comment, the URL the end-to-end job last tested, earlier commits.
-found=$(gh pr view "$pr" --json comments,commits --jq '
+# The address is sent a secret, so a comment counts only by the app that writes it, which the REST list names in full (decisions U563l).
+comments=$(gh api "repos/$GITHUB_REPOSITORY/issues/$pr/comments?per_page=100" --paginate \
+    --jq '.[] | select(.user.login == "vercel[bot]" or .user.login == "github-actions[bot]") | {login: .user.login, body: (.body // "")}') \
+  || die "Could not read the comments of pull request #$pr from GitHub, so there is no preview URL"
+# Two lines, either empty: the URL in Vercel's newest comment, and the URL the end-to-end job last tested.
+found=$(jq -rs '
   def url: [scan("https://[a-z0-9-]+\\.vercel\\.app")][0] // "";
-  ([.comments[] | select(.author.login == "vercel") | .body] | last // "" | url),
-  ([.comments[] | select(.author.login == "github-actions") | .body
-    | select(startswith("End-to-end tests ran against https://"))] | last // "" | url),
-  (.commits | map(.oid) | .[:(index("'"$sha"'") // 0)] | reverse | join(" "))') \
+  ([.[] | select(.login == "vercel[bot]") | .body] | last // "" | url),
+  ([.[] | select(.login == "github-actions[bot]") | .body
+    | select(startswith("End-to-end tests ran against https://"))] | last // "" | url)' <<<"$comments") \
+  || die "The comments of pull request #$pr could not be read as GitHub returned them, so there is no preview URL"
+{ read -r deployed; read -r tested; } <<<"$found" || true
+earlier=$(gh pr view "$pr" --json commits --jq '.commits | map(.oid) | .[:(index("'"$sha"'") // 0)] | reverse | join(" ")') \
   || die "Could not read pull request #$pr from GitHub, so there is no preview URL"
-{ read -r deployed; read -r tested; read -r earlier; } <<<"$found" || true
 
 # Vercel calls a commit it did not build "Skipped", with the state still `success` (decisions M33).
 shopt -s nocasematch
