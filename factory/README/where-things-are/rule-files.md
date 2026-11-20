@@ -1,0 +1,1 @@
+| The rule files, and how many words each may hold | `factory/rule-files.txt` ([H172b](../../decisions/172.md)); a ticket cuts a file a merge leaves over its budget ([H476a](../../decisions/476.md)) |

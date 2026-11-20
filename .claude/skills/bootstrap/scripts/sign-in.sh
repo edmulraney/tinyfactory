@@ -6,15 +6,13 @@
 # writes that line); for such a product this script does nothing.
 # Why Neon Auth: the users live in the database the project already has, so a preview's own
 # database branch holds its own users, and there is no second service or account (decisions S287a).
-# It then tells Neon Auth where it may send people back to (from Google, from an emailed link):
-# the project's production domains, and nothing else, on the production branch's list of trusted
-# domains (decisions S318a). A preview's address is trusted on its own branch, by ci.yml (S318b).
 # People sign in by a link sent to their email and never by a password (decisions S342a): it
 # switches Neon Auth's Magic Link on and its email and password off, for the production branch
-# and for each preview's branch, which copied production's settings on the day it was made.
+# and for each preview's branch, which copied production's settings on the day it was made. A
+# preview's branch made before Neon Auth was on has none, and is passed over (decisions S384).
 # Safe to re-run: Neon answers an "enable" for a branch that has auth with what is there, and a
-# variable Vercel already lists, a domain Neon already lists, or a branch whose two settings are
-# already so, is left alone, so a second run changes nothing.
+# variable Vercel already lists, or a branch whose two settings are already so, is left alone, so
+# a second run changes nothing.
 # Usage: sign-in.sh [name]   (name defaults to the directory name; run after database-key.sh)
 set -euo pipefail
 
@@ -36,13 +34,6 @@ fi
 envs() { vc api "/v9/projects/$name/env" --raw 2>/dev/null | tail -1 | jq -c '[.envs[] | {key, target: ([.target] | flatten)}]'; }
 listed() { jq -e --arg key "$1" --arg target "$2" 'any(.[]; .key == $key and (.target | index($target)))' <<<"$vars" >/dev/null; }
 vars=$(envs) || { echo "cannot read the environment variables of the Vercel project '$name': sign in to Vercel and re-run"; exit 1; }
-
-# Where people reach the app, read here for the same reason. A production domain is one that
-# neither redirects elsewhere nor serves a single git branch.
-homes=$(vc api "/v9/projects/$name/domains" --raw 2>/dev/null | tail -1 \
-  | jq -r '.domains[] | select(.gitBranch == null and .redirect == null) | "https://\(.name)"') \
-  || { echo "cannot read the domains of the Vercel project '$name': sign in to Vercel and re-run"; exit 1; }
-[ -n "$homes" ] || { echo "Vercel lists no production domain for the project '$name', so sign-in has nowhere to send people back to; run vercel.sh, then this script again"; exit 1; }
 
 owner=$(gh api user --jq .login) || { echo "cannot ask GitHub who is signed in: sign in to gh and re-run"; exit 1; }
 project=$(gh variable get NEON_PROJECT_ID -R "$owner/$name") \
@@ -145,32 +136,19 @@ for wanted in "NEON_AUTH_BASE_URL production" "NEON_AUTH_COOKIE_SECRET productio
   listed $wanted || { echo "Vercel does not list $wanted after it was set; run this script again"; exit 1; }
 done
 
-# Last, so that a domain Neon refuses leaves the variables set.
-# trusted: the production branch's list, one domain a line
-# (neonctl 9.6.0 prints the API's `domains` array).
-trusted() { neon neon-auth domain list --project-id "$project" --branch "$branch" --output json | jq -r '.[].domain'; }
-list=$(trusted) || { echo "Neon would not list the trusted domains of the production branch ($branch); run this script again"; exit 1; }
-# On descriptor 3, so that npx cannot read the list as its own input.
-while IFS= read -r domain <&3; do
-  if grep -qxF -- "$domain" <<<"$list"; then
-    echo "$domain is already a trusted domain"
-    continue
-  fi
-  neon neon-auth domain add "$domain" --project-id "$project" --branch "$branch" >/dev/null \
-    || { echo "Neon refused the trusted domain $domain, so sign-in cannot send anyone back there (factory/manual-steps.md, Gotchas, Neon Auth)"; exit 1; }
-  echo "added the trusted domain $domain"
-done 3<<<"$homes"
-
-# Neon's answer to an add is not trusted either.
-list=$(trusted) || { echo "cannot read the trusted domains back from Neon; run this script again"; exit 1; }
-while IFS= read -r domain; do
-  grep -qxF -- "$domain" <<<"$list" || { echo "Neon does not list the trusted domain $domain after it was added; run this script again"; exit 1; }
-done <<<"$homes"
-
 # Last, so that a preview's branch Neon refuses leaves production complete. Vercel's integration
-# names a preview's branch `preview/<git branch>`.
+# names a preview's branch `preview/<git branch>`. On descriptor 3, so that npx cannot read the
+# list as its own input.
 while IFS=$'\t' read -r id preview <&3; do
   [ -n "$id" ] || continue
+  # For a branch with no auth, `status` prints this sentence and no JSON, and succeeds; it fails
+  # when Neon answers anything but "there is none" (neonctl 9.6.3).
+  auth=$(neon neon-auth status --project-id "$project" --branch "$id" --output json) \
+    || { echo "Neon would not say whether the preview's branch $preview ($id) has Neon Auth; run this script again"; exit 1; }
+  if grep -qF 'Neon Auth is not configured for this branch' <<<"$auth"; then
+    echo "passed over the preview's branch $preview ($id): it has no Neon Auth, so nobody can sign in there, by a password or otherwise"
+    continue
+  fi
   by_link_only "$id" "the preview's branch $preview"
 done 3< <(jq -r '.[] | select(.name // "" | startswith("preview/")) | [.id, .name] | @tsv' <<<"$branches")
-echo "sign-in ok: Neon Auth on, by emailed link and no password, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name', its domains trusted by Neon Auth"
+echo "sign-in ok: Neon Auth on, by emailed link and no password, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name'"

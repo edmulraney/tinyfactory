@@ -3,7 +3,7 @@
 # Usage: owner-decides.sh   (a unified diff on stdin, as `gh pr diff` or `git diff` prints it)
 #        Prints "<kind>: <path>" or "<kind>: <path>: <changed line>", once each. The kinds are "spend or limits",
 #        "secrets or permissions", "this rule", "the product's bar" and "the agents' instructions" (CLAUDE.md).
-#        A diff it cannot read ends in exit 2.
+#        A diff it cannot read ends in exit 2, as does a file whose lines it reads when git shows it as binary.
 #        It calls nothing but awk and reads no other file: the installer runs it by its git id (decisions W272b).
 set -euo pipefail
 
@@ -20,14 +20,13 @@ exec awk '
     # Git quotes a path it had to escape, and no rule below would know it.
     if (path ~ /^"/) unread("names a path git had to quote")
     # The gate, the approval and the installer; only the installer writes an installed copy (decisions W1).
-    if (path ~ "^factory/scripts/(owner-decides|protected-paths|merge-gate|approve-merge)\\.sh$" ||
+    if (path ~ "^factory/scripts/(owner-decides|protected-paths|merge-gate|approve-merge|only-merged-main)\\.sh$" ||
         path ~ "^factory/workflows/(install-workflows|approve-merge)\\.yml$" || path ~ "^\\.github/workflows/")
       hold("this rule", path)
-    if (path ~ "^factory/free-tier(\\.md$|/)")
-      hold("spend or limits", path)
-    # The scripts that make or store a credential, or that a merge runs with one (apply-setup.sh).
+    # The scripts that make or store a credential, that a merge runs with one (apply-setup.sh), or that grant a session a write.
     if (path ~ "^\\.claude/skills/bootstrap/scripts/([a-z-]+-(token|key)|workflow-app|preview-access|vercel|board)\\.sh$" ||
-        path == "factory/scripts/apply-setup.sh" || path ~ "^\\.claude/settings[^/]*\\.json$")
+        path == "factory/scripts/apply-setup.sh" || path ~ "^\\.claude/settings[^/]*\\.json$" ||
+        path == "factory/scripts/allow-skill-write.sh")
       hold("secrets or permissions", path)
     # These wait for the owner whoever changes them, on any type of ticket (decisions M272e).
     if (path ~ "^(TASTE|DESIGN)\\.md$" ||
@@ -40,7 +39,8 @@ exec awk '
     gsub(/^[ \t]+|[ \t]+$/, "", text)
     said = file ": " text
     if (workflow(file)) {
-      if (low ~ /model|effort|max-turns|timeout/) hold("spend or limits", said)
+      # The machine that runs a job is billed, or is one the owner keeps (decisions M426).
+      if (low ~ /model|effort|max-turns|timeout|runs-on/) hold("spend or limits", said)
       # A permission is also a line of its own under `permissions:`, which a hunk may not show.
       if (low ~ /permission|secrets|private-key|client-id|allowed|tools|bots|mcp|settings/ ||
           low ~ /^[ \t]*[a-z-]+:[ \t]*(read|write|none)[ \t]*(#.*)?$/)
@@ -79,6 +79,14 @@ exec awk '
     whole(path)
     # A workflow under a new name runs with every permission and secret of the old one.
     if (workflow(path)) hold("secrets or permissions", path)
+    if ($2 == "to") file = path
+    next
+  }
+  # Git prints no line of a file it takes for binary (a NUL byte, or `-diff` in .gitattributes), so one whose
+  # lines a rule reads would pass unread.
+  /^Binary files .* differ$/ {
+    if (workflow(file) || file ~ "^factory/scripts/(in-flight|begin-fix-round)\\.sh$")
+      unread("stands for the changed lines of " file ", which git shows as binary")
     next
   }
   /^(---|\+\+\+) / {

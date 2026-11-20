@@ -56,6 +56,21 @@ expect_count 1
 run "$scripts/fix-rounds.sh" 7 owner
 expect_count 1
 
+scenario "the owner's rounds for a review are those whose record names it, and every record is among the owner's rounds"
+comments \
+  "$(comment 'github-actions[bot]' "<!-- factory:owner-round -->The owner's fix round: the engineer's session ran.")" \
+  "$(comment 'github-actions[bot]' "<!-- factory:owner-round 41 -->The owner's fix round: the engineer's session ran.")" \
+  "$(comment 'github-actions[bot]' "<!-- factory:owner-round 412 -->The owner's fix round: the engineer's session ran.")" \
+  "$(comment 'claude[bot]' "<!-- factory:owner-round 42 -->Not the factory's record.")"
+run "$scripts/fix-rounds.sh" 7 owner 41
+expect_count 1
+run "$scripts/fix-rounds.sh" 7 owner 42
+expect_count 0
+run "$scripts/fix-rounds.sh" 7 owner
+expect_count 3
+run "$scripts/fix-rounds.sh" 7 owner '41 -->") or true or ("'
+expect_status 2
+
 scenario "the rounds for a conflict are counted for the head asked about, and are in neither other count"
 a=5555555555555555555555555555555555555555; b=6666666666666666666666666666666666666666
 comments "$round" \
@@ -70,6 +85,17 @@ run "$scripts/fix-rounds.sh" 7
 expect_count 1
 run "$scripts/fix-rounds.sh" 7 owner
 expect_count 0
+
+scenario "asked about every head, the rounds for a conflict at every head are counted, and no other round"
+comments "$round" \
+  "$(comment 'github-actions[bot]' "<!-- factory:conflict-round $a -->The fix round for a conflict: the engineer's session ran.")" \
+  "$(comment 'github-actions[bot]' "<!-- factory:conflict-round $b -->The fix round for a conflict: the engineer's session ran.")" \
+  "$(comment 'github-actions[bot]' "<!-- factory:owner-round -->The owner's fix round: the engineer's session ran.")" \
+  "$(comment 'repo-owner' "<!-- factory:conflict-round $a -->Not the factory's record.")"
+run "$scripts/fix-rounds.sh" 7 conflict all
+expect_count 2
+run "$scripts/fix-rounds.sh" 7 conflict '5555555 -->") or true or ("'
+expect_status 2
 
 scenario "the rounds for a fresh run are counted for the ci.yml asked about, and are in no other count"
 a=cccccccccccccccccccccccccccccccccccccccc; b=dddddddddddddddddddddddddddddddddddddddd
@@ -88,11 +114,28 @@ expect_count 0
 run "$scripts/fix-rounds.sh" 7 conflict "$a"
 expect_count 0
 
+scenario "the starts of the checks are counted for the commit asked about, from the factory's own record, and are in no other count"
+a=5555555555555555555555555555555555555555; b=6666666666666666666666666666666666666666
+comments "$round" \
+  "$(comment 'github-actions[bot]' "<!-- factory:checks-started $a -->Nothing to do: the factory is starting the checks.")" \
+  "$(comment 'repo-owner' "<!-- factory:checks-started $a -->Not the factory's record.")" \
+  "$(comment 'github-actions[bot]' "**Ryan (correctness): PASS**"$'\n'"<!-- factory:checks-started $a --> is quoted here.")"
+run "$scripts/fix-rounds.sh" 7 start-checks "$a"
+expect_count 1
+run "$scripts/fix-rounds.sh" 7 start-checks "$b"
+expect_count 0
+run "$scripts/fix-rounds.sh" 7
+expect_count 1
+
 scenario "anything else asked for is refused, and nothing is read"
 comments "$round"
 run "$scripts/fix-rounds.sh" 7 everyone
 expect_status 2
-expect_output "Usage: fix-rounds.sh <pr-number> [owner | conflict <head> | fresh-run <ci.yml-id>]"
+expect_output "Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head>]"
+run "$scripts/fix-rounds.sh" 7 start-checks
+expect_status 2
+run "$scripts/fix-rounds.sh" 7 start-checks '55") or true or ("'
+expect_status 2
 run "$scripts/fix-rounds.sh" 7 fresh-run
 expect_status 2
 run "$scripts/fix-rounds.sh" 7 fresh-run 'cc") or true or ("'

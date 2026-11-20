@@ -1,0 +1,10 @@
+### 11. A retro on a failed factory workflow, and its waits
+
+- **Set:** `retro.yml` runs for a failed `implement`, `approve-merge`, `install-workflows` or `fix` run, and for a failed `merge` or `start-fix` job of `ci` or `begin` or `merge` job of `merge-group` (tickets #70, #89, #434, #455). No workflow is watched: each of those jobs starts the retro itself, in a step that runs only when the job failed or, outside `ci`, stopped at its time limit (decision [A434b](../decisions/434.md)).
+- **Protects:** Actions minutes and Claude usage.
+- **Numbers, per failure:** one retro. The five retros so far cost $0.94, $1.15, $1.55, $1.58 and $1.96 of agent usage, and their sessions took 49 to 119 seconds, so with the checkout and the clone of `sessions` a retro is 2 to 3 billed minutes. A failure that lost a build cost far more: $5.44 and 16 minutes on ticket #57.
+- **Numbers, when nothing failed:** nothing. A step that is skipped starts no run and is billed no minute.
+  - Rejected, `retro.yml` starting when a watched workflow ends: GitHub raises no such event for a run started with a workflow's own token, so a failed fix round or build from the queue got no retro (ticket #434). For `ci` the event also says only that the run failed, so a job would have to start to see which job it was, a minute more on every fix round.
+- **The waits:** the retro's agent is tried up to three times, 5 and then 10 minutes apart, because the service that failed the run may still be down. A runner that waits is billed, so an outage that outlasts all three tries costs 15 minutes of waiting on top of the retro, and the job stops at 45 whatever happens. A retro whose first try works waits for nothing. Five and ten are a judgement: the one outage measured, on ticket #57, defeated seven tries in 70 seconds and was over 28 minutes later.
+- **Not retried:** a session that ended for a reason of its own, such as running out of turns. Trying again would pay for the same ending twice more.
+- **Automated:** yes.

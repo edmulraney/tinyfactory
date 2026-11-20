@@ -1,24 +1,22 @@
-# Takes a shipped ticket back when the owner starts it with the number of the ticket or of its pull request.
+# The `revert` label on a shipped ticket takes it back: an engineer opens the pull request that reverts it.
 name: revert
 
 on:
-  workflow_dispatch:
-    inputs:
-      number:
-        description: Shipped ticket, or its merged pull request, to take back
-        required: true
-
-# One at a time: a second start for the same ticket must find the ticket the first one filed.
-concurrency:
-  group: revert
+  issues:
+    types: [labeled]
 
 jobs:
   revert:
+    # A job skipped here costs no minute, where a step would for every label on every ticket (decisions M443b).
+    if: github.event.label.name == 'revert'
+    # One at a time for a ticket: a second start must find the ticket the first one filed. On the job, so a skipped run cancels none that waits.
+    concurrency:
+      group: revert-${{ github.event.issue.number }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: read
-      issues: write         # to file the ticket that takes it back
+      issues: write         # to file the ticket that takes it back, answer on the labelled one and take the label off
       pull-requests: read   # to read the pull request that shipped it
       actions: write        # to start implement.yml (decisions A241c)
     steps:
@@ -26,7 +24,7 @@ jobs:
       - name: File the ticket that reverts its commit, and start the build
         env:
           GH_TOKEN: ${{ github.token }}
-          NUMBER: ${{ inputs.number }}
+          NUMBER: ${{ github.event.issue.number }}
           # Who started this attempt, which a run started again by someone else would otherwise hide (decisions M19a).
           STARTED_BY: ${{ github.triggering_actor }}
           OWNER: ${{ github.repository_owner }}

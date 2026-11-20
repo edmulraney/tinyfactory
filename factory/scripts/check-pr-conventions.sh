@@ -17,7 +17,7 @@ differs="Differs from the ticket:"
 needs="Needs from the owner after merging:"
 # The shape that came before, which is still checked (decisions P170a).
 sections=("## What changed" "## Why" "## Docs updated" "## How it was verified" "## Not proven" "## After merging" "## Notes for the reviewer")
-factory_docs=("factory/README.md" "factory/decisions.md" "factory/free-tier.md" "factory/manual-steps.md" "CLAUDE.md")
+factory_docs=("factory/README.md" "factory/owner-guide.md" "factory/decisions.md" "factory/free-tier.md" "factory/manual-steps.md" "CLAUDE.md")
 
 ok=0
 problem() { echo "$1"; ok=1; }
@@ -316,8 +316,8 @@ fi
 # A ticket's own file of rows or entries is one of the documents (decisions H130a, H130e).
 if grep -qE '^(factory/|\.claude/skills/)' <<<"$changed" && [ "$reason" = no ] \
   && ! grep -qxFf <(printf '%s\n' "${factory_docs[@]}") <<<"$changed" \
-  && ! grep -qE '^factory/(decisions|free-tier)/' <<<"$changed"; then
-  problem "This pull request changes the factory and none of the documents that describe it (${factory_docs[*]}, or a row in factory/decisions/ or an entry in factory/free-tier/). Update the one that is no longer true, or add a line to \"## Docs updated\": \"None needed:\" followed by the reason."
+  && ! grep -qE '^factory/(README|decisions|free-tier)/' <<<"$changed"; then
+  problem "This pull request changes the factory and none of the documents that describe it (${factory_docs[*]}, or a row in factory/decisions/ or an entry in factory/README/ or factory/free-tier/). Update the one that is no longer true, or add a line to \"## Docs updated\": \"None needed:\" followed by the reason."
 fi
 
 finish

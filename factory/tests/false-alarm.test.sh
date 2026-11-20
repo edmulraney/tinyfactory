@@ -51,7 +51,7 @@ expect_result false
 
 scenario "false when another job failed with the sentence in its log"
 checks_failed
-echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":31,"name":"fits-main","conclusion":"failure"}]}' > "$T/jobs"
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":31,"name":"e2e","conclusion":"failure"}]}' > "$T/jobs"
 echo "$edited_directly" > "$T/log-31"
 alarm
 expect_result false

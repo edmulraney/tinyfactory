@@ -49,6 +49,11 @@ expect_saved() {
   expect_call "commit --quiet -m session: $1"
   [ -n "$(ls "$T/runner/cut-short-sessions" 2>/dev/null)" ] || fail "expected a copy of the transcript in cut-short-sessions"
 }
+# A review's job holds no token that writes: its transcript is kept for the job that saves it (decisions A427f).
+expect_kept_unsaved() {
+  expect_no_call "git "
+  [ -n "$(ls "$T/runner/cut-short-sessions" 2>/dev/null)" ] || fail "expected a copy of the transcript in cut-short-sessions"
+}
 expect_nothing_saved() {
   expect_no_call "git "
   [ ! -e "$T/runner/cut-short-sessions" ] || fail "expected no copy of the transcript"
@@ -297,7 +302,7 @@ expect_status 0
 expect_written "continue=true"
 expect_written "session=c22ab626"
 expect_call "sleep 120"
-expect_saved "adam pr-7"
+expect_kept_unsaved
 expect_no_call "gh "
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
 [[ "$prompt" == *"You have not given your result."* ]] || fail "expected the prompt to say the result is missing"
@@ -321,7 +326,7 @@ expect_status 0
 expect_written "continue=true"
 expect_written "session=c22ab626"
 expect_no_call "sleep"
-expect_saved "ryan pr-7"
+expect_kept_unsaved
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
 [[ "$prompt" == *"Your verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: finding 1's \`fix\` is 41 words. Give it again"* ]] || fail "expected the prompt to name the field, got: $prompt"
 [[ "$prompt" != *"You have not given your result."* ]] || fail "expected the prompt not to say the result is missing"
@@ -333,7 +338,7 @@ OUTPUT=$(jq -nc '{findings: [], assumptions: [range(4) | {assumes: "It holds.", 
 expect_status 0
 expect_written "continue=true"
 expect_written "session=c22ab626"
-expect_saved "adam pr-7"
+expect_kept_unsaved
 prompt=$(sed -n 's/^prompt=//p' "$T/outputs")
 [[ "$prompt" == *"Your verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: it gives 4 assumptions, and 3 is the most. Give it again with each such field cut to 40 words or fewer, only the 3 assumptions whose failure would cost most, and nothing else changed."* ]] || fail "expected the prompt to say there is one too many, got: $prompt"
 
@@ -408,13 +413,13 @@ expect_status 2
 expect_output "usage: continue-session.sh build|fix|answer"
 expect_not_written "continue=true"
 
-# Each run of the action gets a token of its own, so a continued session must ask for the same read (decisions A259).
-scenario "every engineer step of implement.yml and fix.yml asks for a token that reads Actions runs"
-for workflow in implement.yml fix.yml; do
+# Each run of the action gets a token of its own, so a continued session must ask for the same read (decisions A259, A406).
+scenario "every agent step of implement.yml, fix.yml and retro.yml asks for a token that reads Actions runs"
+for workflow in implement.yml fix.yml retro.yml; do
   steps=$(grep -cF 'uses: anthropics/claude-code-action@v1' "$root/factory/workflows/$workflow")
   reads=$(grep -A1 -E '^          additional_permissions: \|( +#.*)?$' "$root/factory/workflows/$workflow" | grep -cxF '            actions: read')
   [ "$steps" -gt 0 ] && [ "$steps" = "$reads" ] \
-    || fail "$workflow has $steps engineer steps and $reads that ask for actions: read"
+    || fail "$workflow has $steps agent steps and $reads that ask for actions: read"
   # The action warns, and the read is refused, when the job's own token may not read Actions.
-  grep -qxF '      actions: write' "$root/factory/workflows/$workflow" || fail "$workflow's job may not read Actions itself"
+  grep -qE '^      actions: write( +#.*)?$' "$root/factory/workflows/$workflow" || fail "$workflow's job may not read Actions itself"
 done

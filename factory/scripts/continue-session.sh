@@ -3,7 +3,7 @@
 # Usage: continue-session.sh build  <execution-file> <wait-seconds> <role> <issue-number>
 #        continue-session.sh fix    <execution-file> <wait-seconds> <role> <pr-number> <head-before> [again]
 #        OUTPUT='<json>' continue-session.sh answer <execution-file> <wait-seconds> <role> <pr-number>
-#        Needs GH_TOKEN (build, fix: to read; all: contents write, to save the transcript).
+#        Needs GH_TOKEN (build, fix: to read, and contents write, to save the transcript).
 set -euo pipefail
 
 kind="$1"; file="$2"; wait="$3"; role="$4"; number="$5"; before="${6:-}"; retried="${7:-}"
@@ -72,8 +72,9 @@ if [ "$kind" = fix ] && [ "$retried" = again ] && [ "$ended" = completed ]; then
   skip "the engineer was told nothing had been pushed, and ended the session again without pushing: nothing is taken to need pushing"
 fi
 
-# Saved before the wait, so that a job cancelled while it waits has kept the transcript.
-"$script_dir/save-session.sh" "$role" "$key" "$file"
+# Saved before the wait, so that a job cancelled while it waits has kept the transcript. A review's job holds no
+# token that writes, so the job that posts its verdict saves the copy kept below (decisions A427f).
+[ "$kind" = answer ] || "$script_dir/save-session.sh" "$role" "$key" "$file"
 if [ -n "${RUNNER_TEMP:-}" ]; then
   mkdir -p "$RUNNER_TEMP/cut-short-sessions"
   cp "$file" "$RUNNER_TEMP/cut-short-sessions/$(date -u +%Y%m%dT%H%M%SZ)-$role.json"

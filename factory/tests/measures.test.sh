@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for measures.sh, which keeps a line of measures for each merged ticket and prints a period's six.
+# Tests for measures.sh, which keeps a line of measures for each merged ticket and prints a period's seven.
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/sessions-remote.sh"
 
@@ -19,14 +19,27 @@ an_issue() {
   jq -cn --argjson n "$1" --arg label "$2" --arg body "$3" '{number: $n, labels: [{name: $label}], body: $body}
     | if $label == "pull" then .pull_request = {} else . end' >> "$T/issues"
 }
+# conflict_rounds <pr> <rounds>: the pull request holds that many records of a fix round for a conflict, each at a head of its own.
+conflict_rounds() {
+  for round in $(seq "$2"); do
+    jq -cn --arg body "<!-- factory:conflict-round ${round}555555 -->The fix round for a conflict: the engineer's session ran." \
+      '{id: 1, user: {login: "github-actions[bot]"}, body: $body}'
+  done > "$T/comments-$1"
+}
 github() {
-  : > "$T/fail"; : > "$T/issues"
+  : > "$T/fail"; : > "$T/issues"; : > "$T/cuts"; rm -f "$T"/comments-*
   stub gh '
     while IFS= read -r words; do
       case "$*" in "$words"*) echo "gh: failed: $*" >&2; exit 1 ;; esac
     done < "$T/fail"
     case "$*" in
+      # What cut-rule-files.sh count reads: $T/cuts holds the tickets changed in the month.
+      "api --method GET repos/{owner}/{repo}/issues -f state=all -f labels=factory -f since="*) json "$(jq -sc . "$T/cuts")" "$@" ;;
       "api --method GET repos/{owner}/{repo}/issues -f state=all -f since="*" -f per_page=100 --paginate "*) json "$(jq -sc . "$T/issues")" "$@" ;;
+      # What fix-rounds.sh reads: a pull request with no file has no comment.
+      "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate --jq "*)
+        comments="$T/comments-$(cut -d/ -f5 <<<"$2")"
+        json "$([ ! -f "$comments" ] || jq -sc . "$comments")" "$@" ;;
       "api repos/{owner}/{repo}/contents/measures.jsonl?ref=sessions -H Accept: application/vnd.github.raw") cat "$T/record/measures.jsonl" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -166,7 +179,7 @@ scenario "a week: the table is right for three recorded tickets, and holds no ti
 github; three_tickets
 table --week 2026-W47 "$T/record"
 expect_status 0
-expect_output "The six measures for 2026-W47, over 3 merged tickets:"
+expect_output "The seven measures for 2026-W47, over 3 merged tickets:"
 expect_output "| Measure | Figure |"
 # (10.21 + 4 + 3.8) / 3 and (11 + 20 + 8) / 3.
 expect_output "| Cost per ticket | \$6.00 of Claude usage at API prices and 13 Actions minutes |"
@@ -177,23 +190,87 @@ expect_output "| Stops for a person per ten tickets | 6.7 |"
 # #59 was recorded at the merge; #91, and #90 and #92, are found now.
 expect_output "| Tickets opened per merge | 1.3 |"
 expect_output "| Bugs traced to a ticket | 2: #91 to #57; #92 to #58 |"
-[ "$(grep -c '^|' <<<"$out")" = 8 ] || fail "expected a heading, a rule and six rows"
+[ "$(grep -c '^|' <<<"$out")" = 9 ] || fail "expected a heading, a rule and seven rows"
 expect_call "-f since=2026-11-16T08:00:00Z "
 expect_no_call "contents/measures.jsonl"
+
+scenario "a week: the fix rounds for a conflict for each merged pull request, counted from the pull requests merged in it alone"
+github; three_tickets
+conflict_rounds 60 4; conflict_rounds 72 2; conflict_rounds 80 1
+table --week 2026-W47 "$T/record"
+expect_status 0
+expect_output "| Fix rounds for a conflict per merged pull request | 0.67: 2 rounds over 3 merged pull requests |"
+expect_no_call "issues/60/comments"
+expect_no_call "issues/80/comments"
+
+scenario "a week with no fix round for a conflict says none"
+github; three_tickets
+table --week 2026-W47 "$T/record"
+expect_status 0
+expect_output "| Fix rounds for a conflict per merged pull request | 0: 0 rounds over 3 merged pull requests |"
+
+scenario "stops with a message, and prints no table, when a pull request's fix rounds for a conflict cannot be counted"
+github; three_tickets
+echo "api repos/{owner}/{repo}/issues/73/comments" > "$T/fail"
+table --week 2026-W47 "$T/record"
+expect_status 1
+expect_output "Could not count the fix rounds for a conflict of pull request #73, so the measures of 2026-W47 are not printed."
+expect_no_output "| Measure"
 
 scenario "a month: every ticket merged in it"
 github; three_tickets
 table --month 2026-11 "$T/record"
 expect_status 0
-expect_output "The six measures for 2026-11, over 4 merged tickets:"
+expect_output "The seven measures for 2026-11, over 4 merged tickets:"
 expect_output "| Passing with no fix round | 2 of 4 (50%) |"
 expect_output "| Time to merge | 7 h 8 min: "
+
+# a_cut <number> <opened at> <file>: a ticket that cuts the rule file to its word budget.
+a_cut() { jq -cn --argjson n "$1" --arg at "$2" --arg title "Cut \`$3\` to budget" '{number: $n, created_at: $at, title: $title}' >> "$T/cuts"; }
+
+scenario "a month: under the table, how many tickets were opened in it to cut each rule file to its budget"
+github; three_tickets
+a_cut 95 "2026-11-03T09:00:00Z" TASTE.md
+a_cut 96 "2026-11-19T09:00:00Z" TASTE.md
+a_cut 97 "2026-11-20T09:00:00Z" factory/README.md
+a_cut 98 "2026-10-20T09:00:00Z" DESIGN.md
+table --month 2026-11 "$T/record"
+expect_status 0
+expect_output "| Bugs traced to a ticket | 2: #91 to #57; #92 to #58 |
+
+Tickets opened in 2026-11 to cut a rule file to its word budget:
+
+- \`TASTE.md\`: 2
+- \`factory/README.md\`: 1"
+expect_no_output "DESIGN.md"
+
+scenario "a month with no such ticket: the table alone"
+github; three_tickets
+table --month 2026-11 "$T/record"
+expect_status 0
+expect_no_output "to cut a rule file"
+
+scenario "a week: the table alone, and the tickets that cut a rule file are not asked for"
+github; three_tickets
+a_cut 96 "2026-11-19T09:00:00Z" TASTE.md
+table --week 2026-W47 "$T/record"
+expect_status 0
+expect_no_output "to cut a rule file"
+expect_no_call "labels=factory"
+
+scenario "stops with a message, and prints no table, when the tickets that cut a rule file cannot be counted"
+github; three_tickets
+echo "api --method GET repos/{owner}/{repo}/issues -f state=all -f labels=factory" > "$T/fail"
+table --month 2026-11 "$T/record"
+expect_status 1
+expect_output "Could not count the tickets opened in 2026-11 to cut a rule file to its word budget, so the measures of 2026-11 are not printed."
+expect_no_output "| Measure"
 
 scenario "one ticket, and no bug: the words agree"
 github; three_tickets
 table --month 2026-12 "$T/record"
 expect_status 0
-expect_output "The six measures for 2026-12, over 1 merged ticket:"
+expect_output "The seven measures for 2026-12, over 1 merged ticket:"
 expect_output "| Cost per ticket | \$50.00 of Claude usage at API prices and 50 Actions minutes |"
 expect_output "| Stops for a person per ten tickets | 50 |"
 expect_output "| Tickets opened per merge | 0 |"
@@ -205,7 +282,7 @@ mkdir -p "$T/record"
 { its_line | jq -c '.unread = 2'; a_line 73 58 "2026-11-18T12:00:00Z" 4 20 0 null 0; } > "$T/record/measures.jsonl"
 table --week 2026-W47 "$T/record"
 expect_status 0
-expect_output "and 16 Actions minutes; 2 transcripts could not be read, so the usage is more |"
+expect_output "and 16 Actions minutes; 2 transcripts gave no cost, so the usage is more |"
 expect_output "| Time to merge | 1 h 0 min: 10 min building, 15 min in review, 0 min in fix rounds, 35 min waiting, over the 1 labelled \`ready\` |"
 
 scenario "no ticket was labelled ready: the time is not known, and says why"

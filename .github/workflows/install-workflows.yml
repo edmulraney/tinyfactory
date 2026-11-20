@@ -11,6 +11,8 @@ on:
       pr:
         description: Merged pull request whose workflow changes to install
         required: true
+      then:
+        description: Pull requests merged after it, in the order they merged, to install next. Leave it empty.
 
 concurrency:
   group: install-workflows-${{ inputs.pr || github.event.pull_request.number }}
@@ -18,7 +20,8 @@ concurrency:
 env:
   PR: ${{ inputs.pr || github.event.pull_request.number }}
   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-  RULE: 936dad9113afdf52045bffaf51f667b25baa8320   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
+  RULE: 67f268772e94f3552d7b308c5492370f417596c3   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
+  CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)
 
 jobs:
   install:
@@ -29,14 +32,15 @@ jobs:
       contents: read
       pull-requests: write
       issues: write
+      actions: write   # to start the retro
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.repository.default_branch }}
-          fetch-depth: 0               # the pull request's diff is measured from where it left main
+          fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged
           persist-credentials: false   # the push below must use the app's token and no other
 
-      # One script from the repo is run, by the git id above and with no token (decisions W2, W272b).
+      # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).
       - name: Check that what would be installed was approved, or needs no approval
         id: check
         env:
@@ -47,7 +51,7 @@ jobs:
           refused="$RUNNER_TEMP/refused.md"
           : > "$refused"
 
-          view=$(gh pr view "$PR" --json state,baseRefName,headRefOid,mergedBy,reviews)
+          view=$(gh pr view "$PR" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)
           if [ "$(jq -r .state <<<"$view")" != MERGED ] || [ "$(jq -r .baseRefName <<<"$view")" != "$DEFAULT_BRANCH" ]; then
             echo "pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install"
             exit 0
@@ -57,13 +61,75 @@ jobs:
           # The merged branch is deleted, but GitHub keeps the pull request's last commit here.
           git fetch --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/pull/$PR/head"
           [ "$(git rev-parse FETCH_HEAD)" = "$head" ]
-          base=$(git merge-base HEAD "$head")
+          # It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).
+          merged=$(jq -r '.mergeCommit.oid // ""' <<<"$view")
+          git merge-base --is-ancestor "$merged" HEAD || {
+            echo "the merge commit of pull request #$PR, \"$merged\", is not on $DEFAULT_BRANCH, so what its merge left there is not known"
+            exit 1
+          }
+          # Installed once: started again, it could bring back a workflow that a later merge undid (decisions W496).
+          # "approved in" is the subject of the installs made before an unapproved change could be installed.
+          earlier_install=$(git log --format=%h -E --grep="^ci: install the workflow changes (approved|merged) in #$PR\$" "$merged..HEAD" | tail -1)
+          if [ -n "$earlier_install" ]; then
+            echo "commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again"
+            exit 0
+          fi
+          base=$(git merge-base "$merged^" "$head")
           blob() { git rev-parse --quiet --verify "$1:$2" 2>/dev/null || echo absent; }
+          # The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).
+          applies_to_installed() {
+            local work="$RUNNER_TEMP/applied"
+            rm -rf "$work"; mkdir -p "$work"
+            git cat-file blob "HEAD:$installed" > "$work/installed" 2>/dev/null &&
+              git cat-file blob "$base:$source" > "$work/base" 2>/dev/null &&
+              git cat-file blob "$head:$source" > "$work/reviewed" 2>/dev/null &&
+              git merge-file --quiet "$work/installed" "$work/base" "$work/reviewed" 2>/dev/null &&
+              [ "$(git hash-object --no-filters "$work/installed")" = "$at_merge" ]
+          }
+
+          # Whether it only puts back what main held before a merge the owner made with the merge button, which needs
+          # no approval: the merge gate's test, made again here (decisions M439f, W3).
+          undoes_button_merge() {
+            local issue ticket taken merge commit paths path
+            issue=$(gh pr view "$PR" --json body --jq '.body // ""' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1) || return 1
+            ticket=$(gh issue view "$issue" --json title,author) || return 1
+            # Only a workflow files a ticket as `app/github-actions`, and revert.sh titles it so (decisions M439d).
+            [ "$(jq -r .author.login <<<"$ticket")" = app/github-actions ] || return 1
+            [[ "$(jq -r .title <<<"$ticket")" =~ ^"Take back the button merge of pull request #"([0-9]+)$ ]] || return 1
+            taken="${BASH_REMATCH[1]}"
+            merge=$(gh pr view "$taken" --json mergedBy,mergeCommit) || return 1
+            [ "$(jq -r '.mergedBy.login // ""' <<<"$merge")" = "$OWNER" ] || return 1
+            commit=$(jq -r '.mergeCommit.oid // ""' <<<"$merge")
+            [ -n "$commit" ] || return 1
+            paths=$(git -c core.quotePath=false diff --no-renames --name-only "$base" "$head" &&
+              git -c core.quotePath=false diff --no-renames --name-only "$commit^" "$commit") && [ -n "$paths" ] || return 1
+            # Nothing has changed a file since that merge, and each goes back to what main held before it.
+            while IFS= read -r path; do
+              [ "$(git ls-tree "$base" -- "$path")" = "$(git ls-tree "$commit" -- "$path")" ] &&
+                [ "$(git ls-tree "$head" -- "$path")" = "$(git ls-tree "$commit^" -- "$path")" ] || return 1
+            done <<<"$paths"
+          }
 
           # The owner merging it themselves is the same decision as approving the commit that was merged.
           approved=$(jq -r --arg owner "$OWNER" --arg head "$head" '
             (.mergedBy.login == $owner) or
             ([.reviews[] | select(.author.login == $owner)] | last | (.state == "APPROVED" and .commit.oid == $head))' <<<"$view")
+          # An approval of an earlier commit stands when only merges of the default branch followed it (decisions W456).
+          earlier=$(jq -r --arg owner "$OWNER" \
+            '[.reviews[] | select(.author.login == $owner)] | last | select(.state == "APPROVED") | .commit.oid // ""' <<<"$view")
+          if [ "$approved" != true ] && [ -n "$earlier" ]; then
+            if [ "$(blob HEAD factory/scripts/only-merged-main.sh)" != "$CARRY" ]; then
+              echo "factory/scripts/only-merged-main.sh on $DEFAULT_BRANCH is not the script this installer names (${CARRY:0:7}), so the approval of ${earlier:0:7} is not carried to ${head:0:7}"
+            else
+              git cat-file blob "$CARRY" > "$RUNNER_TEMP/only-merged-main.sh"
+              # It is given the three commits and nothing else: no token, and nothing of the environment.
+              if env -i PATH="$PATH" bash "$RUNNER_TEMP/only-merged-main.sh" "$earlier" "$head" HEAD; then
+                approved=true
+              else
+                echo "so the approval of ${earlier:0:7} is not carried to ${head:0:7}"
+              fi
+            fi
+          fi
           if [ "$approved" != true ]; then
             # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).
             unapproved="\`$OWNER\` neither approved commit \`${head:0:7}\` nor merged it themselves, and"
@@ -78,7 +144,7 @@ jobs:
             fi
             git cat-file blob "$RULE" > "$RUNNER_TEMP/owner-decides.sh"
             # It is given the diff and nothing else: no token, and nothing of the environment.
-            if ! theirs=$(git diff "$base" "$head" | env -i PATH="$PATH" bash "$RUNNER_TEMP/owner-decides.sh" 2>&1); then
+            if ! theirs=$(git diff "$base" "$head" | env -i PATH="$PATH" bash "$RUNNER_TEMP/owner-decides.sh" 2>&1) && ! undoes_button_merge; then
               {
                 echo "- $unapproved it changes what only they may decide:"
                 printf '\n  ```\n%s\n  ```\n' "$(sed 's/^/  /' <<<"$theirs")"
@@ -94,22 +160,26 @@ jobs:
             name="${source#factory/workflows/}"
             installed=".github/workflows/$name"
             read_by_owner=$(blob "$head" "$source")
+            at_merge=$(blob "$merged" "$source")
             if [ "$(blob HEAD "$installed")" = "$read_by_owner" ]; then
               echo "$installed is already what was approved"
+            # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).
+            elif [ "$(blob HEAD "$installed")" = "$(blob HEAD "$source")" ]; then
+              echo "$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed"
             elif [[ "$name" == */* ]]; then
               echo "- \`$source\` is in a folder. GitHub runs only the files directly in \`.github/workflows/\`." >> "$refused"
-            elif [ "$(blob HEAD "$source")" != "$read_by_owner" ]; then
-              echo "- \`$source\` on \`$DEFAULT_BRANCH\` is not what commit \`${head:0:7}\` held, so it has changed since that commit was reviewed." >> "$refused"
-            elif [ "$(blob HEAD "$installed")" != "$(blob "$base" "$source")" ]; then
+            elif [ "$read_by_owner" != absent ] && ! git ls-tree "$head" -- "$source" | grep -qE '^100(644|755) blob '; then
+              echo "- \`$source\` is not an ordinary file (a link, perhaps), so its diff does not show what would run." >> "$refused"
+            elif [ "$at_merge" != "$read_by_owner" ] && ! applies_to_installed; then
+              echo "- \`$source\` on \`$DEFAULT_BRANCH\`, as this pull request's merge \`${merged:0:7}\` left it, is neither what commit \`${head:0:7}\` held nor \`$installed\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet." >> "$refused"
+            elif [ "$at_merge" = "$read_by_owner" ] && [ "$(blob HEAD "$installed")" != "$(blob "$base" "$source")" ]; then
               echo "- \`$installed\` is not what this pull request's diff of \`$source\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run." >> "$refused"
-            elif [ "$read_by_owner" = absent ]; then
+            elif [ "$at_merge" = absent ]; then
               git rm --quiet "$installed"
               echo "removed $installed"
-            elif ! git ls-tree "$head" -- "$source" | grep -qE '^100(644|755) blob '; then
-              echo "- \`$source\` is not an ordinary file (a link, perhaps), so its diff does not show what would run." >> "$refused"
             else
-              # From the commit, not the checked-out file: copying that would follow a link to bytes nobody approved.
-              git update-index --add --cacheinfo "100644,$read_by_owner,$installed"
+              # From git, not the checked-out file: copying that would follow a link to bytes nobody approved.
+              git update-index --add --cacheinfo "100644,$at_merge,$installed"
               echo "installed $source as $installed"
             fi
           done < <(git diff --no-renames --name-only "$base" "$head" -- factory/workflows)
@@ -141,6 +211,7 @@ jobs:
           BOT: ${{ steps.app.outputs.app-slug }}[bot]
         run: |
           set -euo pipefail
+          # By this subject a later run tells that the pull request is installed (decisions W496).
           git -c user.name="$BOT" -c user.email="$BOT@users.noreply.github.com" \
             commit --quiet -m "ci: install the workflow changes merged in #$PR"
           # If main moved since the checkout this is refused, and the run can simply be started again.
@@ -180,7 +251,7 @@ jobs:
             if [ -s "$RUNNER_TEMP/refused.md" ]; then
               cat "$RUNNER_TEMP/refused.md"
               # A new change on top of main would be refused too: its diff would start from a source never installed.
-              printf '\nNothing was installed. To recover, in two `factory` tickets: first put each file above in `factory/workflows/` back to exactly what `.github/workflows/` holds (deleting it if there is none), which makes `pnpm lint` pass again and installs nothing; then make the change again from there, so the whole difference is reviewed in one diff.\n'
+              printf '\nNothing was installed. To recover, in two `factory` tickets: first put each workflow this pull request changed in `factory/workflows/` back to exactly what `.github/workflows/` holds (deleting it if there is none), which makes `pnpm lint` pass again and installs nothing; then make the change again from there, so the whole difference is reviewed in one diff.\n'
             else
               printf 'The checks passed or never finished, and a later step failed: the log says which. If it was the push, start `install-workflows` again with this pull request'"'"'s number. If it was the token, the project has no workflow app yet: `.claude/skills/bootstrap/scripts/workflow-app.sh` creates it.\n'
             fi
@@ -192,3 +263,59 @@ jobs:
           if [ -n "$issue" ]; then gh issue edit "$issue" --add-label needs-human >/dev/null
           else gh pr edit "$PR" --add-label needs-human >/dev/null
           fi
+
+      # Whatever became of this one: a later merge that changed other sources installs all the same (decisions W469b).
+      - name: Start the installer for the pull request merged after this one
+        if: always() && inputs.then != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          THEN: ${{ inputs.then }}
+        run: |
+          read -r next rest <<<"$THEN"
+          for _ in 1 2 3; do
+            if gh workflow run install-workflows.yml -f pr="$next" ${rest:+-f then="$rest"}; then exit 0; fi
+            sleep 20
+          done
+          # The first line says what a person must do (decisions A371a).
+          {
+            printf 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `%s`' "$next"
+            [ -z "$rest" ] || printf ' and `then` to `%s`' "$rest"
+            printf ': that run installs the workflow changes this pull request merged.\n\n'
+            printf 'They are **not installed**: the installer of pull request #%s, merged before this one, could not start this one'"'"'s.\n' "$PR"
+            printf '\n%s/%s/actions/runs/%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
+          } > "$RUNNER_TEMP/not-started.md"
+          gh pr comment "$next" --body-file "$RUNNER_TEMP/not-started.md"
+          gh pr edit "$next" --add-label needs-human >/dev/null
+          exit 1
+
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 5   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

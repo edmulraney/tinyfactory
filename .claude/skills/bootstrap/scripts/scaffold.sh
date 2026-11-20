@@ -94,7 +94,7 @@ if [ ! -f package.json ]; then
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
-    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-factory.sh && pnpm -r lint",
+    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh && pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "factory/scripts/test-factory.sh && pnpm -r test",
     "test:e2e": "pnpm --filter web test:e2e"

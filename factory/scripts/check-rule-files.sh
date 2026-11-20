@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # Keeps facts that change by themselves out of rule files and script comments, and keeps rule files short.
-# Usage: check-rule-files.sh   (from the repo root)
+# Usage: check-rule-files.sh          (from the repo root)
+#        check-rule-files.sh --over   prints "<words> <budget> <file>" for each rule file over its budget, and checks
+#                                     only the list; it needs no git repository
 set -euo pipefail
+
+only_over=false
+[ "${1:-}" != --over ] || only_over=true
 
 # Each rule file and its word budget (decisions H172b).
 list="factory/rule-files.txt"
@@ -15,9 +20,13 @@ unlisted() {
   echo "check-rule-files.sh must be run inside a git repository: it could not list the $1 with git ls-files, so nothing was checked."
   exit 1
 }
-skills=$(git ls-files '.claude/skills/*/SKILL.md') || unlisted "skills"
-# The tests' own files are left out (decisions H172d).
-scripts=$(git ls-files 'factory/scripts/*.sh' '.claude/skills/bootstrap/scripts/*.sh') || unlisted "scripts"
+skills=""; scripts=""
+if [ "$only_over" = false ]; then
+  # A new file is listed before it is added (decisions H464).
+  skills=$(git ls-files --cached --others --exclude-standard '.claude/skills/*/SKILL.md') || unlisted "skills"
+  # The tests' own files are left out (decisions H172d).
+  scripts=$(git ls-files --cached --others --exclude-standard 'factory/scripts/*.sh' '.claude/skills/bootstrap/scripts/*.sh') || unlisted "scripts"
+fi
 
 failed=0
 rule_files=""
@@ -44,11 +53,18 @@ while IFS= read -r line || [ -n "$line" ]; do
   fi
   rule_files+="$file"$'\n'
   words=$(wc -w < "$file" | tr -d ' ')
-  if [ "$words" -gt "$budget" ]; then
-    echo "$file: it holds $words words and its budget is $budget. Cut it: a sentence stays only when removing it changes what a reader does (TASTE.md). Raising the budget in $list is a decision, with a row in this ticket's file in factory/decisions/"
+  [ "$words" -gt "$budget" ] || continue
+  if [ "$only_over" = true ]; then
+    echo "$words $budget $file"
+  # More than a fifth over fails; less merges, and a ticket cuts the file afterwards (decisions H172b, H476a).
+  elif [ $((words * 5)) -gt $((budget * 6)) ]; then
+    echo "$file: it holds $words words and its budget is $budget, and lint fails a file more than a fifth over its budget. Cut it: a line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens (TASTE.md)"
     failed=1
+  else
+    echo "$file: it holds $words words and its budget is $budget. This fails nothing: once the pull request merges, the factory files a ticket that cuts the file to its budget"
   fi
 done < "$list"
+[ "$only_over" = false ] || exit "$failed"
 
 while IFS= read -r skill; do
   [ -n "$skill" ] || continue

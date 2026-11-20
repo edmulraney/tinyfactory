@@ -3,14 +3,13 @@
 . "$(dirname "$0")/helpers.sh"
 
 # $T/fail lists the gh calls that fail, $T/after those that fail once the ticket has its place; $T/rival lists rivals.
-# $T/labels holds the ticket's labels and $T/comments its timeline, as GitHub's REST list gives it.
+# $T/labels holds the ticket's labels.
 # $T/events holds the repo's issue events, newest first.
 # $T/ready holds the open issues labelled ready, for start-waiting.sh: a lower number has carried ready longer.
 github() {
   echo '[]' > "$T/issues"
   echo '[]' > "$T/pulls"
   echo '{"labels":[{"name":"ready"}]}' > "$T/labels"
-  echo '[]' > "$T/comments"
   echo '[]' > "$T/events"
   : > "$T/fail"; : > "$T/after"; : > "$T/rival"
   stub gh '
@@ -23,7 +22,6 @@ github() {
       "pr list --state open "*) cat "$T/pulls" ;;
       "issue comment "*) ;;
       "issue view $3 --json labels "*) json "$(cat "$T/labels")" "$@" ;;
-      "api repos/{owner}/{repo}/issues/"[0-9]*"/timeline?per_page=100 --paginate "*) json "$(cat "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/events?per_page=100 "*) json "$(cat "$T/events")" "$@" ;;
       "issue edit "*)
         case "$*" in
@@ -49,18 +47,8 @@ pull() {
       labels: (if $label == "" then [] else [{name: $label}] end)}'
 }
 pulls_are() { printf '%s\n' "$@" | jq -cs . > "$T/pulls"; }
-# limit_flag <resets> [author] [label]: the ticket as flag-unfinished.sh leaves one whose build the usage limit ended.
-limit_flag() {
-  jq -cn --arg label "${3-needs-human}" '{labels: ([{name: "ready"}] + if $label == "" then [] else [{name: $label}] end)}' > "$T/labels"
-  jq -c --arg at "$1" --arg login "${2:-github-actions[bot]}" \
-    '. + [{event: "commented", user: {login: $login}, body: "<!-- factory:usage-limit \($at) -->The build ended with no pull request ready for review."}]' \
-    "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
-}
-# flagged_again: needs-human came off the ticket, and something else put it back.
-flagged_again() {
-  jq -c '. + [{event: "unlabeled", label: {name: "needs-human"}}, {event: "labeled", label: {name: "needs-human"}}]' \
-    "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
-}
+# limit_holds <resets>: the hold usage-limit.sh keeps on the sessions branch, with that reset time.
+limit_holds() { echo "$1" > "$T/usage-limit"; }
 soon=$(( $(date +%s) + 3600 ))
 past=$(( $(date +%s) - 60 ))
 when=$(jq -rn --argjson at "$soon" '$at | strftime("%Y-%m-%d %H:%M UTC")')
@@ -109,10 +97,10 @@ expect_written true
 expect_call "gh issue edit 12 --remove-label ready --remove-label needs-human --remove-label proposal --add-label in-progress"
 expect_place 12
 
-scenario "a proposal refused a place keeps proposal: a fourth waits with it"
+scenario "a proposal refused a place keeps proposal: a sixth waits with it"
 github
 proposal
-in_progress 20 21 22
+in_progress 20 21 22 28 29
 start
 expect_status 0
 expect_written false
@@ -130,18 +118,18 @@ expect_no_call "proposal"
 
 scenario "a proposal the usage limit holds keeps proposal"
 github
-limit_flag "$soon"
-jq -c '.labels += [{name: "proposal"}]' "$T/labels" > "$T/labels.new" && mv "$T/labels.new" "$T/labels"
+proposal
+limit_holds "$soon"
 start
 expect_status 0
 expect_written false
-expect_output "the Claude usage limit ended the last build of issue #12"
+expect_output "the Claude usage limit holds every agent until $when"
 expect_no_call "proposal"
 
 scenario "a proposal that steps back from the last place gets proposal back with ready"
 github
 proposal
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 12 13
 start
@@ -161,29 +149,43 @@ expect_output "Its place was given back"
 expect_call "gh issue edit 12 --remove-label in-progress --add-label proposal"
 expect_no_place 12
 
-scenario "with two in flight a third starts"
-github
-in_progress 20
-pulls_are "$(pull 31 fix/21-other-ticket app/claude needs-human)"
-start
-expect_status 0
-expect_written true
-expect_output "started: issue #12 takes a place, with 2 other tickets in flight"
-expect_place 12
-
-scenario "with three being built or checked a fourth waits: it keeps ready, and one comment names the three"
+scenario "with three being built or checked a fourth starts"
 github
 in_progress 20 22
 pulls_are "$(pull 30 feat/20-first-ticket)" "$(pull 31 fix/21-other-ticket)" "$(pull 33 fix/23-held-ticket app/claude needs-human)"
 start
 expect_status 0
+expect_written true
+expect_output "started: issue #12 takes a place, with 4 other tickets in flight"
+expect_no_call "gh issue comment"
+expect_place 12
+
+scenario "with four being built or checked a fifth starts"
+github
+in_progress 20 22 24
+pulls_are "$(pull 30 feat/20-first-ticket)" "$(pull 31 fix/21-other-ticket)" "$(pull 33 fix/23-held-ticket app/claude needs-human)"
+start
+expect_status 0
+expect_written true
+expect_output "started: issue #12 takes a place, with 5 other tickets in flight"
+expect_no_call "gh issue comment"
+expect_place 12
+
+scenario "with five being built or checked a sixth waits: it keeps ready, and one comment says why and names the five"
+github
+in_progress 20 22 24 25
+pulls_are "$(pull 30 feat/20-first-ticket)" "$(pull 31 fix/21-other-ticket)" "$(pull 33 fix/23-held-ticket app/claude needs-human)"
+start
+expect_status 0
 expect_written false
-expect_output "not started: 3 tickets are being built or checked, so issue #12 waits with ready until a place frees"
+expect_output "not started: 5 tickets are being built or checked, so issue #12 waits with ready until a place frees"
 [ "$(grep -c '^gh issue comment' "$T/calls")" -eq 1 ] || fail "expected one comment and no more"
-expect_call "gh issue comment 12 --body Waiting: 3 tickets are being built or checked, and that is the most the factory allows at once."
+expect_call "gh issue comment 12 --body Waiting: 5 tickets are being built or checked, and that is the most the factory allows at once."
 expect_call "- #20 (pull request #30)"
 expect_call "- #21 (pull request #31)"
 expect_call "- #22 (being built)"
+expect_call "- #24 (being built)"
+expect_call "- #25 (being built)"
 expect_no_call "#23"
 expect_call "This ticket keeps the \`ready\` label, and its build starts when one of them has merged, been closed or been left for a person."
 expect_no_call "gh issue edit"
@@ -191,7 +193,7 @@ expect_no_place 12
 
 scenario "a waiting ticket started when a place freed, and finding none, waits on and is not told twice"
 github
-in_progress 20 21 22
+in_progress 20 21 22 28 29
 start 12 workflow_dispatch
 expect_status 0
 expect_written false
@@ -213,19 +215,19 @@ expect_untouched
 
 scenario "a ticket and its pull request are one in flight, so two tickets with a pull request each leave a place"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 pulls_are "$(pull 30 feat/20-first-ticket)" "$(pull 31 fix/21-other-ticket)"
 start
 expect_written true
 
-scenario "two pull requests waiting for the owner hold no place a build needs: beside one ticket being built, a new ticket starts"
+scenario "two pull requests waiting for the owner hold no place a build needs: beside three tickets being built, a new ticket starts"
 github
-in_progress 22
+in_progress 22 28 29
 pulls_are "$(pull 30 feat/20-a-ticket app/claude needs-human)" "$(pull 31 fix/21-b-ticket app/claude needs-human)"
 start
 expect_status 0
 expect_written true
-expect_output "started: issue #12 takes a place, with 3 other tickets in flight"
+expect_output "started: issue #12 takes a place, with 5 other tickets in flight"
 expect_place 12
 expect_no_call "gh issue comment"
 
@@ -254,25 +256,25 @@ pulls_are "$(pull 30 feat/20-a-ticket app/claude needs-human)" "$(pull 31 fix/21
 start
 expect_written true
 
-scenario "a factory pull request that names no ticket takes one of the three places"
+scenario "a factory pull request that names no ticket takes one of the five places"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 pulls_are "$(pull 32 chore/no-ticket)"
 start
 expect_written false
 expect_call "- pull request #32, which names no ticket"
 expect_no_call "gh issue edit"
 
-scenario "a factory pull request that names no ticket and waits for the owner takes none of the three places"
+scenario "a factory pull request that names no ticket and waits for the owner takes none of the five places"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 pulls_are "$(pull 32 chore/no-ticket app/claude needs-human)"
 start
 expect_written true
 
 scenario "a person's pull requests take no place"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 pulls_are "$(pull 40 feat/40-mine ada)" "$(pull 41 feat/41-mine ada)"
 start
 expect_written true
@@ -318,12 +320,22 @@ expect_place 12
 
 scenario "another ticket's unfinished draft still takes a place"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 pulls_are "$(pull 131 feat/22-other-ticket app/claude needs-human true)"
 start
 expect_written false
 expect_call "- #22 (draft pull request #131, left unfinished)"
 expect_no_place 12
+
+scenario "another ticket's draft, cut short and waiting with ready, takes no place: beside four being built the build starts"
+github
+in_progress 20 21 28 29
+pulls_are "$(pull 131 feat/22-other-ticket app/claude "" true)"
+wait_with_ready 12 22
+start 12 workflow_dispatch
+expect_status 0
+expect_written true
+expect_place 12
 
 scenario "stops, with ready left on, when a ticket in-progress cannot be told why it was refused"
 github
@@ -345,9 +357,9 @@ expect_output "issue #12 is already in flight: #12 (pull request #31, waiting fo
 expect_call "gh issue edit 12 --remove-label ready"
 expect_no_call "gh issue comment"
 
-scenario "a ticket already in flight is refused as that, not as a fourth, when the places are full"
+scenario "a ticket already in flight is refused as that, not as a sixth, when the places are full"
 github
-in_progress 12 20 21
+in_progress 12 20 21 28 29
 start
 expect_written false
 expect_no_call "tickets are being built"
@@ -360,21 +372,21 @@ expect_written true
 
 scenario "two tickets labelled at the same moment do not both take the last place: the later one steps back and waits"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 12 13
 start
 expect_status 0
 expect_written false
 expect_call "gh issue edit 12 --remove-label in-progress --add-label ready"
-expect_call "gh issue comment 12 --body Waiting: 3 tickets are being built or checked, and that is the most the factory allows at once."
+expect_call "gh issue comment 12 --body Waiting: 5 tickets are being built or checked, and that is the most the factory allows at once."
 expect_call "- #13 (being built)"
 expect_call "Another ticket asked for the last place at the same moment as this one, and took it."
 expect_no_place 12
 
 scenario "the earlier of the two keeps the last place: they do not both step back"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 13 12
 start
@@ -384,27 +396,41 @@ expect_no_call "gh issue comment"
 expect_no_call "--remove-label in-progress"
 expect_place 12
 
-scenario "of five labelled together the third keeps its place and the fourth waits"
+scenario "of those labelled together the one that takes the fifth place keeps it and the next waits"
 github
-in_progress 10 11
+in_progress 10 11 28 29
 echo 13 > "$T/rival"
 took_places 14 13 12 11 10
 start
 expect_written true
 github
-in_progress 10 11 9
+in_progress 10 11 9 28 29
 echo 13 > "$T/rival"
 took_places 14 13 12 9 11 10
 start
 expect_written false
 expect_no_place 12
 
-scenario "a later ticket that held a place with its draft before is not stepped over"
+scenario "a later ticket whose build was cut short at a draft held no place before either: the earlier one keeps the last place"
 github
-in_progress 20
-pulls_are "$(pull 131 feat/13-other-ticket app/claude needs-human true)"
+in_progress 20 28 29
+pulls_are "$(pull 131 feat/13-other-ticket app/claude "" true)"
+wait_with_ready 12 13
 echo "13 21" > "$T/rival"
 took_places 13 12 21
+start
+expect_status 0
+expect_written true
+expect_no_call "gh issue comment"
+expect_place 12
+
+scenario "an earlier ticket being built in its draft keeps its place: the later one steps back"
+github
+in_progress 20 28 29
+pulls_are "$(pull 131 feat/13-other-ticket app/claude "" true)"
+wait_with_ready 12 13
+echo "13 21" > "$T/rival"
+took_places 12 13 21
 start
 expect_written false
 expect_call "- #13 (being built, in draft pull request #131)"
@@ -412,7 +438,7 @@ expect_no_place 12
 
 scenario "steps back when the list of events does not hold its own label: it cannot show it was first"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 13
 start
@@ -421,7 +447,7 @@ expect_no_place 12
 
 scenario "a waiting ticket that loses the last place at the same moment waits on with ready, and is not told twice"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 12 13
 start 12 workflow_dispatch
@@ -432,7 +458,7 @@ expect_no_call "gh issue comment"
 
 scenario "gives its place back when which ticket was first cannot be read"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 echo "api repos/{owner}/{repo}/issues/events" > "$T/fail"
 start
@@ -443,7 +469,7 @@ expect_no_place 12
 
 scenario "says so when the labels of a ticket that stepped back cannot be put back"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 12 13
 echo "issue edit" > "$T/after"
@@ -454,7 +480,7 @@ expect_output "it holds a place with no build until in-progress is removed by ha
 
 scenario "stops when a ticket that stepped back cannot be told it waits"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 echo 13 > "$T/rival"
 took_places 12 13
 echo "issue comment" > "$T/after"
@@ -466,7 +492,7 @@ expect_no_place 12
 
 scenario "two tickets labelled at the same moment both start when there is a place for each"
 github
-in_progress 20
+in_progress 20 28 29
 echo 13 > "$T/rival"
 start
 expect_written true
@@ -474,7 +500,7 @@ expect_place 12
 
 scenario "labelled while another waits beside one free place, it waits with a comment and the waiting ticket is started"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 wait_with_ready 12 5
 start
 expect_status 0
@@ -502,7 +528,7 @@ expect_no_place 12
 
 scenario "with a place for each, the waiting ticket is started and the new one takes the other"
 github
-in_progress 20
+in_progress 20 28 29
 wait_with_ready 12 5
 start
 expect_status 0
@@ -514,7 +540,7 @@ expect_place 12
 
 scenario "a ticket labelled before the others that carry ready takes the one place, and starts none of them"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 wait_with_ready 30 12 31
 start
 expect_status 0
@@ -524,7 +550,7 @@ expect_place 12
 
 scenario "a ticket started when a place freed was given it in order already: the waiting are not read again"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 wait_with_ready 12 5
 start 12 workflow_dispatch
 expect_status 0
@@ -555,7 +581,7 @@ expect_no_call "gh workflow run"
 
 scenario "takes the place itself when the build of the ticket ahead of it cannot be started"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 wait_with_ready 12 5
 echo "workflow run implement.yml -f issue=5" > "$T/fail"
 start
@@ -567,7 +593,7 @@ expect_place 12
 
 scenario "stops, with ready left on, when a ticket that gave way cannot be told it waits"
 github
-in_progress 20 21
+in_progress 20 21 28 29
 wait_with_ready 12 5
 echo "issue comment" > "$T/fail"
 start
@@ -576,25 +602,30 @@ expect_written false
 expect_output "the free place went to a ticket ahead of it in the queue, but it could not be told so. It keeps the ready label"
 expect_no_call "gh issue edit"
 
-scenario "a ticket flagged for the usage limit is refused before the reset time: ready comes off, and it is told when"
+scenario "while the usage limit holds every agent a build is refused with the reset time, and the ticket keeps ready"
 github
-limit_flag "$soon"
-wait_with_ready 5 12
+limit_holds "$soon"
 start
-expect_no_call "gh workflow run"
 expect_status 0
 expect_written false
-expect_output "not started: the Claude usage limit ended the last build of issue #12, and resets on $when"
-expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again after $when: the build starts then."
-expect_call "Not started: the Claude usage limit ended this ticket's last build, and it resets on $when."
-expect_call "gh issue edit 12 --remove-label ready"
-expect_no_call "--remove-label needs-human"
-expect_no_call "--add-label in-progress"
+expect_output "not started: the Claude usage limit holds every agent until $when, so issue #12 waits with ready"
+expect_call "gh issue comment 12 --body Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $when. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once."
+expect_no_call "gh issue edit"
+expect_no_call "gh workflow run implement.yml"
 expect_no_place 12
+
+scenario "a ticket the waiting were started from is refused the same way, and is not told again"
+github
+limit_holds "$soon"
+start 12 workflow_dispatch
+expect_status 0
+expect_written false
+expect_output "the Claude usage limit holds every agent until $when"
+expect_untouched
 
 scenario "the same ticket is started once the reset time has passed"
 github
-limit_flag "$past"
+limit_holds "$past"
 start
 expect_status 0
 expect_written true
@@ -602,94 +633,40 @@ expect_call "gh issue edit 12 --remove-label ready --remove-label needs-human --
 expect_no_call "gh issue comment"
 expect_place 12
 
-scenario "the latest flag decides: a limit met again after an earlier one reset still refuses"
-github
-limit_flag "$past"
-limit_flag "$soon"
-start
-expect_status 0
-expect_written false
-
-scenario "a ticket whose needs-human was taken off is started before the reset time: the owner knows the limit was lifted"
-github
-limit_flag "$soon" "" ""
-start
-expect_status 0
-expect_written true
-expect_no_call "/timeline"
-
-scenario "a ticket flagged for another reason after needs-human came off is started before the old reset time"
-github
-limit_flag "$soon"
-flagged_again
-start
-expect_status 0
-expect_written true
-expect_no_call "gh issue comment"
-
-scenario "a limit met again after needs-human came off still refuses"
-github
-limit_flag "$soon"
-flagged_again
-limit_flag "$soon"
-start
-expect_status 0
-expect_written false
-
-scenario "a reset time a person wrote in a comment holds no build back"
-github
-limit_flag "$soon" mallory
-start
-expect_status 0
-expect_written true
-
-scenario "a ticket flagged for another reason is started"
+scenario "a ticket flagged for a person is started when no limit holds"
 github
 echo '{"labels":[{"name":"ready"},{"name":"needs-human"}]}' > "$T/labels"
-echo '[{"event":"commented","user":{"login":"github-actions[bot]"},"body":"The build ended with no pull request ready for review: <!-- factory:usage-limit 99999999999 -->"}]' > "$T/comments"
 start
 expect_status 0
 expect_written true
 
-scenario "stops, with ready left on, when the ticket's labels cannot be read: that is not 'not flagged'"
+scenario "stops, with ready left on, when the hold cannot be read: that is not 'no limit'"
 github
-limit_flag "$soon"
+echo "api repos/{owner}/{repo}/contents/usage-limit" > "$T/fail"
+start
+expect_status 1
+expect_written false
+expect_output "Issue #12 was not started: whether the Claude usage limit holds every agent could not be read from GitHub. It keeps the ready label"
+expect_untouched
+
+scenario "stops, with ready left on, when a ticket the limit holds cannot be told so"
+github
+limit_holds "$soon"
+echo "issue comment" > "$T/fail"
+start
+expect_status 1
+expect_written false
+expect_output "because the Claude usage limit holds every agent until $when, but it could not be told so. It keeps the ready label"
+expect_no_call "gh issue edit"
+
+scenario "stops, with ready left on, when the ticket's labels cannot be read"
+github
 echo "issue view" > "$T/fail"
 start
 expect_status 1
 expect_written false
 expect_output "Issue #12 was not started: its labels could not be read from GitHub"
 expect_untouched
-
-scenario "stops, with ready left on, when the ticket's comments cannot be read: that is not 'no limit'"
-github
-limit_flag "$soon"
-echo "api repos/{owner}/{repo}/issues/12/timeline" > "$T/fail"
-start
-expect_status 1
-expect_written false
-expect_output "so it is not known whether a usage limit holds it"
-expect_untouched
-
-scenario "stops, with ready left on, when a ticket the limit holds cannot be told so"
-github
-limit_flag "$soon"
-echo "issue comment" > "$T/fail"
-start
-expect_status 1
-expect_written false
-expect_output "because the Claude usage limit has not reset, but it could not be told so"
-expect_no_call "gh issue edit"
-
-scenario "stops when ready cannot be taken off a ticket the limit holds"
-github
-limit_flag "$soon"
-echo "issue edit 12 --remove-label ready" > "$T/fail"
-start
-expect_status 1
-expect_written false
-expect_output "the ready label could not be taken off it"
-expect_no_place 12
 
 scenario "when GitHub cannot be reached, nothing starts and the message says why"
 github
@@ -737,9 +714,9 @@ expect_status 1
 expect_written false
 expect_output "it holds a place with no build until the label is removed by hand"
 
-scenario "stops, with ready left on, when a fourth ticket cannot be told that it waits"
+scenario "stops, with ready left on, when a sixth ticket cannot be told that it waits"
 github
-in_progress 20 21 22
+in_progress 20 21 22 28 29
 echo "issue comment" > "$T/fail"
 start
 expect_status 1
@@ -775,6 +752,8 @@ unguarded() {
     /^      - / { check(); if (placed) after = 1; step = $0; sub(/^      - (name: )?/, "", step); guarded = 0 }
     /^        id: place$/ { placed = 1 }
     /^        if: / && index($0, needs) { guarded = 1 }
+    # The run of a refused build is green, so a step for a failed or cancelled job does not run in it (decisions A20).
+    /^        if: (cancelled\(\)$|failure\(\) \|\| \(cancelled\(\) && )/ { guarded = 1 }
     END { check(); if (!after) print "(no step follows the one with id: place)" }' "$1"
 }
 unguarded_steps=$(unguarded "$workflow")

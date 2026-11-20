@@ -2,6 +2,7 @@
 # Tests for begin-fix-round.sh: whether a fix round goes ahead, and for whom; only gh and sleep are stand-ins.
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/fix-round-github.sh"
+. "$(dirname "$0")/sessions-remote.sh"
 
 round='{"id":2,"user":{"login":"github-actions[bot]"},"body":"<!-- factory:fix-round -->Fix round"}'
 
@@ -96,28 +97,6 @@ expect_status 0
 expect_written "go=true"
 grep -qF "===== conflict with main =====" "$T/failed.txt" || fail "expected the conflict to be in the file the engineer is given"
 
-scenario "a workflow change main has overtaken, with nothing failed, gets the round for a conflict"
-checks_failed; nothing_failed; overtaken_by_main
-begin
-expect_status 0
-expect_written "go=true"
-expect_written "counted=conflict"
-expect_written "head=$second"
-grep -qF "was changed by pull request #6" "$T/failed.txt" || fail "expected the engineer's file to name the pull request that overtook this one"
-
-scenario "an overtaken workflow change gets no second round for a conflict at the same head"
-checks_failed; nothing_failed; overtaken_by_main
-echo "[{\"id\":3,\"user\":{\"login\":\"github-actions[bot]\"},\"body\":\"<!-- factory:conflict-round $second -->The fix round for a conflict\"}]" > "$T/comments.json"
-begin
-expect_status 0
-expect_no_round
-
-scenario "an overtaken workflow change beside a failed job is fixed in a counted round"
-checks_failed; overtaken_by_main
-begin
-expect_written "counted=true"
-grep -qF "===== overtaken by main =====" "$T/failed.txt" || fail "expected the engineer's file to say main overtook the workflow change"
-
 scenario "a round begun with only a conflict reported is not counted, and says so"
 checks_failed; in_conflict; no_ci_run
 begin
@@ -128,23 +107,32 @@ expect_call "gh pr comment 7 --body A fix round for a conflict: Fred is fitting 
 expect_output "fix round for a conflict for pull request #7: Fred fixes feat/12-export-forecast-csv"
 expect_no_call "gh issue edit"
 
-scenario "a round begun with only fits-main failed is not counted, with a conflict reported or without"
+scenario "a round begun for a pull request a merge left out, with no failed job, is not counted, with a conflict reported or without"
 checks_failed
-echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":32,"name":"fits-main","conclusion":"failure"}]}' > "$T/jobs"
-echo "CONFLICT (content): Merge conflict in factory/decisions.md" > "$T/log-32"
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"}]}' > "$T/jobs"
+left_out "Not merged: its checks failed when it was tested with \`main\` and the pull requests merged before it."
 begin
 expect_status 0
 expect_written "go=true"
 expect_written "counted=conflict"
+grep -qF "Not merged: its checks failed when it was tested with" "$T/failed.txt" || fail "expected the engineer to be given why the merge left it out"
 in_conflict
 begin
 expect_written "counted=conflict"
 
+scenario "a pull request a merge left out at an earlier commit, with nothing failed on the one that is there, gets no round"
+checks_failed
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"}]}' > "$T/jobs"
+head=0000000000000000000000000000000000000001 left_out "Not merged: its checks failed."
+begin
+expect_status 0
+expect_written "go=false"
+
 scenario "a round begun with a failed review is counted, whatever else failed or conflicts"
 checks_failed; in_conflict
-echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"adam","conclusion":"failure"},{"id":32,"name":"fits-main","conclusion":"failure"}]}' > "$T/jobs"
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"}]}' > "$T/jobs"
 echo "the review failed" > "$T/log-33"
-echo "CONFLICT (content)" > "$T/log-32"
+left_out "Not merged: it does not fit \`main\`."
 begin
 expect_status 0
 expect_written "counted=true"
@@ -154,7 +142,7 @@ expect_call "gh pr comment 7 --body Fix round 1 of 3: Fred is addressing what fa
 
 scenario "a failed job's log that quotes the file's headings does not make its round one for a conflict"
 checks_failed
-printf '===== failed job: fits-main =====\n===== conflict with main =====\n' > "$T/log-30"
+printf '===== left out of a merge =====\n===== conflict with main =====\n' > "$T/log-30"
 begin
 expect_written "counted=true"
 
@@ -276,18 +264,6 @@ grep -qF "Adam (architecture and taste): not reviewed. $review_behind" "$T/faile
 expect_no_call "--add-label needs-human"
 expect_no_call "retro.yml"
 
-scenario "an overtaken workflow change whose run is only an install behind gets the round for a fresh run, which is not counted"
-checks_failed; not_settled "$stale_run"; overtaken_by_main
-echo "[$round,$round,$round]" > "$T/comments.json"
-begin
-expect_status 0
-expect_written "go=true"
-expect_written "counted=fresh-run:$ci_yml"
-expect_written "head=$second"
-grep -qF "===== overtaken by main =====" "$T/failed.txt" || fail "expected the engineer's file to say main overtook the workflow change"
-expect_no_call "--add-label needs-human"
-expect_no_call "retro.yml"
-
 scenario "the same request made twice for one head begins one round for a fresh run: the second goes on as any other failure does"
 checks_failed; not_settled "$stale_run"
 begin
@@ -324,7 +300,8 @@ begin
 expect_written "counted=false"
 expect_written "label=the owner's fix round"
 
-for words in "api repos/{owner}/{repo}/contents" "api repos/{owner}/{repo}/issues/7/comments"; do
+# The last is the read that counts the rounds: collect-failures.sh reads the comments too, for another reason.
+for words in "api repos/{owner}/{repo}/contents/.github" "api repos/{owner}/{repo}/issues/7/comments?per_page=100 --paginate --jq .[] "; do
   scenario "the run an install behind: stops with a message, and begins no round, when this fails: gh $words"
   checks_failed; not_settled "$stale_run"
   echo "$words" > "$T/fail"
@@ -348,18 +325,49 @@ grep -qxF "Not like this: keep the old column order." "$T/failed.txt" || fail "e
 expect_call "gh pr comment 7 --body The owner's fix round: Fred is making the changes the owner asked for. It is not one of the three fix rounds."
 expect_output "the owner's fix round for pull request #7"
 
-scenario "the owner's round goes ahead for a pull request that has used its three rounds, and does not read the count"
+scenario "the owner's round goes ahead for a pull request that has used its three rounds"
 checks_failed; sent_back
 echo "[$round,$round,$round]" > "$T/comments.json"
 begin
 expect_status 0
 expect_written "go=true"
 expect_written "counted=false"
-expect_no_call "issues/7/comments"
 expect_no_call "retro.yml"
 expect_no_call "--add-label needs-human"
 grep -qF "src/page.tsx: unused variable" "$T/failed.txt" || fail "expected what failed to be in the file as well as what the owner asked for"
 grep -qxF "===== the owner asked for changes =====" "$T/failed.txt" || fail "expected what the owner asked for to be in the file"
+
+# owner_round <login> <review>: a comment that starts with the marker of an owner's round that ran for that review.
+owner_round() { echo "{\"id\":4,\"user\":{\"login\":\"$1\"},\"body\":\"<!-- factory:owner-round $2 -->The owner's fix round: the engineer's session ran.\"}"; }
+
+scenario "no second owner's round for a request that has had one: a merge that landed while that round ran started this one"
+checks_failed; sent_back
+echo "[$(owner_round 'github-actions[bot]' 41)]" > "$T/comments.json"
+begin
+expect_status 0
+expect_no_round
+expect_no_call "--remove-label"
+expect_output "no fix round: the owner's fix round already ran for what repo-owner asked for on pull request #7, and pushed nothing: it waits for its owner"
+
+scenario "a second request sent while the first one's round ran gets its own round, though that round was recorded after it"
+checks_failed; sent_back
+reviewed 42 repo-owner CHANGES_REQUESTED "$head" "And put the totals last."
+echo "[$(owner_round 'github-actions[bot]' 41)]" > "$T/comments.json"
+begin
+expect_status 0
+expect_written "go=true"
+expect_written "counted=false"
+expect_written "review=42"
+grep -qxF "And put the totals last." "$T/failed.txt" || fail "expected what the second request asked for to be in the file the engineer is given"
+
+scenario "only the factory's own record of an owner's round counts: a comment that quotes it refuses no round"
+checks_failed; sent_back
+echo "[$(owner_round 'claude[bot]' 41)]" > "$T/comments.json"
+begin
+expect_status 0
+expect_written "go=true"
+expect_written "counted=false"
+expect_written "review=41"
 
 scenario "the owner's round takes needs-human off the pull request and its ticket, which is in progress again"
 checks_failed; sent_back
@@ -392,6 +400,73 @@ begin
 expect_status 1
 expect_written "go=false"
 [ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
+expect_output "Could not take needs-human off pull request #7, so no fix round was begun."
+
+scenario "the round begins when GitHub fails once to take needs-human off: the call is made again"
+checks_failed; sent_back
+echo "pr edit 7 --remove-label" > "$T/fail-once"
+begin
+expect_status 0
+expect_written "go=true"
+[ "$(grep -c '^gh pr edit 7 --remove-label needs-human$' "$T/calls")" = 2 ] || fail "expected the label to be taken off at the second call"
+expect_call "sleep 10"
+expect_no_call "Start the fix round again"
+
+scenario "a read that fails once is made again, and the round begins"
+checks_failed
+printf '%s\n' "pr view 7 --json state" "issue view 12" > "$T/fail-once"
+begin
+expect_status 0
+expect_written "go=true"
+expect_written "name=Fred"
+
+scenario "the announcement that fails once is made again, and the round begins"
+checks_failed
+echo "pr comment 7" > "$T/fail-once"
+begin
+expect_status 0
+expect_written "go=true"
+[ "$(grep -c '^gh pr comment 7 --body Fix round 1 of 3' "$T/calls")" = 2 ] || fail "expected the announcement to be made a second time"
+
+scenario "a round announced whose label never comes off: one comment says no round began and how to start one, and it ends with an error"
+checks_failed; sent_back
+echo "pr edit 7 --remove-label" > "$T/fail"
+: > "$T/outputs"
+run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_OUTPUT="$T/outputs" GITHUB_RUN_ID=900 GITHUB_SERVER_URL=https://github.example "$scripts/begin-fix-round.sh" 7 "$T/failed.txt" repo-owner
+expect_status 1
+expect_written "go=false"
+[ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
+[ "$(grep -c '^gh pr edit 7 --remove-label needs-human$' "$T/calls")" = 6 ] || fail "expected the label call to be made six times"
+expect_first_line "gh pr comment 7 --body" "Start the fix round again: \`gh workflow run fix.yml -f pr=7\`"
+[ "$(grep -c '^gh pr comment 7 --body Start the fix round again' "$T/calls")" = 1 ] || fail "expected one comment saying no round began"
+expect_call "No fix round began, though the comment before this one says one did: GitHub did not take the \`needs-human\` label off this pull request. The log has what GitHub answered: https://github.example/owner/myapp/actions/runs/900"
+expect_output "Could not take needs-human off pull request #7, so no fix round was begun."
+expect_no_call "gh issue edit"
+
+scenario "the owner's round whose ticket could not be marked in progress says on the pull request that no round began"
+checks_failed; sent_back
+echo "issue edit 12" > "$T/fail"
+begin
+expect_status 1
+expect_first_line "gh pr comment 7 --body" "Start the fix round again: \`gh workflow run fix.yml -f pr=7\`"
+expect_call "GitHub did not mark ticket #12 as in progress again."
+
+scenario "a round not announced gets no comment saying none began"
+checks_failed
+echo "pr comment 7" > "$T/fail"
+begin
+expect_status 1
+[ "$(grep -c '^gh pr comment 7 --body Fix round 1 of 3' "$T/calls")" = 6 ] || fail "expected the announcement to be tried six times"
+expect_no_call "Start the fix round again"
+expect_no_call "--remove-label"
+
+scenario "says so, and still ends with its error, when the comment that no round began cannot be posted"
+checks_failed
+printf '%s\n' "pr edit 7 --remove-label" "pr comment 7 --body Start" > "$T/fail"
+begin
+expect_status 1
+expect_written "go=false"
+expect_output "Could not say on pull request #7 that no fix round began."
 expect_output "Could not take needs-human off pull request #7, so no fix round was begun."
 
 scenario "only the owner's review makes the round the owner's: another reviewer's, or one a push answered, does not"
@@ -438,6 +513,7 @@ pr view 7 --json headRefOid --jq|What repo-owner asked for on pull request #7 co
 api repos/{owner}/{repo}/pulls/7/reviews?per_page|What repo-owner asked for on pull request #7 could not be read, so no fix round was begun.
 api repos/{owner}/{repo}/pulls/7/reviews/41|What repo-owner asked for on pull request #7 could not be read, so no fix round was begun.
 api repos/{owner}/{repo}/pulls/7/comments|What repo-owner asked for on pull request #7 could not be read, so no fix round was begun.
+api repos/{owner}/{repo}/issues/7/comments?per_page=100 --paginate --jq .[] |The owner's fix rounds of pull request #7 could not be counted, so no fix round was begun.
 pr comment 7|Could not say on pull request #7 that a fix round has begun, so it was not begun.
 pr edit 7 --remove-label|Could not take needs-human off pull request #7, so no fix round was begun.
 issue edit 12|Could not mark issue #12 as in progress again, so the owner's fix round on pull request #7 was not begun.
@@ -478,6 +554,64 @@ begin
 expect_status 0
 expect_no_round
 expect_output "nothing is there to fix on pull request #7"
+
+# GitHub started a ci run for the head only while it took the pull request for a draft (decisions A543a).
+only_skipped_run() { echo '[{"databaseId":901,"conclusion":"skipped"}]' > "$T/runs"; }
+
+scenario "a pull request whose head has only a skipped ci run gets a round to start the checks: not counted, and only marking it ready again to do"
+checks_failed; only_skipped_run
+begin
+expect_status 0
+expect_written "go=true"
+expect_written "counted=start-checks"
+expect_written "label=fix round to start the checks"
+! grep -q '^round=' "$T/outputs" || fail "expected no number among the three for a round to start the checks"
+expect_call "gh pr comment 7 --body A fix round to start the checks: Fred is marking this pull request ready for review again, which starts the checks its last commit 5555555 never had. Nothing failed, so it is not one of the three fix rounds."
+grep -qxF "Run: gh pr ready 7 --undo && gh pr ready 7" "$T/failed.txt" || fail "expected the engineer to be told to mark the pull request ready again"
+grep -qF "Push nothing and change nothing else in this round." "$T/failed.txt" || fail "expected the engineer to be told to push nothing"
+expect_no_call "runs/901/jobs"
+
+scenario "the same for a head with no ci run at all, and for a pull request that has used its three rounds, whose count is not read"
+checks_failed; no_ci_run
+echo "[$round,$round,$round]" > "$T/comments.json"
+begin
+expect_status 0
+expect_written "counted=start-checks"
+expect_no_call "issues/7/comments?per_page=100 --paginate --jq .[] "
+expect_no_call "retro.yml"
+
+scenario "a labelled pull request with no ci run that ran gets the round to start the checks, not a retest: main may hold nothing to merge"
+checks_failed; only_skipped_run; waits_for_main
+begin
+expect_status 0
+expect_written "counted=start-checks"
+expect_call "gh pr edit 7 --remove-label needs-human --remove-label waits-for-main"
+
+scenario "no round to start the checks of a draft, which its engineer is still building"
+checks_failed; only_skipped_run
+echo true > "$T/draft"
+begin
+expect_status 0
+expect_no_round
+expect_output "nothing is there to fix on pull request #7"
+
+scenario "the owner's round stays the owner's when no ci run of the head ran its jobs"
+checks_failed; only_skipped_run; sent_back
+begin
+expect_status 0
+expect_written "counted=false"
+
+scenario "stops with a message, and begins no round, when the ci runs cannot be listed to tell whether one ran its jobs"
+checks_failed; only_skipped_run
+# collect-failures.sh lists them first, and is answered: every later listing fails.
+mv "$T/bin/gh" "$T/bin/github"
+stub gh 'case "$*" in "run list "*) [ "$(grep -c "^gh run list " "$T/calls")" -le 2 ] || { echo "gh: failed: $*" >&2; exit 1; } ;; esac; exec "$T/bin/github" "$@"'
+begin
+expect_status 1
+expect_written "go=false"
+[ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
+expect_output "Could not list the ci runs for 5555555, the head of pull request #7, so no fix round was begun."
+expect_no_call "gh pr comment"
 
 scenario "refuses anything that is not a pull request number"
 checks_failed
@@ -549,7 +683,7 @@ while IFS='|' read -r words message; do
 done <<'CALLS'
 pr view 7 --json state|Could not read pull request #7 from GitHub, so no fix round was begun.
 api repos/{owner}/{repo}/pulls/7/reviews|What repo-owner asked for on pull request #7 could not be read, so no fix round was begun.
-api repos/{owner}/{repo}/issues/7/comments|The fix rounds of pull request #7 could not be counted, so no fix round was begun.
+api repos/{owner}/{repo}/issues/7/comments?per_page=100 --paginate --jq .[] |The fix rounds of pull request #7 could not be counted, so no fix round was begun.
 pr view 7 --json headRefOid,baseRefName|What failed on pull request #7 could not be read, so no fix round was begun.
 run list|What failed on pull request #7 could not be read, so no fix round was begun.
 api repos/owner/myapp/actions/runs/900/jobs|What failed on pull request #7 could not be read, so no fix round was begun.
@@ -579,7 +713,7 @@ echo "[$round,$round,$round]" > "$T/comments.json"
 begin
 expect_status 0
 expect_written "counted=retest"
-expect_no_call "issues/7/comments"
+expect_no_call "issues/7/comments?per_page=100 --paginate --jq .[] "
 expect_no_call "retro.yml"
 
 scenario "a pull request without the label keeps it off the call, and its round is counted"
@@ -626,3 +760,27 @@ scenario "leaves nothing behind but the file the engineer is given"
 checks_failed
 begin
 [ -z "$(find "$T/work" "$T/tmp" -mindepth 1)" ] || fail "expected no file left in the working or temporary directory"
+
+scenario "while the Claude usage limit holds every agent no round begins: the run keeps its place, and the pull request is told when it starts"
+checks_failed
+sessions_remote sessions
+hold_is 99999999999
+: > "$T/outputs"
+run env GITHUB_OUTPUT="$T/outputs" GITHUB_RUN_ID=900 "$scripts/begin-fix-round.sh" 7 "$T/failed.txt"
+expect_status 0
+[ "$(cat "$T/outputs")" = "held=true"$'\n'"go=false" ] || fail "expected it to write held=true and go=false, got: $(cat "$T/outputs")"
+expect_output "no fix round: the Claude usage limit holds every agent until 5138-11-16 09:46 UTC: a fix round starts after it"
+[ "$(the_hold)" = "99999999999"$'\n'"run 900" ] || fail "expected run 900 to keep its place on the sessions branch, got: $(the_hold)"
+expect_first_line "gh issue comment 7 --body" "Nothing to do: a fix round starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."
+expect_no_call "gh pr edit"
+expect_no_call "gh pr comment"
+[ ! -e "$T/failed.txt" ] || fail "expected nothing to be collected for a round that does not begin"
+
+scenario "stops with a message, and begins no round, when the hold of the usage limit cannot be read"
+checks_failed
+echo "api repos/{owner}/{repo}/contents/usage-limit" > "$T/fail"
+begin
+expect_status 1
+expect_output "Whether the Claude usage limit holds every agent is not known, so no fix round was begun for pull request #7."
+expect_no_call "gh pr edit"
+expect_no_call "gh pr comment"

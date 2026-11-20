@@ -1,17 +1,57 @@
 #!/usr/bin/env bash
-# Runs the factory scripts' own tests, every factory/tests/*.test.sh, as the first part of `pnpm test` (decisions H3).
-# Usage: test-factory.sh   (from the repo root)
+# Runs the factory scripts' own tests, in factory/tests/*.test.sh, as the first part of `pnpm test` (decisions H3).
+# Usage: test-factory.sh [<commit-of-main>]   (from the repo root)
+#        With no commit, every test file runs. With one, only those the change since that commit can affect
+#        (decisions H429a), and every one when that cannot be worked out (H429d).
 set -euo pipefail
+
+main="${1:-}"
 
 # Every file is run even after one fails, so one push shows everything that is broken (decisions H21).
 failed=0
 passed=0
 files=0
 # Listed on a line of its own, so a failed listing is not taken for a folder with no test in it (decisions H106).
-if ! tests=$(git ls-files 'factory/tests/*.test.sh'); then
+# Paths as they are: git would put one with a letter outside ASCII in quotes, and no such file could be run.
+if ! tests=$(git -c core.quotePath=false ls-files 'factory/tests/*.test.sh'); then
   echo "test-factory.sh must be run inside a git repository: it could not list the test files with git ls-files, so no test was run."
   exit 1
 fi
+
+# affected: prints the test files that the change since $main can affect (decisions H429a, H429b, H429e).
+affected() {
+  local changed names found boundary='A-Za-z0-9_-'
+  # Read as checks-needed.sh reads them (decisions H268d).
+  changed=$(git -c core.quotePath=false diff --name-only --no-renames "$main" HEAD) || return 1
+  # What every test file is run by, or reads by its folder (decisions H429c).
+  if grep -qE '^(factory/workflows/|\.github/|factory/scripts/test-factory\.sh$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$)' <<<"$changed"; then
+    echo "$tests"
+    return 0
+  fi
+  # A changed file by its name, and a changed script's own test file, which H3 names after it.
+  names=$(sed -E 's|.*/||' <<<"$changed"; sed -n -E 's|^factory/scripts/(.*)\.sh$|\1.test.sh|p' <<<"$changed")
+  while :; do
+    names=$(sort -u <<<"$names" | sed '/^$/d')
+    [ -n "$names" ] || return 0
+    names_pattern="($(sed -E "s/[^$boundary]/\\\\&/g" <<<"$names" | paste -sd '|' -))"
+    # The shell files that hold one of the names as a whole word, on a line that is not a comment.
+    found=$(git -c core.quotePath=false grep -l -E -e "^[[:space:]]*([^#[:space:]].*[^$boundary]|[^#[:space:]$boundary])?$names_pattern(\$|[^$boundary])" -- '*.sh') \
+      || [ $? -eq 1 ] || return 1
+    found=$(sed -E 's|.*/||' <<<"$found"$'\n'"$names" | sort -u | sed '/^$/d')
+    [ "$found" != "$names" ] || break
+    names=$found
+  done
+  grep -E "^factory/tests/$names_pattern\$" <<<"$tests" || true
+}
+if [ -n "$main" ]; then
+  if chosen=$(affected); then
+    echo "The change since $main can affect $(grep -c . <<<"$chosen" || true) of the $(grep -c . <<<"$tests" || true) test files, and only those run."
+    tests=$chosen
+  else
+    echo "test-factory.sh could not work out which test files the change since $main can affect, so every test file runs."
+  fi
+fi
+
 # As many files at once as the machine has processors, each writing to a file of its own (decisions H249a, H249b).
 if ! processors=$(getconf _NPROCESSORS_ONLN); then
   echo "test-factory.sh could not read how many processors the machine has with getconf, so no test was run."

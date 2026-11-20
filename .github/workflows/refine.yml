@@ -60,7 +60,7 @@ jobs:
           # She comments on and closes this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
           # The mode denies what the list does not cover: the action's own default lets a review pass it (decisions A353b, A353e).
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 60 --permission-mode default
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
             --allowedTools "Read,Edit(.refine/**),Glob,Grep,Bash(factory/scripts/file-slice.sh ${{ env.ISSUE }}:*),Bash(gh issue comment ${{ env.ISSUE }} --body-file:*),Bash(gh issue close ${{ env.ISSUE }}:*)"
 
       - name: Save the session transcript

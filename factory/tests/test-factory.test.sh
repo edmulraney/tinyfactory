@@ -146,3 +146,154 @@ run "$scripts/test-factory.sh"
 expect_status 1
 expect_output "FAILED factory/tests/two.test.sh: test-factory.sh could not read what it printed"
 expect_no_output "factory tests ok"
+
+# changed <path>...: a repo of scripts and their test files, then a commit that changes these paths; $T/ran is
+# where each test file that runs leaves its name, and `ran` prints those names on one line.
+changed() {
+  local script path
+  git init -q -b main .
+  mkdir -p factory/tests factory/scripts factory/workflows factory/decisions "$T/ran"
+  echo "# the stand-ins" > factory/tests/helpers.sh
+  echo "on: push" > factory/workflows/ci.yml
+  echo "# Retro" > SKILL.md
+  echo 'echo shipping' > factory/scripts/shipping.sh
+  # shellcheck disable=SC2016
+  {
+    echo '. "$(dirname "$0")/shipping.sh"' > factory/scripts/ship.sh
+    echo '  "$script_dir/ship.sh" "$pr"' > factory/scripts/approve-merge.sh
+    echo '# Waits as ship.sh waits.' > factory/scripts/watch.sh
+    echo 'echo again' > factory/scripts/re-ship.sh
+    echo 'grep -q lesson "$root/SKILL.md"' > factory/scripts/retro-lesson.sh
+    echo 'echo each file' > factory/scripts/test-factory.sh
+    for script in shipping ship approve-merge watch re-ship retro-lesson test-factory; do
+      printf '. "$(dirname "$0")/helpers.sh"\n: "$scripts/%s.sh"\ntouch "$RAN/%s"\necho "ok - %s"\n' "$script" "$script" "$script" \
+        > "factory/tests/$script.test.sh"
+    done
+  }
+  git add .
+  git commit -q -m "main"
+  for path in "$@"; do
+    mkdir -p "$(dirname "$path")"
+    echo "# changed" >> "$path"
+  done
+  git add .
+  git commit -q --allow-empty -m "the change"
+}
+ran() { ls "$T/ran" | paste -sd ' ' -; }
+# expect_ran <names>: exactly the test files of these scripts ran, and all passed.
+expect_ran() {
+  expect_status 0
+  [ "$(ran)" = "$1" ] || fail "expected the test files of \"$1\" to run, and these ran: \"$(ran)\""
+}
+
+scenario "given main's commit, a change to a script nothing else runs starts its own test file alone"
+changed factory/scripts/watch.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "watch"
+expect_output "The change since HEAD^ can affect 1 of the 7 test files, and only those run."
+expect_output "factory tests ok: 1 passed in 1 files"
+
+scenario "a change to shipping.sh starts the test files of the script that sources it and of the script that runs that one"
+changed factory/scripts/shipping.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge ship shipping"
+
+scenario "a script is found by its whole name, outside comments: ship.sh is not re-ship.sh, and watch.sh only writes of it"
+changed factory/scripts/ship.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge ship"
+
+scenario "a changed script starts the test file named after it, also when that file does not name the script"
+changed
+printf 'touch "$RAN/watch"\necho "ok - watch"\n' > factory/tests/watch.test.sh
+git commit -q -a -m "a test that names nothing"
+echo "# changed" >> factory/scripts/watch.sh
+git commit -q -a -m "the change"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "watch"
+
+scenario "a change to helpers.sh starts every test file, since each sources it"
+changed factory/tests/helpers.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "factory tests ok: 7 passed in 7 files"
+
+scenario "a change to test-factory.sh starts every test file"
+changed factory/scripts/test-factory.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+
+scenario "a change to a workflow starts every test file"
+changed factory/workflows/ci.yml
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+
+scenario "a change to one of the root's package files, or under .github/, starts every test file"
+changed pnpm-lock.yaml
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+rm "$T/ran"/*
+echo "# changed" > .github-file && mkdir -p .github/actions/setup && mv .github-file .github/actions/setup/action.yml
+git add . && git commit -q -m "a shared action"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+
+scenario "a changed test file runs, and so does one more for each other changed script"
+changed factory/tests/re-ship.test.sh factory/scripts/watch.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "re-ship watch"
+
+scenario "a changed document starts the test file of the script that reads it"
+changed SKILL.md
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "retro-lesson"
+
+scenario "a change no shell file names starts no test file, and passes"
+changed factory/decisions/429.md apps/web/page.tsx
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran ""
+expect_output "The change since HEAD^ can affect 0 of the 7 test files, and only those run."
+expect_output "factory tests ok: 0 passed in 0 files"
+
+scenario "a changed script with a letter outside ASCII in its name is read as it is, and starts its test file"
+changed
+echo 'echo deployed' > "factory/scripts/déploy.sh"
+printf 'touch "$RAN/déploy"\necho "ok - déploy"\n' > "factory/tests/déploy.test.sh"
+git add .
+git commit -q -m "a script"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "déploy"
+
+scenario "a script with a letter outside ASCII in its name that sources the changed file starts its test file"
+changed
+# shellcheck disable=SC2016
+{
+  echo '. "$(dirname "$0")/shipping.sh"' > "factory/scripts/déploy.sh"
+  printf ': "$scripts/déploy.sh"\ntouch "$RAN/déploy"\necho "ok - déploy"\n' > "factory/tests/déploy.test.sh"
+}
+git add .
+git commit -q -m "a script"
+echo "# changed" >> factory/scripts/shipping.sh
+git commit -q -a -m "the change"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge déploy ship shipping"
+
+scenario "with no commit every test file runs, whatever changed"
+changed factory/scripts/watch.sh
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_no_output "can affect"
+
+scenario "runs every test file, and says so, when the changed files cannot be read"
+changed factory/scripts/watch.sh
+RAN="$T/ran" run "$scripts/test-factory.sh" 0000000000000000000000000000000000000000
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "could not work out which test files the change since 0000000000000000000000000000000000000000 can affect, so every test file runs."
+
+scenario "runs every test file, and says so, when the shell files cannot be searched"
+changed factory/scripts/watch.sh
+git=$(command -v git)
+stub git "case \" \$* \" in *' grep '*) exit 2 ;; *) exec \"$git\" \"\$@\" ;; esac"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "so every test file runs."

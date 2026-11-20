@@ -15,23 +15,28 @@ concurrency:
 env:
   PR: ${{ inputs.pr }}
   OWNER: ${{ github.repository_owner }}
-  # No background commands in a session with nobody in it (decisions A69f).
-  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+  # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A475b).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\""}]}]}}'
 
 jobs:
   fix:
-    runs-on: ubuntu-latest
+    # The owner's runner when they named one (decisions A426a).
+    runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 60
     permissions:
       contents: write
       pull-requests: write
       issues: write
-      # To read the failed jobs' logs, and to start the retro when no round is left (decisions A89h).
+      # To read the failed jobs' logs, and to start the retro when no round is left or this job failed (decisions A89h, A20).
       actions: write
       # To show the round in the pull request's checks (decisions A124d).
       statuses: write
       id-token: write
     steps:
+      # No session reads what an earlier one left in the home folder (decisions A426c).
+      - name: Give the job a home folder of its own on the owner's runner
+        if: vars.AGENT_RUNNER
+        run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           # Main's copy of the scripts, not the pull request's, and main as it is now (decisions A29).
@@ -90,7 +95,7 @@ jobs:
             You are ${{ steps.round.outputs.name }}. Read ${{ steps.round.outputs.skill }} and follow its "Fixing a pull request" section for pull request #${{ inputs.pr }} in this repository. Its branch, ${{ steps.round.outputs.branch }}, is checked out.
             What there is to fix is in ${{ runner.temp }}/failed-checks.txt: the tails of the failed job logs, a conflict with main if there is one, and what the repo's owner asked for if they sent the pull request back. Review findings are in the pull request's comments.
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # Nothing pushed: continued twice at most, with a wait first when the model's API failed (decisions A69a, A69b).
       - name: Was the session cut short? First look
@@ -116,7 +121,7 @@ jobs:
           prompt: ${{ steps.cut1.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut1.outputs.session }}
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # `again`: an engineer told once that nothing was pushed is not asked a second time (decisions A69g).
       - name: Was the session cut short again? Second and last look
@@ -142,7 +147,7 @@ jobs:
           prompt: ${{ steps.cut2.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut2.outputs.session }}
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # Every run of the action writes the same file, so this saves the last one.
       - name: Save the session transcript
@@ -168,7 +173,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}
         run: |
-          "$RUNNER_TEMP/factory-scripts/record-fix-round.sh" "$PR" "$FILE" "${{ steps.round.outputs.counted }}" "${{ steps.round.outputs.head }}"
+          "$RUNNER_TEMP/factory-scripts/record-fix-round.sh" "$PR" "$FILE" "${{ steps.round.outputs.counted }}" "${{ steps.round.outputs.head }}" "${{ steps.round.outputs.review }}"
       # A round that pushed nothing starts no checks, so nobody would be told (decisions A69d, A20, A48c).
       - name: Keep the work and ask for a person if the round pushed nothing
         if: always() && steps.record.outcome == 'success'
@@ -179,6 +184,36 @@ jobs:
           FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}
         run: |
           "$RUNNER_TEMP/factory-scripts/flag-unfinished.sh" fix "$PR" "$FILE" "$BEFORE" "${{ steps.round.outputs.counted }}"
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 60   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1
       # Last, to tell how the job stands, on the commit the round began with; it cannot fail the job (decisions A124e).
       - name: Show in the pull request's checks how the round ended
         if: always() && steps.round.outputs.go == 'true'

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Tests for factory/scripts/start-refine.sh, which decides whether Peta runs for an idea and what she reads.
 . "$(dirname "$0")/helpers.sh"
+. "$(dirname "$0")/sessions-remote.sh"
 
 # github: issue 12 is an open idea with Peta's proposal, the owner's answer and a stranger's comment; $T/fail holds a word of the call to fail.
 github() {
@@ -12,10 +13,12 @@ github() {
   stub gh '
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
     case "$*" in
+      "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github ;;
       "api repos/{owner}/{repo}/issues/12") cat "$T/issue" ;;
       "api repos/{owner}/{repo}/issues/comments/"*) all="$*"; id=${all#*comments/}; id=${id%% *}
         json "$(jq --argjson id "$id" ".[] | select(.id == \$id)" "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/12/comments?per_page=100 --paginate "*) json "$(cat "$T/comments")" "$@" ;;
+      "issue comment 12 --body "*) ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
@@ -169,4 +172,26 @@ start 3
 expect_status 1
 expect_written false
 expect_output "Could not read the comments on issue #12 from GitHub"
+expect_no_file
+
+scenario "while the Claude usage limit holds every agent Peta does not run: the run keeps its place, and the idea is told when she does"
+github
+sessions_remote sessions
+hold_is 99999999999
+: > "$T/outputs"
+run env GITHUB_OUTPUT="$T/outputs" GITHUB_RUN_ID=900 "$scripts/start-refine.sh" 12 owner "$T/work/.refine/idea.md" 3
+expect_status 0
+[ "$(cat "$T/outputs")" = "held=true"$'\n'"start=false" ] || fail "expected it to write held=true and start=false, got: $(cat "$T/outputs")"
+expect_output "not started: the Claude usage limit holds every agent until 5138-11-16 09:46 UTC: Peta's run on this idea starts after it"
+[ "$(the_hold)" = "99999999999"$'\n'"run 900" ] || fail "expected run 900 to keep its place on the sessions branch, got: $(the_hold)"
+expect_first_line "gh issue comment 12 --body" "Nothing to do: Peta's run on this idea starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."
+expect_no_file
+
+scenario "stops when the hold of the usage limit cannot be read"
+github
+echo "contents/usage-limit" > "$T/fail"
+start 3
+expect_status 1
+[ "$(cat "$T/outputs")" = "held=true"$'\n'"start=false" ] || fail "expected it to write held=true and start=false, got: $(cat "$T/outputs")"
+expect_output "Whether the Claude usage limit holds every agent is not known, so Peta did not run for issue #12."
 expect_no_file

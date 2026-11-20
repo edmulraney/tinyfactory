@@ -61,35 +61,40 @@ expect_status 0
 [ -f "$T/failed.txt" ] && [ ! -s "$T/failed.txt" ] || fail "expected an empty file"
 expect_output "wrote 0 lines"
 
+scenario "writes why a merge left the pull request out at this commit, which no job of its ci run shows"
+checks_failed; nothing_failed
+left_out "Not merged: its checks failed when it was tested with \`main\` and the pull requests merged before it.
+
+lint: apps/web/broken is not allowed"
+collect 7
+expect_status 0
+expect_in_file "===== left out of a merge ====="
+expect_in_file "Not merged: its checks failed when it was tested with"
+expect_in_file "lint: apps/web/broken is not allowed"
+expect_not_in_file "factory:merge-queue"
+[ "$(grep -c '^===== ' "$T/failed.txt")" = 1 ] || fail "expected one heading: the scripts that read the file count them"
+
+scenario "writes nothing of a merge that left the pull request out at an earlier commit"
+checks_failed; nothing_failed
+head=0000000000000000000000000000000000000001 left_out "Not merged: its checks failed."
+collect 7
+expect_status 0
+[ ! -s "$T/failed.txt" ] || fail "expected an empty file, got: $(cat "$T/failed.txt")"
+
+scenario "stops, and leaves no file, when whether a merge left it out cannot be read"
+checks_failed
+echo "api repos/{owner}/{repo}/issues/7/comments" > "$T/fail"
+collect 7
+expect_failure
+expect_output "Could not read whether a merge left pull request #7 out, so what there is to fix on it is not known."
+[ ! -e "$T/failed.txt" ] || fail "expected no file to be left"
+
 scenario "asks again while GitHub is still working out whether the pull request conflicts"
 checks_failed; nothing_failed
 printf 'UNKNOWN\nUNKNOWN\nCONFLICTING\n' > "$T/mergeable"
 collect 7
 expect_in_file "===== conflict with main ====="
 [ "$(grep -c '^gh pr view 7' "$T/calls")" = 3 ] || fail "expected three askings, got $(grep -c '^gh pr view 7' "$T/calls")"
-
-scenario "says which workflow source main has overtaken and who did, with no job failed and no conflict, and how to fix it"
-checks_failed; nothing_failed; overtaken_by_main
-collect 7
-expect_status 0
-expect_in_file "===== overtaken by main ====="
-expect_in_file "\`factory/workflows/ci.yml\` on \`main\` was changed by pull request #6 after this pull request's diff of it was made."
-expect_in_file "Merge main into the branch (git fetch origin main && git merge origin/main), keep both changes and push; the new commit is then checked and merged like any other."
-[ "$(grep -c '^===== ' "$T/failed.txt")" = 1 ] || fail "expected one heading: the scripts that read the file count them"
-
-scenario "writes nothing about a workflow change main has not overtaken"
-checks_failed; nothing_failed; overtaken_by_main; merge_main_into_second; head=$second
-collect 7
-expect_status 0
-[ -f "$T/failed.txt" ] && [ ! -s "$T/failed.txt" ] || fail "expected an empty file"
-
-scenario "stops, and leaves no file, when what main did to an overtaken source cannot be read"
-checks_failed; overtaken_by_main
-echo "api --method GET repos/{owner}/{repo}/contents/factory/workflows" > "$T/fail"
-collect 7
-expect_status 1
-expect_output "Could not read whether main has overtaken a workflow change in pull request #7"
-[ ! -e "$T/failed.txt" ] || fail "expected no file to be left: a failed read is not \"nothing failed\""
 
 scenario "asks only six times, and writes no conflict GitHub never reported"
 checks_failed; nothing_failed
@@ -133,7 +138,7 @@ stub gh '
     *"/runs/900/jobs "*) json "$(cat "$T/jobs")" "$@" ;;
     "pr view 7 "*) json "{\"headRefOid\":\"$head\",\"baseRefName\":\"main\",\"mergeable\":\"MERGEABLE\"}" "$@" ;;
     "run list "*) json "$(cat "$T/runs")" "$@" ;;
-    *"/pulls/7/files "*) json "[]" "$@" ;;
+    *"/pulls/7/files "* | *"/issues/7/comments"*) json "[]" "$@" ;;
     *) exit 1 ;;
   esac'
 collect 7
@@ -172,7 +177,6 @@ done <<'CALLS'
 pr view 7|Could not read pull request #7 from GitHub, so what failed on it is not known.
 run list|Could not list the ci runs for 5555555, the head of pull request #7
 api repos/owner/myapp/actions/runs/900/jobs|Could not list the jobs of workflow run 900, so which of them failed is not known.
-api repos/{owner}/{repo}/pulls/7/files|Could not read whether main has overtaken a workflow change in pull request #7, so what there is to fix on it is not known.
 CALLS
 
 scenario "without a pull request number, is refused with its usage, and asks GitHub nothing"

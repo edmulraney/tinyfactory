@@ -34,12 +34,13 @@ fetch() {
   done <<<"$files"
 }
 
-# cost_of <pr>: one pull request's figures as JSON, from run-facts.sh and GitHub (decisions H221a).
+# cost_of <pr> [issue]: one pull request's figures as JSON, from run-facts.sh and GitHub (decisions H221a).
+#   issue is the ticket it closes, when the caller has read it.
 cost_of() {
-  local pr="$1" facts branch issue listed named run more jobs="" events="" labels
+  local pr="$1" issue="${2:-}" facts branch listed named run more jobs="" events="" labels
   if [ "$fetched" = yes ]; then
     # linked-issue.sh says for itself what it could not read, and so does run-facts.sh.
-    issue=$("$script_dir/linked-issue.sh" "$pr") || exit 1
+    [ -n "$issue" ] || issue=$("$script_dir/linked-issue.sh" "$pr") || exit 1
     fetch "pr-$pr"
     [ -z "$issue" ] || fetch "issue-$issue"
   fi
@@ -56,7 +57,7 @@ cost_of() {
   named=$(jq -r '.agents[].file | capture("-run(?<id>[0-9]+)\\.json$") | .id' <<<"$facts")
   for run in $(printf '%s\n%s\n' "$listed" "$named" | sort -un); do
     more=$(gh api --method GET "repos/{owner}/{repo}/actions/runs/$run/jobs" -f filter=all -f per_page=100 --paginate \
-        --jq '.jobs[] | [.run_id, .started_at // "", .completed_at // "", .conclusion // "", .workflow_name // ""] | @tsv') \
+        --jq '.jobs[] | [.run_id, .started_at // "", .completed_at // "", .conclusion // "", .workflow_name // "", .runner_id // 0, .runner_group_name // ""] | @tsv') \
       || die "Could not read the jobs of workflow run $run, so the Actions minutes of pull request #$pr are not known."
     jobs+="$more"$'\n'
   done
@@ -83,7 +84,7 @@ cost_of() {
           ([$in[] | select(.from <= $at[$i] and .to >= $at[$i + 1]) | .kind]) as $kinds
           | (["build", "fix", "review"] | map(select(. as $kind | $kinds | index($kind))) | .[0] // "waiting") as $kind
           | .[$kind] += $at[$i + 1] - $at[$i]);
-    {implement: "build", fix: "fix", ci: "review", "approve-merge": "review", "rerun-fits-main": "review"} as $kinds
+    {implement: "build", fix: "fix", ci: "review", "approve-merge": "review"} as $kinds
     | [$events | split("\n")[] | select(. != "") | split("\t") | {on: .[0], event: .[1], label: .[2], at: (.[3] | at)}] as $labels
     # Decisions H221d.
     | ($labels | map(select(.on == "ticket" and .event == "labeled" and .label == "ready") | .at) | min) as $ready
@@ -91,9 +92,12 @@ cost_of() {
     # Unreadable, or ended with no result: run-facts.sh gives neither a cost.
     | ($facts.agents | map(select(.cost_usd != null))) as $read
     # A whole minute for each job, and one still running counted to now (decisions H221b).
-    | [$jobs | split("\n")[] | select(. != "") | split("\t") | select(.[3] != "skipped" and .[1] != "")
-       | {run: .[0], kind: $kinds[.[4]], from: (.[1] | at), to: ((if .[2] == "" then now | todate else .[2] end) | at)}
-       | select(.to > .from) | .minutes = ((.to - .from) / 60 | ceil)] as $billed
+    # A job cancelled while it waited for a runner has a start and an end, and no runner: it is billed nothing.
+    # So is a job on a runner the owner keeps, which stays here for the time it ran (decisions H426).
+    | [$jobs | split("\n")[] | select(. != "") | split("\t") | select(.[3] != "skipped" and .[1] != "" and .[5] != "0")
+       | {run: .[0], kind: $kinds[.[4]], from: (.[1] | at), to: ((if .[2] == "" then now | todate else .[2] end) | at),
+          own: (.[6] != "" and .[6] != "GitHub Actions")}
+       | select(.to > .from) | .minutes = (if .own then 0 else (.to - .from) / 60 | ceil end)] as $billed
     | {
       pr: $facts.pr, issue: $facts.issue, title: $facts.title, merged_at: $facts.merged_at,
       cost_usd: ($read | map(.cost_usd) | add // 0),
@@ -121,7 +125,7 @@ words='
   def dollars: (.cost_usd * 100 | round) as $cents
     | "$\($cents / 100 | floor).\($cents % 100 | tostring | if length < 2 then "0" + . else . end)";
   def unread: if .unread == 0 then ""
-    else "; \(.unread | plural("more transcript")) could not be read, so " + (if .unread == 1 then "its cost is" else "their cost is" end) + " not in the sum" end;
+    else "; \(.unread | plural("more transcript")) gave no cost" end;
   def models: if (.models | length) == 0 then "not known" else .models | join(", ") end;
   def rounds: "\(.fix_rounds)" + (if .owner_rounds > 0 then ", and \(.owner_rounds) the owner asked for" else "" end);
   def took: if .seconds == null then (if .issue == null then "not known: the pull request closes no ticket" else "not known: the ticket was never labelled `ready`" end)
@@ -180,11 +184,14 @@ merged=$(gh api "repos/{owner}/{repo}/pulls?state=closed&per_page=100" --paginat
   || die "Could not list the pull requests merged in $month, so what its tickets cost is not known."
 rows=""
 for pr in $(sort -n <<<"$merged"); do
-  cost=$(cost_of "$pr") || exit 1
+  # linked-issue.sh says for itself what it could not read.
+  issue=$("$script_dir/linked-issue.sh" "$pr") || exit 1
+  [ -n "$issue" ] || continue
+  cost=$(cost_of "$pr" "$issue") || exit 1
   rows+="$cost"$'\n'
 done
 jq -rn --arg rows "$rows" --arg month "$month" "$words"'
-  [$rows | split("\n")[] | select(. != "") | fromjson | select(.issue != null)]
+  [$rows | split("\n")[] | select(. != "") | fromjson]
   | if length == 0 then "No ticket had its pull request merged in \($month)."
     else "| Ticket | Claude usage | Sessions | Model | Actions minutes | Runs | Fix rounds | Ready to merged |",
          "|---|---|---|---|---|---|---|---|",

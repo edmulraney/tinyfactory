@@ -58,7 +58,7 @@ A file listed in `.claude/skills/bootstrap/manifest.txt`, and every template, is
 ## Off limits
 
 - **Every ticket here is a `factory` ticket,** and only **Fred** builds one. His pull request merges once both reviewers pass it, unless it changes what only the owner decides (`factory/scripts/owner-decides.sh`), which waits for their approval:
-  - **spend or limits:** a model, effort, turn limit or timeout, a free plan's limit, the tickets in flight;
+  - **spend or limits:** a model, effort, turn limit or timeout, the tickets in flight;
   - **secrets or permissions:** a `permissions:` block, a secret, a token or key script, the tools or bots an agent may use;
   - **this rule:** the scripts that decide the hold.
 - **The bar:** `TASTE.md` and `CLAUDE.md`. Whoever changes one, the pull request waits for the owner.
@@ -66,4 +66,4 @@ A file listed in `.claude/skills/bootstrap/manifest.txt`, and every template, is
 
 ## Every change is a ticket
 
-When the owner asks for something, do not make the change yourself. Write a Factory ticket (the `ticket` skill) and start it (the `promote` skill); the factory builds it. The two exceptions are a setup step that needs the owner's own logins, and a hand step to unstick the factory, as the `operate` skill limits it (`factory/decisions.md` A120b).
+When the owner asks for something, do not make the change yourself. Write a Factory ticket (the `ticket` skill) and start it (the `promote` skill); the factory builds it. The two exceptions are a setup step that needs the owner's own logins, and a hand step to unstick the factory, as the `operate` skill limits it (`factory/decisions.md` [A120b](factory/decisions/120.md)).

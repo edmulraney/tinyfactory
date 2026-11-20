@@ -58,7 +58,7 @@ expect_call "gh issue edit 12 --remove-label in-progress --add-label needs-human
 
 scenario "a ticket told why it was not built, with a ticket waiting with ready, starts the waiting ticket's build"
 github
-echo '[{"number":20},{"number":21}]' > "$T/issues"
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
 echo '[{"number":31},{"number":30}]' > "$T/ready"
 give_back 12 true
 expect_status 0
@@ -76,9 +76,9 @@ expect_call "gh issue comment 12"
 expect_no_call "labels=ready"
 expect_no_call "gh workflow run"
 
-scenario "with three still in flight it starts no waiting ticket"
+scenario "with five still in flight it starts no waiting ticket"
 github
-echo '[{"number":20},{"number":21},{"number":22}]' > "$T/issues"
+echo '[{"number":20},{"number":21},{"number":22},{"number":28},{"number":29}]' > "$T/issues"
 echo '[{"number":30}]' > "$T/ready"
 give_back 12 true
 expect_status 0

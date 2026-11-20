@@ -2,11 +2,12 @@
 # Decides, as the first step of refine.yml, whether Peta runs for an idea, and writes what she reads to a file.
 # Usage: start-refine.sh <issue-number> <owner-login> <file> [comment-id]
 #        The comment is the one that started the run; with none, the `idea` label did.
-#        Writes start=true or start=false to GITHUB_OUTPUT. Needs GH_TOKEN (issues: read).
+#        Writes start=true or start=false to GITHUB_OUTPUT. Needs GH_TOKEN (issues and contents: write) and GITHUB_REPOSITORY.
 set -euo pipefail
 
 usage="Usage: start-refine.sh <issue-number> <owner-login> <file> [comment-id]"
 issue="${1:?$usage}"; owner="${2:?$usage}"; file="${3:?$usage}"; comment="${4:-}"
+script_dir="$(cd "$(dirname "$0")" && pwd)"
 outputs="${GITHUB_OUTPUT:-/dev/null}"
 
 # A refusal exits 0: the workflow runs no later step and ends green.
@@ -34,6 +35,11 @@ if [ -n "$comment" ]; then
   jq -e '(.body // "") | ascii_downcase | contains("@claude") | not' <<<"$started_by" >/dev/null \
     || refuse "the comment holds @claude, which the mention agent answers"
 fi
+
+# Peta does not run while the Claude usage limit holds every agent: usage-limit.sh runs this run again (decisions A231b, A395b).
+limit=$("$script_dir/usage-limit.sh" wait "$issue" "Peta's run on this idea") \
+  || die "Whether the Claude usage limit holds every agent is not known, so Peta did not run for issue #$issue."
+[ -z "$limit" ] || refuse "$limit"
 
 # Her own comments are the Claude app's; anyone else's is left out, so she cannot act on it (decisions A353c).
 # So is the owner's comment that holds @claude, and each comment by the job's token, which the mention agent replies with (decisions A372h).

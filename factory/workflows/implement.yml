@@ -22,19 +22,24 @@ env:
 jobs:
   implement:
     if: github.event.label.name == 'ready' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    # The owner's runner when they named one (decisions A426a).
+    runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 60
     permissions:
       contents: write
       issues: write
       pull-requests: write
-      # To start a fix round for a pull request marked ready in conflict (decisions A124f).
+      # To start a fix round for a pull request marked ready in conflict (decisions A124f), and the retro (decisions A20).
       actions: write
       id-token: write
     steps:
+      # No session reads what an earlier one left in the home folder (decisions A426c).
+      - name: Give the job a home folder of its own on the owner's runner
+        if: vars.AGENT_RUNNER
+        run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
 
-      # Three tickets built or checked at most, and never two builds of one ticket (decisions T64a to T64e).
+      # A limit on the tickets built or checked at once, and never two builds of one ticket (decisions T64a to T64e).
       - name: Take a place among the tickets in flight
         id: place
         env:
@@ -82,7 +87,7 @@ jobs:
                             echo "skill=.claude/skills/factory-engineer/SKILL.md" >> "$GITHUB_OUTPUT" ;;
             *" research "*) echo "name=Rosa" >> "$GITHUB_OUTPUT"; echo "role=rosa" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/research/SKILL.md" >> "$GITHUB_OUTPUT"
-                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*)" ;;
+                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
             *)              echo "name=Esme" >> "$GITHUB_OUTPUT"; echo "role=esme" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/implement/SKILL.md" >> "$GITHUB_OUTPUT" ;;
           esac
@@ -125,7 +130,7 @@ jobs:
             You are ${{ steps.engineer.outputs.name }}. Read ${{ steps.engineer.outputs.skill }} and follow its "Implementing an issue" section for issue #${{ env.ISSUE }} in this repository.
             ${{ steps.earlier.outputs.note }}
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
 
       # Continued twice at most, with a wait first when the model's API failed (decisions A69a, A69b).
@@ -151,7 +156,7 @@ jobs:
           prompt: ${{ steps.cut1.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut1.outputs.session }}
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
       - name: Was the session cut short again? Second and last look
         id: cut2
@@ -175,7 +180,7 @@ jobs:
           prompt: ${{ steps.cut2.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut2.outputs.session }}
-            --model claude-fable-5-2 --effort medium --max-turns 200
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
 
       # Every run of the action writes the same file, so this saves the last one.
@@ -195,6 +200,25 @@ jobs:
             ${{ runner.temp }}/cut-short-sessions
           retention-days: 90
 
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 60   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+
       - name: Keep the work and flag the ticket if no pull request ready for review came out
         if: always() && steps.place.outputs.start == 'true' && steps.agent.outcome != 'skipped'
         env:
@@ -203,7 +227,7 @@ jobs:
           FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}
         # A pull request that came out in conflict with main gets a fix round from it (decisions A124a).
         run: |
-          "$RUNNER_TEMP/factory-scripts/flag-unfinished.sh" build "$ISSUE" "$FILE"
+          "$RUNNER_TEMP/factory-scripts/flag-unfinished.sh" build "$ISSUE" "$FILE" "${{ steps.limit.outputs.reached }}"
 
       # Last, as a step's outcome is not known before its turn: the ticket would hold a place unbuilt (decisions T64g).
       - name: Give the place back when the build never began
@@ -212,3 +236,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
         run: factory/scripts/give-back-place.sh "$ISSUE" "${{ steps.validate.outputs.notified }}"
+
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

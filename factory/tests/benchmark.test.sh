@@ -2,7 +2,7 @@
 # Tests for benchmark.sh, on a repo of its own, an origin that holds its pull requests, and a stand-in for the model.
 . "$(dirname "$0")/helpers.sh"
 
-# A repo whose origin holds `main` and pull request #7, one commit ahead of it, and a ci.yml with each reviewer's job.
+# A repo whose origin holds `main` and pull request #7, one commit ahead of it, and a ci.yml with the reviewers' job.
 # The stand-in for claude answers Adam from $T/adam and Ryan from $T/ryan, and notes the commit it was run in,
 # the commits it can reach and the refs it holds.
 repo() {
@@ -13,35 +13,25 @@ repo() {
 jobs:
   checks:
     env:
-      REVIEW_SCHEMA: '{"for":"nobody"}'
-  adam:
-    env:
-      # Why.
-      REVIEW_SCHEMA: '{"kinds":["design"]}'
+      ADAM_SCHEMA: '{"for":"nobody"}'
     steps:
-      - with:
-          prompt: |
+      - run: echo --max-turns 5 --allowedTools "Read"
+  review:
+    steps:
+      - env:
+          # Why.
+          ADAM_SCHEMA: '{"kinds":["design"]}'
+          RYAN_SCHEMA: '{"kinds":["bug"]}'
+          ADAM_PROMPT: |
             You are Adam. Read .claude/skills/review-architecture/SKILL.md and follow it to review pull request #${{ github.event.pull_request.number }} in this repository.
 
-            ${{ steps.scope.outputs.brief }}
-          claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 40
-            --allowedTools "Read,Glob,Bash(gh pr view:*),Bash(gh issue view:*),Bash(git diff:*),Bash(git log:*)"
-      - with:
-          prompt: ${{ steps.cut1.outputs.prompt }}
-          claude_args: |
-            --max-turns 5
-            --allowedTools "Read"
-  ryan:
-    env:
-      REVIEW_SCHEMA: '{"kinds":["bug"]}'
-    steps:
-      - with:
-          prompt: |
+            ${{ steps.scope-adam.outputs.brief }}
+          RYAN_PROMPT: |
             You are Ryan. Read .claude/skills/review-code/SKILL.md and follow it to review pull request #${{ github.event.pull_request.number }} in this repository.
-          claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 30
-            --allowedTools "Read,Grep,Bash(gh pr diff:*),Bash(git diff:*)"
+        run: |
+          factory/scripts/review.sh "$PR" adam ryan -- \
+            --model claude-fable-5-2 --effort medium --max-turns 40 \
+            --allowedTools "Read,Glob,Bash(gh pr view:*),Bash(gh issue view:*),Bash(git diff:*),Bash(git log:*)"
 CI
   git add . && git commit -q -m "main"
   base=$(git rev-parse HEAD)
@@ -171,14 +161,13 @@ expect_call "# Connect the database"
 expect_call "The health check reports the database."
 expect_call "--model claude-opus-5-5 --effort high --max-turns"
 
-scenario "each reviewer is given its own job's prompt, turn limit, tools less gh and format from ci.yml"
+scenario "each reviewer is given its own prompt and format, and the review job's turn limit and tools less gh, from ci.yml"
 repo
 benchmark
 expect_status 0
 expect_call "claude -p You are Adam. Read .claude/skills/review-architecture/SKILL.md and follow it to review pull request #7 in this repository."
 expect_call "claude -p You are Ryan. Read .claude/skills/review-code/SKILL.md and follow it to review pull request #7 in this repository."
 expect_call '--max-turns 40 --allowedTools Read,Glob,Bash(git diff:*),Bash(git log:*) --disallowedTools Bash(gh:*)'
-expect_call '--max-turns 30 --allowedTools Read,Grep,Bash(git diff:*) --disallowedTools Bash(gh:*)'
 expect_call '--json-schema {"kinds":["design"]} --output-format json'
 expect_call '--json-schema {"kinds":["bug"]} --output-format json'
 expect_no_call "nobody"
@@ -313,11 +302,11 @@ expect_no_call "claude"
 scenario "ci.yml lacks a reviewer's format, prompt, turn limit or tools: stops before any review"
 repo
 cp factory/workflows/ci.yml "$T/ci"
-for lacking in '"bug"' 'You are Ryan' 'max-turns 30' 'allowedTools "Read,Grep'; do
+for lacking in '"bug"' 'You are Ryan' 'max-turns 40' 'allowedTools "Read,Glob'; do
   grep -v -- "$lacking" "$T/ci" > factory/workflows/ci.yml
   benchmark
   expect_failure
-  expect_output "The ryan job in factory/workflows/ci.yml does not hold a REVIEW_SCHEMA, a prompt for pull request #"
+  expect_output "The review job in factory/workflows/ci.yml does not hold "
   expect_no_call "claude"
 done
 

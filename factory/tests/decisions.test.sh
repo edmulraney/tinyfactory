@@ -127,7 +127,7 @@ show
 expect_status 1
 expect_output "decisions.md: there is no such decision record"
 
-# No merge attribute is set, so git merges here as GitHub and the fits-main job do (decisions M95).
+# No merge attribute is set, so git merges here as GitHub and the test of a group do (decisions M95).
 branches() {
   git init --quiet --initial-branch=main .
   record

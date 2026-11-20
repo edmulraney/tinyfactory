@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Tests for factory/scripts/post-verdict.sh, which posts a reviewer's findings and lets their kinds decide the job.
 . "$(dirname "$0")/helpers.sh"
+. "$(dirname "$0")/sessions-remote.sh"
 
 # $T/fail lists the gh calls, by their first words, that fail; $T/posted keeps what was posted, $T/kept the notes kept.
 a_review() {
@@ -19,6 +20,7 @@ a_review() {
     done < "$T/fail"
     case "$*" in
       "pr view 7 --json author --jq .author.login") cat "$T/author" ;;
+      "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github ;;
       "pr comment 7 --body-file "*) cat "$5" >> "$T/posted" ;;
       "pr comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
       "pr edit 7 --add-label needs-human") ;;
@@ -216,7 +218,7 @@ expect_refused_for() {
   [ "${2:-bug}" = bug ] || reviewer="Adam (architecture and taste)"
   expect_status 1
   expect_posted "Its verdict was refused, because each of its findings is \`${2:-bug}\` or \`out-of-scope\`, and these are not: $1. It is not posted, so no fix round starts"
-  expect_posted "Run the failed job again in https://github.com/owner/repo/actions/runs/900"
+  expect_posted "Run the failed jobs again in https://github.com/owner/repo/actions/runs/900"
   [[ "$(cat "$T/posted")" != *": FAIL**"* && "$(cat "$T/posted")" != *": PASS**"* ]] || fail "expected it to be posted as neither a pass nor a fail"
   [[ "$(cat "$T/posted")" != *"Wrong."* ]] || fail "expected no finding to be posted"
   [[ "$(cat "$T/posted")" != *"factory:assumptions"* ]] || fail "expected no hidden list a script could take for a verdict's"
@@ -380,7 +382,7 @@ OUTPUT="{\"findings\":[{\"file\":\"a.ts\",\"kind\":\"misbehaves\",\"problem\":\"
 expect_status 1
 expect_posted "Its verdict was refused, because a field holds 40 words at most and a verdict 3 assumptions: finding 2's \`fix\` is 41 words."
 expect_posted "no fix round starts"
-expect_posted "Run the failed job again in https://github.com/owner/repo/actions/runs/900"
+expect_posted "Run the failed jobs again in https://github.com/owner/repo/actions/runs/900"
 [[ "$(cat "$T/posted")" != *": FAIL**"* ]] || fail "expected it not to be posted as a fail"
 [[ "$(cat "$T/posted")" != *"word word"* ]] || fail "expected the long field not to be posted"
 [[ "$(cat "$T/posted")" != *"Nothing is known to be wrong"* ]] || fail "expected a refused fail not to be called a pull request with nothing wrong"
@@ -460,21 +462,23 @@ expect_status 1
 expect_posted "**Adam (architecture and taste): review not finished.**"
 expect_posted "The review ended without a verdict: the model's API was overloaded (error 529)."
 expect_posted "no fix round starts"
-expect_posted "Run the failed job again in https://github.com/owner/repo/actions/runs/900"
+expect_posted "Run the failed jobs again in https://github.com/owner/repo/actions/runs/900"
 expect_call "gh pr edit 7 --add-label needs-human"
 grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
 [[ "$(cat "$T/posted")" != *": FAIL**"* ]] || fail "expected it not to be posted as a fail"
 [[ "$(cat "$T/posted")" != *": no verdict"* ]] || fail "expected it not to use the words run-facts.sh counts as a fail"
 
-# in_a_run [installed]: a ci run checked out in $T/work; with `installed`, a changed ci.yml has since landed on main.
+# in_a_run [installed]: a ci run with the base checked out in $T/work; with `installed`, a changed ci.yml landed on main after it began.
 in_a_run() {
   git init --quiet --initial-branch=main "$T/origin"
   mkdir -p "$T/origin/.github/workflows"
   echo "name: ci" > "$T/origin/.github/workflows/ci.yml"
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "the workflow"
-  git clone --quiet "$T/origin" "$T/work"
+  git -C "$T/origin" config uploadpack.allowAnySHA1InWant true
+  GITHUB_WORKFLOW_SHA=$(git -C "$T/origin" rev-parse HEAD)
   [ "${1:-}" != installed ] || { echo "name: ci, changed" > "$T/origin/.github/workflows/ci.yml"; git -C "$T/origin" commit --quiet -am "ci: install ci.yml"; }
-  export GITHUB_WORKFLOW_REF=owner/repo/.github/workflows/ci.yml@refs/pull/7/merge GITHUB_BASE_REF=main
+  git clone --quiet "$T/origin" "$T/work"
+  export GITHUB_WORKFLOW_SHA GITHUB_WORKFLOW_REF=owner/repo/.github/workflows/ci.yml@refs/pull/7/merge GITHUB_BASE_REF=main
 }
 
 scenario "no verdict in a run whose ci.yml differs from main's at review time: the job fails so that a fresh run is asked for, and no person is"
@@ -548,7 +552,7 @@ git remote set-url origin "$T/nowhere"
 OUTPUT="" run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_status 1
 expect_posted "review not finished"
-[ "$(sed -n 1p "$T/posted")" = "**Adam (architecture and taste): review not finished.** Run the failed job again in https://github.com/owner/repo/actions/runs/900: the reviewer then reviews this pull request." ] && [ -z "$(sed -n 2p "$T/posted")" ] \
+[ "$(sed -n 1p "$T/posted")" = "**Adam (architecture and taste): review not finished.** Run the failed jobs again in https://github.com/owner/repo/actions/runs/900: the reviewer then reviews this pull request." ] && [ -z "$(sed -n 2p "$T/posted")" ] \
   || fail "expected the comment's first line to say what a person must do, got: $(head -n 1 "$T/posted")"
 expect_call "gh pr edit 7 --add-label needs-human"
 grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
@@ -635,3 +639,42 @@ a_review
 echo "pr comment" > "$T/fail"
 OUTPUT='{"findings":[]}' run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_failure
+
+# limit_ended <resets>: the review's session ended at the Claude usage limit, which resets then.
+limit_ended() {
+  printf '[{"type":"system","subtype":"init","session_id":"c22ab626"},{"type":"rate_limit_event","rate_limit_info":{"status":"rejected","resetsAt":%s}},{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"result":"You'\''ve hit your Fable limit · resets Nov 23, 11am (UTC). Switch to another model to continue.","session_id":"c22ab626"}]\n' "$1" > "$T/session.json"
+}
+
+scenario "a review the usage limit ended holds every agent until the reset time, keeps its place and asks for no person"
+sessions_remote sessions
+a_review
+limit_ended 99999999999
+OUTPUT="" run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
+expect_status 1
+[ "$(the_hold)" = "99999999999"$'\n'"failed 900" ] || fail "expected the reset time, and run 900 to be run again for its failed jobs, got: $(the_hold)"
+[ "$(sort -u "$T/outputs")" = "cut-short=true"$'\n'"held=true" ] || fail "expected the job to be marked cut short and held, so no fix round starts, got: $(cat "$T/outputs")"
+[[ "$(cat "$T/kept")" == "Nothing to do: Adam's review starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."* ]] \
+  || fail "expected the pull request to be told when the review starts, got: $(cat "$T/kept")"
+expect_no_call "needs-human"
+[ ! -s "$T/posted" ] || fail "expected no other comment, got: $(cat "$T/posted")"
+
+scenario "a review the usage limit ended asks for a person, as any cut short, when the reset time cannot be written"
+sessions_remote sessions
+refuses_pushes
+a_review
+limit_ended 99999999999
+OUTPUT="" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7 "$T/session.json"
+expect_status 1
+expect_posted "**Ryan (correctness): review not finished.**"
+expect_posted "The review ended without a verdict: the Claude usage limit was reached"
+expect_call "gh pr edit 7 --add-label needs-human"
+grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
+
+scenario "a review ended by a usage limit that has since reset asks for a person too"
+sessions_remote sessions
+a_review
+limit_ended 1000000000
+OUTPUT="" run "$scripts/post-verdict.sh" "Ryan (correctness)" 7 "$T/session.json"
+expect_status 1
+expect_posted "**Ryan (correctness): review not finished.**"
+expect_call "gh pr edit 7 --add-label needs-human"
