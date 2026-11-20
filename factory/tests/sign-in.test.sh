@@ -30,6 +30,12 @@ a_product() {
     esac'
   stub npx '
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "could not connect" >&2; exit 1; fi
+    # Asked of every call about the sign-in of a branch, before the call is answered. A case of its own, because
+    # the bash a Mac ships has no `;;&` to carry on to the next pattern.
+    case "$*" in "--yes neonctl@latest api /projects/quiet-wood-1/branches/"*"/auth/"*)
+      id=${4#/projects/quiet-wood-1/branches/}; id=${id%%/*}
+      if grep -qxF -- "$id" "$T/no-auth"; then echo "ERROR: Neon Auth is not enabled for this branch" >&2; exit 1; fi ;;
+    esac
     case "$*" in
       "--yes vercel@latest api /v9/projects/myapp/env --raw")
         if [ -f "$T/second-read-fails" ] && grep -q "neon-auth enable" "$T/calls"; then echo "could not connect" >&2; exit 1; fi
@@ -42,9 +48,6 @@ a_product() {
       "--yes neonctl@latest neon-auth status --project-id quiet-wood-1 --branch "*" --output json")
         if grep -qxF -- "$8" "$T/no-auth"; then printf "\nNeon Auth is not configured for this branch\n\n"; exit 0; fi
         echo "{\"auth_provider\":\"better_auth\",\"branch_id\":\"$8\",\"base_url\":\"https://ep-$8.neonauth.aws.neon.tech/neondb/auth\"}" ;;
-      "--yes neonctl@latest api /projects/quiet-wood-1/branches/"*"/auth/"*)
-        id=${4#/projects/quiet-wood-1/branches/}; id=${id%%/*}
-        if grep -qxF -- "$id" "$T/no-auth"; then echo "ERROR: Neon Auth is not enabled for this branch" >&2; exit 1; fi ;;&
       "--yes neonctl@latest api /projects/quiet-wood-1/branches/"*"/auth/plugins")
         if [ -f "$T/read-back-fails" ] && grep -q "PATCH" "$T/calls"; then echo "could not connect" >&2; exit 1; fi
         id=${4#/projects/quiet-wood-1/branches/}; id=${id%/auth/plugins}
