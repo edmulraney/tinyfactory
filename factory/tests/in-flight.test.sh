@@ -2,9 +2,11 @@
 # Tests for factory/scripts/in-flight.sh: the tickets in flight, one per line.
 . "$(dirname "$0")/helpers.sh"
 
-# $T/issues and $T/pulls hold what gh prints; $T/fail holds the start of each call that should fail.
+# $T/issues and $T/pulls hold what gh prints, and $T/ready the open issues labelled ready; $T/fail holds the start
+# of each call that should fail.
 github() {
   echo '[]' > "$T/issues"
+  echo '[]' > "$T/ready"
   echo '[]' > "$T/pulls"
   : > "$T/fail"
   stub gh '
@@ -13,6 +15,7 @@ github() {
     done < "$T/fail"
     case "$*" in
       "api repos/{owner}/{repo}/issues?state=open&labels=in-progress&per_page=100 --paginate --jq "*) json "$(cat "$T/issues")" "$@" ;;
+      "api repos/{owner}/{repo}/issues?state=open&labels=ready&per_page=100 --paginate --jq "*) json "$(cat "$T/ready")" "$@" ;;
       "pr list --state open --limit 100 --json number,headRefName,author,labels,isDraft") cat "$T/pulls" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -32,9 +35,16 @@ expect_lines() {
 # full <line>...: asks whether a further build may start beside these lines.
 full() { run "$scripts/in-flight.sh" full <<<"$(printf '%s\n' "$@")"; }
 
-scenario "with two tickets being built or checked a further build may start: it prints nothing, and asks GitHub nothing"
+scenario "with three tickets being built or checked a fourth build may start: it prints nothing, and asks GitHub nothing"
 github
-full "20 #20 (being built)" "21 #21 (pull request #31)"
+full "20 #20 (being built)" "21 #21 (pull request #31)" "24 #24 (being built)"
+expect_status 0
+expect_lines ""
+expect_no_call "gh "
+
+scenario "with four tickets being built or checked a fifth build may start"
+github
+full "20 #20 (being built)" "21 #21 (pull request #31)" "24 #24 (being built)" "25 #25 (pull request #35)"
 expect_status 0
 expect_lines ""
 expect_no_call "gh "
@@ -45,20 +55,23 @@ full ""
 expect_status 0
 expect_lines ""
 
-scenario "three being built or checked are the limit: it says so, what frees a place, and which three"
+scenario "five being built or checked are the limit: it says so, what frees a place, and which five"
 github
 full "20 #20 (being built, in draft pull request #30)" "21 #21 (pull request #31)" \
-  "22 #22 (pull request #32, waiting for a person)" "23 #23 (draft pull request #33, left unfinished)"
+  "22 #22 (pull request #32, waiting for a person)" "23 #23 (draft pull request #33, left unfinished)" \
+  "24 #24 (being built)" "25 #25 (pull request #35)"
 expect_status 0
-expect_lines "3 tickets are being built or checked
+expect_lines "5 tickets are being built or checked
 one of them has merged, been closed or been left for a person
 20 #20 (being built, in draft pull request #30)
 21 #21 (pull request #31)
-23 #23 (draft pull request #33, left unfinished)"
+23 #23 (draft pull request #33, left unfinished)
+24 #24 (being built)
+25 #25 (pull request #35)"
 
-scenario "a pull request waiting for the owner is not being built: four of them beside two builds leave a place"
+scenario "a pull request waiting for the owner is not being built: four of them beside four builds leave a place"
 github
-full "20 #20 (being built)" "21 #21 (pull request #31)" "22 #22 (pull request #32, waiting for a person)" \
+full "20 #20 (being built)" "21 #21 (pull request #31)" "26 #26 (being built)" "27 #27 (being built)" "22 #22 (pull request #32, waiting for a person)" \
   "23 #23 (pull request #33, waiting for a person)" "24 #24 (pull request #34, waiting for a person)" \
   "25 #25 (pull request #35, waiting for a person)"
 expect_status 0
@@ -79,21 +92,24 @@ the owner has merged or closed one of them
 
 scenario "a ticket with one pull request waiting for the owner and another in review is still being checked"
 github
-full "20 #20 (being built)" "21 #21 (being built)" "22 #22 (pull request #32, waiting for a person; pull request #36)"
+full "20 #20 (being built)" "21 #21 (being built)" "26 #26 (being built)" "27 #27 (being built)" \
+  "22 #22 (pull request #32, waiting for a person; pull request #36)"
 expect_status 0
-expect_output "3 tickets are being built or checked"
+expect_output "5 tickets are being built or checked"
 expect_output "22 #22 (pull request #32, waiting for a person; pull request #36)"
 
 scenario "a factory pull request that names no ticket is counted with those being built"
 github
-full "20 #20 (being built)" "21 #21 (being built)" "- pull request #120, which names no ticket"
+full "20 #20 (being built)" "21 #21 (being built)" "26 #26 (being built)" "27 #27 (being built)" \
+  "- pull request #120, which names no ticket"
 expect_status 0
-expect_output "3 tickets are being built or checked"
+expect_output "5 tickets are being built or checked"
 expect_output "- pull request #120, which names no ticket"
 
 scenario "a factory pull request that names no ticket and waits for the owner is counted with those that wait"
 github
-full "20 #20 (being built)" "21 #21 (being built)" "- pull request #120, which names no ticket, waiting for a person"
+full "20 #20 (being built)" "21 #21 (being built)" "26 #26 (being built)" "27 #27 (being built)" \
+  "- pull request #120, which names no ticket, waiting for a person"
 expect_status 0
 expect_lines ""
 full "22 #22 (pull request #32, waiting for a person)" "23 #23 (pull request #33, waiting for a person)" \
@@ -101,6 +117,27 @@ full "22 #22 (pull request #32, waiting for a person)" "23 #23 (pull request #33
   "- pull request #120, which names no ticket, waiting for a person"
 expect_output "5 pull requests wait for the owner"
 expect_output "- pull request #120, which names no ticket, waiting for a person"
+
+scenario "a ticket cut short that waits with ready holds no place: beside four being built a further build may start"
+github
+full "20 #20 (being built)" "21 #21 (pull request #31)" "24 #24 (being built)" "25 #25 (pull request #35)" \
+  "23 #23 (waiting with ready; draft pull request #33, left unfinished)" \
+  "26 #26 (waiting with ready; draft pull request #36, left unfinished)"
+expect_status 0
+expect_lines ""
+
+scenario "a ticket cut short that waits with ready is not named among the five that hold the places"
+github
+full "20 #20 (being built)" "21 #21 (pull request #31)" "24 #24 (being built)" "25 #25 (pull request #35)" \
+  "23 #23 (waiting with ready; draft pull request #33, left unfinished)" "27 #27 (being built, in draft pull request #37)"
+expect_status 0
+expect_lines "5 tickets are being built or checked
+one of them has merged, been closed or been left for a person
+20 #20 (being built)
+21 #21 (pull request #31)
+24 #24 (being built)
+25 #25 (pull request #35)
+27 #27 (being built, in draft pull request #37)"
 
 scenario "prints nothing when nothing is in flight"
 github
@@ -152,6 +189,35 @@ pulls_are "$(pull 131 feat/71-other-ticket app/claude "" true)"
 run "$scripts/in-flight.sh"
 expect_status 0
 expect_lines "71 #71 (draft pull request #131, left unfinished)"
+
+scenario "a draft left unfinished whose ticket waits with ready is listed as waiting, and one without ready as before"
+github
+echo '[{"number":71},{"number":73},{"number":131,"pull_request":{}}]' > "$T/ready"
+pulls_are "$(pull 131 feat/71-other-ticket app/claude "" true)" "$(pull 132 feat/72-third-ticket app/claude "" true)"
+run "$scripts/in-flight.sh"
+expect_status 0
+expect_lines "71 #71 (waiting with ready; draft pull request #131, left unfinished)
+72 #72 (draft pull request #132, left unfinished)"
+
+scenario "ready on a ticket whose draft is being built, or whose pull request is ready for review, changes nothing"
+github
+echo '[{"number":70},{"number":64}]' > "$T/issues"
+echo '[{"number":70},{"number":64}]' > "$T/ready"
+pulls_are "$(pull 130 feat/70-other-ticket app/claude "" true)" "$(pull 112 feat/64-three-tickets-in-flight)"
+run "$scripts/in-flight.sh"
+expect_status 0
+expect_lines "64 #64 (pull request #112)
+70 #70 (being built, in draft pull request #130)"
+expect_no_call "labels=ready"
+
+scenario "stops when the issues labelled ready cannot be read: a draft left unfinished is not said to hold a place"
+github
+pulls_are "$(pull 131 feat/71-other-ticket app/claude "" true)"
+echo "api repos/{owner}/{repo}/issues?state=open&labels=ready" > "$T/fail"
+run "$scripts/in-flight.sh"
+expect_status 1
+expect_output "The issues labelled ready could not be read from GitHub"
+expect_no_output "#71"
 
 scenario "a person's pull request is not in flight, whatever its branch is called"
 github

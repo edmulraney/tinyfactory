@@ -96,7 +96,5 @@ job e2e | grep -qF 'review: ${{ steps.reviewable.outputs.review }}' || fail "the
 
 # With a status function in it, a review would run after a failed e2e, or on a draft (decisions A50c).
 scenario "ci.yml starts neither review on a plain false, and on any other answer only when e2e passed"
-for reviewer in adam ryan; do
-  [ "$(job "$reviewer" | grep '^    if:')" = "    if: needs.e2e.outputs.review != 'false'" ] \
-    || fail "expected $reviewer to carry the one condition, on e2e's answer, with no status function"
-done
+[ "$(job review | grep '^    if:')" = "    if: needs.e2e.outputs.review != 'false'" ] \
+  || fail "expected the review job to carry the one condition, on e2e's answer, with no status function"

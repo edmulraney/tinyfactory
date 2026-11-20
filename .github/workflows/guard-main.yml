@@ -1,0 +1,29 @@
+# Raises an issue when a bot pushes straight to main, which GitHub cannot prevent on a private repo on the free plan.
+name: guard-main
+
+on:
+  # The merge gate's token starts no workflow, so any run means a bot wrote to main some other way.
+  push:
+    branches: [main]
+
+jobs:
+  alarm:
+    # The workflow app's installs are expected (decisions W9); a project with no app exempts nobody.
+    if: endsWith(github.actor, '[bot]') && github.actor != format('{0}[bot]', vars.WORKFLOW_APP_SLUG)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Raise an issue for a human
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ACTOR: ${{ github.actor }}
+          COMPARE: ${{ github.event.compare }}
+          AFTER: ${{ github.sha }}
+        run: |
+          # The first line says what a person must do (decisions A371a).
+          printf 'Read the commits below, then revert or keep them: the factory reverts nothing.\n\n`%s` pushed straight to `main`, which only the merge gate may do.\n\nCommits: %s\nHead is now `%s`.\n' \
+            "$ACTOR" "$COMPARE" "$AFTER" > "$RUNNER_TEMP/alarm.md"
+          gh issue create -R "$GITHUB_REPOSITORY" --title "A bot pushed straight to main (${AFTER:0:7})" \
+            --label needs-human --body-file "$RUNNER_TEMP/alarm.md"

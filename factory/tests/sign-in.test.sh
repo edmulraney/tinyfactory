@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
-# Tests for bootstrap's sign-in.sh: Neon Auth on, by emailed link alone, its variables in Vercel, its domains trusted.
+# Tests for bootstrap's sign-in.sh: Neon Auth on, by emailed link alone, its variables in Vercel.
 . "$(dirname "$0")/helpers.sh"
 
 sign_in="$root/.claude/skills/bootstrap/scripts/sign-in.sh"
 secret="c2VjcmV0LW9mLXRoaXJ0eS10d28tY2hhcmFjdGVycw=="
 
-# a_product: has accounts; Vercel lists the variables in $T/vercel as `KEY target` lines and answers $T/domains for the
-# project's domains; Neon trusts the domains in $T/trusted, one a line; $T/fail holds a word of the call to fail.
+# a_product: has accounts; Vercel lists the variables in $T/vercel as `KEY target` lines; $T/fail holds a word of the call to fail.
 # Neon holds each branch's two settings as `<Magic Link on> <email and password on>` in $T/settings-<branch id>, and a
-# branch with no such file has Neon's own: no link, a password.
+# branch with no such file has Neon's own: no link, a password. $T/branches, when there, is the list of branches Neon
+# answers, and $T/no-auth holds the id of each branch that has no Neon Auth, one a line.
 a_product() {
   echo "# Purpose" > PURPOSE.md
   echo "DATABASE_URL production" > "$T/vercel"
   echo "DATABASE_URL preview" >> "$T/vercel"
   echo none > "$T/fail"
   : > "$T/posted"
-  : > "$T/trusted"
-  echo '{"domains":[{"name":"myapp.vercel.app","redirect":null,"gitBranch":null}]}' > "$T/domains"
+  : > "$T/no-auth"
   touch "$T/signed-in"
   stub openssl '
     if grep -qF -- "$(cat "$T/fail")" <<<"openssl $*"; then exit 1; fi
@@ -40,14 +39,12 @@ a_product() {
         if grep -qxF -- "$(jq -r "\"\(.key) \(.target[0])\"" <<<"$body")" "$T/vercel"; then echo "already exists" >&2; exit 1; fi
         [ -f "$T/vercel-forgets" ] || jq -r "\"\(.key) \(.target[0])\"" <<<"$body" >> "$T/vercel"
         echo "$body" ;;
-      "--yes vercel@latest api /v9/projects/myapp/domains --raw") cat "$T/domains" ;;
-      "--yes neonctl@latest neon-auth domain list --project-id quiet-wood-1 --branch br-main-1 --output json")
-        if [ -f "$T/list-fails-after-add" ] && grep -q "domain add" "$T/calls"; then echo "could not connect" >&2; exit 1; fi
-        jq -Rn "[inputs | {domain: ., auth_provider: \"better_auth\"}]" "$T/trusted" ;;
-      "--yes neonctl@latest neon-auth domain add "*" --project-id quiet-wood-1 --branch br-main-1")
-        grep -qxF -- "$6" "$T/trusted" && { echo "ERROR: domain already exists" >&2; exit 1; }
-        [ -f "$T/neon-forgets" ] || echo "$6" >> "$T/trusted"
-        echo "Domain \"$6\" added" ;;
+      "--yes neonctl@latest neon-auth status --project-id quiet-wood-1 --branch "*" --output json")
+        if grep -qxF -- "$8" "$T/no-auth"; then printf "\nNeon Auth is not configured for this branch\n\n"; exit 0; fi
+        echo "{\"auth_provider\":\"better_auth\",\"branch_id\":\"$8\",\"base_url\":\"https://ep-$8.neonauth.aws.neon.tech/neondb/auth\"}" ;;
+      "--yes neonctl@latest api /projects/quiet-wood-1/branches/"*"/auth/"*)
+        id=${4#/projects/quiet-wood-1/branches/}; id=${id%%/*}
+        if grep -qxF -- "$id" "$T/no-auth"; then echo "ERROR: Neon Auth is not enabled for this branch" >&2; exit 1; fi ;;&
       "--yes neonctl@latest api /projects/quiet-wood-1/branches/"*"/auth/plugins")
         if [ -f "$T/read-back-fails" ] && grep -q "PATCH" "$T/calls"; then echo "could not connect" >&2; exit 1; fi
         id=${4#/projects/quiet-wood-1/branches/}; id=${id%/auth/plugins}
@@ -66,6 +63,7 @@ a_product() {
       "--yes neonctl@latest me") [ -f "$T/signed-in" ] ;;
       "--yes neonctl@latest auth") touch "$T/signed-in" ;;
       "--yes neonctl@latest branches list --project-id quiet-wood-1 --output json")
+        [ -f "$T/branches" ] && { cat "$T/branches"; exit 0; }
         [ -f "$T/no-default" ] && { echo "[{\"id\":\"br-preview-9\",\"name\":\"preview/feat/12-export\",\"default\":false}]"; exit 0; }
         echo "[{\"id\":\"br-preview-9\",\"name\":\"preview/feat/12-export\",\"default\":false},{\"id\":\"br-main-1\",\"name\":\"main\",\"default\":true},{\"id\":\"br-dev-3\",\"name\":\"dev\",\"default\":false}]" ;;
       "--yes neonctl@latest neon-auth enable --project-id quiet-wood-1 --branch br-main-1 --output json")
@@ -126,11 +124,9 @@ run "$sign_in" myapp
 run "$sign_in" myapp
 expect_status 0
 [ ! -s "$T/posted" ] || fail "expected nothing to be sent to Vercel on the second run"
-expect_no_call "domain add"
 expect_no_call "PATCH"
 expect_output "the production branch already signs people in by an emailed link and takes no password"
 expect_output "the preview's branch preview/feat/12-export already signs people in by an emailed link and takes no password"
-expect_output "https://myapp.vercel.app is already a trusted domain"
 expect_output "NEON_AUTH_COOKIE_SECRET is already set for production"
 expect_output "sign-in ok"
 
@@ -177,24 +173,7 @@ run "$sign_in" myapp
 expect_failure
 expect_output "cannot read the environment variables of the Vercel project 'myapp'"
 expect_no_call "neon-auth enable"
-expect_no_call "domain add"
 expect_no_output "sign-in ok"
-
-scenario "stops before switching anything on, and trusts no domain, when Vercel's domains cannot be read"
-a_product
-echo "/v9/projects/myapp/domains" > "$T/fail"
-run "$sign_in" myapp
-expect_failure
-expect_output "cannot read the domains of the Vercel project 'myapp'"
-expect_no_call "neonctl"
-
-scenario "stops before switching anything on when Vercel names no production domain"
-a_product
-echo '{"domains":[{"name":"www.myapp.run","redirect":"myapp.run","gitBranch":null}]}' > "$T/domains"
-run "$sign_in" myapp
-expect_failure
-expect_output "Vercel lists no production domain for the project 'myapp'"
-expect_no_call "neonctl"
 
 scenario "stops before switching anything on when the Neon project's id cannot be read"
 a_product
@@ -271,78 +250,6 @@ touch "$T/vercel-forgets"
 run "$sign_in" myapp
 expect_failure
 expect_output "Vercel does not list NEON_AUTH_BASE_URL production after it was set"
-expect_no_output "sign-in ok"
-
-scenario "trusts the production domain, and no pattern for previews, on the production branch"
-a_product
-run "$sign_in" myapp
-expect_status 0
-expect_call "neon-auth domain add https://myapp.vercel.app --project-id quiet-wood-1 --branch br-main-1"
-[ "$(grep -c "domain add" "$T/calls")" = 1 ] || fail "expected one domain to be added and no more"
-expect_no_call "*"
-expect_output "added the trusted domain https://myapp.vercel.app"
-expect_output "its domains trusted by Neon Auth"
-
-scenario "trusts every domain production is served at, but not one that redirects or serves a git branch"
-a_product
-jq -nc '{domains: [{name: "myapp.vercel.app"}, {name: "myapp.run", redirect: null, gitBranch: null},
-  {name: "www.myapp.run", redirect: "myapp.run"}, {name: "staging.myapp.run", gitBranch: "staging"}]}' > "$T/domains"
-run "$sign_in" myapp
-expect_status 0
-[ "$(grep -c "domain add" "$T/calls")" = 2 ] || fail "expected two domains to be added and no more"
-expect_call "domain add https://myapp.vercel.app "
-expect_call "domain add https://myapp.run "
-expect_no_call "www.myapp.run"
-expect_no_call "staging.myapp.run"
-
-scenario "adds only the domain that is missing"
-a_product
-echo '{"domains":[{"name":"myapp.vercel.app"},{"name":"myapp.run"}]}' > "$T/domains"
-echo "https://myapp.vercel.app" > "$T/trusted"
-run "$sign_in" myapp
-expect_status 0
-expect_no_call "domain add https://myapp.vercel.app"
-expect_call "domain add https://myapp.run "
-expect_output "sign-in ok"
-
-scenario "stops when Neon cannot list the trusted domains"
-a_product
-echo "domain list" > "$T/fail"
-run "$sign_in" myapp
-expect_failure
-expect_output "Neon would not list the trusted domains of the production branch (br-main-1)"
-expect_no_call "domain add"
-expect_no_output "sign-in ok"
-
-scenario "stops when Neon refuses a domain"
-a_product
-echo "domain add" > "$T/fail"
-run "$sign_in" myapp
-expect_failure
-expect_output "Neon refused the trusted domain https://myapp.vercel.app"
-expect_no_output "sign-in ok"
-
-scenario "has set the variables when Neon refuses a domain"
-a_product
-echo "domain add" > "$T/fail"
-run "$sign_in" myapp
-expect_failure
-grep -qxF "NEON_AUTH_COOKIE_SECRET production" "$T/vercel" || fail "expected the variables to be set"
-
-scenario "does not take Neon's word that a domain was added"
-a_product
-touch "$T/neon-forgets"
-run "$sign_in" myapp
-expect_failure
-expect_output "Neon does not list the trusted domain https://myapp.vercel.app after it was added"
-expect_no_output "sign-in ok"
-
-scenario "stops when the trusted domains cannot be read back from Neon"
-a_product
-touch "$T/list-fails-after-add"
-run "$sign_in" myapp
-expect_failure
-expect_output "cannot read the trusted domains back from Neon"
 expect_no_output "sign-in ok"
 
 scenario "switches the emailed link on and the password off for the production branch, and reads both back"
@@ -431,5 +338,43 @@ expect_failure
 expect_output "Neon refused to switch Magic Link on for the preview's branch preview/feat/12-export (br-preview-9)"
 [ "$(cat "$T/settings-br-main-1")" = "true false" ] || fail "expected production to sign people in by link"
 grep -qxF "NEON_AUTH_COOKIE_SECRET production" "$T/vercel" || fail "expected the variables to be set"
-grep -qxF "https://myapp.vercel.app" "$T/trusted" || fail "expected the production domain to be trusted"
+expect_no_output "sign-in ok"
+
+# three_previews: Neon lists production's branch and three previews' branches, the middle one made before auth was on.
+three_previews() {
+  jq -nc '[{id: "br-main-1", name: "main", default: true}, {id: "br-preview-7", name: "preview/feat/7-first"},
+    {id: "br-preview-8", name: "preview/feat/8-made-before-auth"}, {id: "br-preview-9", name: "preview/feat/9-last"}]
+    | map({default: false} + .)' > "$T/branches"
+  echo "br-preview-8" > "$T/no-auth"
+}
+
+scenario "passes over a preview's branch that has no Neon Auth, says which and why, and sets the ones around it"
+a_product
+three_previews
+run "$sign_in" myapp
+expect_status 0
+expect_output "passed over the preview's branch preview/feat/8-made-before-auth (br-preview-8): it has no Neon Auth, so nobody can sign in there"
+[ "$(cat "$T/settings-br-preview-7")" = "true false" ] || fail "expected the preview's branch before it to sign people in by link"
+[ "$(cat "$T/settings-br-preview-9")" = "true false" ] || fail "expected the preview's branch after it to sign people in by link"
+expect_no_call "br-preview-8/auth"
+expect_output "sign-in ok"
+
+scenario "stops when Neon will not say whether a preview's branch has Neon Auth"
+a_product
+three_previews
+echo "neon-auth status --project-id quiet-wood-1 --branch br-preview-8" > "$T/fail"
+run "$sign_in" myapp
+expect_failure
+expect_output "Neon would not say whether the preview's branch preview/feat/8-made-before-auth (br-preview-8) has Neon Auth"
+expect_no_call "br-preview-8/auth"
+expect_no_call "br-preview-9/auth"
+expect_no_output "sign-in ok"
+
+scenario "still stops at a preview's branch that has Neon Auth when Neon will not show its settings"
+a_product
+three_previews
+echo "br-preview-9/auth/plugins" > "$T/fail"
+run "$sign_in" myapp
+expect_failure
+expect_output "Neon would not show the sign-in settings of the preview's branch preview/feat/9-last (br-preview-9)"
 expect_no_output "sign-in ok"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Writes what failed on a pull request to a file: each failed job's log tail, a conflict, an overtaken workflow.
+# Writes what failed on a pull request to a file: each failed job's log tail, a conflict, why a merge left it out.
 # Usage: collect-failures.sh <output-file> <pr-number>
 #        Needs GH_TOKEN (actions, contents and pull-requests: read) and GITHUB_REPOSITORY.
 set -euo pipefail
@@ -32,15 +32,13 @@ if [ "$mergeable" = CONFLICTING ]; then
     echo
   } >> "$out"
 fi
-# Git sees no conflict in it, and ship.sh does not merge it (decisions W281a, W281b).
-overtaken=$("$(dirname "$0")/overtaken.sh" "$pr" "$base" "$head") \
-  || die "Could not read whether $base has overtaken a workflow change in pull request #$pr, so what there is to fix on it is not known."
-if [ -n "$overtaken" ]; then
+# The test of a group ran in merge-group.yml, not in this pull request's ci run (decisions M455d).
+left_out=$("$(dirname "$0")/merge-queue.sh" removed "$pr" "$head") \
+  || die "Could not read whether a merge left pull request #$pr out, so what there is to fix on it is not known."
+if [ -n "$left_out" ]; then
   {
-    echo "===== overtaken by $base ====="
-    echo "$overtaken"
-    echo "The installer installs a workflow change only when $base still holds the source its diff was made against, so this pull request is not merged as it is."
-    echo "Merge $base into the branch (git fetch origin $base && git merge origin/$base), keep both changes and push; the new commit is then checked and merged like any other."
+    echo "===== left out of a merge ====="
+    echo "$left_out"
     echo
   } >> "$out"
 fi

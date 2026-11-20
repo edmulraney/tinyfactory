@@ -13,7 +13,7 @@ repo() {
 }
 # append_line <file> <line>: appends the line to the file.
 append_line() { printf '%s\n' "$2" >> "$1"; }
-check() { run "$scripts/check-rule-files.sh"; }
+check() { run "$scripts/check-rule-files.sh" "$@"; }
 refuses() {
   expect_status 1
   expect_output "$1"
@@ -100,6 +100,18 @@ expect_output 'factory/scripts/one.sh:4: a date: "14 November"'
 expect_output '.claude/skills/bootstrap/scripts/board.sh:2: a phrase that is true only for now: "not yet"'
 expect_no_output "one.sh:5"
 
+scenario "fails on a new script and a new skill not yet added to git, and reads no ignored file"
+repo
+printf '#!/usr/bin/env bash\n# Not yet automated.\n' > factory/scripts/new.sh
+mkdir .claude/skills/review
+printf '# Review\n' > .claude/skills/review/SKILL.md
+printf '#!/usr/bin/env bash\n# Not yet automated.\n' > factory/scripts/ignored.sh
+echo 'factory/scripts/ignored.sh' > .gitignore
+check
+refuses 'factory/scripts/new.sh:2: a phrase that is true only for now: "not yet"'
+expect_output ".claude/skills/review/SKILL.md: factory/rule-files.txt does not name it"
+expect_no_output "ignored.sh"
+
 scenario "passes a record, a free-tier entry and a test's comment that hold all of them"
 repo
 mkdir factory/free-tier
@@ -111,16 +123,49 @@ check
 expect_status 0
 expect_output "rule files ok: 2 files and the comments of 1 scripts"
 
-scenario "fails a file over its budget, and passes it at the budget exactly"
+scenario "passes a file one word over its budget, and prints the file, its words and its budget"
 repo
-printf '5 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
+printf '6 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
 check
-refuses "CLAUDE.md: it holds 7 words and its budget is 5."
-expect_output "Raising the budget in factory/rule-files.txt is a decision"
+expect_status 0
+expect_output "CLAUDE.md: it holds 7 words and its budget is 6. This fails nothing: once the pull request merges, the factory files a ticket that cuts the file to its budget"
+expect_output "rule files ok: 2 files"
 expect_no_output "SKILL.md: it holds"
+
+scenario "says nothing of a file at its budget exactly"
+repo
 printf '7 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
 check
 expect_status 0
+expect_no_output "it holds"
+
+scenario "fails a file more than a fifth over its budget, and passes it a fifth over exactly"
+repo
+append_line CLAUDE.md "Five more words are here."
+printf '9 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
+check
+refuses "CLAUDE.md: it holds 12 words and its budget is 9, and lint fails a file more than a fifth over its budget."
+expect_no_output "This fails nothing"
+printf '10 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
+check
+expect_status 0
+expect_output "CLAUDE.md: it holds 12 words and its budget is 10. This fails nothing"
+
+scenario "--over prints each file over its budget with its words and budget, and nothing else, outside a git repository"
+repo
+rm -rf .git
+append_line CLAUDE.md "Currently five more words here."
+printf '9 CLAUDE.md\n8 .claude/skills/build/SKILL.md\n50 factory/scripts/one.sh\n' > factory/rule-files.txt
+check --over
+expect_status 0
+[ "$out" = "12 9 CLAUDE.md"$'\n'"14 8 .claude/skills/build/SKILL.md" ] || fail "expected only the two files over their budget"
+
+scenario "--over fails on a line of the list it cannot read"
+repo
+append_line factory/rule-files.txt "40 TASTE.md"
+check --over
+expect_status 1
+expect_output "factory/rule-files.txt:5: TASTE.md is not a file"
 
 scenario "fails a skill the list does not name"
 repo
@@ -145,7 +190,7 @@ printf '5 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.tx
 append_line .claude/skills/build/SKILL.md "Currently three tickets are in flight."
 append_line factory/scripts/one.sh "# Written on 16 November."
 check
-refuses "CLAUDE.md: it holds 7 words"
+refuses "CLAUDE.md: it holds 7 words and its budget is 5, and lint fails"
 expect_output 'SKILL.md:4: a phrase that is true only for now: "currently"'
 expect_output 'one.sh:4: a date: "16 November"'
 

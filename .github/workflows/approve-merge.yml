@@ -1,0 +1,199 @@
+# Queues a pull request the owner approves, finishes or takes back one merged with the button, sends back one to change.
+name: approve-merge
+
+on:
+  pull_request_review:
+    types: [submitted]
+  # GitHub's merge button. `_target` runs main's copy of this file; a merge by ship.sh starts no workflow (decisions M435a).
+  pull_request_target:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number, already approved by the owner
+        required: true
+
+concurrency:
+  group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}
+
+jobs:
+  test-main:
+    # The button skips the test with main as it is now, and only the factory's own are taken back (decisions M439a).
+    if: >-
+      github.event_name == 'pull_request_target' && github.event.pull_request.merged == true &&
+      github.event.pull_request.user.login == 'claude[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # It runs code no reviewer may have passed, so it may only read, is given no secret, and starts no retro (decisions M439i).
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read   # to read which main the pull request's checks passed with
+    env:
+      # GitHub cannot unset GITHUB_WORKFLOW_REF, by which lint would take an install of this file for a run behind main.
+      TEST: pnpm install --frozen-lockfile && env -u GITHUB_WORKFLOW_REF pnpm lint && pnpm typecheck && pnpm test && pnpm build
+    outputs:
+      main: ${{ steps.tested.outputs.tested == 'true' && 'success' || steps.main.outcome }}
+      before: ${{ steps.before.outcome }}
+      failed: ${{ steps.failed.outputs.printed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 2   # the commit before the merge is tested when the merge fails
+      - name: Did the pull request's checks pass with main as it was before the merge?
+        id: tested
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: factory/scripts/button-merge.sh tested "$PR" >> "$GITHUB_OUTPUT"
+      # Not the shared setup action: an install the merge broke is a failed test of main, not a failed job.
+      - uses: pnpm/action-setup@v4
+        if: steps.tested.outputs.tested != 'true'
+      - uses: actions/setup-node@v4
+        if: steps.tested.outputs.tested != 'true'
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Test main as the merge left it
+        id: main
+        if: steps.tested.outputs.tested != 'true'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          bash -c "$TEST" 2>&1 | tee "$RUNNER_TEMP/main.log"
+      - name: Keep the last lines the failed test printed, for the engineer
+        id: failed
+        if: steps.main.outcome == 'failure'
+        run: |
+          { echo 'printed<<END-OF-WHAT-THE-TEST-PRINTED'; tail -n 30 "$RUNNER_TEMP/main.log"; echo END-OF-WHAT-THE-TEST-PRINTED; } >> "$GITHUB_OUTPUT"
+      - name: Test main as it was before the merge
+        id: before
+        if: steps.main.outcome == 'failure'
+        continue-on-error: true
+        run: |
+          git checkout --quiet HEAD^
+          bash -c "$TEST"
+
+  ship:
+    needs: test-main
+    # A status function, or the skipped test-main would skip this job too (decisions M75c).
+    if: >-
+      !cancelled() && (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) ||
+      (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write   # to record the measures of a pull request a person merged; an approved one is merged by merge-group.yml
+      pull-requests: write
+      issues: write
+      actions: write   # to read the pull request's check runs, and to start merge-group.yml and a retro
+      statuses: read   # to see that Vercel skipped a deployment (decisions M33)
+      checks: read     # to read why a job never started, and run it again if for billing (decisions H386a)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Let it wait to merge, if the owner approved this exact commit and its checks passed
+        if: github.event_name != 'pull_request_target'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ inputs.pr || github.event.pull_request.number }}
+          OWNER: ${{ github.repository_owner }}
+        run: factory/scripts/approve-merge.sh "$PR" "$OWNER"
+      - name: Do what follows a merge with GitHub's merge button, or take back one that broke main
+        if: github.event_name == 'pull_request_target'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets apply-setup.sh re-run a changed board.sh, and start-waiting.sh read the order of the board
+          PR: ${{ github.event.pull_request.number }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+          MAIN: ${{ needs.test-main.outputs.main }}
+          BEFORE: ${{ needs.test-main.outputs.before }}
+          FAILED: ${{ needs.test-main.outputs.failed }}
+        run: factory/scripts/button-merge.sh finish "$PR" "$MAIN" "$BEFORE"
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 20   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1
+
+  send-back:
+    # Only starts fix.yml, as ci.yml's start-fix job does (decisions A89a); the round is not counted (decisions A48a).
+    if: >-
+      github.event_name == 'pull_request_review' &&
+      github.event.review.state == 'changes_requested' && github.event.review.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read   # to read the owner's review
+      actions: write        # to start fix.yml, and the retro
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Start the owner's fix round
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          OWNER: ${{ github.repository_owner }}
+        run: factory/scripts/start-fix-round.sh "$PR" "$OWNER"
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 5   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

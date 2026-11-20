@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Creates or updates the labels the factory uses, and deletes the ones GitHub gives every new
 # repo, which nothing uses. Safe to re-run: --force updates a label that exists, and a default
-# label that is gone is not looked for again. Which labels, and why: decisions T85a to T85e, T33a, T218, T19a, T353a.
+# label that is gone is not looked for again. Which labels, and why: decisions T85a to T85e, T33a, T218, T19a, T353a, M443b.
 # It is its own script, called by github.sh during setup, because it is a setup step the
 # factory can re-apply by itself: factory/scripts/apply-setup.sh runs it after a merged change,
 # with the workflow's own token. So it must need nothing but `issues: write` on the repo (which
@@ -22,6 +22,7 @@ gh label create research    -R "$repo" --force --color 006B75 --description "A q
 gh label create in-progress -R "$repo" --force --color FBCA04 --description "An agent is building this"
 gh label create deployed    -R "$repo" --force --color 0E8A16 --description "Merged and confirmed live in production"
 gh label create reverted    -R "$repo" --force --color B60205 --description "Shipped, then taken back; add ready to build it again"
+gh label create revert      -R "$repo" --force --color B60205 --description "Add to a shipped ticket to take it back; the factory takes it off"
 gh label create proposal    -R "$repo" --force --color BFD4F2 --description "A change the factory suggests; add ready to accept it, or close it"
 gh label create retro       -R "$repo" --force --color D4C5F9 --description "Filed by a retro; it stays once the proposal is accepted"
 gh label create waits-for-main -R "$repo" --force --color C2E0C6 --description "What failed lies outside this pull request; the next merge tests it again"

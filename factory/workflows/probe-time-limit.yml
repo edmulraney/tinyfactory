@@ -1,0 +1,46 @@
+# Shows what GitHub does to a job at its time limit: how the job and the run end, and which later steps run.
+# Usage: starts when its installed copy changes, or by hand; `gh run view <run> --json conclusion,jobs` and the job's log hold the answer.
+name: probe-time-limit
+
+on:
+  # The installer's push starts it, so a new or changed probe is measured with nobody asked to (decisions A460b).
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-time-limit.yml']
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    permissions:
+      actions: read   # to read when this job started
+    steps:
+      - name: Run past the time limit
+        run: sleep 300
+      - name: Run when no step before it failed or was stopped
+        run: echo "a step with no condition ran after the time limit"
+      # The step the factory's jobs hold, to the letter but for its limit (decisions A434b); start-retro.test.sh compares them.
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 1   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        run: echo "a job at its time limit would have asked for its retro here"
+      - name: Say how the job stands in a step that always runs
+        if: always()
+        run: echo "job.status is ${{ job.status }}"

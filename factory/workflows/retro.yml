@@ -2,10 +2,7 @@
 name: retro
 
 on:
-  # A failure of the factory's own machinery starts a retro, and a failed retro starts nothing (decisions A20).
-  workflow_run:
-    workflows: [implement, approve-merge, install-workflows, fix]
-    types: [completed]
+  # A job of the factory's own that failed starts this for its run, and a failed retro starts nothing (decisions A20).
   workflow_dispatch:
     inputs:
       pr:
@@ -14,25 +11,26 @@ on:
       run:
         description: Or the id of a failed workflow run to learn from. With both, the run is the first of a workflow that pull request changed
         required: false
+      comment:
+        description: With the id of the `claude` run that answered it, the link to a comment that asked for help
+        required: false
 
 concurrency:
   # Both numbers: one pull request can change several workflows, and a third retro cancels one waiting in its group.
-  group: retro-${{ inputs.pr || 'run' }}-${{ inputs.run || github.event.workflow_run.id }}
+  group: retro-${{ inputs.pr || 'run' }}-${{ inputs.run }}
 
 env:
   PR: ${{ inputs.pr }}
-  RUN: ${{ inputs.run || github.event.workflow_run.id }}
+  RUN: ${{ inputs.run }}
+  COMMENT: ${{ inputs.comment }}
   # No background commands in a session with nobody in it (decisions A69f).
   AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
-  LESSON_SCHEMA: '{"type":"object","properties":{"summary":{"type":"string"},"title":{"type":"string","description":"A ticket title for the proposed change: an imperative verb, then what changes. One clause, no colon, no comma, 60 characters or fewer, sentence case, no full stop."},"cause":{"type":"string","enum":["ticket","skill-missing","skill-wrong","check-missing","agent-ignored","process","outside","one-off"]},"detail":{"type":"string"},"evidence":{"type":"array","items":{"type":"string"}},"change":{"type":"object","properties":{"kind":{"type":"string","enum":["script","check","template","skill","none"]},"target":{"type":"string"},"proposal":{"type":"string"},"removes":{"type":"string","description":"The rule, check, step or instruction the change takes away, or nothing."}},"required":["kind","target","proposal","removes"]},"cost":{"type":"object","properties":{"amount":{"type":"string","description":"What the fault cost on this run, with a figure from its facts: dollars, minutes, rounds."},"kind":{"type":"array","items":{"type":"string","enum":["lost-work","lost-money","stopped"]}}},"required":["amount","kind"]},"saves":{"type":"string","description":"What the change would have saved on this run, with a figure from its facts."},"repeats":{"type":"array","items":{"type":"string"}},"handling":{"type":"array","items":{"type":"string","enum":["lost-work","left-wrong","told-nobody"]}},"retry":{"type":"string","enum":["enough","not-enough","harmful","not-applicable"]},"propose":{"type":"boolean"},"held_by":{"type":"integer","description":"The number of the open ticket that already holds this change, or 0 when none does or the open tickets were not given."}},"required":["summary","title","cause","detail","evidence","change","cost","saves","repeats","handling","retry","propose","held_by"]}'
+  LESSON_SCHEMA: '{"type":"object","properties":{"summary":{"type":"string"},"title":{"type":"string","description":"A ticket title for the proposed change: an imperative verb, then what changes. One clause, no colon, no comma, 60 characters or fewer, sentence case, no full stop."},"cause":{"type":"string","enum":["ticket","skill-missing","skill-wrong","check-missing","agent-ignored","process","outside","one-off"]},"detail":{"type":"string"},"evidence":{"type":"array","items":{"type":"string"}},"change":{"type":"object","properties":{"kind":{"type":"string","enum":["script","check","template","skill","none"]},"target":{"type":"string"},"proposal":{"type":"string"},"removes":{"type":"string","description":"The rule, check, step or instruction the change takes away, or nothing."}},"required":["kind","target","proposal","removes"]},"cost":{"type":"object","properties":{"amount":{"type":"string","description":"What the fault cost on this run, with a figure from its facts: dollars, minutes, rounds."},"minutes":{"type":"number","description":"The minutes of sessions and waiting the fault cost on this run, worked out from its facts, which give seconds; 0 when none."},"kind":{"type":"array","items":{"type":"string","enum":["lost-work","lost-money","stopped"]}}},"required":["amount","minutes","kind"]},"saves":{"type":"string","description":"What the change would have saved on this run, with a figure from its facts."},"repeats":{"type":"array","items":{"type":"string"}},"handling":{"type":"array","items":{"type":"string","enum":["lost-work","left-wrong","told-nobody"]}},"retry":{"type":"string","enum":["enough","not-enough","harmful","not-applicable"]},"propose":{"type":"boolean"},"held_by":{"type":"integer","description":"The number of the open ticket that already holds this change, or 0 when none does or the open tickets were not given."}},"required":["summary","title","cause","detail","evidence","change","cost","saves","repeats","handling","retry","propose","held_by"]}'
 
 jobs:
   retro:
-    # Another workflow ending starts it only when that failed: a job skipped here is billed nothing.
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out'
-    runs-on: ubuntu-latest
+    # The owner's runner when they named one (decisions A426a).
+    runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
     # Three tries of the agent, and the fifteen minutes between them (decisions A24).
     timeout-minutes: 45
     permissions:
@@ -42,6 +40,10 @@ jobs:
       actions: write   # run-facts.sh reads a run's jobs and a failed step's log; file-proposal.sh starts implement.yml (decisions A369b)
       id-token: write
     steps:
+      # No session reads what an earlier one left in the home folder (decisions A426c).
+      - name: Give the job a home folder of its own on the owner's runner
+        if: vars.AGENT_RUNNER
+        run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
 
       - name: Fetch the transcripts and earlier lessons
@@ -57,6 +59,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # No retro starts while the Claude usage limit holds every agent: this run is run again (decisions A231b, A395b).
+          limit=$(factory/scripts/usage-limit.sh wait "" "the retro")
+          if [ -n "$limit" ]; then
+            echo "no retro: $limit"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [ -n "$PR" ] && [ -n "$RUN" ]; then
             # The first run of a workflow that pull request changed (decisions A185a).
             factory/scripts/run-facts.sh --first-run "$PR" "$RUN" .sessions > .sessions/facts.json
@@ -64,6 +73,14 @@ jobs:
           elif [ -n "$PR" ]; then
             factory/scripts/run-facts.sh "$PR" .sessions > .sessions/facts.json
             { echo "go=true"; echo "subject=pull request #$PR"; echo "key=pr-$PR"; } >> "$GITHUB_OUTPUT"
+          elif [ -n "$RUN" ] && [ -n "$COMMENT" ]; then
+            # A request for help is learnt from however its run ended (decisions A446a).
+            factory/scripts/run-facts.sh --ask "$RUN" "$COMMENT" .sessions > .sessions/facts.json
+            {
+              echo "go=true"
+              echo "subject=the request for help that workflow run $RUN answered"
+              jq -r '"key=" + (if .issue then "issue-\(.issue)" else "pr-\(.pr)" end)' .sessions/facts.json
+            } >> "$GITHUB_OUTPUT"
           elif [ -n "$RUN" ]; then
             factory/scripts/run-facts.sh --run "$RUN" .sessions > .sessions/facts.json
             # A failed check, or a ticket refused at validation, ended as designed (decisions A21).
@@ -99,6 +116,9 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The session's token reads a run's jobs and logs, which it otherwise may not (decisions A259, A406).
+          additional_permissions: |
+            actions: read
           # The scripts that start this do so with the workflow's own token, so the actor is a bot.
           allowed_bots: "*"
           settings: ${{ env.AGENT_SETTINGS }}
@@ -108,7 +128,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 40
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -127,6 +147,8 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
           allowed_bots: "*"
           settings: ${{ env.AGENT_SETTINGS }}
           prompt: |
@@ -135,7 +157,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 40
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -155,6 +177,8 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
           allowed_bots: "*"
           settings: ${{ env.AGENT_SETTINGS }}
           prompt: |
@@ -163,7 +187,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model claude-fable-5-2 --effort medium --max-turns 40
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -190,19 +214,55 @@ jobs:
         if: steps.facts.outputs.go == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TRANSCRIPT: ${{ steps.third.outputs.execution_file || steps.second.outputs.execution_file || steps.first.outputs.execution_file }}
         run: |
           lesson="$RUNNER_TEMP/lesson.json"
           # A proposal an open ticket holds is noted there, and files nothing (decisions A218a).
-          message=$(factory/scripts/file-proposal.sh "$lesson" .sessions/tickets.json .sessions/lessons)
+          message=$(factory/scripts/file-proposal.sh "$lesson" .sessions/tickets.json .sessions/lessons "$TRANSCRIPT")
+          echo "$message"
+          echo "message=$message" >> "$GITHUB_OUTPUT"
+
+      # The session rewrites a proposal the ticket template refuses, once (decisions A394a).
+      - name: Rewrite a proposal the ticket template refuses
+        id: rewrite
+        if: steps.propose.outputs.rewrite == 'true'
+        # Its failure is not the job's: the next step files the proposal for a person.
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
+          allowed_bots: "*"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: ${{ steps.propose.outputs.prompt }}
+          claude_args: |
+            --resume ${{ steps.propose.outputs.session }}
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
+            --json-schema '${{ env.LESSON_SCHEMA }}'
+
+      - name: File the rewritten proposal
+        id: rewritten
+        if: steps.propose.outputs.rewrite == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTPUT: ${{ steps.rewrite.outputs.structured_output }}
+          TRANSCRIPT: ${{ steps.rewrite.outputs.execution_file }}
+          KEY: ${{ steps.facts.outputs.key }}
+        run: |
+          lesson="$RUNNER_TEMP/lesson.json"
+          factory/scripts/save-session.sh retro "$KEY" "$TRANSCRIPT"
+          message=$(factory/scripts/file-proposal.sh "$lesson" .sessions/tickets.json .sessions/lessons --rewritten "$TRANSCRIPT")
           echo "$message"
           echo "message=$message" >> "$GITHUB_OUTPUT"
 
       # A failed run's owner looks on its ticket (decisions A25); a first run's, on its pull request (decisions A185a).
       - name: Say on the run's ticket what the retro found
-        if: steps.facts.outputs.go == 'true' && (env.PR == '' || env.RUN != '')
+        if: steps.facts.outputs.go == 'true' && (env.PR == '' || env.RUN != '') && env.COMMENT == ''   # a request for help has its answer there already (decisions A446c)
         env:
           GH_TOKEN: ${{ github.token }}
-          PROPOSAL: ${{ steps.propose.outputs.message }}
+          PROPOSAL: ${{ steps.rewritten.outputs.message || steps.propose.outputs.message }}
         run: |
           lesson="$RUNNER_TEMP/lesson.json"
           ticket=$(jq -r '.facts.changed_by.pr // .issue // .pr // empty' "$lesson")

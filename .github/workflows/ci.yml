@@ -1,0 +1,470 @@
+# Checks, tests and reviews every pull request, lets one the factory opened merge, and starts a fix round on failure.
+name: ci
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+
+env:
+  PR: ${{ github.event.pull_request.number }}
+  # No background commands in a session with nobody in it (decisions A69f).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+
+jobs:
+  checks:
+    # A draft skips each job that needs no other, and the rest with them (decisions A50c).
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+    steps:
+      # Before any checkout, and in no script, which an agent can change (decisions M15, factory/free-tier.md entry 8).
+      - name: Delete the database branches of pull requests that are gone
+        if: vars.NEON_PROJECT_ID != ''
+        # Housekeeping must not fail a pull request's checks.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          # One fetch a line so a failed request stops the step: an empty list would read as every pull request gone.
+          previews=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api")
+          alive=$(gh api "repos/$GITHUB_REPOSITORY/branches" --paginate --jq '.[].name')
+          [ -n "$alive" ]
+          jq -r '.branches[] | select(.name | startswith("preview/")) | [.id, .name] | @tsv' <<<"$previews" \
+            | while IFS=$'\t' read -r id name; do
+                if grep -qxF -- "${name#preview/}" <<<"$alive"; then
+                  echo "kept $name"
+                else
+                  curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$id" >/dev/null
+                  echo "deleted $name: its git branch is gone"
+                fi
+              done
+      # Before any checkout and in no script, as the step above (decisions M15, M342). People sign in by an emailed
+      # link (S342a), and a preview's branch keeps the settings production had when it was made.
+      - name: Switch the emailed sign-in link on for production's database branch and this preview's
+        if: vars.NEON_PROJECT_ID != ''
+        # A product with no accounts has no sign-in to set, so this must not fail a pull request's checks.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          # One fetch a line, as above. Production's branch is Neon's default one.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api")
+          jq -r --arg name "preview/$BRANCH" '.branches[] | select(.default or .name == $name) | [.id, .name] | @tsv' <<<"$branches" \
+            | while IFS=$'\t' read -r id name; do
+                settings=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/$id/auth/plugins")
+                # Passwords stay as they are: an app that still signs people in by one would lock them out (M342).
+                if [ "$(jq -r '.magic_link.enabled' <<<"$settings")" = true ]; then
+                  echo "$name already sends a sign-in link"
+                else
+                  curl -fsS -X PATCH -H "Authorization: Bearer $NEON_API_KEY" -H "Content-Type: application/json" -d '{"enabled": true}' "$api/$id/auth/plugins/magic-link" >/dev/null
+                  echo "$name now sends a sign-in link"
+                fi
+              done
+      # Two deep: the parents of GitHub's merge commit, which checks-needed.sh compares (decisions H268d).
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: ./.github/actions/setup
+      - name: PR title, branch name and description follow the conventions
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          BRANCH: ${{ github.head_ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/check-pr-conventions.sh "$TITLE" "$BRANCH" "$PR"
+      # It never fails: checks-needed.sh answers `true` when unsure, and only a plain `false` skips a check (decisions H268a, H268c).
+      - name: Which checks can this change affect?
+        id: needed
+        run: factory/scripts/checks-needed.sh HEAD^1 >> "$GITHUB_OUTPUT"
+      - run: pnpm lint
+      - if: steps.needed.outputs.app != 'false'
+        run: pnpm typecheck
+      - if: steps.needed.outputs.factory != 'false'
+        run: factory/scripts/test-factory.sh HEAD^1
+      - if: steps.needed.outputs.app != 'false'
+        run: pnpm -r test
+      - if: steps.needed.outputs.app != 'false'
+        run: pnpm build
+      - name: Every acceptance criterion has a test, and research output is as its ticket says
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          issue=$(factory/scripts/linked-issue.sh "$PR")
+          if [ -n "$issue" ]; then
+            factory/scripts/check-acceptance.sh "$issue" "$BRANCH"
+            # Any ticket that is not research passes (decisions T33c to T33e).
+            factory/scripts/check-research.sh "$issue" "$PR"
+          else
+            echo "This pull request closes no issue; nothing to check."
+          fi
+      # The checkout is GitHub's merge with main and has no history, so main's commit is read from the commit itself.
+      - name: Note which commit of main these checks ran with
+        id: main
+        run: |
+          main=$(git cat-file -p HEAD | sed -n 's/^parent //p' | head -n 1)
+          [ -n "$main" ]
+          echo "$main" > "$RUNNER_TEMP/tested-with-main"
+          echo "sha=$main" >> "$GITHUB_OUTPUT"
+      # Last, so that the record exists only when everything above passed (decisions M19).
+      - name: Upload the record of which main this passed with
+        uses: actions/upload-artifact@v4
+        with:
+          name: tested-with-main-${{ steps.main.outputs.sha }}
+          path: ${{ runner.temp }}/tested-with-main
+          retention-days: 90
+          overwrite: true   # a job run again with the same main records the same name
+
+  e2e:
+    # It needs no job, so that the reviews need not wait for `checks` (decisions A2, M75a); a draft skips it (A50c).
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: read
+    outputs:
+      run: ${{ steps.needed.outputs.run }}   # `false` when no app code changed (decisions M75a)
+      review: ${{ steps.reviewable.outputs.review }}   # `false` for a build's empty first commit alone (decisions A266a)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The commit Vercel built the preview from, not GitHub's merge with main (decisions M442).
+          ref: ${{ github.event.pull_request.head.sha }}
+      # It never fails: needs-e2e.sh answers `true` when unsure, and only a plain `false` ends the job here (decisions M75b).
+      - name: Do the end-to-end tests need to run?
+        id: needed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/needs-e2e.sh "$PR" >> "$GITHUB_OUTPUT"
+      # It never fails: needs-review.sh answers `true` when unsure (decisions A266b).
+      - name: Is this commit worth a review?
+        id: reviewable
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.base_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: factory/scripts/needs-review.sh "$BASE" "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+      # Saying so must not fail the job, which the reviews wait for (decisions M75d).
+      - name: Say that the end-to-end tests were skipped
+        if: steps.needed.outputs.run == 'false'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: gh pr comment "$PR" --body "End-to-end tests were skipped for $HEAD_SHA. This pull request changes no app code, so the app in its preview is the app on main (factory/scripts/needs-e2e.sh decides)."
+      - uses: ./.github/actions/setup
+        if: steps.needed.outputs.run != 'false'
+        with:
+          playwright: "true"
+      - name: Wait for the Vercel preview
+        id: preview
+        if: steps.needed.outputs.run != 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        # Assigned on a line of its own: inside `echo "url=$(…)"` a failed wait was lost and the step passed (#92).
+        run: |
+          url=$(factory/scripts/wait-for-preview.sh "$PR" "$HEAD_SHA")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Playwright against the preview
+        if: steps.needed.outputs.run != 'false'
+        env:
+          BASE_URL: ${{ steps.preview.outputs.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: pnpm test:e2e
+      - name: Upload screenshots and the test report
+        id: proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ github.event.pull_request.head.sha }}
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Link the visual proof on the pull request
+        if: always() && steps.proof.outputs.artifact-url != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW: ${{ steps.preview.outputs.url }}
+          PROOF: ${{ steps.proof.outputs.artifact-url }}
+        run: gh pr comment "$PR" --body "End-to-end tests ran against $PREVIEW. Screenshots and report - $PROOF"
+
+  review:
+    # Not `checks`: the reviews start beside it (decisions A2). A failed `e2e` skips it, and a draft's skipped one (A50c).
+    needs: e2e
+    # No status function, so a failed or skipped `e2e` still skips it; so does a plain `false` (decisions A266a).
+    if: needs.e2e.outputs.review != 'false'
+    # The owner's runner when they named one (decisions A426a).
+    runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 20
+    # No token here writes: `verdicts` posts what the sessions found (decisions A427f).
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+    outputs:
+      held: ${{ steps.reviews.outputs.held }}   # the Claude usage limit holds every agent, so no session started (decisions A231b)
+    steps:
+      # No session reads what an earlier one left in the home folder (decisions A426c).
+      - name: Give the job a home folder of its own on the owner's runner
+        if: vars.AGENT_RUNNER
+        run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
+      # The base's files, and none of the pull request's: a session starts here (decisions A427e).
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          fetch-depth: 0
+      - name: Fetch the pull request's commit, which a checkout of the base lacks
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git fetch --quiet origin "$HEAD_SHA"
+      # No agent runs for such a push (decisions A160a); if a step fails, that review runs. `verdicts` posts the pass.
+      - name: Does Adam's earlier pass still stand, the push having only merged main?
+        id: carry-adam
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE: ${{ github.base_ref }}
+        run: factory/scripts/carry-review.sh "Adam (architecture and taste)" "$PR" "$HEAD_SHA" "origin/$BASE" check
+      - name: Does Ryan's earlier pass still stand, the push having only merged main?
+        id: carry-ryan
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE: ${{ github.base_ref }}
+        run: factory/scripts/carry-review.sh "Ryan (correctness)" "$PR" "$HEAD_SHA" "origin/$BASE" check
+      # Each checks its earlier findings and the lines changed since; given nothing, the whole (decisions A97a, A97c).
+      - name: Find Adam's last verdict and what was pushed since
+        id: scope-adam
+        if: steps.carry-adam.outputs.carried != 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: factory/scripts/review-scope.sh "Adam (architecture and taste)" "$PR" "$HEAD_SHA"
+      - name: Find Ryan's last verdict and what was pushed since
+        id: scope-ryan
+        if: steps.carry-ryan.outputs.carried != 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: factory/scripts/review-scope.sh "Ryan (correctness)" "$PR" "$HEAD_SHA"
+      # Two steps cannot run at once, so the sessions are started with the CLI (decisions A427a, A427b).
+      # If the install fails, each review ends with no verdict and asks for a person (decisions A69e).
+      - name: Install Claude Code
+        if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'
+        continue-on-error: true
+        run: |
+          curl -fsSL https://claude.ai/install.sh -o "$RUNNER_TEMP/install-claude.sh"
+          bash "$RUNNER_TEMP/install-claude.sh"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      # Each session is continued twice at most when cut short (decisions A69a). The job fails for a review with no
+      # verdict, or held by the usage limit, so that running the failed jobs again reviews again (decisions A395b).
+      - name: Adam reviews architecture and taste, and Ryan correctness, at the same time
+        id: reviews
+        if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Each verdict names its commit, so a later push can carry it (decisions A160c).
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          # A review's format: findings of that reviewer's kinds, and no prose (decisions A169a, A182a, A256a, A55a, A55b, A55d, A224a).
+          ADAM_SCHEMA: '{"type":"object","properties":{"findings":{"type":"array","description":"Each field is 40 words at most.","items":{"type":"object","properties":{"file":{"type":"string"},"line":{"type":"integer"},"kind":{"type":"string","enum":["design","out-of-scope"]},"problem":{"type":"string"},"fix":{"type":"string"}},"required":["file","kind","problem","fix"]}},"assumptions":{"type":"array","description":"Three at most, the costliest failure first. Each field is 40 words at most.","items":{"type":"object","properties":{"assumes":{"type":"string"},"if_wrong":{"type":"string"}},"required":["assumes","if_wrong"]}}},"required":["findings","assumptions"]}'
+          RYAN_SCHEMA: '{"type":"object","properties":{"findings":{"type":"array","description":"Each field is 40 words at most.","items":{"type":"object","properties":{"file":{"type":"string"},"line":{"type":"integer"},"kind":{"type":"string","enum":["bug","out-of-scope"]},"problem":{"type":"string"},"fix":{"type":"string"}},"required":["file","kind","problem","fix"]}},"assumptions":{"type":"array","description":"Three at most, the costliest failure first. Each field is 40 words at most.","items":{"type":"object","properties":{"assumes":{"type":"string"},"if_wrong":{"type":"string"}},"required":["assumes","if_wrong"]}}},"required":["findings","assumptions"]}'
+          ADAM_PROMPT: |
+            You are Adam. Read .claude/skills/review-architecture/SKILL.md and follow it to review pull request #${{ github.event.pull_request.number }} in this repository.
+
+            ${{ steps.scope-adam.outputs.brief }}
+          RYAN_PROMPT: |
+            You are Ryan. Read .claude/skills/review-code/SKILL.md and follow it to review pull request #${{ github.event.pull_request.number }} in this repository.
+
+            ${{ steps.scope-ryan.outputs.brief }}
+        run: |
+          factory/scripts/review.sh sessions "$PR" "$HEAD_SHA" ${{ steps.carry-adam.outputs.carried != 'true' && 'adam' || '' }} ${{ steps.carry-ryan.outputs.carried != 'true' && 'ryan' || '' }} -- \
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40 \
+            --allowedTools "Read,Glob,Grep,WebSearch,WebFetch,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(git diff:*),Bash(git log:*)" \
+            --settings "$AGENT_SETTINGS"
+      # For `verdicts`, which posts each verdict and saves each transcript. Named for the run and not the attempt:
+      # `verdicts` run again alone, after a `review` that passed, reads what that `review` left.
+      - name: Keep the transcripts on this run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: session-review-${{ github.run_id }}
+          path: ${{ runner.temp }}/reviews
+          retention-days: 90
+          overwrite: true
+          if-no-files-found: ignore   # both passes still stand, or the usage limit held the reviews
+
+  verdicts:
+    # The one job of the reviews whose token writes: it runs the base's files alone (decisions A427f).
+    needs: [e2e, review]
+    # It runs after a failed `review` too, to say that a review was not finished; a skipped `review` skips it.
+    if: ${{ !cancelled() && needs.review.result != 'skipped' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write   # post-verdict.sh keeps the review's notes in a ticket (decisions A241e)
+    outputs:
+      cut-short: ${{ steps.limit.outputs.held || steps.verdicts.outputs.cut-short }}   # held, or a review ended with no verdict and none failed (decisions A69e)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          fetch-depth: 0
+      # In this job and not in `e2e`, and neither step may fail it (decisions P22, P24).
+      - name: Fetch the screenshots the end-to-end tests took
+        id: screenshots
+        if: needs.e2e.outputs.run != 'false'   # tests that did not run took none
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/playwright
+      - name: Show the acceptance tests' screenshots on the pull request
+        if: steps.screenshots.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: factory/scripts/post-screenshots.sh "$PR" "$HEAD_SHA" "$RUNNER_TEMP/playwright"
+      # `review` started no session; this keeps the run's place, and fails so that its failed jobs are run again (decisions A395b).
+      - name: Wait while the Claude usage limit holds every agent
+        id: limit
+        if: needs.review.outputs.held == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/usage-limit.sh wait "$PR" "the review" failed
+      # Asked again, here to post it (decisions A160a); if a step fails, nothing was carried and that review's verdict is posted.
+      - name: Fetch the pull request's commit, which a checkout of the base lacks
+        continue-on-error: true
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git fetch --quiet origin "$HEAD_SHA"
+      - name: Carry Adam's earlier pass forward when the push only merged main
+        id: carry-adam
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE: ${{ github.base_ref }}
+        run: factory/scripts/carry-review.sh "Adam (architecture and taste)" "$PR" "$HEAD_SHA" "origin/$BASE"
+      - name: Carry Ryan's earlier pass forward when the push only merged main
+        id: carry-ryan
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE: ${{ github.base_ref }}
+        run: factory/scripts/carry-review.sh "Ryan (correctness)" "$PR" "$HEAD_SHA" "origin/$BASE"
+      # None is there when no session printed anything: each review is then said to be unfinished (decisions A69e).
+      - name: Fetch the transcripts the sessions left
+        if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: session-review-${{ github.run_id }}
+          path: ${{ runner.temp }}/reviews
+      - name: Post each verdict and save each transcript
+        id: verdicts
+        if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Each verdict names its commit, so a later push can carry it (decisions A160c).
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: factory/scripts/review.sh verdicts "$PR" ${{ steps.carry-adam.outputs.carried != 'true' && 'adam' || '' }} ${{ steps.carry-ryan.outputs.carried != 'true' && 'ryan' || '' }}
+
+  merge:
+    # The merge gate. A human's pull request is theirs to merge; a job before it that failed or was skipped skips it.
+    needs: [checks, e2e, review, verdicts]
+    if: github.event.pull_request.user.login == 'claude[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      actions: write   # to start merge-group.yml, the builds that wait, and the retro
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The gate's rules come from main as it is now, never from the pull request being judged.
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0   # the pull request's diff is measured from where it left main (decisions M373)
+      - name: Let it wait to merge, unless the change needs a person
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          OWNER: ${{ github.repository_owner }}
+        run: factory/scripts/merge-gate.sh "$PR" "$HEAD_SHA" "$OWNER"
+      # This job's failure is the factory's own (decisions A20). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1
+
+  start-fix:
+    # It only starts fix.yml (decisions A89a), and not for a review that ended with no verdict (decisions A69e).
+    needs: [checks, e2e, review, verdicts]
+    if: >-
+      always() && github.event.pull_request.user.login == 'claude[bot]' &&
+      (needs.checks.result == 'failure' || needs.e2e.result == 'failure' ||
+      (needs.verdicts.result == 'failure' && needs.verdicts.outputs.cut-short != 'true'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write   # to read the fix rounds used, and to say so when all three are
+      issues: write          # to add needs-human then
+      actions: write         # to start fix.yml, and the retro
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Main's copy of the scripts, not the pull request's, and main as it is now (decisions A29).
+          ref: ${{ github.event.repository.default_branch }}
+      # Every caller starts a fix round through this script (decisions A89b).
+      - name: Start a fix round, unless three have been used
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/start-fix-round.sh "$PR"
+      # This job's failure is the factory's own (decisions A20). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

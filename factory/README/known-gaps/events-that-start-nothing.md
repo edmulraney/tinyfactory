@@ -1,0 +1,1 @@
+- **Four events start nothing:** `intake` accepting an insight (its ticket would go straight to `ready`), a signal reaching three sources (an Initiative proposed), the clock (upkeep tickets) and production breaking (a Bug ticket with the error).

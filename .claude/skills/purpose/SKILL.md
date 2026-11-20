@@ -14,6 +14,7 @@ description: Interview the human and write PURPOSE.md, the mission and the one-p
 5. How will you know it is working three months from now? Give a number if you can.
 6. What will it deliberately not do?
 7. Will people sign in to it? Yes, unless you say it has no accounts.
+8. Is its repository public? Private by default. Public: unlimited GitHub Actions minutes, and anyone can read the code, tickets, decisions and agents' transcripts. Private: all hidden, and GitHub gives the monthly minutes `factory/free-tier/limits.md` states, which the factory works within.
 
 ## Steps
 
@@ -21,7 +22,7 @@ description: Interview the human and write PURPOSE.md, the mission and the one-p
 2. **Ask the remaining questions in one message.**
 3. **Push back once on a weak answer, then accept it:** "everyone" as the audience, a problem nobody copes with today, a success measure that cannot be observed, an empty "will not do". Offer a sharper version.
 4. **Draft at least ten missions** from answers 2, 3 and 4, in different shapes. Throw out each that explains, hedges, or could sit in another company's deck, and offer the best three or four as a choice (the question tool if you have one), with room for the human's own. If none has an edge, say so and ask how they would put it to a friend. Their line beats yours.
-5. **Write `PURPOSE.md`** in the shape of `template.md` in this folder, in the human's words, tightened. One page: no features, roadmap or technology. "I don't know yet" is written as an open question in its section; invent nothing. For a product with no accounts, "What it will not do" holds the bullet `- **Have accounts.**` in exactly those words, then the reason: setup reads it (`factory/decisions.md` S287d).
+5. **Write `PURPOSE.md`** in the shape of `template.md` in this folder, in the human's words, tightened. One page: no features, roadmap or technology. "I don't know yet" is written as an open question in its section; invent nothing. For a product with no accounts, "What it will not do" holds the bullet `- **Have accounts.**` in exactly those words, then the reason; for a public repository it holds `- **Keep its repository private.**` the same way. Setup reads both (`factory/decisions.md` [S287d](../../../factory/decisions/287.md), [S385a](../../../factory/decisions/385.md)).
 6. **Show it.** In a repo with a remote, commit it straight to `main` as `docs: add PURPOSE.md` (or `docs: revise PURPOSE.md`). During bootstrap, leave it for the first commit.
 
 ## What makes a mission

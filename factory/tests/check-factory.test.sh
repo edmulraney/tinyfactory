@@ -154,6 +154,20 @@ expect_status 1
 expect_output "factory/tests/one.test.sh: its header is one line"
 expect_output "  its first line is 122 characters"
 
+scenario "fails on a new script and a new workflow not yet added to git, and reads no ignored file"
+repo_with one.test.sh 'true'
+printf '%s\n' '#!/usr/bin/env bash' "# xx$long" 'true' > factory/scripts/new.sh
+mkdir -p factory/workflows
+printf '%s\n' '# Every pull request: checks, then reviews.' '# A draft runs nothing.' 'name: ci' > factory/workflows/new.yml
+printf '%s\n' '#!/usr/bin/env bash' "# xx$long" 'true' > factory/scripts/ignored.sh
+echo 'factory/scripts/ignored.sh' > .gitignore
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/scripts/new.sh: its header is one line"
+expect_output "  its first line is 122 characters"
+expect_output "factory/workflows/new.yml: its header is one line"
+expect_no_output "ignored.sh"
+
 scenario "fails on a line under the usage that is not indented under it"
 repo_with one.test.sh 'true'
 printf '%s\n' '#!/usr/bin/env bash' '# Ships a pull request.' '# Usage: ship.sh <pr-number>' '# It never ends in silence.' 'true' > factory/scripts/ship.sh
@@ -201,46 +215,66 @@ expect_status 1
 expect_output "could not list the workflows"
 expect_no_output "factory scripts ok"
 
-# reviewers <adam's Bash entries> <ryan's>: a ci.yml whose checks job runs a script, and whose reviewers hold these tools.
+# reviewers <Bash entries>: a ci.yml whose checks job runs a script, and whose review job holds these tools.
 reviewers() {
   repo_with one.test.sh 'true'
   mkdir -p factory/workflows
   printf '%s\n' '# Runs the checks.' 'jobs:' '  checks:' '          claude_args: |' '            --allowedTools "Read,Bash(factory/scripts/events.sh:*),Bash"' \
-    '  adam:' '          claude_args: |' "            --allowedTools \"Read,Grep,$1\"" \
-    '  ryan:' '          claude_args: |' '            --max-turns 40' "            --allowedTools \"Read,$2\"" > factory/workflows/ci.yml
+    '  review:' '        run: |' '            --max-turns 40 \' "            --allowedTools \"Read,Grep,$1\"" > factory/workflows/ci.yml
   git add .
 }
 
 scenario "passes reviewers whose tools run only gh and git, whatever another job's tools run"
-reviewers 'Bash(gh pr view:*),Bash(git diff:*)' 'Bash(gh issue view:*),Bash(git log:*)'
+reviewers 'Bash(gh pr view:*),Bash(git diff:*),Bash(gh issue view:*),Bash(git log:*)'
 run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
 
 scenario "fails on a reviewer's tool that runs a script from the repo, naming the line, the job and the entry"
-reviewers 'Bash(gh pr view:*),Bash(factory/scripts/events.sh:*)' 'Bash(git log:*)'
+reviewers 'Bash(gh pr view:*),Bash(factory/scripts/events.sh:*),Bash(git log:*)'
 run "$scripts/check-factory.sh"
 expect_status 1
-expect_output "factory/workflows/ci.yml: a reviewer's job checks out the pull request with a token that writes, so it runs no script from the repo (H293d)"
-expect_output "  line 8, in the job adam: Bash(factory/scripts/events.sh:*)"
+expect_output "factory/workflows/ci.yml: a reviewer's tools run no script from the repo (H293d)"
+expect_output "  line 9, in the job review: Bash(factory/scripts/events.sh:*)"
 expect_no_output "Bash(gh pr view:*)"
 expect_no_output "in the job checks"
 expect_no_output "factory scripts ok"
 
-scenario "fails on the second reviewer's too, on Bash with no command and on a command that only starts like git"
-reviewers 'Bash(git diff:*)' 'Bash(gh pr diff:*),Bash,Bash(gitleaks:*),Bash(bash factory/scripts/events.sh)'
+scenario "fails on Bash with no command and on a command that only starts like git"
+reviewers 'Bash(git diff:*),Bash(gh pr diff:*),Bash,Bash(gitleaks:*),Bash(bash factory/scripts/events.sh)'
 run "$scripts/check-factory.sh"
 expect_status 1
 # The newline ends the line: without it, the gitleaks line below would meet this too.
-expect_output $'  line 12, in the job ryan: Bash\n'
-expect_output "  line 12, in the job ryan: Bash(gitleaks:*)"
-expect_output "  line 12, in the job ryan: Bash(bash factory/scripts/events.sh)"
-expect_no_output "in the job adam"
+expect_output $'  line 9, in the job review: Bash\n'
+expect_output "  line 9, in the job review: Bash(gitleaks:*)"
+expect_output "  line 9, in the job review: Bash(bash factory/scripts/events.sh)"
+expect_no_output "Bash(git diff:*)"
 
 scenario "leaves another workflow's tools alone: only ci.yml's reviewers check out a pull request to judge it"
-reviewers 'Bash(git diff:*)' 'Bash(git log:*)'
-printf '%s\n' '# Builds a ticket.' 'jobs:' '  adam:' '            --allowedTools "Bash(pnpm:*)"' > factory/workflows/implement.yml
+reviewers 'Bash(git diff:*),Bash(git log:*)'
+printf '%s\n' '# Builds a ticket.' 'jobs:' '  review:' '            --allowedTools "Bash(pnpm:*)"' > factory/workflows/implement.yml
 git add .
 run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
+
+scenario "fails on an ordered list numbered by hand in a file .gitattributes marks merge=list, naming the file and the line"
+repo_with one.test.sh 'true'
+printf 'factory/guide.md merge=list\n' > .gitattributes
+printf '# Guide\n\n1. File a ticket.\n2. Add the label.\n' > factory/guide.md
+git add .
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/guide.md: .gitattributes marks it \`merge=list\`, so each item of an ordered list is written \`1.\`"
+expect_output "  4:2. Add the label."
+expect_no_output "factory scripts ok"
+
+scenario "passes a marked file whose every item is written 1., and a list numbered by hand in a file no mark names"
+repo_with one.test.sh 'true'
+printf 'factory/guide.md merge=list\n' > .gitattributes
+printf '# Guide\n\n1. File a ticket.\n1. Add the label.\n' > factory/guide.md
+printf '# Steps\n\n1. One.\n2. Two.\n' > factory/steps.md
+git add .
+run "$scripts/check-factory.sh"
+expect_status 0
+expect_output "factory scripts ok: 1 checked"

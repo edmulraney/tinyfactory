@@ -31,6 +31,7 @@ jobs:
       - name: Set the scripts aside as they are on main
         run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
       - name: The agent does what the owner asked
+        id: session
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -56,7 +57,7 @@ jobs:
           # No command that approves, merges or calls GitHub's API by path, and no file written but a body.
           # `Edit(...)` is the rule a `Write` is checked against, and start-waiting.sh takes no argument (decisions A372c, A372d, A372f).
           claude_args: |
-            --model claude-fable-5-2 --effort medium
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }}
             --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
       # The reply is the session's own, so a session that fails leaves none (decisions A372e).
       - name: Say that the run failed
@@ -67,3 +68,30 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh issue comment "$NUMBER" --body "The run that was to answer the owner's request here failed, and may have acted before it did. Its log says how far it got: $RUN_URL"
+      # This job may not write the sessions branch (decisions A372b), so the retro reads the transcript from this run (decisions A446b).
+      - name: Keep the transcript on this run
+        if: always() && steps.session.outputs.execution_file != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: session-claude-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.session.outputs.execution_file }}
+          retention-days: 90
+      # A request for help is work the factory did not do by itself; a session that never began answered none (decisions A446a).
+      - name: Start a retro of the request for help
+        if: always() && steps.session.outputs.execution_file != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TRANSCRIPT: ${{ steps.session.outputs.execution_file }}
+          COMMENT: ${{ github.event.comment.html_url }}
+        run: |
+          # An outage or the usage limit leaves one message, which the session wrote itself and marked as an error.
+          if ! jq -e 'any(.[]?; .type == "assistant" and .error == null)' "$TRANSCRIPT" > /dev/null; then
+            echo "no retro: the session never began"
+            exit 0
+          fi
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID" -f comment="$COMMENT"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

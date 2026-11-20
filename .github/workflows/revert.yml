@@ -1,0 +1,31 @@
+# The `revert` label on a shipped ticket takes it back: an engineer opens the pull request that reverts it.
+name: revert
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  revert:
+    # A job skipped here costs no minute, where a step would for every label on every ticket (decisions M443b).
+    if: github.event.label.name == 'revert'
+    # One at a time for a ticket: a second start must find the ticket the first one filed. On the job, so a skipped run cancels none that waits.
+    concurrency:
+      group: revert-${{ github.event.issue.number }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write         # to file the ticket that takes it back, answer on the labelled one and take the label off
+      pull-requests: read   # to read the pull request that shipped it
+      actions: write        # to start implement.yml (decisions A241c)
+    steps:
+      - uses: actions/checkout@v4
+      - name: File the ticket that reverts its commit, and start the build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          # Who started this attempt, which a run started again by someone else would otherwise hide (decisions M19a).
+          STARTED_BY: ${{ github.triggering_actor }}
+          OWNER: ${{ github.repository_owner }}
+        run: factory/scripts/revert.sh start "$NUMBER" "$STARTED_BY" "$OWNER"

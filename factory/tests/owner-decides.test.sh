@@ -75,6 +75,7 @@ model|--model claude-fable-5-2|--model claude-opus-5-5
 effort|--effort medium|--effort high
 turn limit|--max-turns 40|--max-turns 400
 timeout|timeout-minutes: 20|timeout-minutes: 360
+runner|runs-on: ubuntu-latest|runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
 EOF
 
 scenario "holds a timeout that was only taken away"
@@ -83,18 +84,25 @@ in_workflow "    timeout-minutes: 20
 decides
 expect_held "spend or limits: factory/workflows/build.yml: timeout-minutes: 20"
 
-scenario "holds a new entry in the record of the free plans' limits"
+scenario "lets through a change to the free-tier log alone: a new entry, and the file that says how one is written"
 change factory/free-tier/300.md "" "### #300. Previews are kept for a week"
 decides
-expect_held "spend or limits: factory/free-tier/300.md"
-
-scenario "holds a change to the free plans' limits themselves"
+expect_unheld
 change factory/free-tier.md "2,000 minutes a month" "3,000 minutes a month"
 decides
-expect_held "spend or limits: factory/free-tier.md"
+expect_unheld
+
+scenario "holds a free-tier entry that comes with a workflow's changed timeout for the timeout's lines alone"
+change factory/free-tier/300.md "" "### #300. Previews are kept for a week"
+cp "$T/diff" "$T/entry.diff"
+in_workflow "timeout-minutes: 20" "timeout-minutes: 360"
+cat "$T/entry.diff" >> "$T/diff"
+decides
+expect_held "spend or limits: factory/workflows/build.yml: timeout-minutes: 20
+spend or limits: factory/workflows/build.yml: timeout-minutes: 360"
 
 scenario "holds a change to how many tickets may be built at once, or wait for the owner, as main's in-flight.sh writes them"
-for limit in building_limit=3 owner_limit=5; do
+for limit in building_limit=5 owner_limit=5; do
   grep -qxF "$limit" "$scripts/in-flight.sh" || fail "in-flight.sh no longer holds $limit on a line that names the word limit, so a change to it would not be held"
   change factory/scripts/in-flight.sh "$limit" "${limit}0"
   decides
@@ -164,6 +172,11 @@ change factory/scripts/apply-setup.sh "echo one" "echo two"
 decides
 expect_held "secrets or permissions: factory/scripts/apply-setup.sh"
 
+scenario "holds a change to allow-skill-write.sh, which grants a fix round's session a write"
+change factory/scripts/allow-skill-write.sh "echo one" "echo two"
+decides
+expect_held "secrets or permissions: factory/scripts/allow-skill-write.sh"
+
 scenario "holds a change to the tools every session is allowed"
 change .claude/settings.json '{}' '{"permissions":{"allow":["Bash"]}}'
 decides
@@ -187,8 +200,8 @@ expect_output 'secrets or permissions: factory/workflows/build.yml: claude_code_
 
 # This rule.
 for path in factory/scripts/owner-decides.sh factory/scripts/protected-paths.sh factory/scripts/merge-gate.sh \
-    factory/scripts/approve-merge.sh factory/workflows/install-workflows.yml factory/workflows/approve-merge.yml \
-    .github/workflows/ci.yml; do
+    factory/scripts/approve-merge.sh factory/scripts/only-merged-main.sh factory/workflows/install-workflows.yml \
+    factory/workflows/approve-merge.yml .github/workflows/ci.yml; do
   scenario "holds any change to $path, as this rule"
   change "$path" "one" "two"
   decides
@@ -385,6 +398,46 @@ sed -n '/^@@/,$p' "$T/diff" > "$T/bare"; mv "$T/bare" "$T/diff"
 decides
 expect_status 2
 expect_output "opens a hunk of no file"
+
+# binary <path> [new path]: the diff git prints when that file, which holds a NUL byte, changes, in $T/diff.
+binary() {
+  rm -rf "$T/repo"
+  git init --quiet "$T/repo"
+  (
+    cd "$T/repo" || exit 1
+    mkdir -p "$(dirname "$1")" "$(dirname "${2:-$1}")"
+    printf 'permissions:\n  contents: read\n\0%s\n' "$(seq 1 40)" > "$1"; git add -A; git commit --quiet -m "before"
+    [ -z "${2:-}" ] || git mv "$1" "$2"
+    sed 's/contents: read/contents: write/' "${2:-$1}" > changed && mv changed "${2:-$1}"
+    git add -A
+    git diff --cached
+  ) > "$T/diff"
+  grep -q '^Binary files ' "$T/diff" || fail "the test's diff does not show the file as binary"
+}
+
+scenario "refuses a workflow git shows as binary, whose changed lines it cannot read, with exit 2"
+binary factory/workflows/build.yml
+decides
+expect_status 2
+expect_output "stands for the changed lines of factory/workflows/build.yml, which git shows as binary"
+
+scenario "refuses a workflow that is renamed and shown as binary, with exit 2"
+binary factory/workflows/build.yml factory/workflows/built.yml
+grep -q '^rename to ' "$T/diff" || fail "the test's diff does not rename the file"
+decides
+expect_status 2
+expect_output "stands for the changed lines of factory/workflows/built.yml, which git shows as binary"
+
+scenario "refuses a script whose lines a rule reads when git shows it as binary, with exit 2"
+binary factory/scripts/in-flight.sh
+decides
+expect_status 2
+
+scenario "lets through a binary file no rule reads the lines of"
+binary apps/web/public/logo.png
+decides
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
 
 # What the rest of the factory relies on.
 scenario "the installer runs exactly this script: its source names the git id of the file as it is"

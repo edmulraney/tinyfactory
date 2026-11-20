@@ -16,22 +16,22 @@ set -- factory/benchmark/*.json
 # shellcheck disable=SC2046
 set -- $(printf '%s\n' "$@" | sort -t / -k 3 -n)
 
-# reviewer <job>: sets $schema, $opening, $turns and $tools to the format, the prompt's first line, the turn limit and
-# the tools less `gh` of that reviewer's job in ci.yml, read from there so the two cannot differ (decisions A345a).
+# reviewer <name>: sets $schema, $opening, $turns and $tools to that reviewer's format and the first line of its prompt,
+# and the turn limit and the tools less `gh` of the `review` job in ci.yml, read from there so the two cannot differ (decisions A345a).
 reviewer() {
   local job
-  job=$(awk -v job="$1" '/^  [A-Za-z0-9_-]+:/ { at = $1; sub(/:.*/, "", at) } at == job' factory/workflows/ci.yml)
-  schema=$(sed -n "s/^ *REVIEW_SCHEMA: '\(.*\)'[^']*$/\1/p" <<<"$job" | head -n 1 | jq -ce 'select(type == "object")') \
-    && opening=$(awk '/^ *prompt: \|$/ { getline; sub(/^ */, ""); print; exit }' <<<"$job") \
+  job=$(awk '/^  [A-Za-z0-9_-]+:/ { at = $1; sub(/:.*/, "", at) } at == "review"' factory/workflows/ci.yml)
+  schema=$(sed -n "s/^ *$1_SCHEMA: '\(.*\)'[^']*$/\1/p" <<<"$job" | head -n 1 | jq -ce 'select(type == "object")') \
+    && opening=$(awk -v key="$1_PROMPT:" '$1 == key && $2 == "|" { getline; sub(/^ */, ""); print; exit }' <<<"$job") \
     && [[ "$opening" == *"$number"* ]] \
     && turns=$(grep -o -- '--max-turns [0-9][0-9]*' <<<"$job" | head -n 1 | cut -d ' ' -f 2) \
     && tools=$(grep -o -- '--allowedTools "[^"]*"' <<<"$job" | head -n 1 | cut -d '"' -f 2 | tr , '\n' | grep -v '^Bash(gh[ :]' | paste -s -d , -) \
-    || die "The $1 job in factory/workflows/ci.yml does not hold a REVIEW_SCHEMA, a prompt for pull request #$number, --max-turns and --allowedTools, so what a review is given is not known."
+    || die "The review job in factory/workflows/ci.yml does not hold $1_SCHEMA, $1_PROMPT for pull request #$number, --max-turns and --allowedTools, so what a review is given is not known."
 }
 # shellcheck disable=SC2016
 number='${{ github.event.pull_request.number }}'
-reviewer adam
-reviewer ryan
+reviewer ADAM
+reviewer RYAN
 
 # Every case is read and fetched before the first review, so no review is paid for in a run that cannot finish.
 bases=""
@@ -58,7 +58,7 @@ done
 work=$(mktemp -d) || die "Could not make a folder for the checkouts with mktemp."
 trap 'rm -rf "$work"' EXIT
 
-# review <name> <job>: one review of the case checked out in $work/tree, its findings added to $work/findings.
+# review <name> <NAME>: one review of the case checked out in $work/tree, its findings added to $work/findings.
 review() {
   local answer prompt schema opening turns tools
   reviewer "$2"
@@ -94,8 +94,8 @@ for case in "$@"; do
     && git -C "$work/tree" checkout --quiet --detach FETCH_HEAD \
     || die "Could not check out the commit of $case, so it cannot be reviewed."
   : > "$work/findings"
-  review Adam adam
-  review Ryan ryan
+  review Adam ADAM
+  review Ryan RYAN
   rm -rf "$work/tree"
   # Found by either reviewer, in a file of the problem and in the case's words (decisions A345b).
   jq -r --arg pr "$pr" --slurpfile findings "$work/findings" '

@@ -102,7 +102,7 @@ if [ -n "$differing" ]; then
   running="${running%@*}"
   running="${running#*/"$installed"/}"
   stale_run() {
-    echo "$installed/$1 is an install behind $branch, where it now matches its source. Nothing was edited, but this run uses the workflow from before the install, and no reviewer is given a token in a run whose workflow is not the one $branch holds. Merge $branch into the branch and push, which starts a run with the workflow $branch holds: git fetch origin $branch && git merge origin/$branch"
+    echo "$installed/$1 is an install behind $branch, where it now matches its source. Nothing was edited, but this run uses the workflow from before the install. Merge $branch into the branch and push, which starts a run with the workflow $branch holds: git fetch origin $branch && git merge origin/$branch"
   }
 
   problems=""

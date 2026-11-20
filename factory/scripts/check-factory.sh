@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Lints the factory's shell scripts and test files, their headers and each workflow's, and the reviewers' tools.
+# Lints the factory's shell scripts and test files, their headers, the reviewers' tools and the lists git merges.
 # Usage: check-factory.sh   (from the repo root)
 set -euo pipefail
 
-# A listing that failed is not a repo with no script in it (decisions H106).
-if ! scripts=$(git ls-files 'factory/scripts/*.sh' 'factory/tests/*.sh' '.claude/skills/bootstrap/scripts/*.sh'); then
+# A listing that failed is not a repo with no script in it (decisions H106). A new file is listed before it is added (decisions H464).
+if ! scripts=$(git ls-files --cached --others --exclude-standard 'factory/scripts/*.sh' 'factory/tests/*.sh' '.claude/skills/bootstrap/scripts/*.sh'); then
   echo "check-factory.sh must be run inside a git repository: it could not list the scripts with git ls-files, so nothing was checked."
   exit 1
 fi
@@ -55,7 +55,7 @@ for script in $scripts; do
   fi
 done
 # A header that grows is read on every run that opens the file (decisions H176a).
-if ! workflows=$(git ls-files 'factory/workflows/*.yml'); then
+if ! workflows=$(git ls-files --cached --others --exclude-standard 'factory/workflows/*.yml'); then
   echo "check-factory.sh could not list the workflows with git ls-files, so no header was checked."
   exit 1
 fi
@@ -85,7 +85,7 @@ for file in $workflows; do
   [ "$file" = factory/workflows/ci.yml ] || continue
   found=$(awk '
     /^  [A-Za-z0-9_-]+:/ { job = $1; sub(/:.*/, "", job) }
-    (job == "adam" || job == "ryan") && /--allowedTools/ {
+    job == "review" && /--allowedTools/ {
       rest = $0
       while (match(rest, /Bash(\([^)]*\))?/)) {
         entry = substr(rest, RSTART, RLENGTH)
@@ -95,10 +95,23 @@ for file in $workflows; do
     }
   ' "$file")
   if [ -n "$found" ]; then
-    echo "$file: a reviewer's job checks out the pull request with a token that writes, so it runs no script from the repo (H293d). Each Bash entry in its --allowedTools begins \`gh \` or \`git \`:"
+    echo "$file: a reviewer's tools run no script from the repo (H293d). Each Bash entry in the review job's --allowedTools begins \`gh \` or \`git \`:"
     sed 's/^/  /' <<<"$found"
     failed=1
   fi
 done
+# A merge keeps both of two items added to a marked list, so a number written by hand would be there twice (decisions M485e).
+if ! marked=$(git ls-files --cached --others --exclude-standard | git check-attr --stdin merge | sed -n 's/: merge: list$//p'); then
+  echo "check-factory.sh could not read from git which files .gitattributes marks as lists, so their lists were not checked."
+  exit 1
+fi
+while IFS= read -r file; do
+  [ -f "$file" ] || continue
+  if found=$(grep -nE '^[[:space:]]*([02-9]|[0-9]{2,})[.)] ' "$file"); then
+    echo "$file: .gitattributes marks it \`merge=list\`, so each item of an ordered list is written \`1.\`, which Markdown numbers in order when it is shown (decisions M485e):"
+    sed 's/^/  /' <<<"$found"
+    failed=1
+  fi
+done <<<"$marked"
 [ "$failed" -eq 0 ] && echo "factory scripts ok: $(wc -w <<<"$scripts" | tr -d ' ') checked"
 exit "$failed"

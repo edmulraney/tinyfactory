@@ -5,20 +5,26 @@
 
 in_ci="GITHUB_WORKFLOW_REF=owner/myapp/.github/workflows/ci.yml@refs/pull/7/merge"
 
+# a_run: GitHub ran the workflow from the commit $ran, and serves any commit by its id, as a local repo does only when told.
 a_run() {
   git init --quiet --initial-branch=main "$T/origin"
+  git -C "$T/origin" config uploadpack.allowAnySHA1InWant true
   mkdir -p "$T/origin/.github/workflows"
   echo "name: ci" > "$T/origin/.github/workflows/ci.yml"
   echo "name: fix" > "$T/origin/.github/workflows/fix.yml"
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "the workflows"
-  git clone --quiet "$T/origin" "$T/work"
+  ran=$(git -C "$T/origin" rev-parse HEAD)
 }
-# on_main <file> <contents>: an install lands on main after the run's checkout was made.
+# on_main <file> <contents>: an install lands on main after the run began.
 on_main() {
   echo "$2" > "$T/origin/.github/workflows/$1"
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "ci: install $1"
 }
-behind() { run env "$@" "$scripts/workflow-behind.sh"; }
+# behind: from a checkout of the base as it is now, as the job that posts verdicts has (decisions A427f).
+behind() {
+  [ -d "$T/work/.git" ] || git clone --quiet "$T/origin" "$T/work"
+  run env GITHUB_WORKFLOW_SHA="$ran" "$@" "$scripts/workflow-behind.sh"
+}
 
 scenario "prints nothing for a run whose ci.yml is the one main holds"
 a_run
@@ -61,12 +67,22 @@ expect_status 0
 expect_output "not in a workflow run"
 expect_no_output "this run uses the workflow from before the install"
 
-scenario "when main cannot be read it prints no sentence, says why, and does not fail: its caller asks for a person"
+scenario "when the commit the run came from cannot be read it prints no sentence, says why, and does not fail"
 a_run; on_main ci.yml "name: ci, changed"
-git remote set-url origin "$T/nowhere"
-behind "$in_ci"
+for sha in "" 0123456789012345678901234567890123456789; do
+  behind "$in_ci" GITHUB_WORKFLOW_SHA="$sha"
+  expect_status 0
+  expect_output "the commit this run's .github/workflows/ci.yml came from could not be read, so whether it is the one main holds is not known"
+  expect_no_output "this run uses the workflow from before the install"
+done
+
+scenario "when the base cannot be read it prints no sentence, says why, and does not fail: its caller asks for a person"
+a_run; on_main ci.yml "name: ci, changed"
+git clone --quiet "$T/origin" "$T/work"
+git config remote.origin.fetch "+refs/heads/gone:refs/remotes/origin/gone"
+behind "$in_ci" GITHUB_BASE_REF=gone
 expect_status 0
-expect_output "main could not be read, so whether this run's .github/workflows/ci.yml is the one main holds is not known"
+expect_output "gone could not be read, so whether this run's .github/workflows/ci.yml is the one gone holds is not known"
 expect_no_output "this run uses the workflow from before the install"
-only=$(env "$in_ci" "$scripts/workflow-behind.sh" 2>/dev/null)
+only=$(env "$in_ci" GITHUB_WORKFLOW_SHA="$ran" GITHUB_BASE_REF=gone "$scripts/workflow-behind.sh" 2>/dev/null)
 [ -z "$only" ] || fail "expected nothing on its standard output, which is all its caller reads"

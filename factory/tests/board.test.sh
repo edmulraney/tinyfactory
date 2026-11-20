@@ -3,8 +3,6 @@
 . "$(dirname "$0")/helpers.sh"
 
 board="$root/.claude/skills/bootstrap/scripts/board.sh"
-# The template board these scenarios name; the scenario with no template unsets both.
-export FACTORY_BOARD_TEMPLATE_OWNER=template-owner FACTORY_BOARD_TEMPLATE_NUMBER=7
 
 # The board is #4, described by $T/board.json; the token holds only `project`; $T/fail holds a word of the call to fail.
 # The template is seen unless $T/template-hidden exists.
@@ -179,11 +177,11 @@ github_holds
 echo '[{"title":"another","number":2,"closed":false}]' > "$T/projects.json"
 run "$board" myapp
 expect_status 0
-expect_call "owner=template-owner -F number=7 -f query="
+expect_call "owner=repo-owner -F number=7 -f query="
 expect_call "project=PVT_template -f account=U_owner -f title=myapp -f query="
 expect_call "copyProjectV2(input: {projectId: \$project, ownerId: \$account, title: \$title})"
 expect_no_call "createProjectV2("
-expect_output "created board #9, a copy of template-owner's board #7"
+expect_output "created board #9, a copy of repo-owner's board #7"
 expect_output "board ok: https://github.com/users/owner/projects/9"
 expect_no_call "gh project "
 
@@ -217,16 +215,6 @@ expect_no_call "copyProjectV2("
 expect_output "created board #9"
 expect_no_output "a copy of"
 expect_output "board ok: https://github.com/users/owner/projects/9"
-
-scenario "creates the board from nothing when no template is named"
-github_holds
-echo '[]' > "$T/projects.json"
-run env -u FACTORY_BOARD_TEMPLATE_OWNER -u FACTORY_BOARD_TEMPLATE_NUMBER "$board" myapp
-expect_status 0
-expect_output "no template board is named, so the board is built from nothing"
-expect_no_call "template: projectV2("
-expect_call "createProjectV2(input: {ownerId: \$account, title: \$title})"
-expect_no_call "copyProjectV2("
 
 scenario "stops when the template cannot be read for another reason, and creates no board"
 github_holds

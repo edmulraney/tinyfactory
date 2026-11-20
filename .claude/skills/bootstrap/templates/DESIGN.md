@@ -8,6 +8,7 @@ How {{name}} looks and behaves. `ARCHITECTURE.md` says how the code is organised
 
 - **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`. Never hand-write a button, input or dialog.
 - **Product components** are built from those and live in `src/components`. A pattern becomes a component at its second use.
+- **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.
 - **Colour is a closed set of named tokens**, defined in `src/app/globals.css`. Tailwind's default palette has been removed, so `bg-blue-500` does not exist.
 
   | Token | Use |

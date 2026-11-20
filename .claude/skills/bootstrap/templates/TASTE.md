@@ -5,6 +5,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 ## Approach
 
 - **The smallest standard route.** The scale is a startup idea being validated as fast as possible, without slop, and it guides the architecture. Take the smallest standard engineering solution that does the job at that scale; anything heavier is over-engineering. A general problem is solved once, where that solution puts it, not at each call site. Depart only for a reason that serves the business, the product or the user, such as testing a hypothesis before building the whole thing, and record it as a decision.
+- **React to the event that changes the state.** Do not poll for it. A schedule is only for what has no event, such as time passing.
 
 ## Code
 
@@ -14,7 +15,6 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 - **Names carry the meaning.** Use the domain language in `ARCHITECTURE.md`. A comment explains why, never what.
 - **An identifier takes the standard engineering term.** Prose stays plain; a variable, function, output or file is named with the word an engineer would search for (`notified`, `failed`, `retry`), never a house word (`told`).
 - **Errors are handled where something can be done about them,** and nowhere else. Never swallow one silently.
-- **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.
 - **No comment that defends not doing something.** A comment explains why something surprising is there. If the simple thing was done, there is nothing to explain.
 - **A provider's number is read from the provider when it is needed, or not used.** A limit, balance, price or count that GitHub, Vercel, Neon or Anthropic holds is never copied into a script, variable or rule file; a record may keep a dated measurement, which no script reads.
 
@@ -28,19 +28,19 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 ## Pull requests
 
 - **One ticket, one pull request, as small as the ticket allows.** Unrelated cleanups go in their own ticket.
-- **The description's first sentence says what changed and stands alone.** No file-by-file narration.
 - **Docs move with the code.** The docs named in the ticket are updated in the same pull request.
 
 ## Documents
 
 - **A file holds what stays true until someone edits it.** A ticket's state, a date or "for now" is wrong by the next merge. What happened goes in the ticket or a decision row.
-- **A sentence stays only when removing it changes what a reader does.**
 
 ## Writing
 
 These rules apply to everything written: code comments, commit messages, tickets, pull request descriptions, comments on tickets and pull requests, decision rows and documents.
 
+- **Every written line earns its place.** A line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens. A fact that only some tasks need goes in the document those tasks read, not in a file every agent reads.
 - **Write for a reader who has read neither the ticket nor the code.**
 - **Say the thing itself.** Do not point at it.
 - **Name a thing by what it is, and keep that name.**
 - **One idea in each sentence, in the active voice, with its articles.**
+- **A number is written with what it measures, and with the limit it is judged against when there is one.** "A contrast ratio of 5.5:1 on the destructive button on hover, where the accessibility standard asks for at least 4.5:1", never "(5.5:1)" alone.

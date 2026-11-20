@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Posts a reviewer's verdict: a fail exits 1, so the review job is red; an unfinished review asks for a person instead.
+# Posts a reviewer's verdict: a fail exits 1, so its job is red; an unfinished review asks for a person instead.
 # Usage: OUTPUT='<json>' [HEAD_SHA=<commit>] post-verdict.sh "<reviewer name>" <pr-number> [<execution-file>]
-#        The execution file is the last session's saved result, read for the verdict and the cause. Needs GH_TOKEN.
+#        The execution file is the last session's saved result, read for the verdict and the cause.
+#        Needs GH_TOKEN (pull-requests and issues: write; contents: write, to hold every agent when the usage limit ended the review).
 set -euo pipefail
 
 reviewer="$1"; pr="$2"; file="${3:-}"
@@ -55,13 +56,19 @@ if [ -z "$verdict" ] || [ -n "$long" ]; then
   elif [ -n "$unkind" ]; then
     message="Its verdict was refused, because each of its findings is \`$own\` or \`out-of-scope\`, and these are not: $unkind. $refused"
   else
-    cause=$("$script_dir/session-outcome.sh" "$file" | sed -n 's/^cause=//p')
+    outcome=$("$script_dir/session-outcome.sh" "$file")
+    cause=$(sed -n 's/^cause=//p' <<<"$outcome")
+    # A review the usage limit ended waits for the reset and not for a person; held, the call exits 1 (decisions A395c).
+    resets=$(sed -n 's/^resets=//p' <<<"$outcome")
+    if [ -n "$resets" ] && "$script_dir/usage-limit.sh" hold "$resets" >/dev/null; then
+      "$script_dir/usage-limit.sh" wait "$pr" "${reviewer%% *}'s review" failed || exit 1
+    fi
     message="The review ended without a verdict: $cause. Nothing is known to be wrong with this pull request, so no fix round starts, and it does not merge until it has been reviewed."
   fi
   run_link=""
   [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" in $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   # The first line says what a person must do, after the name a reviewer's comment is found by (decisions A371a, A371c).
-  gh pr comment "$pr" --body "**$reviewer: review not finished.** Run the failed job again$run_link: the reviewer then reviews this pull request.
+  gh pr comment "$pr" --body "**$reviewer: review not finished.** Run the failed jobs again$run_link: the reviewer then reviews this pull request.
 
 $message"
   gh pr edit "$pr" --add-label needs-human >/dev/null

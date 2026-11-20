@@ -4,7 +4,10 @@
 #        run-facts.sh --run <run-id> [sessions-dir]
 #        run-facts.sh --first-run <pr-number> <run-id> [sessions-dir]
 #        sessions-dir is a checkout of the sessions branch. Needs GH_TOKEN (actions: read to see jobs and logs).
-#        --first-run adds `changed_steps`: each step the pull request's diff names in that workflow, and what it did.
+#        run-facts.sh --ask <run-id> <comment-link> <sessions-dir>
+#        --first-run adds `changed_steps`: each named step the pull request's diff adds a line to in that workflow, and what it did.
+#        --ask adds `ask`: the comment that asked @claude for help. It copies the transcript of the `claude` run that
+#        answered, an artifact of that run, into sessions-dir, where the facts list it.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
@@ -83,15 +86,46 @@ if [ "${1:-}" = --first-run ]; then
     || die "Could not read the diff of pull request #$pr, so which steps it changed is not known."
   jobs=$(gh api "repos/{owner}/{repo}/actions/runs/$run/jobs" --paginate --jq '.jobs[]') \
     || die "Could not read the jobs of workflow run $run from GitHub, so what its changed steps did is not known."
-  # A step is known by its name alone, so one the diff adds or renames in this run's workflow (decisions A334).
-  names=$(awk -v workflow="factory/workflows/$workflow" '
+  # The workflow's file, then the number of each line the diff adds to it, as the pull request left it.
+  added=$(awk -v workflow="factory/workflows/$workflow" '
     /^diff --git / { inside = 0 }
-    /^\+\+\+ b\// { inside = ($0 == "+++ b/" workflow ".yml" || $0 == "+++ b/" workflow ".yaml") }
-    inside && /^\+[ \t]*- name:/ {
-      sub(/^\+[ \t]*- name:[ \t]*/, ""); sub(/[ \t\r]+$/, "")
-      if ($0 ~ /^".*"$/ || $0 ~ /^\047.*\047$/) $0 = substr($0, 2, length($0) - 2)
-      print
-    }' <<<"$diff")
+    /^\+\+\+ b\// {
+      inside = ($0 == "+++ b/" workflow ".yml" || $0 == "+++ b/" workflow ".yaml")
+      if (inside) print substr($0, 7)
+      next
+    }
+    inside && /^@@ / { split($3, at, ","); line = substr(at[1], 2) + 0; next }
+    inside && /^\+/ { print line++; next }
+    inside && /^ / { line++ }' <<<"$diff")
+  # A step is known by its name, so each added line is placed in the step that holds it: its name, a line of
+  # its `run:`, its `if:` (decisions A334). GitHub keeps the pull request's last commit at refs/pull/<n>/head.
+  names=""
+  if [ "$(grep -c . <<<"$added")" -gt 1 ]; then
+    file=$(sed -n 1p <<<"$added")
+    source=$(gh api "repos/{owner}/{repo}/contents/$file?ref=refs/pull/$pr/head" -H "Accept: application/vnd.github.raw+json") \
+      || die "Could not read $file as pull request #$pr left it, so which steps it changed is not known."
+    names=$(awk -v added="$(sed 1d <<<"$added")" '
+      { sub(/\r$/, "") }
+      /^[ \t]*steps:[ \t]*$/ { indent = -1; step = 0; next }
+      /^[ \t]*(#|$)/ { next }
+      indent == -1 { indent = ($0 ~ /^ *- /) ? index($0, "-") : 0 }
+      # A line indented less than the steps ends them: the next job, or the end of the jobs.
+      indent > 0 && match($0, /[^ ]/) < indent { indent = 0; step = 0 }
+      indent > 0 && match($0, /[^ ]/) == indent { step = ++steps }
+      step {
+        in_step[FNR] = step
+        key = substr($0, indent)
+        if (key ~ /^(- |  )name:/) {
+          sub(/^(- |  )name:[ \t]*/, "", key); sub(/[ \t]+$/, "", key)
+          if (key ~ /^".*"$/ || key ~ /^\047.*\047$/) key = substr(key, 2, length(key) - 2)
+          name[step] = key
+        }
+      }
+      END {
+        count = split(added, lines, "\n")
+        for (i = 1; i <= count; i++) if ((lines[i] in in_step) && name[in_step[lines[i]]] != "") print name[in_step[lines[i]]]
+      }' <<<"$source")
+  fi
   # A step no job of the run holds was never reached: it is listed with no job. Sorted so a job's log is read once.
   steps=$(jq -sc --arg names "$names" '
     . as $jobs
@@ -123,6 +157,35 @@ if [ "${1:-}" = --first-run ]; then
   exit 0
 fi
 
+# A comment that asked @claude for help, and the `claude` run that answered it (decisions A446a).
+if [ "${1:-}" = --ask ]; then
+  usage="Usage: run-facts.sh --ask <run-id> <comment-link> <sessions-dir>"
+  run="${2:?$usage}"; link="${3:?$usage}"; sessions="${4:?$usage}"
+  # A comment's link names the ticket or pull request it is on, then the comment's kind and id.
+  [[ "$link" =~ ^https://[^[:space:]]+/(issues|pull)/([0-9]+)#(issuecomment-|discussion_r)([0-9]+)$ ]] \
+    || die "$link is not the link to a comment on a ticket or a pull request, so the request for help was not read."
+  case "${BASH_REMATCH[1]}" in pull) folder="pr-${BASH_REMATCH[2]}" ;; *) folder="issue-${BASH_REMATCH[2]}" ;; esac
+  case "${BASH_REMATCH[3]}" in issuecomment-) kind=issues ;; *) kind=pulls ;; esac
+  ask=$(gh api "repos/{owner}/{repo}/$kind/comments/${BASH_REMATCH[4]}" --jq '{comment: .body, url: .html_url}') \
+    || die "Could not read the comment $link from GitHub, so the request for help is not known."
+  attempt=$(gh api "repos/{owner}/{repo}/actions/runs/$run" --jq .run_attempt) \
+    || die "Could not read workflow run $run from GitHub, so its transcript was not found."
+  work=$(mktemp -d) || die "Could not make a temporary folder, so the transcript of workflow run $run was not read."
+  kept="$sessions/$folder/$(date -u +%Y%m%dT%H%M%SZ)-claude-run$run.json"
+  trap 'rm -rf "$error_file" "$work"' EXIT
+  # The job that answered may not write the sessions branch, so its transcript is an artifact of its run (decisions A446b).
+  gh run download "$run" --name "session-claude-$run-$attempt" --dir "$work" >&2 \
+    || die "Could not download the transcript of workflow run $run, so the facts of the request for help are not known."
+  transcript=$(find "$work" -type f -name '*.json' | head -n 1)
+  [ -n "$transcript" ] || die "The artifact of workflow run $run holds no transcript, so the facts of the request for help are not known."
+  mkdir -p "$sessions/$folder" && cp "$transcript" "$kept" \
+    || die "Could not copy the transcript of workflow run $run into $sessions, so the facts of the request for help are not known."
+  # The folder names the ticket or pull request to the run's facts, which say for themselves what they could not read.
+  of_run=$("$0" --run "$run" "$sessions") || { rm -f "$kept"; exit 1; }
+  jq -n --argjson run "$of_run" --argjson ask "$ask" '$run + {ask: $ask}'
+  exit 0
+fi
+
 if [ "${1:-}" = --run ]; then
   run="${2:?Usage: run-facts.sh --run <run-id> [sessions-dir]}"; sessions="${3:-}"
 
@@ -134,8 +197,10 @@ if [ "${1:-}" = --run ]; then
 
   # A job still finishing has no conclusion yet, but its failed step already shows.
   # In `ci` a failed check or review is the pull request's: only `merge`, `start-fix` and `fix` count (decisions A20).
+  # A job stopped at its time limit ends cancelled with no failed step: that it asked for its retro tells it (decisions A434b).
   failed=$(jq -sc --arg workflow "$workflow" '
-    map(select(.conclusion == "failure" or .conclusion == "timed_out" or ((.steps // []) | any(.conclusion == "failure"))))
+    map(select(.conclusion == "failure" or .conclusion == "timed_out" or ((.steps // []) | any(.conclusion == "failure"
+      or (.name == "Start a retro when this job failed" and .conclusion == "success")))))
     | if $workflow == "ci" then map(select(.name == "merge" or .name == "start-fix" or .name == "fix")) else . end
     | map(((.steps // []) | map(select(.conclusion == "failure")) | .[0]) as $step
           | {id, job: .name, step: ($step.name // null), from: ($step.started_at // ""), to: ($step.completed_at // "")})' <<<"$jobs")

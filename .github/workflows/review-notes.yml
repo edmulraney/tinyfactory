@@ -1,0 +1,23 @@
+# Each Friday, starts the build of the ticket that holds the week's review notes.
+name: review-notes
+
+on:
+  schedule:
+    # Friday morning, so the pull request waits for the owner inside the week; off the hour, when GitHub starts late.
+    - cron: "17 6 * * 5"
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write         # to tell the ticket when its build could not be started
+      pull-requests: read   # to see which tickets a build already holds
+      actions: write        # to start implement.yml (decisions A241c)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start the build of the oldest ticket that holds review notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/review-notes.sh start

@@ -23,7 +23,7 @@ status=""
 replaced=""
 
 # What a workflow would set is taken away, so a test passes or fails the same in CI as on a laptop.
-unset BOARD_TOKEN PRODUCTION_URL GITHUB_BASE_REF GH_TOKEN GITHUB_TOKEN GITHUB_WORKFLOW_REF
+unset BOARD_TOKEN PRODUCTION_URL GITHUB_BASE_REF GH_TOKEN GITHUB_TOKEN GITHUB_WORKFLOW_REF GITHUB_WORKFLOW_SHA
 # The tests that need a git repo make their own; it must not depend on who runs them.
 export GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com
 export GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com
@@ -103,12 +103,29 @@ sessions_on_github() {
 }
 export -f sessions_on_github
 
+# hold_on_github: answers a gh stand-in's read of the hold usage-limit.sh keeps: from the sessions branch of the repo
+# sessions_remote made, which the script's own pushes reach, or else from $T/usage-limit. With no such file it
+# answers as GitHub does for one the branch does not hold.
+hold_on_github() {
+  if [ -d "$T/remote.git" ]; then
+    git --git-dir="$T/remote.git" show sessions:usage-limit 2>/dev/null && return 0
+  elif [ -e "$T/usage-limit" ]; then
+    cat "$T/usage-limit"
+    return 0
+  fi
+  echo "gh: Not Found (HTTP 404)" >&2
+  return 1
+}
+export -f hold_on_github
+
 # waiting_on_github "$@": answers a gh stand-in's calls from start-waiting.sh, which a script that frees a place runs.
 # $T/ready holds the open issues labelled ready, $T/issues and $T/pulls what in-flight.sh reads: each `[]` when absent.
+# $T/usage-limit holds the hold of the Claude usage limit, and none holds when absent.
 # $T/open holds every open issue and pull request. A ticket with a lower number has carried ready longer.
 waiting_on_github() {
   local file n
   case "$*" in
+    "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github; return ;;
     "api repos/{owner}/{repo}/issues?state=open&labels=ready&per_page=100 --paginate --jq "*) file=ready ;;
     "api repos/{owner}/{repo}/issues?state=open&per_page=100 --paginate --jq "*) file=open ;;
     "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate --jq "*) json '[]' "$@"; return ;;
@@ -170,4 +187,9 @@ expect_first_line() {
 }
 expect_no_call() {
   [[ "$(cat "$T/calls")" != *"$1"* ]] || fail "expected no call like: $1"
+}
+# How many times something was called, by the first words of the call.
+calls() { grep -cF -- "$1" "$T/calls" || true; }
+expect_calls() {
+  [ "$(calls "$2")" = "$1" ] || fail "expected $1 of the call, got $(calls "$2"): $2"
 }

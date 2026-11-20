@@ -16,6 +16,9 @@ github() {
     case "$*" in
       "api repos/{owner}/{repo}/actions/runs/900/jobs --paginate "*) json "$(cat "$T/jobs")" "$@" ;;
       "api repos/{owner}/{repo}/actions/runs/900") cat "$T/run" ;;
+      "api repos/{owner}/{repo}/actions/runs/900 --jq .run_attempt") json "$(cat "$T/run")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/comments/5 --jq "* | "api repos/{owner}/{repo}/pulls/comments/8 --jq "*) json "$(cat "$T/comment")" "$@" ;;
+      "run download 900 --name session-claude-900-1 --dir "*) [ ! -e "$T/artifact.json" ] || cp "$T/artifact.json" "${*: -1}/claude-execution-output.json" ;;
       "api repos/{owner}/{repo}/actions/jobs/"*"/logs" | "api repos/{owner}/{repo}/actions/jobs/"*"/logs --allow-escape-sequences")
         id=${2#*/jobs/}; id=${id%/logs}
         if [ -f "$T/log-$id.later" ] && [ "$(grep -c "jobs/$id/logs" "$T/calls")" -ge 3 ]; then cat "$T/log-$id.later"
@@ -27,11 +30,13 @@ github() {
       "pr view 72 --json body "*) json "{\"body\":\"Closes #57\"}" "$@" ;;
       "pr view 72 --json number,"*) json "$(cat "$T/pr")" "$@" ;;
       "pr diff 72") cat "$T/diff" ;;
+      "api repos/{owner}/{repo}/contents/factory/workflows/"*"?ref=refs/pull/72/head -H Accept: application/vnd.github.raw+json")
+        name=${2#*/workflows/}; cat "$T/source-${name%%\?*}" ;;
       "pr comment 72 --body-file "*) ;;
       "api repos/{owner}/{repo}/issues/72/comments?per_page=100 "*) json "$(cat "$T/rounds")" "$@" ;;
       "run list --workflow ci.yml --branch feat/57-test-with-current-main "*) json "$(cat "$T/ci-runs")" "$@" ;;
-      "run view 801 --json jobs "*) json "{\"jobs\":[{\"name\":\"checks\",\"conclusion\":\"success\"},{\"name\":\"ryan\",\"conclusion\":\"failure\"}]}" "$@" ;;
-      "run view 802 --json jobs "*) json "{\"jobs\":[{\"name\":\"ryan\",\"conclusion\":\"failure\"},{\"name\":\"e2e\",\"conclusion\":\"failure\"}]}" "$@" ;;
+      "run view 801 --json jobs "*) json "{\"jobs\":[{\"name\":\"checks\",\"conclusion\":\"success\"},{\"name\":\"review\",\"conclusion\":\"failure\"}]}" "$@" ;;
+      "run view 802 --json jobs "*) json "{\"jobs\":[{\"name\":\"review\",\"conclusion\":\"failure\"},{\"name\":\"e2e\",\"conclusion\":\"failure\"}]}" "$@" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub sleep ':'
@@ -222,7 +227,7 @@ scenario "a ci run: a failed check or review is not the factory's failure"
 github
 a_run ci pull_request failure
 jobs_are "$(a_job 51 checks success "$(step "Lint" success 08:00:00 08:00:30)")" \
-         "$(a_job 52 ryan failure "$(step "Post the verdict" failure 08:02:00 08:02:01)")" \
+         "$(a_job 52 review failure "$(step "Adam reviews architecture and taste, and Ryan correctness, at the same time" failure 08:02:00 08:02:01)")" \
          "$(a_job 53 start-fix success "$(step "Start a fix round, unless three have been used" success 08:03:00 08:03:05)")"
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --run 900 "$T/sessions"
 expect_status 0
@@ -233,7 +238,7 @@ expect_no_call "/logs"
 scenario "a ci run that began before fix.yml: a failed fix job is the factory's failure, and the failed review beside it is not listed"
 github
 a_run ci pull_request failure
-jobs_are "$(a_job 52 ryan failure "$(step "Post the verdict" failure 08:02:00 08:02:01)")" \
+jobs_are "$(a_job 52 review failure "$(step "Adam reviews architecture and taste, and Ryan correctness, at the same time" failure 08:02:00 08:02:01)")" \
          "$(a_job 53 fix failure "$(step "The engineer fixes the pull request" failure 08:03:00 08:09:00)")"
 printf '2026-11-16T08:03:00.1000000Z   PR: 72\n2026-11-16T08:09:00.0000000Z ##[error]Process completed with exit code 1.\n' > "$T/log-53"
 a_session_cut_short pr-72 fred-fix
@@ -290,6 +295,27 @@ expect_fact '.failed[0].step' null
 expect_fact '.failed[0].log | contains("ISSUE: 57")' true
 expect_fact .issue 57
 expect_fact .factory_failure true
+
+scenario "a job stopped at its time limit that asked for its retro: it counts, with no step named"
+github; a_build_cut_short
+jobs_are "$(a_job 31 implement cancelled \
+  "$(step "The engineer builds the ticket" cancelled 07:19:10 08:19:10)" \
+  "$(step "Start a retro when this job failed" success 08:19:12 08:19:13)")"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --run 900 "$T/sessions"
+expect_status 0
+expect_fact '.failed[0].job' implement
+expect_fact '.failed[0].step' null
+expect_fact .factory_failure true
+
+scenario "a job a person cancelled, which asked for no retro: not the factory's failure"
+github; a_build_cut_short
+jobs_are "$(a_job 31 implement cancelled \
+  "$(step "The engineer builds the ticket" cancelled 07:19:10 07:25:00)" \
+  "$(step "Start a retro when this job failed" skipped 07:25:02 07:25:02)")"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --run 900 "$T/sessions"
+expect_status 0
+expect_fact '.failed | length' 0
+expect_fact .factory_failure false
 
 scenario "a ticket refused at validation: failed as designed, so not the factory's failure"
 github
@@ -477,7 +503,7 @@ expect_fact .outcome merged
 expect_fact .fix_rounds 1
 expect_fact .owner_rounds 0
 expect_fact '.reviews | "\(.adam.pass) \(.adam.fail) \(.ryan.pass) \(.ryan.fail)"' "2 0 1 1"
-expect_fact '.failed_jobs | map("\(.job) \(.times)") | join(", ")' "e2e 1, ryan 2"
+expect_fact '.failed_jobs | map("\(.job) \(.times)") | join(", ")' "e2e 1, review 2"
 expect_no_call "gh run view 803"
 
 scenario "a pull request: a pass carried forward is counted apart from the passes a reviewer gave"
@@ -621,6 +647,7 @@ run view 802|Could not read the jobs of ci run 802
 READS
 
 # The diff adds one step to ci.yml and renames another, beside a context line, a removed line and another workflow's.
+# $T/source-ci.yml is ci.yml as the pull request left it: the diff's added lines are its lines 7 to 10.
 a_first_run() {
   a_pull_request
   a_run ci pull_request success
@@ -647,7 +674,7 @@ diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml
 index 1111111..2222222 100644
 --- a/factory/workflows/ci.yml
 +++ b/factory/workflows/ci.yml
-@@ -50,6 +50,10 @@ jobs:
+@@ -5,3 +5,6 @@ jobs:
        - name: Run pnpm lint
          run: pnpm lint
 +      - name: "Trust the preview's address"
@@ -659,7 +686,7 @@ diff --git a/factory/workflows/retro.yml b/factory/workflows/retro.yml
 index 3333333..4444444 100644
 --- a/factory/workflows/retro.yml
 +++ b/factory/workflows/retro.yml
-@@ -50,6 +50,7 @@ jobs:
+@@ -4,0 +5,1 @@ jobs:
 +      - name: Wait for the preview
 diff --git a/apps/web/notes.yml b/apps/web/notes.yml
 index 5555555..6666666 100644
@@ -668,6 +695,36 @@ index 5555555..6666666 100644
 @@ -1,1 +1,2 @@
 +      - name: Run pnpm lint
 DIFF
+  cat > "$T/source-ci.yml" <<'SOURCE'
+name: ci
+jobs:
+  checks:
+    steps:
+      - name: Run pnpm lint
+        run: pnpm lint
+      - name: "Trust the preview's address"
+        run: factory/scripts/trust-preview.sh
+      - name: Delete the preview's branch
+        if: always()
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: wait
+        name: Wait for the preview
+        run: |
+          factory/scripts/wait-for-preview.sh
+          - name: Run pnpm lint
+SOURCE
+  printf 'name: retro\njobs:\n  retro:\n    steps:\n      - name: Wait for the preview\n' > "$T/source-retro.yml"
+}
+# adds <line>...: the diff adds those lines of ci.yml, and no other.
+adds() {
+  local line
+  printf 'diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml\n' > "$T/diff"
+  for line in "$@"; do printf '@@ -%s,0 +%s,1 @@\n+%s\n' "$line" "$line" "$(sed -n "${line}p" "$T/source-ci.yml")"; done >> "$T/diff"
 }
 
 scenario "the first run of a changed workflow: the run's facts though nothing failed, and the pull request that changed it with its reviewers' assumptions"
@@ -739,6 +796,7 @@ expect_fact '.changed_steps[] | select(.step | startswith("Trust")) | .log | con
 scenario "the first run of a changed workflow: two changed steps of one job read its log once"
 github; a_first_run
 sed -i.bak 's/^-      - name: Run the unit tests$/+      - name: Run the unit tests/' "$T/diff" && rm "$T/diff.bak"
+sed -i.bak '9i\      - name: Run the unit tests' "$T/source-ci.yml" && rm "$T/source-ci.yml.bak"
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
 expect_fact '.changed_steps[] | select(.step == "Run the unit tests") | .log' "212 tests passed"
 [ "$(grep -c 'jobs/51/logs' "$T/calls")" = 1 ] || fail "expected one asking, got $(grep -c 'jobs/51/logs' "$T/calls")"
@@ -767,6 +825,39 @@ grep -v '^+      - name: Wait for the preview$' "$T/diff" > "$T/diff.new" && mv 
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
 expect_status 0
 expect_fact '.changed_steps | tojson' "[]"
+[ "$(grep -c 'contents/factory/workflows' "$T/calls")" = 1 ] || fail "expected the workflow to be read only when the diff adds a line to it"
+
+scenario "the first run of a changed workflow: a step whose command or condition changed is listed, though its name did not"
+github; a_first_run
+adds 6 10
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
+expect_status 0
+expect_fact '.changed_steps | map(.step) | sort | join(", ")' "Delete the preview's branch, Run pnpm lint"
+expect_fact '.changed_steps[] | select(.step == "Run pnpm lint") | "\(.job) \(.conclusion)"' "checks success"
+
+scenario "the first run of a changed workflow: a step whose name is not its first line is found from any line of it"
+github; a_first_run
+for line in 17 21; do
+  adds "$line"
+  run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
+  expect_status 0
+  expect_fact '.changed_steps | map("\(.step) in \(.job)") | join(", ")' "Wait for the preview in e2e"
+done
+
+scenario "the first run of a changed workflow: a line of a step with no name, of a job outside its steps or above the jobs is no step's"
+github; a_first_run
+adds 1 11 12 16
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
+expect_status 0
+expect_fact '.changed_steps | tojson' "[]"
+
+scenario "the first run of a changed workflow: stops with a message, and prints no facts, when the workflow cannot be read as the pull request left it"
+github; a_first_run
+echo "api repos/{owner}/{repo}/contents/factory/workflows/ci.yml" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
+expect_failure
+expect_output "Could not read factory/workflows/ci.yml as pull request #72 left it, so which steps it changed is not known."
+expect_no_output '"changed_by"'
 
 scenario "the first run of a changed workflow: stops with a message, and prints no facts, when the diff cannot be read"
 github; a_first_run
@@ -783,6 +874,88 @@ run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/s
 expect_failure
 expect_output "Could not read the jobs of workflow run 900 from GitHub, so what its changed steps did is not known."
 expect_no_output '"changed_by"'
+
+# A `claude` run that answered the owner's comment on ticket #12, and left its transcript on the run.
+a_request_answered() {
+  a_run claude issue_comment success
+  jobs_are "$(a_job 51 claude success "$(step "The agent does what the owner asked" success 08:00:00 08:03:00)")"
+  echo '{"id":5,"body":"@claude start #12, which has waited since Monday","html_url":"https://github.example/owner/myapp/issues/12#issuecomment-5","user":{"login":"owner"}}' > "$T/comment"
+  echo '[{"type":"assistant"},{"type":"result","is_error":false,"terminal_reason":"completed","total_cost_usd":0.42,"num_turns":9,"duration_ms":180000}]' > "$T/artifact.json"
+}
+ask="https://github.example/owner/myapp/issues/12#issuecomment-5"
+
+scenario "a request for help: the comment's text and link, the ticket it is on, and the transcript of the run that answered"
+github; a_request_answered
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_status 0
+expect_fact .ask.comment "@claude start #12, which has waited since Monday"
+expect_fact .ask.url "$ask"
+expect_fact .workflow claude
+expect_fact .url "https://github.example/runs/900"
+expect_fact .issue 12
+expect_fact .pr null
+expect_fact '.agents | length' 1
+expect_fact '.agents[0].role' claude
+expect_fact .cost_usd 0.42
+[ -f "$T/sessions/$(jq -r '.agents[0].file' <<<"$out")" ] || fail "expected the transcript to be where the facts list it"
+[ -z "$(find "$T/work" "$T/tmp" -mindepth 1)" ] || fail "expected no file left in the working or temporary directory"
+
+scenario "a request for help in a review comment: read as a pull request's comment, with that pull request and its ticket"
+github; a_request_answered
+echo '{"id":8,"body":"@claude why is this red?","html_url":"https://github.example/owner/myapp/pull/72#discussion_r8"}' > "$T/comment"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "https://github.example/owner/myapp/pull/72#discussion_r8" "$T/sessions"
+expect_status 0
+expect_call "gh api repos/{owner}/{repo}/pulls/comments/8 --jq"
+expect_fact .ask.comment "@claude why is this red?"
+expect_fact .pr 72
+expect_fact .issue 57
+expect_fact '.agents[0].file | startswith("pr-72/")' true
+
+scenario "a request for help: what is no link to a comment is refused before GitHub is asked"
+github; a_request_answered
+for link in "https://github.example/owner/myapp/issues/12" "issues/12#issuecomment-5" "$ask"$'\n'"go=true" "go=true"$'\n'"$ask" "https://github.example/owner/myapp/commit/abc#issuecomment-5"; do
+  run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$link" "$T/sessions"
+  expect_failure
+  expect_output "is not the link to a comment on a ticket or a pull request, so the request for help was not read."
+done
+expect_no_call "gh"
+
+scenario "a request for help: stops with a message, and leaves nothing, when the comment, the run or the transcript cannot be read"
+github; a_request_answered
+left() { find "$T/sessions" "$T/work" "$T/tmp" -mindepth 1 ! -path "$T/sessions/lessons"; }
+echo "api repos/{owner}/{repo}/issues/comments/5" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_failure
+expect_output "Could not read the comment $ask from GitHub, so the request for help is not known."
+expect_no_call "run download"
+echo "api repos/{owner}/{repo}/actions/runs/900 --jq" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_failure
+expect_output "Could not read workflow run 900 from GitHub, so its transcript was not found."
+expect_no_call "run download"
+echo "run download" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_failure
+expect_output "Could not download the transcript of workflow run 900, so the facts of the request for help are not known."
+expect_no_output '"ask"'
+[ -z "$(left)" ] || fail "expected nothing left behind, found: $(left)"
+
+scenario "a request for help: stops with a message when the run kept no transcript"
+github; a_request_answered
+rm "$T/artifact.json"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_failure
+expect_output "The artifact of workflow run 900 holds no transcript, so the facts of the request for help are not known."
+expect_no_output '"ask"'
+
+scenario "a request for help: stops with the run's own message, and takes the transcript back, when the run's jobs cannot be read"
+github; a_request_answered
+echo "api repos/{owner}/{repo}/actions/runs/900/jobs" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --ask 900 "$ask" "$T/sessions"
+expect_failure
+expect_output "Could not read the jobs of workflow run 900 from GitHub, so what failed is not known."
+expect_no_output '"ask"'
+[ -z "$(find "$T/sessions" -name '*-run900.json')" ] || fail "expected the copied transcript to be taken back"
 
 scenario "leaves nothing behind"
 github; a_build_cut_short

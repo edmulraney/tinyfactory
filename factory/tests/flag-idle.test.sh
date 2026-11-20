@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Tests for flag-idle.sh: a ticket in flight that nothing works on is flagged once (decisions T271a to T271d).
 . "$(dirname "$0")/helpers.sh"
+. "$(dirname "$0")/sessions-remote.sh"
 
 # $T/issues and $T/pulls are what in-flight.sh reads; $T/issue-<n> and $T/pull-<n> answer for each one;
 # $T/runs-<state> holds the runs in that state; $T/fail holds the start of each call that should fail.
@@ -25,6 +26,7 @@ github() {
       "issue edit "*" --add-label needs-human --remove-label in-progress")
         jq -c --argjson n "$3" "map(select(.number != \$n))" "$T/issues" > "$T/issues.new" && mv "$T/issues.new" "$T/issues" ;;
       "issue comment "*) : ;;
+      "run rerun "*) : ;;
       *) waiting_on_github "$@" ;;
     esac'
 }
@@ -71,6 +73,8 @@ expect_no_call "gh issue comment"
 scenario "a flagged ticket with no pull request gives its place to the ticket that waits with ready"
 github
 ticket 64 300
+ticket 72 10
+ticket 73 10
 pull 112 feat/70-other 10
 pull 113 feat/71-another 10
 echo '[{"number":81},{"number":80}]' > "$T/ready"
@@ -86,14 +90,16 @@ expect_output "started the build of issue #80, which waited with ready"
 scenario "a flagged ticket whose pull request is open still holds its place: the ticket that waits is not started"
 github
 ticket 64 300
-pull 111 feat/64-three-in-flight 200
+ticket 72 10
+ticket 73 10
+pull 111 feat/64-five-in-flight 200
 pull 112 feat/70-other 10
 pull 113 feat/71-another 10
 echo '[{"number":80}]' > "$T/ready"
 run "$scripts/flag-idle.sh"
 expect_status 0
 expect_output "flagged: #64"
-expect_output "3 tickets are being built or checked, so no waiting ticket was started"
+expect_output "5 tickets are being built or checked, so no waiting ticket was started"
 expect_no_call "gh workflow run"
 
 scenario "with nothing flagged, the tickets that wait are not looked for"
@@ -169,7 +175,7 @@ expect_output "flagged: #70"
 expect_no_call "gh issue edit 64"
 expect_call "gh issue edit 70 --add-label needs-human --remove-label in-progress"
 
-for workflow in implement fix approve-merge rerun-fits-main; do
+for workflow in implement fix approve-merge merge-group; do
   scenario "leaves every ticket while a run of $workflow is going: it names no ticket"
   github
   ticket 64 300
@@ -246,6 +252,16 @@ run "$scripts/flag-idle.sh"
 expect_status 0
 expect_call "It is in flight (being built, in draft pull request #130)"
 expect_first_line "gh issue comment 64 --body" "Add the \`ready\` label again: a build starts when a place is free."
+
+scenario "a ticket cut short that waits with ready for a place is not idle: start-waiting.sh starts it"
+github
+echo '[{"number":64}]' > "$T/ready"
+pull 130 feat/64-three-in-flight 200 MERGEABLE true
+run "$scripts/flag-idle.sh"
+expect_status 0
+expect_output "left: #64 waits with ready for a place"
+expect_no_call "gh issue edit"
+expect_no_call "gh issue comment"
 
 scenario "says of a conflict that no fix round is going, and how to start one"
 github
@@ -344,6 +360,49 @@ grep -B4 'run: factory/scripts/flag-idle.sh' "$workflow" | grep -qF 'if: ${{ !ca
   || fail "expected the flag-idle.sh step to run after a failed step"
 
 scenario "the workflow's token may do what the two scripts need"
-for permission in "issues: write" "pull-requests: read" "actions: write" "checks: read" "contents: read"; do
+for permission in "issues: write" "pull-requests: read" "actions: write" "checks: read" "contents: write"; do
   grep -qF "      $permission" "$workflow" || fail "expected the permission: $permission"
 done
+
+scenario "while the Claude usage limit holds every agent an idle ticket is not flagged: nothing works on it until the limit resets"
+github
+ticket 12 600
+echo 99999999999 > "$T/usage-limit"
+run "$scripts/flag-idle.sh"
+expect_status 0
+expect_output "The Claude usage limit holds every agent until 5138-11-16 09:46 UTC: nothing was started again."
+expect_output "Nothing was flagged: what the usage limit held is not idle."
+expect_no_call "gh issue edit"
+expect_no_call "labels=in-progress"
+
+scenario "the first look after the limit resets starts again what it held, and flags nothing: the runs it started are not yet listed"
+sessions_remote sessions
+github
+hold_is 1000000000 "run 44" "failed 45"
+ticket 12 600
+echo '[{"number":30}]' > "$T/ready"
+run "$scripts/flag-idle.sh"
+expect_status 0
+[ -z "$(the_hold)" ] || fail "expected the hold to be gone from the sessions branch, got: $(the_hold)"
+expect_call "gh run rerun 44"
+expect_call "gh run rerun 45 --failed"
+expect_call "gh workflow run implement.yml -f issue=30"
+expect_no_call "gh issue edit"
+
+scenario "the look after that flags an idle ticket as before"
+github
+ticket 12 600
+GITHUB_RUN_ID=9 GITHUB_SERVER_URL=https://github.com GITHUB_REPOSITORY=owner/repo run "$scripts/flag-idle.sh"
+expect_status 0
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+
+scenario "flags nothing, and fails, when what the usage limit held could not all be started again"
+sessions_remote sessions
+github
+hold_is 1000000000 "run 44"
+ticket 12 600
+echo "run rerun 44" > "$T/fail"
+run "$scripts/flag-idle.sh"
+expect_status 1
+expect_output "What the Claude usage limit held could not all be started again, so nothing was flagged."
+expect_no_call "gh issue edit"

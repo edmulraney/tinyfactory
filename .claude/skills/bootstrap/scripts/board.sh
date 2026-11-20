@@ -8,8 +8,6 @@
 # factory/scripts/apply-setup.sh with the BOARD_TOKEN secret. That token can edit boards and
 # cannot see any repo, so nothing here may need repo access once the board is linked.
 # Usage: board.sh [name]   (name defaults to the directory name)
-#        FACTORY_BOARD_TEMPLATE_OWNER and FACTORY_BOARD_TEMPLATE_NUMBER name a board to copy, such as one whose
-#        automations are already on. With neither set, the board is built from nothing (decisions S283a).
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -20,9 +18,9 @@ owner=$(gh api user --jq .login)
 columns='["Backlog","In progress","Deployed"]'
 # A column that had another name keeps its id under the new one (decisions T6).
 renamed='{"In progress":"In review"}'
-# A new board is a copy of the template board these two name, when both are set (decisions S283a).
-template_owner="${FACTORY_BOARD_TEMPLATE_OWNER:-}"
-template_number="${FACTORY_BOARD_TEMPLATE_NUMBER:-}"
+# A new board is a copy of this one (decisions S283a).
+template_owner=repo-owner
+template_number=7
 
 # Through the API, not `gh project`, which a token with only `project` is refused (decisions U222).
 account=$(gh api graphql --paginate -f owner="$owner" -f query='
@@ -35,17 +33,14 @@ account=$(gh api graphql --paginate -f owner="$owner" -f query='
 number=$(jq -rs --arg name "$name" \
   '[.[].projectsV2.nodes[] | select(.title == $name and (.closed | not)) | .number] | first // ""' <<<"$account")
 if [ -z "$number" ]; then
-  template=""
-  if [ -n "$template_owner" ] && [ -n "$template_number" ]; then
-    # Only an answer that the template is hidden builds from nothing; any other failure stops (decisions S283b).
-    template=$(gh api graphql -f owner="$template_owner" -F number="$template_number" -f query='
-      query($owner: String!, $number: Int!) {
-        user(login: $owner) { template: projectV2(number: $number) { id } }
-      }' --jq '.data.user.template.id' 2>&1) || {
-      grep -qF "Could not resolve" <<<"$template" || { echo "$template" >&2; exit 1; }
-      template=""
-    }
-  fi
+  # Only an answer that the template is hidden builds from nothing; any other failure stops (decisions S283b).
+  template=$(gh api graphql -f owner="$template_owner" -F number="$template_number" -f query='
+    query($owner: String!, $number: Int!) {
+      user(login: $owner) { template: projectV2(number: $number) { id } }
+    }' --jq '.data.user.template.id' 2>&1) || {
+    grep -qF "Could not resolve" <<<"$template" || { echo "$template" >&2; exit 1; }
+    template=""
+  }
   if [ -n "$template" ]; then
     number=$(gh api graphql -f project="$template" -f account="$(jq -rs '.[0].id' <<<"$account")" -f title="$name" -f query='
       mutation($project: ID!, $account: ID!, $title: String!) {
@@ -53,11 +48,7 @@ if [ -z "$number" ]; then
       }' --jq '.data.copyProjectV2.projectV2.number')
     echo "created board #$number, a copy of $template_owner's board #$template_number"
   else
-    if [ -n "$template_owner" ] && [ -n "$template_number" ]; then
-      echo "this login cannot see the template board, $template_owner's #$template_number, so the board is built from nothing"
-    else
-      echo "no template board is named, so the board is built from nothing"
-    fi
+    echo "this login cannot see the template board, $template_owner's #$template_number, so the board is built from nothing"
     number=$(gh api graphql -f account="$(jq -rs '.[0].id' <<<"$account")" -f title="$name" -f query='
       mutation($account: ID!, $title: String!) {
         createProjectV2(input: {ownerId: $account, title: $title}) { projectV2 { number } }

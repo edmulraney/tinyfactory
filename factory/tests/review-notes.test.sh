@@ -15,6 +15,7 @@ github() {
     case "$*" in
       "api repos/{owner}/{repo}/issues?state=open&labels=factory&per_page=100 --paginate --jq "*) json "$(cat "$T/issues")" "$@" ;;
       "api repos/{owner}/{repo}/issues?state=open&labels=in-progress&per_page=100 --paginate --jq "*) json "$(cat "$T/building")" "$@" ;;
+      "api repos/{owner}/{repo}/issues?state=open&labels=ready&per_page=100 --paginate --jq "*) json "[]" "$@" ;;
       "pr list --state open --limit 100 --json number,headRefName,author,labels,isDraft") cat "$T/pulls" ;;
       "issue create --title Apply the review notes of week 7 --label factory --body "*)
         printf "%s\n" "$8" > "$T/body"; cat "$T/made" 2>/dev/null || echo https://github.com/owner/repo/issues/50 ;;
@@ -53,7 +54,8 @@ stub gh 'case "$*" in "issue view 50 --json title,body,labels,createdAt") cat "$
 echo "$made" > "$T/ticket.json"
 run "$scripts/check-ticket.sh" 50
 expect_status 0
-for expected in "--comments" "headed by a reviewer's name" "skip any other comment" "or answer it in one line" "seen three times" '`apps/` included'; do
+for expected in "--comments" "headed by a reviewer's name" "skip any other comment" "or answer it in one line" "seen three times" '`apps/` included' \
+  '`gh issue list --search`' '`gh pr list --search`' "a note one of them holds is not applied, and its answer names that number"; do
   grep -qF -- "$expected" "$T/body" || fail "expected the ticket to say: $expected"
 done
 

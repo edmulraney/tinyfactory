@@ -589,6 +589,11 @@ branch_changing ARCHITECTURE.md factory/scripts/ship.sh factory/decisions.md
 check "$good"
 passes
 
+scenario "passes a change to the factory whose only document is the owner's guide"
+branch_changing ARCHITECTURE.md factory/scripts/ship.sh factory/owner-guide.md
+check "$good"
+passes
+
 scenario "passes a change to the factory whose only document is its ticket's decision rows"
 branch_changing ARCHITECTURE.md factory/scripts/ship.sh factory/decisions/62.md
 check "$good"
@@ -596,6 +601,11 @@ passes
 
 scenario "passes a change to the factory whose only document is its ticket's free-tier entry"
 branch_changing ARCHITECTURE.md factory/scripts/ship.sh factory/free-tier/62.md
+check "$good"
+passes
+
+scenario "passes a change to the factory whose only document is an entry of a list of the README"
+branch_changing ARCHITECTURE.md factory/scripts/ship.sh factory/README/known-gaps/previews.md
 check "$good"
 passes
 

@@ -1,0 +1,1 @@
+| The factory's files, and what only the owner decides, the product's bar included | `factory/scripts/protected-paths.sh`, `factory/scripts/owner-decides.sh`; the merge gate runs `main`'s copies ([M2](../../decisions/setup.md), [M272a](../../decisions/272.md), [M272e](../../decisions/272.md)) |

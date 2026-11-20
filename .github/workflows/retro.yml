@@ -1,0 +1,275 @@
+# A retro: one agent finds the cause of a run's friction or failure, writes a lesson and may propose a change.
+name: retro
+
+on:
+  # A job of the factory's own that failed starts this for its run, and a failed retro starts nothing (decisions A20).
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number of the run to learn from
+        required: false
+      run:
+        description: Or the id of a failed workflow run to learn from. With both, the run is the first of a workflow that pull request changed
+        required: false
+      comment:
+        description: With the id of the `claude` run that answered it, the link to a comment that asked for help
+        required: false
+
+concurrency:
+  # Both numbers: one pull request can change several workflows, and a third retro cancels one waiting in its group.
+  group: retro-${{ inputs.pr || 'run' }}-${{ inputs.run }}
+
+env:
+  PR: ${{ inputs.pr }}
+  RUN: ${{ inputs.run }}
+  COMMENT: ${{ inputs.comment }}
+  # No background commands in a session with nobody in it (decisions A69f).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+  LESSON_SCHEMA: '{"type":"object","properties":{"summary":{"type":"string"},"title":{"type":"string","description":"A ticket title for the proposed change: an imperative verb, then what changes. One clause, no colon, no comma, 60 characters or fewer, sentence case, no full stop."},"cause":{"type":"string","enum":["ticket","skill-missing","skill-wrong","check-missing","agent-ignored","process","outside","one-off"]},"detail":{"type":"string"},"evidence":{"type":"array","items":{"type":"string"}},"change":{"type":"object","properties":{"kind":{"type":"string","enum":["script","check","template","skill","none"]},"target":{"type":"string"},"proposal":{"type":"string"},"removes":{"type":"string","description":"The rule, check, step or instruction the change takes away, or nothing."}},"required":["kind","target","proposal","removes"]},"cost":{"type":"object","properties":{"amount":{"type":"string","description":"What the fault cost on this run, with a figure from its facts: dollars, minutes, rounds."},"minutes":{"type":"number","description":"The minutes of sessions and waiting the fault cost on this run, worked out from its facts, which give seconds; 0 when none."},"kind":{"type":"array","items":{"type":"string","enum":["lost-work","lost-money","stopped"]}}},"required":["amount","minutes","kind"]},"saves":{"type":"string","description":"What the change would have saved on this run, with a figure from its facts."},"repeats":{"type":"array","items":{"type":"string"}},"handling":{"type":"array","items":{"type":"string","enum":["lost-work","left-wrong","told-nobody"]}},"retry":{"type":"string","enum":["enough","not-enough","harmful","not-applicable"]},"propose":{"type":"boolean"},"held_by":{"type":"integer","description":"The number of the open ticket that already holds this change, or 0 when none does or the open tickets were not given."}},"required":["summary","title","cause","detail","evidence","change","cost","saves","repeats","handling","retry","propose","held_by"]}'
+
+jobs:
+  retro:
+    # The owner's runner when they named one (decisions A426a).
+    runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
+    # Three tries of the agent, and the fifteen minutes between them (decisions A24).
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write   # to say on a failed pull request what the retro found
+      issues: write
+      actions: write   # run-facts.sh reads a run's jobs and a failed step's log; file-proposal.sh starts implement.yml (decisions A369b)
+      id-token: write
+    steps:
+      # No session reads what an earlier one left in the home folder (decisions A426c).
+      - name: Give the job a home folder of its own on the owner's runner
+        if: vars.AGENT_RUNNER
+        run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+
+      - name: Fetch the transcripts and earlier lessons
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git clone --quiet --depth 1 --branch sessions \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .sessions
+          mkdir -p .sessions/lessons
+
+      - name: Gather the run's facts
+        id: facts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # No retro starts while the Claude usage limit holds every agent: this run is run again (decisions A231b, A395b).
+          limit=$(factory/scripts/usage-limit.sh wait "" "the retro")
+          if [ -n "$limit" ]; then
+            echo "no retro: $limit"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -n "$PR" ] && [ -n "$RUN" ]; then
+            # The first run of a workflow that pull request changed (decisions A185a).
+            factory/scripts/run-facts.sh --first-run "$PR" "$RUN" .sessions > .sessions/facts.json
+            { echo "go=true"; echo "subject=workflow run $RUN, the first run of a workflow that pull request #$PR changed"; echo "key=pr-$PR"; } >> "$GITHUB_OUTPUT"
+          elif [ -n "$PR" ]; then
+            factory/scripts/run-facts.sh "$PR" .sessions > .sessions/facts.json
+            { echo "go=true"; echo "subject=pull request #$PR"; echo "key=pr-$PR"; } >> "$GITHUB_OUTPUT"
+          elif [ -n "$RUN" ] && [ -n "$COMMENT" ]; then
+            # A request for help is learnt from however its run ended (decisions A446a).
+            factory/scripts/run-facts.sh --ask "$RUN" "$COMMENT" .sessions > .sessions/facts.json
+            {
+              echo "go=true"
+              echo "subject=the request for help that workflow run $RUN answered"
+              jq -r '"key=" + (if .issue then "issue-\(.issue)" else "pr-\(.pr)" end)' .sessions/facts.json
+            } >> "$GITHUB_OUTPUT"
+          elif [ -n "$RUN" ]; then
+            factory/scripts/run-facts.sh --run "$RUN" .sessions > .sessions/facts.json
+            # A failed check, or a ticket refused at validation, ended as designed (decisions A21).
+            go=$(jq -r .factory_failure .sessions/facts.json)
+            [ "$go" = true ] || echo "run $RUN is not a failure of the factory: no retro"
+            {
+              echo "go=$go"
+              echo "subject=the failed workflow run $RUN"
+              jq -r '"key=" + (if .issue then "issue-\(.issue)" elif .pr then "pr-\(.pr)" else "run-\(.run)" end)' .sessions/facts.json
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "Give a pull request number or a workflow run id."; exit 1
+          fi
+          jq . .sessions/facts.json
+
+      # The session may not list issues, and one read here costs nothing; without it the retro files as before (decisions A218a, A218b).
+      - name: List the open tickets
+        if: steps.facts.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue list --state open --limit 1000 --json number,title,labels \
+            --jq '[.[] | {number, title, labels: [.labels[].name]}]' > .sessions/tickets.json || {
+            rm -f .sessions/tickets.json
+            echo "the open tickets could not be listed: the retro goes on without them"
+          }
+
+      # The service that failed may still be down: three tries, alike but in name (decisions A24).
+      - name: Find the cause and write the lesson
+        id: first
+        if: steps.facts.outputs.go == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The session's token reads a run's jobs and logs, which it otherwise may not (decisions A259, A406).
+          additional_permissions: |
+            actions: read
+          # The scripts that start this do so with the workflow's own token, so the actor is a bot.
+          allowed_bots: "*"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: |
+            Read .claude/skills/retro/SKILL.md and follow it for ${{ steps.facts.outputs.subject }} in this repository.
+            The facts are in .sessions/facts.json. Transcripts are under .sessions/ at the paths the facts list.
+            Earlier lessons are the JSON files in .sessions/lessons/.
+            The open tickets are in .sessions/tickets.json, unless they could not be listed.
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
+            --json-schema '${{ env.LESSON_SCHEMA }}'
+
+      - name: Wait five minutes if the retro was cut short from outside
+        id: wait1
+        if: steps.first.outcome == 'failure'
+        run: |
+          ending=$(factory/scripts/session-ending.sh "${{ steps.first.outputs.execution_file }}")
+          echo "the session ended: $ending"
+          case "$ending" in api_error | none) sleep 300; echo "retry=true" >> "$GITHUB_OUTPUT" ;; esac
+
+      - name: Find the cause and write the lesson, second try
+        id: second
+        if: steps.wait1.outputs.retry == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
+          allowed_bots: "*"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: |
+            Read .claude/skills/retro/SKILL.md and follow it for ${{ steps.facts.outputs.subject }} in this repository.
+            The facts are in .sessions/facts.json. Transcripts are under .sessions/ at the paths the facts list.
+            Earlier lessons are the JSON files in .sessions/lessons/.
+            The open tickets are in .sessions/tickets.json, unless they could not be listed.
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
+            --json-schema '${{ env.LESSON_SCHEMA }}'
+
+      - name: Wait ten minutes if it was cut short again
+        id: wait2
+        if: steps.second.outcome == 'failure'
+        run: |
+          ending=$(factory/scripts/session-ending.sh "${{ steps.second.outputs.execution_file }}")
+          echo "the session ended: $ending"
+          case "$ending" in api_error | none) sleep 600; echo "retry=true" >> "$GITHUB_OUTPUT" ;; esac
+
+      - name: Find the cause and write the lesson, third try
+        id: third
+        if: steps.wait2.outputs.retry == 'true'
+        # Its failure is not the job's: the save step fails the job when there is no lesson (decisions A141).
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
+          allowed_bots: "*"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: |
+            Read .claude/skills/retro/SKILL.md and follow it for ${{ steps.facts.outputs.subject }} in this repository.
+            The facts are in .sessions/facts.json. Transcripts are under .sessions/ at the paths the facts list.
+            Earlier lessons are the JSON files in .sessions/lessons/.
+            The open tickets are in .sessions/tickets.json, unless they could not be listed.
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
+            --json-schema '${{ env.LESSON_SCHEMA }}'
+
+      - name: Save the lesson beside the transcripts
+        if: steps.facts.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Whichever try gave a lesson; one finished past the limit is read from the transcript (decisions A141).
+          OUTPUT: ${{ steps.third.outputs.structured_output || steps.second.outputs.structured_output || steps.first.outputs.structured_output }}
+          TRANSCRIPT: ${{ steps.third.outputs.execution_file || steps.second.outputs.execution_file || steps.first.outputs.execution_file }}
+          KEY: ${{ steps.facts.outputs.key }}
+        run: |
+          OUTPUT=$(factory/scripts/retro-lesson.sh "$TRANSCRIPT")
+          # The log's end stays out of the lesson: every later retro reads every lesson.
+          jq -n --argjson lesson "$OUTPUT" --slurpfile facts .sessions/facts.json \
+            '{pr: $facts[0].pr, issue: $facts[0].issue, facts: ($facts[0] | del(.agents) | del(.failed[]?.log, .changed_steps[]?.log)), lesson: $lesson}' \
+            > "$RUNNER_TEMP/lesson.json"
+          factory/scripts/save-session.sh lesson lessons "$RUNNER_TEMP/lesson.json"
+          factory/scripts/save-session.sh retro "$KEY" "$TRANSCRIPT"
+          jq -r '"lesson: \(.lesson.summary)\ncause: \(.lesson.cause), seen before: \(.lesson.repeats | length), handling: \(.lesson.handling | join(" ")), retry: \(.lesson.retry), propose: \(.lesson.propose)"' "$RUNNER_TEMP/lesson.json"
+
+      - name: Propose a change to the factory
+        id: propose
+        if: steps.facts.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRANSCRIPT: ${{ steps.third.outputs.execution_file || steps.second.outputs.execution_file || steps.first.outputs.execution_file }}
+        run: |
+          lesson="$RUNNER_TEMP/lesson.json"
+          # A proposal an open ticket holds is noted there, and files nothing (decisions A218a).
+          message=$(factory/scripts/file-proposal.sh "$lesson" .sessions/tickets.json .sessions/lessons "$TRANSCRIPT")
+          echo "$message"
+          echo "message=$message" >> "$GITHUB_OUTPUT"
+
+      # The session rewrites a proposal the ticket template refuses, once (decisions A394a).
+      - name: Rewrite a proposal the ticket template refuses
+        id: rewrite
+        if: steps.propose.outputs.rewrite == 'true'
+        # Its failure is not the job's: the next step files the proposal for a person.
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |   # as for the first try
+            actions: read
+          allowed_bots: "*"
+          settings: ${{ env.AGENT_SETTINGS }}
+          prompt: ${{ steps.propose.outputs.prompt }}
+          claude_args: |
+            --resume ${{ steps.propose.outputs.session }}
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(gh run view:*)"
+            --json-schema '${{ env.LESSON_SCHEMA }}'
+
+      - name: File the rewritten proposal
+        id: rewritten
+        if: steps.propose.outputs.rewrite == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTPUT: ${{ steps.rewrite.outputs.structured_output }}
+          TRANSCRIPT: ${{ steps.rewrite.outputs.execution_file }}
+          KEY: ${{ steps.facts.outputs.key }}
+        run: |
+          lesson="$RUNNER_TEMP/lesson.json"
+          factory/scripts/save-session.sh retro "$KEY" "$TRANSCRIPT"
+          message=$(factory/scripts/file-proposal.sh "$lesson" .sessions/tickets.json .sessions/lessons --rewritten "$TRANSCRIPT")
+          echo "$message"
+          echo "message=$message" >> "$GITHUB_OUTPUT"
+
+      # A failed run's owner looks on its ticket (decisions A25); a first run's, on its pull request (decisions A185a).
+      - name: Say on the run's ticket what the retro found
+        if: steps.facts.outputs.go == 'true' && (env.PR == '' || env.RUN != '') && env.COMMENT == ''   # a request for help has its answer there already (decisions A446c)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROPOSAL: ${{ steps.rewritten.outputs.message || steps.propose.outputs.message }}
+        run: |
+          lesson="$RUNNER_TEMP/lesson.json"
+          ticket=$(jq -r '.facts.changed_by.pr // .issue // .pr // empty' "$lesson")
+          [ -n "$ticket" ] || { echo "the run's ticket is not known, so there is nowhere to say it"; exit 0; }
+          {
+            jq -r '(if .facts.changed_by then "the first run of `\(.facts.workflow)` since this pull request changed it" else "the failed `\(.facts.workflow)` run" end) as $run
+              | "A retro looked at \($run): \(.facts.url)\n\n\(.lesson.summary)\n"' "$lesson"
+            echo "${PROPOSAL:-It proposes no change to the factory. The lesson is saved on the \`sessions\` branch.}"
+          } | sed 's/@claude/claude/g' > "$RUNNER_TEMP/found.md"
+          gh issue comment "$ticket" --body-file "$RUNNER_TEMP/found.md"

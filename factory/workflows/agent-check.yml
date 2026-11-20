@@ -21,6 +21,6 @@ jobs:
           echo "token length: ${#CLAUDE_CODE_OAUTH_TOKEN} characters, whitespace inside: $(printf %s "$CLAUDE_CODE_OAUTH_TOKEN" | grep -c '[[:space:]]' || true)"
           claude --version
           claude -p "Reply with the single word: ok" \
-            --model claude-fable-5-2 --effort medium --max-turns 1 --output-format json \
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 1 --output-format json \
             | tail -1 | jq '{is_error, result}' | tee result.json
           jq -e '.is_error == false' result.json >/dev/null

@@ -12,13 +12,6 @@ command -v pnpm >/dev/null && ok "pnpm $(pnpm -v)" || bad "pnpm not found" "npm 
 command -v git  >/dev/null && ok "git"             || bad "git not found" "install git"
 command -v gh   >/dev/null && ok "gh"              || bad "gh not found" "https://cli.github.com"
 command -v jq   >/dev/null && ok "jq"              || bad "jq not found" "brew install jq"
-# The factory's scripts and their tests need bash 4.4: an empty array is an error under `set -u` before it.
-# macOS ships 3.2, and scaffold.sh ends by running those tests.
-if bash -c '[ "${BASH_VERSINFO[0]}" -gt 4 ] || { [ "${BASH_VERSINFO[0]}" -eq 4 ] && [ "${BASH_VERSINFO[1]}" -ge 4 ]; }'; then
-  ok "bash $(bash -c 'echo "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}"')"
-else
-  bad "bash $(bash -c 'echo "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}"') is older than 4.4, which the factory's scripts need" "brew install bash (macOS ships 3.2), and open a new terminal"
-fi
 
 if command -v gh >/dev/null; then
   if owner=$(gh api user --jq .login 2>/dev/null); then

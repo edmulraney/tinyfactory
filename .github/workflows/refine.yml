@@ -1,0 +1,81 @@
+# Runs Peta on an idea: she proposes its slices, and files them as tickets once the repo's owner answers.
+name: refine
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+
+env:
+  ISSUE: ${{ github.event.issue.number }}
+
+jobs:
+  refine:
+    # Only the owner's comment takes a place in the queue below, so nobody else's replaces an answer that waits; start-refine.sh checks it again (decisions A353f).
+    # A comment that holds @claude is the mention agent's to answer (decisions A372h).
+    if: >-
+      (github.event_name == 'issues' && github.event.label.name == 'idea') ||
+      (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
+      contains(github.event.issue.labels.*.name, 'idea') && github.event.comment.user.login == github.repository_owner &&
+      !contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    # One session, never continued (decisions A353d).
+    timeout-minutes: 30
+    # On the job, so a skipped run never takes the place of an answer that waits its turn.
+    concurrency:
+      group: refine-${{ github.event.issue.number }}
+    permissions:
+      contents: write   # to save the transcript on the sessions branch
+      issues: write     # to tell the idea that a run failed
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # Every step from here runs only for an idea Peta may act on: a refused run ends green.
+      - name: Decide whether Peta runs, and write what she reads
+        id: start
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+          COMMENT: ${{ github.event.comment.id }}
+        run: factory/scripts/start-refine.sh "$ISSUE" "$OWNER" .refine/idea.md "$COMMENT"
+
+      # save-session.sh runs as main has it, not as Peta's session left it.
+      - name: Set the scripts aside as they are on main
+        if: steps.start.outputs.start == 'true'
+        run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
+
+      - name: Peta refines the idea
+        id: agent
+        if: steps.start.outputs.start == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # No background commands in a session with nobody in it (decisions A69f).
+          settings: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+          prompt: |
+            You are Peta. Read .claude/skills/refine/SKILL.md and follow it for idea #${{ env.ISSUE }} in this repository.
+            The idea, your earlier comments on it and the owner's answers are in .refine/idea.md. Write your own files in .refine/.
+          # She comments on and closes this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
+          # The mode denies what the list does not cover: the action's own default lets a review pass it (decisions A353b, A353e).
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
+            --allowedTools "Read,Edit(.refine/**),Glob,Grep,Bash(factory/scripts/file-slice.sh ${{ env.ISSUE }}:*),Bash(gh issue comment ${{ env.ISSUE }} --body-file:*),Bash(gh issue close ${{ env.ISSUE }}:*)"
+
+      - name: Save the session transcript
+        if: always() && steps.start.outputs.start == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/save-session.sh" peta "issue-$ISSUE" "${{ steps.agent.outputs.execution_file }}"
+
+      # The owner waits for a comment that will not come, so the idea says so (decisions A353d).
+      - name: Tell the idea that the run failed
+        if: failure() || cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$ISSUE" --body "Peta's run on this idea failed: $RUN_URL. Comment on the idea to run her again."
+          gh issue edit "$ISSUE" --add-label needs-human

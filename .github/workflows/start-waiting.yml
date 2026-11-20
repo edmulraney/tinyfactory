@@ -1,0 +1,36 @@
+# Runs refused jobs again, then starts the tickets that wait with `ready`, when a factory pull request closes unmerged.
+name: start-waiting
+
+on:
+  # `_target` runs main's copy of this file. ship.sh runs the script itself after a merge, whoever merged (decisions M435c).
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  start:
+    # A person's pull request held no place (decisions T64b).
+    if: github.event.pull_request.user.login == 'claude[bot]' && github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write         # to see which tickets wait, and tell one that it waits for another (decisions T339a)
+      pull-requests: read   # to see which tickets are in flight
+      actions: write        # to start implement.yml, and to run a refused run again (decisions H386a)
+      checks: read          # to read why a job never started
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts, never the pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Run again the jobs GitHub refused to start for billing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/rerun-refused.sh
+      # A refused run that could not be read or run again holds back no waiting ticket (decisions H386b).
+      - name: Start the tickets that wait for the place this pull request held
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
+        run: factory/scripts/start-waiting.sh

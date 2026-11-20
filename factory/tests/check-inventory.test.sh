@@ -43,7 +43,7 @@ change_something_else() {
 }
 edited=".github/workflows/ci.yml was edited directly. Undo that and change factory/workflows/ci.yml: the installer copies it in once that merges."
 behind="this checkout is one install behind main, where .github/workflows/ci.yml now matches its source: nothing was edited"
-stale=".github/workflows/ci.yml is an install behind main, where it now matches its source. Nothing was edited, but this run uses the workflow from before the install, and no reviewer is given a token in a run whose workflow is not the one main holds. Merge main into the branch and push, which starts a run with the workflow main holds: git fetch origin main && git merge origin/main"
+stale=".github/workflows/ci.yml is an install behind main, where it now matches its source. Nothing was edited, but this run uses the workflow from before the install. Merge main into the branch and push, which starts a run with the workflow main holds: git fetch origin main && git merge origin/main"
 in_ci="GITHUB_WORKFLOW_REF=owner/myapp/.github/workflows/ci.yml@refs/pull/7/merge"
 in_another="GITHUB_WORKFLOW_REF=owner/myapp/.github/workflows/deploy.yml@refs/pull/7/merge"
 already_differs="factory/workflows/ci.yml on main already differs from .github/workflows/ci.yml, so a change on top of it could not be installed."
@@ -345,7 +345,7 @@ expect_no_output "was edited directly"
 expect_no_output "one install behind"
 expect_no_output "inventory ok"
 
-scenario "fails a checkout one install behind in the workflow running the check: its reviewers would get no token"
+scenario "fails a checkout one install behind in the workflow running the check: only a push starts a run with the workflow main holds"
 merged_not_installed
 change_something_else
 checks_checkout
