@@ -37,7 +37,7 @@ ready_to_ship() {
   # What ticket-cost.sh reads: one reviewer's session, and ticket #12 made `ready` 30 minutes before the merge.
   mkdir -p "$T/sessions/pr-7"
   echo '[{"type":"system","subtype":"init","model":"claude-fable-5-2"},{"type":"result","total_cost_usd":1.5,"num_turns":9}]' > "$T/sessions/pr-7/20261116T080000Z-adam-run900.json"
-  echo "{\"state\":\"OPEN\",\"headRefOid\":\"$head\",\"reviews\":[{\"author\":{\"login\":\"repo-owner\"},\"state\":\"APPROVED\",\"commit\":{\"oid\":\"$head\"}}]}" > "$T/view.json"
+  echo "{\"state\":\"OPEN\",\"isDraft\":false,\"author\":{\"login\":\"app/claude\"},\"headRefOid\":\"$head\",\"reviews\":[{\"author\":{\"login\":\"repo-owner\"},\"state\":\"APPROVED\",\"commit\":{\"oid\":\"$head\"}}]}" > "$T/view.json"
   # Neither is #7's squash commit: one only mentions it below its title, one reverts it.
   jq -n '[{sha: "1111111111111111111111111111111111111111", commit: {message: "feat: something else (#17)\n\nFollows (#7)"}},
           {sha: "2222222222222222222222222222222222222222", commit: {message: "Revert \"feat: export forecast as CSV (#7)\""}}]' > "$T/log.json"
@@ -90,7 +90,7 @@ ready_to_ship() {
       "pr view 7 --json comments "*) json "$(cat "$T/comments")" "$@" ;;
       "pr view 7 --json author "*) json "{\"author\":{\"login\":\"$(cat "$T/author" 2>/dev/null || echo app/claude)\"}}" "$@" ;;
       "pr view 7 --json baseRefName "*) json "{\"baseRefName\":\"main\"}" "$@" ;;
-      "pr view 7 --json state,headRefOid,reviews") cat "$T/view.json" ;;
+      "pr view 7 --json state,headRefOid,reviews,isDraft,author") cat "$T/view.json" ;;
       "pr view 7 --json reviews,comments") jq -s ".[0] + .[1]" "$T/view.json" "$T/comments" ;;
       "pr view 7 --json number,"*) json "{\"number\":7,\"title\":\"feat: export forecast as CSV\",\"headRefName\":\"feat/12-export-forecast-csv\",\"state\":\"MERGED\",\"mergedAt\":\"2026-11-16T09:00:00Z\",\"labels\":[],\"comments\":[]}" "$@" ;;
       "run list --workflow ci.yml --branch "*) json "[]" "$@" ;;

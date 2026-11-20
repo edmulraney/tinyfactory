@@ -4,7 +4,7 @@
 #        flag-unfinished.sh fix   <pr-number>    <execution-file> <head-before> [counted]
 #        The execution file is the last session's saved result, read for the cause.
 #        `at-limit` is `true` for a job stopped at its time limit: the build starts again, or the second in a row asks.
-#        `counted` is what begin-fix-round.sh wrote: only `false` says the round is the owner's.
+#        `counted` is what begin-fix-round.sh wrote: `false` says the round is the owner's, `start-checks` that it pushes nothing.
 #        Needs GH_TOKEN (issues, pull requests, contents and actions: write) and GITHUB_REPOSITORY.
 #        A GitHub call that fails stops it with a message and exit 1; work already pushed stays pushed.
 set -euo pipefail
@@ -58,6 +58,12 @@ case "$kind" in
       || die "Pull request #$number could not be read from GitHub, so it is not known whether a fix was pushed."
     read -r head marked <<<"$pull"
     if [ "$head" != "$before" ]; then echo "handed over: a fix was pushed to pull request #$number"; exit 0; fi
+    # A round to start the checks pushes nothing: it hands over a ci run of the head that runs its jobs (decisions A543b).
+    if [ "$counted" = start-checks ]; then
+      run=$("$script_dir/ci-run.sh" "$head" databaseId) \
+        || die "The ci runs for ${head:0:7}, the head of pull request #$number, could not be listed, so it is not known whether its checks were started."
+      if [ -n "$run" ]; then echo "handed over: the checks of pull request #$number were started"; exit 0; fi
+    fi
     ;;
   *) echo "usage: flag-unfinished.sh build <issue-number> <execution-file> | fix <pr-number> <execution-file> <head-before>" >&2; exit 2 ;;
 esac
@@ -167,6 +173,10 @@ case "$kept" in
       todo="Nothing to do: the next merge to \`main\` tests this pull request again."
       message="The fix round pushed nothing: the engineer labelled this pull request \`waits-for-main\`, as what failed lies outside it, and the comment above says what it waits for."
       asks_person=false
+    elif [ "$ended" = completed ] && [ "$counted" = start-checks ]; then
+      # The answer this round's engineer is told to give says the checks are running, and none is (decisions A543b).
+      todo="Convert this pull request to a draft, then mark it ready for review: that starts its checks."
+      message="The fix round to start the checks started none: no ci run of ${head:0:7}, the last commit of this pull request, ran its jobs."
     elif [ "$ended" = completed ]; then
       # The engineer stopped on purpose, so its answer says what it needs (decisions A371b).
       todo=${answer:-"Read the engineer's comment above, then submit a \"Request changes\" review saying what to change: that starts a fix round that is not one of the three."}

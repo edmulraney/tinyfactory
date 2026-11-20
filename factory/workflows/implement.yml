@@ -87,7 +87,7 @@ jobs:
                             echo "skill=.claude/skills/factory-engineer/SKILL.md" >> "$GITHUB_OUTPUT" ;;
             *" research "*) echo "name=Rosa" >> "$GITHUB_OUTPUT"; echo "role=rosa" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/research/SKILL.md" >> "$GITHUB_OUTPUT"
-                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*)" ;;
+                            tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
             *)              echo "name=Esme" >> "$GITHUB_OUTPUT"; echo "role=esme" >> "$GITHUB_OUTPUT"
                             echo "skill=.claude/skills/implement/SKILL.md" >> "$GITHUB_OUTPUT" ;;
           esac

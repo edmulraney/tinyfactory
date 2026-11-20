@@ -2,7 +2,7 @@
 # Counts a fix round after the engineer's step, unless the usage limit ended its session, and flags one that never ran.
 # Usage: record-fix-round.sh <pr-number> <execution-file> [counted] [head] [review]
 #        <execution-file>  the one the engineer's step, or its last continuation, left; may be empty.
-#        [counted]         what begin-fix-round.sh wrote: `false`, `conflict`, `retest` and `fresh-run:<id>` leave a round uncounted.
+#        [counted]         what begin-fix-round.sh wrote: `false`, `conflict`, `retest`, `start-checks` and `fresh-run:<id>` leave a round uncounted.
 #        [head]            the commit the round began with, also from begin-fix-round.sh.
 #        [review]          the id of the owner's review the owner's round was begun for, also from begin-fix-round.sh.
 #        Needs GH_TOKEN (pull-requests and issues: write) and, for the owner's round, flag-ticket.sh.
@@ -43,6 +43,11 @@ if [ -n "$file" ] && [ -s "$file" ]; then
   # No marker: the label that began it came off as it began, and only another mark begins another (decisions A368a).
   if [ "$counted" = retest ]; then
     echo "the fix round for a retest ran on pull request #$pr: it is not counted"
+    exit 0
+  fi
+  # No marker either: approve-merge.sh starts one for a commit (decisions M543b).
+  if [ "$counted" = start-checks ]; then
+    echo "the fix round to start the checks ran on pull request #$pr: it is not counted"
     exit 0
   fi
   # Its marker names the ci.yml main held: one such round for each (decisions A142a, A142b).

@@ -35,9 +35,9 @@ checks_failed() {
     done < "$T/fail-once"
     case "$*" in
       "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github ;;
-      "pr view 7 --json state,author,headRefOid,headRefName,labels "* | "pr view 7 --json headRefOid,baseRefName,mergeable "*)
+      "pr view 7 --json state,author,headRefOid,headRefName,labels,isDraft "* | "pr view 7 --json headRefOid,baseRefName,mergeable "*)
         # Each is set on its own, with no brace list (decisions H121).
-        json "$(jq --arg head "$head" --arg m "$(head -n 1 "$T/mergeable")" ".headRefOid = \$head | .mergeable = \$m" "$T/pull")" "$@"
+        json "$(jq --arg head "$head" --arg m "$(head -n 1 "$T/mergeable")" --argjson draft "$(cat "$T/draft")" ".headRefOid = \$head | .mergeable = \$m | .isDraft = \$draft" "$T/pull")" "$@"
         case "$*" in *mergeable*)
           if [ "$(wc -l < "$T/mergeable")" -gt 1 ]; then tail -n +2 "$T/mergeable" > "$T/mergeable.rest"; mv "$T/mergeable.rest" "$T/mergeable"; fi ;;
         esac ;;

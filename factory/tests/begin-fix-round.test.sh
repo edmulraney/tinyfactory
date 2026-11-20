@@ -555,6 +555,64 @@ expect_status 0
 expect_no_round
 expect_output "nothing is there to fix on pull request #7"
 
+# GitHub started a ci run for the head only while it took the pull request for a draft (decisions A543a).
+only_skipped_run() { echo '[{"databaseId":901,"conclusion":"skipped"}]' > "$T/runs"; }
+
+scenario "a pull request whose head has only a skipped ci run gets a round to start the checks: not counted, and only marking it ready again to do"
+checks_failed; only_skipped_run
+begin
+expect_status 0
+expect_written "go=true"
+expect_written "counted=start-checks"
+expect_written "label=fix round to start the checks"
+! grep -q '^round=' "$T/outputs" || fail "expected no number among the three for a round to start the checks"
+expect_call "gh pr comment 7 --body A fix round to start the checks: Fred is marking this pull request ready for review again, which starts the checks its last commit 5555555 never had. Nothing failed, so it is not one of the three fix rounds."
+grep -qxF "Run: gh pr ready 7 --undo && gh pr ready 7" "$T/failed.txt" || fail "expected the engineer to be told to mark the pull request ready again"
+grep -qF "Push nothing and change nothing else in this round." "$T/failed.txt" || fail "expected the engineer to be told to push nothing"
+expect_no_call "runs/901/jobs"
+
+scenario "the same for a head with no ci run at all, and for a pull request that has used its three rounds, whose count is not read"
+checks_failed; no_ci_run
+echo "[$round,$round,$round]" > "$T/comments.json"
+begin
+expect_status 0
+expect_written "counted=start-checks"
+expect_no_call "issues/7/comments?per_page=100 --paginate --jq .[] "
+expect_no_call "retro.yml"
+
+scenario "a labelled pull request with no ci run that ran gets the round to start the checks, not a retest: main may hold nothing to merge"
+checks_failed; only_skipped_run; waits_for_main
+begin
+expect_status 0
+expect_written "counted=start-checks"
+expect_call "gh pr edit 7 --remove-label needs-human --remove-label waits-for-main"
+
+scenario "no round to start the checks of a draft, which its engineer is still building"
+checks_failed; only_skipped_run
+echo true > "$T/draft"
+begin
+expect_status 0
+expect_no_round
+expect_output "nothing is there to fix on pull request #7"
+
+scenario "the owner's round stays the owner's when no ci run of the head ran its jobs"
+checks_failed; only_skipped_run; sent_back
+begin
+expect_status 0
+expect_written "counted=false"
+
+scenario "stops with a message, and begins no round, when the ci runs cannot be listed to tell whether one ran its jobs"
+checks_failed; only_skipped_run
+# collect-failures.sh lists them first, and is answered: every later listing fails.
+mv "$T/bin/gh" "$T/bin/github"
+stub gh 'case "$*" in "run list "*) [ "$(grep -c "^gh run list " "$T/calls")" -le 2 ] || { echo "gh: failed: $*" >&2; exit 1; } ;; esac; exec "$T/bin/github" "$@"'
+begin
+expect_status 1
+expect_written "go=false"
+[ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
+expect_output "Could not list the ci runs for 5555555, the head of pull request #7, so no fix round was begun."
+expect_no_call "gh pr comment"
+
 scenario "refuses anything that is not a pull request number"
 checks_failed
 begin '7; echo'

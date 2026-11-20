@@ -44,7 +44,7 @@ Public posts are written by real people who did not agree to be studied.
    Differs from the ticket: the profiles rest on one forum, because the other asks for a login.
    ```
 
-   `gh pr edit <pr> --title "docs: <the ticket's title>" --body "<description>"`, then `factory/scripts/check-pr-conventions.sh "<title>" "<branch>" <pr>` and fix what it reports, then push and, last, once `git ls-remote origin <branch>` prints your last commit, `gh pr ready <pr>`; commit nothing after it ([A266c](../../../factory/decisions/266.md)). Marking it ready is what starts the checks and reviews, and the build is not finished until it is done.
+   `gh pr edit <pr> --title "docs: <the ticket's title>" --body "<description>"`, then `factory/scripts/check-pr-conventions.sh "<title>" "<branch>" <pr>` and fix what it reports, then, last, `factory/scripts/hand-over.sh <pr>`, which pushes and marks the pull request ready; commit nothing after it ([A266c](../../../factory/decisions/266.md)). Marking it ready is what starts the checks and reviews, and the build is not finished until it is done.
 
 ## Fixing a pull request
 

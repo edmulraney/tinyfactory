@@ -26,10 +26,10 @@ No fix round began, though the comment before this one says one did: $1.$(run_lo
 [[ "$pr" =~ ^[0-9]+$ ]] || die "\"$pr\" is not a pull request number."
 
 # Read on a line of its own (decisions H7). gh writes the app that opens the factory's pull requests as `app/claude`.
-pull=$(retry gh pr view "$pr" --json state,author,headRefOid,headRefName,labels \
-    --jq '"\(.state) \(.author.login) \(.headRefOid) \(.headRefName) \([.labels[].name] | index("waits-for-main") != null)"') \
+pull=$(retry gh pr view "$pr" --json state,author,headRefOid,headRefName,labels,isDraft \
+    --jq '"\(.state) \(.author.login) \(.headRefOid) \(.headRefName) \([.labels[].name] | index("waits-for-main") != null) \(.isDraft)"') \
   || die "Could not read pull request #$pr from GitHub, so no fix round was begun."
-read -r state author head branch marked <<<"$pull"
+read -r state author head branch marked draft <<<"$pull"
 [ "$state" = OPEN ] || skip "pull request #$pr is not open"
 [ "$author" = app/claude ] || skip "pull request #$pr was not opened by the factory, and is its author's to fix"
 
@@ -52,7 +52,14 @@ if [ -n "$requested" ]; then
     || die "The owner's fix rounds of pull request #$pr could not be counted, so no fix round was begun."
   [ "$answered" -eq 0 ] || skip "the owner's fix round already ran for what $owner asked for on pull request #$pr, and pushed nothing: it waits for its owner"
 fi
-[ -s "$failures" ] || skip "nothing is there to fix on pull request #$pr: the latest ci run for its head ${head:0:7} has no failed job, GitHub reports no conflict, and its owner has not sent it back"
+# Nothing failed where no ci run of the head ran its jobs, and the round starts them (decisions A543a); a draft is still being built (decisions A50b).
+unchecked=false
+if [ ! -s "$failures" ] && [ "$draft" != true ]; then
+  run=$(retry "$script_dir/ci-run.sh" "$head" databaseId) \
+    || die "Could not list the ci runs for ${head:0:7}, the head of pull request #$pr, so no fix round was begun."
+  [ -n "$run" ] || unchecked=true
+fi
+[ -s "$failures" ] || [ "$unchecked" = true ] || skip "nothing is there to fix on pull request #$pr: the latest ci run for its head ${head:0:7} has no failed job, GitHub reports no conflict, and its owner has not sent it back"
 
 # Before the rounds are counted, so that one with none left is not stopped for this (decisions A134a).
 alarm=$("$script_dir/false-alarm.sh" "$pr" "$failures") \
@@ -72,10 +79,10 @@ workflow=""
 
 # The owner's round is the owner's whatever the label says, and merges main too; any other for a labelled pull request is its retest (decisions A368a).
 retest=false
-[ "$marked" != true ] || [ -n "$requested" ] || retest=true
+[ "$marked" != true ] || [ -n "$requested" ] || [ "$unchecked" = true ] || retest=true
 
 conflict=false
-if [ -z "$requested" ] && [ "$retest" = false ] && [ -z "$workflow" ]; then
+if [ -z "$requested" ] && [ "$retest" = false ] && [ -z "$workflow" ] && [ "$unchecked" = false ]; then
   # No failed job leaves only a conflict, or what the test of a group found, to fix (decisions A124b).
   others=$(grep -c '^===== failed job: ' "$failures" || true)
   [ "$others" -ne 0 ] || conflict=true
@@ -107,7 +114,7 @@ case "$type" in
   factory) name=Fred; role=fred-fix; skill=.claude/skills/factory-engineer/SKILL.md ;;
   research)
     name=Rosa; role=rosa-fix; skill=.claude/skills/research/SKILL.md
-    tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*)" ;;
+    tools="Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(git:*),Bash(gh:*),Bash(pnpm lint),Bash(factory/scripts/check-research.sh:*),Bash(factory/scripts/check-pr-conventions.sh:*),Bash(factory/scripts/hand-over.sh:*)" ;;
   *) name=Esme; role=esme-fix; skill=.claude/skills/implement/SKILL.md ;;
 esac
 
@@ -134,6 +141,17 @@ elif [ "$retest" = true ]; then
     echo "This pull request is labelled waits-for-main: its engineer found that what failed lay outside it, and main has changed since."
     echo "Merge main into the branch (git fetch origin main && git merge origin/main), resolve a conflict if there is one, and push."
     echo "The push runs the checks again, with main as it is now. Change nothing else in this round."
+  } > "$failures"
+elif [ "$unchecked" = true ]; then
+  counted=start-checks; label="fix round to start the checks"
+  message="A fix round to start the checks: $name is marking this pull request ready for review again, which starts the checks its last commit ${head:0:7} never had. Nothing failed, so it is not one of the three fix rounds."
+  # The head stays the one the owner approved, which a push would not (decisions A543a).
+  {
+    echo "===== no checks ran ====="
+    echo "No ci run of ${head:0:7}, the last commit of this pull request, ran its jobs, as when GitHub starts one only while it takes the pull request for a draft."
+    echo "Run: gh pr ready $pr --undo && gh pr ready $pr"
+    echo "Marking it ready for review again starts the checks on that commit. Push nothing and change nothing else in this round."
+    echo "When you are told that nothing was pushed, answer: Nothing to do: the checks of this pull request are running."
   } > "$failures"
 elif [ -n "$workflow" ]; then
   counted="fresh-run:$workflow"; label="fix round for a fresh run"

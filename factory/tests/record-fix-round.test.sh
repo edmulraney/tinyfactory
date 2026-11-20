@@ -242,6 +242,21 @@ expect_status 1
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_output "The fix round did not run"
 
+scenario "a round to start the checks is not counted, and leaves no comment: approve-merge.sh starts one for a commit"
+github; a_session
+record "$T/execution.json" start-checks 5555555555555555555555555555555555555555
+expect_status 0
+expect_output "the fix round to start the checks ran on pull request #7: it is not counted"
+expect_no_call "gh pr comment"
+expect_count 0
+
+scenario "a round to start the checks whose session never began fails like any other"
+github
+record "" start-checks
+expect_status 1
+expect_call "gh pr edit 7 --add-label needs-human"
+expect_output "The fix round did not run"
+
 scenario "leaves nothing behind"
 github; a_session
 record "$T/execution.json"

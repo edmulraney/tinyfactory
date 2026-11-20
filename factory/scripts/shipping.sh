@@ -25,11 +25,11 @@ run_log() {
     "${GITHUB_SERVER_URL:-https://github.com}" "${GITHUB_REPOSITORY:-}" "$GITHUB_RUN_ID"
 }
 
-# notify_not_merged <why>: tells the pull request and flags it for the owner; fails when either could not be done.
+# notify_not_merged <why> [what a person must do]: tells the pull request and flags it for the owner; fails when either could not be done.
 notify_not_merged() {
   local body failed=0
   # The first line says what a person must do (decisions A371a).
-  body="Approve this pull request again: the merge is tried again then.
+  body="${2:-Approve this pull request again: the merge is tried again then.}
 
 Not merged: $1.$(run_log)"
   echo "$body" >&2

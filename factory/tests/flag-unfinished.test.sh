@@ -41,6 +41,7 @@ ended() {
       "issue view 12 --json labels "*) json "$(cat "$T/labels.json")" "$@" ;;
       "pr view 7 --json headRefOid,labels "*) json "{\"headRefOid\":\"$(cat "$T/head")\",\"labels\":$(cat "$T/pr-labels.json" 2>/dev/null || echo "[]")}" "$@" ;;
       "pr view 7 --json body "*) json "{\"body\":\"Closes #12\"}" "$@" ;;
+      "run list --workflow ci.yml --commit "*) json "$(cat "$T/runs.json" 2>/dev/null || echo "[]")" "$@" ;;
       "issue comment 12 --body "*|"pr comment 7 --body "*|"issue comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
       "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*)
         git -C "$T/github.git" show sessions:usage-limit 2>/dev/null || { echo "gh: Not Found (HTTP 404)" >&2; exit 1; } ;;
@@ -570,6 +571,42 @@ fix_ended completed
 echo 6666666666666666666666666666666666666666 > "$T/head"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
+expect_silence
+
+scenario "a round to start the checks that pushed nothing, and left a ci run of the head running its jobs, is left alone"
+fix_ended completed
+echo '[{"databaseId":902,"conclusion":""},{"databaseId":901,"conclusion":"skipped"}]' > "$T/runs.json"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" start-checks
+expect_status 0
+expect_output "handed over: the checks of pull request #7 were started"
+expect_silence
+expect_no_call "retro.yml"
+
+scenario "a round to start the checks that left only a skipped ci run asks a person to start them, whatever the engineer answered"
+fix_ended completed
+jq -c '.[-1].result = "Nothing to do: the checks of this pull request are running."' "$T/session.json" > "$T/answered.json"
+echo '[{"databaseId":901,"conclusion":"skipped"}]' > "$T/runs.json"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/answered.json" "$before" start-checks
+expect_status 0
+expect_first_line "gh pr comment 7 --body" "Convert this pull request to a draft, then mark it ready for review: that starts its checks."
+expect_posted "The fix round to start the checks started none: no ci run of ${before:0:7}, the last commit of this pull request, ran its jobs."
+expect_not_posted "the checks of this pull request are running"
+expect_call "gh pr edit 7 --add-label needs-human"
+
+scenario "any other round that pushed nothing is not taken for handed over by a ci run of the head"
+fix_ended completed
+echo '[{"databaseId":902,"conclusion":"failure"}]' > "$T/runs.json"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" true
+expect_status 0
+expect_posted "The fix round pushed nothing"
+expect_no_call "gh run list"
+
+scenario "a round to start the checks stops with a message when the ci runs cannot be listed"
+fix_ended completed
+echo "run list" > "$T/fail"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" start-checks
+expect_status 1
+expect_output "The ci runs for ${before:0:7}, the head of pull request #7, could not be listed, so it is not known whether its checks were started."
 expect_silence
 
 scenario "a fix round that changed nothing on purpose is not reported as unverified work or as cut short"
