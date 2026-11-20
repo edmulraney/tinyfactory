@@ -48,7 +48,7 @@ expect_no_call "gh issue edit"
 limit wait 7 "Adam's review" failed
 expect_status 1
 expect_output "the Claude usage limit holds every agent until $ahead_in_words: Adam's review starts after it"
-expect_written "held=true"
+expect_written "held=true"$'\n'"kept=true"
 expect_posted "#7: Nothing to do: Adam's review starts after the Claude usage limit resets on $ahead_in_words."
 echo '[{"type":"result","is_error":true,"terminal_reason":"api_error","api_error":"usage_limit_reached","session_id":"abc-123"}]' > "$T/execution.json"
 : > "$T/calls"
@@ -153,7 +153,7 @@ hold_is "$ahead"
 limit wait 7 "a fix round"
 expect_status 0
 expect_output "the Claude usage limit holds every agent until $ahead_in_words: a fix round starts after it"
-expect_written "held=true"
+expect_written "held=true"$'\n'"kept=true"
 expect_hold "$ahead"$'\n'"run 900"
 expect_first_line "gh issue comment 7 --body" "Nothing to do: a fix round starts after the Claude usage limit resets on $ahead_in_words."
 expect_posted "If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once."
@@ -165,7 +165,7 @@ github sessions
 hold_is "$ahead" "run 44"
 limit wait 7 "Ryan's review" failed
 expect_status 1
-expect_written "held=true"
+expect_written "held=true"$'\n'"kept=true"
 expect_hold "$ahead"$'\n'"run 44"$'\n'"failed 900"
 
 scenario "wait: a run with no ticket or pull request keeps its place and tells nobody"
@@ -185,13 +185,14 @@ expect_status 1
 expect_written "held=true"
 expect_output "could not be read from the sessions branch, so Adam's review did not start."
 
-scenario "wait: stops, telling nobody, when the run's place cannot be written"
+scenario "wait: stops, telling nobody and marked held with no place kept, when the run's place cannot be written"
 github sessions
 hold_is "$ahead"
 refuses_pushes
 limit wait 7 "a fix round"
 expect_status 1
 expect_output "the place of run 900 could not be written to the sessions branch: nothing starts a fix round again."
+expect_written "held=true"
 expect_no_call "gh issue comment"
 
 scenario "wait: stops when the pull request cannot be told, or when no run is named to run again"

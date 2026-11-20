@@ -88,9 +88,8 @@ not_settled() {
 # What workflow-behind.sh and post-verdict.sh print for a review with no verdict in a run behind main (decisions A142c).
 review_behind=".github/workflows/ci.yml on main has changed since this run began: this run uses the workflow from before the install. Merge main into the branch and push, which starts a run with the workflow main holds: git fetch origin main && git merge origin/main"
 reviews_behind() {
-  echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"},{"id":34,"name":"verdicts","conclusion":"failure"}]}' > "$T/jobs"
-  printf '2026-11-17T09:00:00.1000000Z adam: ended with no verdict that can be posted\n2026-11-17T09:00:01.0000000Z ##[error]Process completed with exit code 1.\n' > "$T/log-33"
-  printf '2026-11-17T09:00:00.1000000Z adam: Adam (architecture and taste): not reviewed. %s\n2026-11-17T09:00:00.2000000Z ryan: Ryan (correctness): not reviewed. %s\n2026-11-17T09:00:01.0000000Z ##[error]Process completed with exit code 1.\n' "$review_behind" "$review_behind" > "$T/log-34"
+  echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"}]}' > "$T/jobs"
+  printf '2026-11-17T09:00:00.1000000Z adam: Adam (architecture and taste): not reviewed. %s\n2026-11-17T09:00:00.2000000Z ryan: Ryan (correctness): not reviewed. %s\n2026-11-17T09:00:01.0000000Z ##[error]Process completed with exit code 1.\n' "$review_behind" "$review_behind" > "$T/log-33"
 }
 # The id git gives the ci.yml main holds, which a fresh-run round's comment records (decisions A142b).
 ci_yml=cccccccccccccccccccccccccccccccccccccccc

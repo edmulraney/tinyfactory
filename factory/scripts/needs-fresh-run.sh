@@ -20,17 +20,14 @@ behind="this run uses the workflow from before the install"
 # One heading per failed job or conflict: each must be such a job whose log holds the sentence, or an engineer has work.
 only=$(awk -v sentence="$behind" '
   /^===== / {
-    if (open && !found) other = 1
-    # A failed `review` job says nothing of its own: `verdicts` runs after it and says why (decisions A427f).
-    open = ($0 != "===== failed job: review =====")
-    if (open) {
-      jobs++; found = 0
-      if ($0 != "===== failed job: checks =====" && $0 != "===== failed job: verdicts =====") other = 1
-    }
+    if (jobs > 0 && !found) other = 1
+    jobs++; found = 0
+    # Any job: a run from before an install has the jobs of its own ci.yml (decisions A541a).
+    if ($0 !~ /^===== failed job: /) other = 1
     next
   }
-  open && index($0, sentence) { found = 1 }
-  END { if (open && !found) other = 1; if (jobs > 0 && !other) print "yes"; else print "no" }' "$failures")
+  index($0, sentence) { found = 1 }
+  END { if (jobs > 0 && !found) other = 1; if (jobs > 0 && !other) print "yes"; else print "no" }' "$failures")
 if [ "$only" != yes ]; then
   echo false
   exit 0

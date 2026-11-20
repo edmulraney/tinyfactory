@@ -47,10 +47,10 @@ verdict() {
 }
 pass='{"verdict":"pass","findings":[],"assumptions":[{"assumes":"GitHub accepts `queue: max`.","if_wrong":"Every merge stops."}]}'
 fail_json='{"findings":[{"file":"app.txt","line":10,"kind":"misbehaves","problem":"Wrong.","fix":"Right it."}],"assumptions":[]}'
-# carry [reviewer] [head] [main] [check]
+# carry [reviewer] [head] [main]
 carry() {
   before=$(jq length "$T/comments")
-  run "$scripts/carry-review.sh" "${1:-$ryan}" 7 "${2:-$(git rev-parse HEAD)}" "${3:-main}" ${4:+"$4"}
+  run "$scripts/carry-review.sh" "${1:-$ryan}" 7 "${2:-$(git rev-parse HEAD)}" "${3:-main}"
 }
 last_comment() { jq -r '.[-1].body' "$T/comments"; }
 expect_carried() {
@@ -133,33 +133,6 @@ git merge -q --no-edit main >/dev/null
 carry
 expect_status 0
 expect_reviewed "its change does not read the same"
-
-scenario "asked only to check, with a token that cannot write: says the pass is carried and posts nothing"
-a_pull_request
-verdict "$ryan" "$passed" "$pass"
-on_main "docs: other" 'echo two > other.txt'
-git merge -q --no-edit main >/dev/null
-echo "pr comment" > "$T/fail"
-carry "$ryan" "$(git rev-parse HEAD)" main check
-expect_status 0
-grep -qxF "carried=true" "$T/outputs" || fail "expected carried=true in the step's outputs"
-[ "$(jq length "$T/comments")" = "$before" ] || fail "expected no comment to be posted"
-expect_output "Ryan (correctness)'s pass of ${passed:0:7} still stands at $(git rev-parse --short=7 HEAD): no review runs, and the job that posts verdicts carries it forward."
-
-scenario "asked only to check a change that does not read the same: reviewed again, as when it posts"
-a_pull_request
-verdict "$ryan" "$passed" "$pass"
-on_main "feat: twelve" 'sed "s/^12$/twelve/" app.txt > app.new && mv app.new app.txt'
-git merge -q --no-edit main >/dev/null
-carry "$ryan" "$(git rev-parse HEAD)" main check
-expect_status 0
-expect_reviewed "its change does not read the same"
-
-scenario "a fifth argument that is not check: stops with the usage"
-a_pull_request
-carry "$ryan" "$(git rev-parse HEAD)" main post
-expect_status 2
-expect_output 'Usage: carry-review.sh "<reviewer name>" <pr-number> <head-sha> <main-ref> [check]'
 
 scenario "a merge of main that also edits a file by hand is reviewed again"
 a_pull_request

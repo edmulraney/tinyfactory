@@ -30,16 +30,23 @@ fresh
 expect_status 0
 expect_result "true $ci_yml"
 
-scenario "false when the review job failed and the job that posts verdicts does not say the run is behind"
+scenario "false when the review job failed and does not say the run is behind"
 checks_failed; reviews_behind
-echo "Ryan (correctness): review not finished." > "$T/log-34"
+echo "Ryan (correctness): review not finished." > "$T/log-33"
 fresh
 expect_result false
 
-scenario "false when the review job's log alone holds the sentence: the job that posts verdicts did not fail for it"
+scenario "true when the run's ci.yml still has a job main's no longer has, and each failed job says the run is behind"
 checks_failed; reviews_behind
-echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"}]}' > "$T/jobs"
-echo "$review_behind" > "$T/log-33"
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"},{"id":34,"name":"verdicts","conclusion":"failure"}]}' > "$T/jobs"
+echo "not reviewed. $review_behind" > "$T/log-34"
+fresh
+expect_result "true $ci_yml"
+
+scenario "false when one of two failed jobs does not say the run is behind"
+checks_failed; reviews_behind
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"},{"id":34,"name":"verdicts","conclusion":"failure"}]}' > "$T/jobs"
+echo "Usage: review.sh" > "$T/log-34"
 fresh
 expect_result false
 

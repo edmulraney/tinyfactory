@@ -20,7 +20,7 @@ on_main() {
   echo "$2" > "$T/origin/.github/workflows/$1"
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "ci: install $1"
 }
-# behind: from a checkout of the base as it is now, as the job that posts verdicts has (decisions A427f).
+# behind: from a checkout of the base as it is now, as the review job has (decisions A427e).
 behind() {
   [ -d "$T/work/.git" ] || git clone --quiet "$T/origin" "$T/work"
   run env GITHUB_WORKFLOW_SHA="$ran" "$@" "$scripts/workflow-behind.sh"
@@ -37,6 +37,20 @@ a_run; on_main ci.yml "name: ci, changed"
 behind "$in_ci"
 expect_status 0
 [ "$out" = "$review_behind" ] || fail "expected the sentence the fix round's tests use, and nothing else"
+
+scenario "prints the sentence when main holds a ci.yml merged and not installed yet, and nothing once it is installed"
+a_run
+mkdir -p "$T/origin/factory/workflows"; echo "name: ci, changed" > "$T/origin/factory/workflows/ci.yml"
+git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "the change merged"
+ran=$(git -C "$T/origin" rev-parse HEAD)
+behind "$in_ci"
+expect_status 0
+expect_output ".github/workflows/ci.yml on main is about to be installed from factory/workflows/ci.yml: this run uses the workflow from before the install. Merge main into the branch and push"
+on_main ci.yml "name: ci, changed"
+ran=$(git -C "$T/origin" rev-parse HEAD)
+behind "$in_ci"
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
 
 scenario "prints nothing when another workflow changed on main: this run's file is still main's"
 a_run; on_main fix.yml "name: fix, changed"
@@ -86,3 +100,11 @@ expect_output "gone could not be read, so whether this run's .github/workflows/c
 expect_no_output "this run uses the workflow from before the install"
 only=$(env "$in_ci" GITHUB_WORKFLOW_SHA="$ran" GITHUB_BASE_REF=gone "$scripts/workflow-behind.sh" 2>/dev/null)
 [ -z "$only" ] || fail "expected nothing on its standard output, which is all its caller reads"
+
+# The review job's checkout keeps no token (decisions A541d); a local origin never asks for one, so only the words are checked.
+scenario "git is given the caller's token when GitHub asks for one, as the review job's own fetch is"
+# shellcheck disable=SC2016
+helper='git -c credential.helper= -c credential.helper='"'"'!f() { echo username=x-access-token; echo "password=$GH_TOKEN"; }; f'"'"' fetch --quiet origin'
+grep -qF "$helper" "$scripts/workflow-behind.sh" || fail "expected workflow-behind.sh to fetch with a helper that answers with GH_TOKEN"
+grep -qF "$helper" "$root/factory/workflows/ci.yml" || fail "expected the review job to fetch the pull request's commit the same way"
+

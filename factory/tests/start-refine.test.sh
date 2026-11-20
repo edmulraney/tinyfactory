@@ -181,7 +181,7 @@ hold_is 99999999999
 : > "$T/outputs"
 run env GITHUB_OUTPUT="$T/outputs" GITHUB_RUN_ID=900 "$scripts/start-refine.sh" 12 owner "$T/work/.refine/idea.md" 3
 expect_status 0
-[ "$(cat "$T/outputs")" = "held=true"$'\n'"start=false" ] || fail "expected it to write held=true and start=false, got: $(cat "$T/outputs")"
+[ "$(cat "$T/outputs")" = "held=true"$'\n'"kept=true"$'\n'"start=false" ] || fail "expected it to write held=true, kept=true and start=false, got: $(cat "$T/outputs")"
 expect_output "not started: the Claude usage limit holds every agent until 5138-11-16 09:46 UTC: Peta's run on this idea starts after it"
 [ "$(the_hold)" = "99999999999"$'\n'"run 900" ] || fail "expected run 900 to keep its place on the sessions branch, got: $(the_hold)"
 expect_first_line "gh issue comment 12 --body" "Nothing to do: Peta's run on this idea starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."

@@ -768,7 +768,7 @@ hold_is 99999999999
 : > "$T/outputs"
 run env GITHUB_OUTPUT="$T/outputs" GITHUB_RUN_ID=900 "$scripts/begin-fix-round.sh" 7 "$T/failed.txt"
 expect_status 0
-[ "$(cat "$T/outputs")" = "held=true"$'\n'"go=false" ] || fail "expected it to write held=true and go=false, got: $(cat "$T/outputs")"
+[ "$(cat "$T/outputs")" = "held=true"$'\n'"kept=true"$'\n'"go=false" ] || fail "expected it to write held=true, kept=true and go=false, got: $(cat "$T/outputs")"
 expect_output "no fix round: the Claude usage limit holds every agent until 5138-11-16 09:46 UTC: a fix round starts after it"
 [ "$(the_hold)" = "99999999999"$'\n'"run 900" ] || fail "expected run 900 to keep its place on the sessions branch, got: $(the_hold)"
 expect_first_line "gh issue comment 7 --body" "Nothing to do: a fix round starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."

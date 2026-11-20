@@ -652,7 +652,7 @@ limit_ended 99999999999
 OUTPUT="" run "$scripts/post-verdict.sh" "Adam (architecture and taste)" 7 "$T/session.json"
 expect_status 1
 [ "$(the_hold)" = "99999999999"$'\n'"failed 900" ] || fail "expected the reset time, and run 900 to be run again for its failed jobs, got: $(the_hold)"
-[ "$(sort -u "$T/outputs")" = "cut-short=true"$'\n'"held=true" ] || fail "expected the job to be marked cut short and held, so no fix round starts, got: $(cat "$T/outputs")"
+[ "$(sort -u "$T/outputs")" = "cut-short=true"$'\n'"held=true"$'\n'"kept=true" ] || fail "expected the job to be marked cut short and held, its place kept, so no fix round starts, got: $(cat "$T/outputs")"
 [[ "$(cat "$T/kept")" == "Nothing to do: Adam's review starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."* ]] \
   || fail "expected the pull request to be told when the review starts, got: $(cat "$T/kept")"
 expect_no_call "needs-human"

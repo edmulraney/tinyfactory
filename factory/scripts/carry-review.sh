@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 # Posts a reviewer's earlier pass again when it still stands for a pull request's head (decisions A160a).
-# Usage: carry-review.sh "<reviewer name>" <pr-number> <head-sha> <main-ref> [check]
+# Usage: carry-review.sh "<reviewer name>" <pr-number> <head-sha> <main-ref>
 #        Run in a checkout that holds the whole history of the head and of main. Needs GH_TOKEN (pull-requests: write).
 #        Carried: writes `carried=true` to $GITHUB_OUTPUT and exits 0. Not carried: exits 0. Could not tell: exits 1.
-#        With `check` it posts nothing, and its token need only read: the job that posts carries the pass (A427f).
 set -euo pipefail
 
-usage='Usage: carry-review.sh "<reviewer name>" <pr-number> <head-sha> <main-ref> [check]'
-reviewer="${1:?$usage}"; pr="${2:?$usage}"; head="${3:?$usage}"; main="${4:?$usage}"; check="${5:-}"
-[ -z "$check" ] || [ "$check" = check ] || { echo "$usage" >&2; exit 2; }
+usage='Usage: carry-review.sh "<reviewer name>" <pr-number> <head-sha> <main-ref>'
+reviewer="${1:?$usage}"; pr="${2:?$usage}"; head="${3:?$usage}"; main="${4:?$usage}"
 not_carried() { echo "$reviewer reviews pull request #$pr again: $1."; exit 0; }
 die() { echo "$1, so whether the earlier review still stands is not known and $reviewer reviews pull request #$pr again." >&2; exit 1; }
 
@@ -30,12 +28,6 @@ status=0
 why=$("$(dirname "$0")/only-merged-main.sh" "$reviewed" "$head" "$main" 2>&1) || status=$?
 [ "$status" -le 1 ] || die "$why"
 [ "$status" -eq 0 ] || not_carried "$why"
-
-if [ -n "$check" ]; then
-  echo "carried=true" >> "${GITHUB_OUTPUT:-/dev/null}"
-  echo "$reviewer's pass of ${reviewed:0:7} still stands at ${head:0:7}: no review runs, and the job that posts verdicts carries it forward."
-  exit 0
-fi
 
 # Keeps the first line and the hidden list (decisions A160d). An earlier carried line goes, so one commit is named.
 file="${RUNNER_TEMP:-${TMPDIR:-/tmp}}/carried-verdict.md"
