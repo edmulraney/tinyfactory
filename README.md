@@ -21,7 +21,7 @@ tinyfactory is a small software factory for a technical founder, or a tiny team,
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
-> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it merged more than 150 pull requests in its first five days, and this repository is a copy of its files. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
+> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it merged 235 pull requests in its first week. This repository holds its files, and the factory now runs here on its own pull requests. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
@@ -68,13 +68,17 @@ Every agent starts from the purpose and from its ticket, so the engineer acts as
 
 **As few pull requests as possible wait for you.** A pull request that passes its checks and both reviews merges by itself, unless it changes one of these:
 
-- **spend or limits:** a model, a timeout, a free plan's limit, how many tickets run at once;
+- **spend or limits:** a model, a timeout, how many tickets run at once;
 - **secrets or permissions:** a token, a workflow's permissions, the tools an agent may use;
 - **the rule that decides this list;**
 - **the product's quality bar:** `TASTE.md`, `DESIGN.md`, the theme, and the lint, TypeScript and test configuration;
 - **`CLAUDE.md`,** the instructions every agent starts with.
 
 Anything else that needs you is labelled `needs-human`, with a comment that says what to do.
+
+**One merge at a time, tested with `main`.** A pull request that has passed waits in a queue. The factory tests the waiting ones together with `main` as it is at that moment, merges those that pass, and sends back only the one that fails. A merge never leaves the others to be tested all over again.
+
+**Only the team can start it.** The factory acts for an account with write access to the repository, and for its own two bots. Anyone else's issue, comment or review starts nothing, and no agent reads it. [`SECURITY.md`](SECURITY.md) says what that protects and what it does not.
 
 **The rules are files.** Each project owns `PURPOSE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md` and `CLAUDE.md`, and every ticket and review is judged against them. An agent starts each task with no memory, so what is written down is all it knows.
 
@@ -108,10 +112,10 @@ To run the newest commit of this repository instead of the published package: `n
 ## Using it
 
 1. **Start with an idea or a ticket.** Open an issue with the Idea template, and Peta proposes the tickets and the decisions that are yours; answer her, or say "go", and she files them. Or file a ticket yourself with one of the other templates.
-2. **Add the `ready` label** to a ticket to start its build. Three tickets are built at once at most, and the rest wait their turn.
-3. **Answer what needs you:** approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes.
+2. **Add the `ready` label** to a ticket to start its build. Five tickets are built at once at most, and the rest wait their turn.
+3. **Answer what needs you:** approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes. GitHub's merge button counts as your approval.
 4. **Read what the factory proposes.** A retro's proposal is a ticket written to be built as it is. Add `ready` to accept it, or close it.
-5. **Take a change back** from the repository's Actions tab: choose the `revert` workflow, press "Run workflow" and give the ticket's number. An engineer opens the pull request that reverts it.
+5. **Take a change back** by adding the `revert` label to its ticket. An engineer opens the pull request that reverts it.
 6. **Ask Claude for anything else** in a comment that holds `@claude`: something the factory did not handle by itself, or got wrong.
 
 `factory/README.md` is the full guide.
@@ -120,9 +124,9 @@ To run the newest commit of this repository instead of the published package: `n
 
 The free tiers are the constraint the factory is designed around, so it is tuned to stretch them and keep you shipping without reaching a limit:
 
-- **GitHub Actions minutes:** it runs only the checks a change can affect, and moves the board's cards with GitHub's own automations.
+- **GitHub Actions minutes:** it runs only the checks and tests a change can affect, runs both reviews in one job, and moves the board's cards with GitHub's own automations.
 - **Vercel deployments:** it builds no preview for a change that touches no app code.
-- **Neon database branches:** it keeps previews for a day, and builds three tickets at a time at most.
+- **Neon database branches:** it deletes a preview's database branch once its pull request is gone, keeps previews for a day, and builds five tickets at a time at most.
 
 That tuning is still going on, and heavy use can still reach a limit. A public repository has no limit on Actions minutes; setup creates a private one. `factory/free-tier.md` records each limit and every setting made to stretch it.
 
@@ -132,9 +136,10 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
 - **No database code yet.** A project gets a Postgres database, and no ORM or migrations. Drizzle is planned.
 - **No set structure for features yet.** A skill that has the engineer build each feature as its own slice (Feature-Sliced Design) is planned.
-- **You cannot yet order waiting tickets by dragging cards.** The ticket that has waited longest starts first.
-- **Nothing pauses the queue when the Claude usage limit is reached.**
-- **The factory does not run in this repository yet.** The files here are a copy from the project the factory was built in. The plan is for tinyfactory to build tinyfactory here.
+- **Ordering waiting tickets by dragging their cards is new.** It has not yet been seen working with tickets waiting; until it is, expect the ticket that has waited longest to start first.
+- **An agent holds the Claude token.** Every agent session needs it to run, so an agent that reads a hostile page could be talked into sending it out. [`SECURITY.md`](SECURITY.md) says what is protected and what is not.
+- **The factory's own tests need Linux.** They run on GitHub's runner, and many fail on a Mac's older bash, awk and git. Setup itself runs on a Mac.
+- **The factory has only just started running in this repository.** Until 20 November 2026 it was built in a private project and copied here.
 
 ## Where things are
 
@@ -146,6 +151,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 | Why it is built this way | `factory/decisions.md` and `factory/decisions/` |
 | Free plans, and what stretches them | `factory/free-tier.md` and `factory/free-tier/` |
 | What still needs a person | `factory/manual-steps.md` |
+| Who the factory acts for, and how to report a vulnerability | `SECURITY.md` |
 | Ticket and pull request templates | `.github/` |
 | What a new project starts with: its seed documents, and its app's lint and test setup | `.claude/skills/bootstrap/templates/` |
 
