@@ -1,0 +1,1525 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-fable-5-2",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.329",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "3b1ad45e-06a7-4d62-931b-6abc21e9aecd",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2514.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKmVHY741AUxTGnNLed",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01ECcgmoND64MR6Fq1L65Bhw",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/factory-engineer/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 12417,
+        "cache_read_input_tokens": 12993,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 12417
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "8b8aa2b8-a9d3-4239-94f7-505e6c0a718f",
+    "timestamp": "2026-11-20T14:18:13.204Z",
+    "request_id": "req_011ChEKmV5PoVfrtCDLVFHYj",
+    "wire_tool_inputs": {
+      "toolu_01ECcgmoND64MR6Fq1L65Bhw": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/factory-engineer/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01ECcgmoND64MR6Fq1L65Bhw",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: factory-engineer\n3\tdescription: Fred, the factory engineer. Builds one ticket labelled `factory` - a change to the factory's own scripts, skills, checks, templates or rule documents - and opens a pull request that the owner approves only when it changes what only they decide. Use with an issue number to implement, or a pull request number to fix.\n4\t---\n5\t\n6\t# Factory engineer (Fred)\n7\t\n8\tYou are Fred, the factory engineer. You change the factory itself: `factory/scripts/`, `factory/workflows/`, `.claude/skills/`, the bootstrap, the ticket templates and `CLAUDE.md`; the product's bar (`TASTE.md`, `DESIGN.md`, the theme, lint and test configuration) only when the ticket names it. Nobody is watching: ask no questions.\n9\t\n10\tRead the mission and principles at the top of `factory/README.md`, then the decision record (`factory/scripts/decisions.sh`). A change follows from a principle and quietly undoes no recorded decision.\n11\t\n12\t- **A script before an instruction.** What a check, lint rule or script can enforce, it enforces; add an instruction to a skill only when nothing cheaper works.\n13\t- **Take away before you add.** Prefer deleting or rewording a line to adding one.\n14\t- **The standard route** (`TASTE.md`). Where the factory already does the same job, do it that way, also when the ticket names another: \"How we will know it works\" binds you, the ticket's way does not. Say so under \"Differs from the ticket\".\n15\t- **Say why, where it lives.** A script's header and comments are as [H176a](../../../factory/decisions/176.md) and [H176b](../../../factory/decisions/176.md) say. A decision gets a row in `factory/decisions/<ticket>.md`, as the header of `factory/decisions.md` says, its ID the section's letter and this ticket's number (`H62`; `H62a`, `H62b` for several in a section); a comment on code that depends on it cites the ID and adds no reason. A setting that protects a free limit gets an entry in `factory/free-tier/<ticket>.md`, as `factory/free-tier.md` says.\n16\t- **The factory is copied into new projects.** List a new file in `factory/` in `.claude/skills/bootstrap/manifest.txt`. A change to a rule document usually belongs in its seed under `.claude/skills/bootstrap/templates/` too.\n17\t- **A workflow** cannot run before it merges: run `factory/scripts/events.sh`, which prints each workflow's trigger and what starts it, and follow each new way it starts, and each way a step can end, down to the steps your change relies on, and compare them with a workflow already started that way.\n18\t\n19\t## Implementing an issue\n20\t\n21\t1. **Read the ticket:** `factory/scripts/thread.sh <n>`. \"How we will know it works\" defines done.\n22\t2. **If it cannot be done as written,** comment on the issue with the specific problem, `gh issue edit <n> --add-label needs-human`, and stop. If building it as written would break `main` or production once it merges, because it needs a hand step or rests on a pull request still open, do the hand step first, or build the part that is safe now and file a ticket for the part that waits (the `ticket` skill, [A367b](../../../factory/decisions/367.md)): its body holds a line `After #<n>` for the pull request it waits for and one for this ticket, and it takes `ready`, so its build starts once both have closed. The description names that ticket ([A367a](../../../factory/decisions/367.md)).\n23\t3. **Branch** from `main`: `<type>/<n>-<slug>`, the type `chore`, `docs`, `fix` or `feat`, the slug naming what changes for whoever uses the factory. Then `git commit --allow-empty -m \"chore: start work on #<n>\"`, push, and `gh pr create --draft --title \"<type>: <the ticket's title>\" --body \"Closes #<n>\"`. If the branch already has a draft pull request, carry on in it.\n24\t4. **Make the change.**\n25\t5. **Verify it:**\n26\t   - `pnpm lint`;\n27\t   - a script: tests in `factory/tests/<script>.test.sh` (`helpers.sh` makes the stand-ins), run by `pnpm test`. They cover it working, each outside command it calls (`gh`, `curl`, a CLI) failing, and each thing it says about itself or leaves another script to do (\"only this repo\", \"the failed job starts the fix round\"): read that script, and test what it does with each state yours leaves it, including a round that pushed nothing: the cases in which it would not act, and those in which it would act again. A failed command stops it with a message, never reads as an empty answer, and leaves behind nothing it created. For each behaviour a new scenario names, break that behaviour alone in the script and watch that scenario fail; an assertion that still passes is met by something else;\n28\t   - a bootstrap script or template: `.claude/skills/bootstrap/scripts/scaffold.sh demo` in an empty temporary directory ends with `scaffold ok`;\n29\t   - a changed rule: search every document for its subject, not its old wording (`git grep -n -i 'description'`, not `'How it was verified'`), and make each line found true, or decide in a decision row what replaces a flow the change ended.\n30\t6. **Describe it.** The pull request finishes its ticket, leaving nothing for a follow-up but the ticket step 2 files. Write the description to a temporary file outside the repo; run `factory/scripts/check-pr-conventions.sh \"<title>\" \"<branch>\" <file>` and fix what it reports; then push, `gh pr edit <pr> --title \"<type>: <imperative summary>\" --body-file <file>`.\n31\t7. **Review it.** Start two subagents at once, each told only to read one of `.claude/skills/review-architecture/SKILL.md` and `.claude/skills/review-code/SKILL.md` and follow it for the draft pull request. Fix each `design` or `bug` finding that holds against the code, and review no second time ([A428a](../../../factory/decisions/428.md)).\n32\t8. **Hand over,** last. Build on the branch as it is until here, however far `main` has moved; now merge `main` into it, once (`git fetch origin main && git merge origin/main`), and run step 5 a last time ([A468](../../../factory/decisions/468.md)). Then correct the description and run `factory/scripts/hand-over.sh <pr>`, which pushes and marks the pull request ready; commit nothing after it ([A266c](../../../factory/decisions/266.md)). The build is not finished until then.\n33\t\n34\t## Fixing a pull request\n35\t\n36\tA check or review failed, or the owner sent it back with a \"Request changes\" review. Read `gh pr checks <pr>` and `factory/scripts/thread.sh <pr>`, then `gh pr checkout <pr>`. Fix each finding or rebut it with evidence; a fix is the smallest change that answers it: a new script, rule or decision row needs a finding that asks for one. Make each change the owner asked for, or answer it with the reason it was not made. If a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict or fix what the comment shows; rows that conflict in `factory/decisions.md` move to `factory/decisions/<ticket>.md`, and the file is `main`'s copy. Re-run step 5 and push to the same branch as `fix: <what>`. No force-push.\n37\t\n38\t## Always\n39\t\n40\t- Work only on your branch. Never push to `main`.\n41\t- File any other ticket only for a defect you saw happen, linking the run or output that shows it (`factory/decisions.md` [T223](../../../factory/decisions/223.md)).\n42\t- Change code under `apps/` only when the ticket names the file there (the lint config, the test fixture, the health endpoint), or holds a review note that names it.\n43\t- If you cannot finish, say so in a comment and add `needs-human`. A comment that leaves work to a person starts with one line: what they must do, or \"Nothing to do\", then what the factory does next and when ([A371a](../../../factory/decisions/371.md)).\n44\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "27ec609c-0c35-4802-be2f-37ee0fd41378",
+    "timestamp": "2026-11-20T14:18:13.230Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/factory-engineer/SKILL.md",
+        "content": "---\nname: factory-engineer\ndescription: Fred, the factory engineer. Builds one ticket labelled `factory` - a change to the factory's own scripts, skills, checks, templates or rule documents - and opens a pull request that the owner approves only when it changes what only they decide. Use with an issue number to implement, or a pull request number to fix.\n---\n\n# Factory engineer (Fred)\n\nYou are Fred, the factory engineer. You change the factory itself: `factory/scripts/`, `factory/workflows/`, `.claude/skills/`, the bootstrap, the ticket templates and `CLAUDE.md`; the product's bar (`TASTE.md`, `DESIGN.md`, the theme, lint and test configuration) only when the ticket names it. Nobody is watching: ask no questions.\n\nRead the mission and principles at the top of `factory/README.md`, then the decision record (`factory/scripts/decisions.sh`). A change follows from a principle and quietly undoes no recorded decision.\n\n- **A script before an instruction.** What a check, lint rule or script can enforce, it enforces; add an instruction to a skill only when nothing cheaper works.\n- **Take away before you add.** Prefer deleting or rewording a line to adding one.\n- **The standard route** (`TASTE.md`). Where the factory already does the same job, do it that way, also when the ticket names another: \"How we will know it works\" binds you, the ticket's way does not. Say so under \"Differs from the ticket\".\n- **Say why, where it lives.** A script's header and comments are as [H176a](../../../factory/decisions/176.md) and [H176b](../../../factory/decisions/176.md) say. A decision gets a row in `factory/decisions/<ticket>.md`, as the header of `factory/decisions.md` says, its ID the section's letter and this ticket's number (`H62`; `H62a`, `H62b` for several in a section); a comment on code that depends on it cites the ID and adds no reason. A setting that protects a free limit gets an entry in `factory/free-tier/<ticket>.md`, as `factory/free-tier.md` says.\n- **The factory is copied into new projects.** List a new file in `factory/` in `.claude/skills/bootstrap/manifest.txt`. A change to a rule document usually belongs in its seed under `.claude/skills/bootstrap/templates/` too.\n- **A workflow** cannot run before it merges: run `factory/scripts/events.sh`, which prints each workflow's trigger and what starts it, and follow each new way it starts, and each way a step can end, down to the steps your change relies on, and compare them with a workflow already started that way.\n\n## Implementing an issue\n\n1. **Read the ticket:** `factory/scripts/thread.sh <n>`. \"How we will know it works\" defines done.\n2. **If it cannot be done as written,** comment on the issue with the specific problem, `gh issue edit <n> --add-label needs-human`, and stop. If building it as written would break `main` or production once it merges, because it needs a hand step or rests on a pull request still open, do the hand step first, or build the part that is safe now and file a ticket for the part that waits (the `ticket` skill, [A367b](../../../factory/decisions/367.md)): its body holds a line `After #<n>` for the pull request it waits for and one for this ticket, and it takes `ready`, so its build starts once both have closed. The description names that ticket ([A367a](../../../factory/decisions/367.md)).\n3. **Branch** from `main`: `<type>/<n>-<slug>`, the type `chore`, `docs`, `fix` or `feat`, the slug naming what changes for whoever uses the factory. Then `git commit --allow-empty -m \"chore: start work on #<n>\"`, push, and `gh pr create --draft --title \"<type>: <the ticket's title>\" --body \"Closes #<n>\"`. If the branch already has a draft pull request, carry on in it.\n4. **Make the change.**\n5. **Verify it:**\n   - `pnpm lint`;\n   - a script: tests in `factory/tests/<script>.test.sh` (`helpers.sh` makes the stand-ins), run by `pnpm test`. They cover it working, each outside command it calls (`gh`, `curl`, a CLI) failing, and each thing it says about itself or leaves another script to do (\"only this repo\", \"the failed job starts the fix round\"): read that script, and test what it does with each state yours leaves it, including a round that pushed nothing: the cases in which it would not act, and those in which it would act again. A failed command stops it with a message, never reads as an empty answer, and leaves behind nothing it created. For each behaviour a new scenario names, break that behaviour alone in the script and watch that scenario fail; an assertion that still passes is met by something else;\n   - a bootstrap script or template: `.claude/skills/bootstrap/scripts/scaffold.sh demo` in an empty temporary directory ends with `scaffold ok`;\n   - a changed rule: search every document for its subject, not its old wording (`git grep -n -i 'description'`, not `'How it was verified'`), and make each line found true, or decide in a decision row what replaces a flow the change ended.\n6. **Describe it.** The pull request finishes its ticket, leaving nothing for a follow-up but the ticket step 2 files. Write the description to a temporary file outside the repo; run `factory/scripts/check-pr-conventions.sh \"<title>\" \"<branch>\" <file>` and fix what it reports; then push, `gh pr edit <pr> --title \"<type>: <imperative summary>\" --body-file <file>`.\n7. **Review it.** Start two subagents at once, each told only to read one of `.claude/skills/review-architecture/SKILL.md` and `.claude/skills/review-code/SKILL.md` and follow it for the draft pull request. Fix each `design` or `bug` finding that holds against the code, and review no second time ([A428a](../../../factory/decisions/428.md)).\n8. **Hand over,** last. Build on the branch as it is until here, however far `main` has moved; now merge `main` into it, once (`git fetch origin main && git merge origin/main`), and run step 5 a last time ([A468](../../../factory/decisions/468.md)). Then correct the description and run `factory/scripts/hand-over.sh <pr>`, which pushes and marks the pull request ready; commit nothing after it ([A266c](../../../factory/decisions/266.md)). The build is not finished until then.\n\n## Fixing a pull request\n\nA check or review failed, or the owner sent it back with a \"Request changes\" review. Read `gh pr checks <pr>` and `factory/scripts/thread.sh <pr>`, then `gh pr checkout <pr>`. Fix each finding or rebut it with evidence; a fix is the smallest change that answers it: a new script, rule or decision row needs a finding that asks for one. Make each change the owner asked for, or answer it with the reason it was not made. If a comment says a merge left it out: `git fetch origin main && git merge origin/main`, and resolve the conflict or fix what the comment shows; rows that conflict in `factory/decisions.md` move to `factory/decisions/<ticket>.md`, and the file is `main`'s copy. Re-run step 5 and push to the same branch as `fix: <what>`. No force-push.\n\n## Always\n\n- Work only on your branch. Never push to `main`.\n- File any other ticket only for a defect you saw happen, linking the run or output that shows it (`factory/decisions.md` [T223](../../../factory/decisions/223.md)).\n- Change code under `apps/` only when the ticket names the file there (the lint config, the test fixture, the health endpoint), or holds a review note that names it.\n- If you cannot finish, say so in a comment and add `needs-human`. A comment that leaves work to a person starts with one line: what they must do, or \"Nothing to do\", then what the factory does next and when ([A371a](../../../factory/decisions/371.md)).\n",
+        "numLines": 44,
+        "startLine": 1,
+        "totalLines": 44
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01ECcgmoND64MR6Fq1L65Bhw",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKmVHY741AUxTGnNLed",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UmXkxTii8xAEwaApCWRFtw",
+          "name": "Bash",
+          "input": {
+            "command": "gh issue view 564 --comments",
+            "description": "Read issue 564 with comments"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 12417,
+        "cache_read_input_tokens": 12993,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 12417
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "34592bf1-6f3b-4857-aec1-da1fd09948ac",
+    "timestamp": "2026-11-20T14:18:14.402Z",
+    "request_id": "req_011ChEKmV5PoVfrtCDLVFHYj",
+    "wire_tool_inputs": {
+      "toolu_01UmXkxTii8xAEwaApCWRFtw": {
+        "command": "gh issue view 564 --comments",
+        "description": "Read issue 564 with comments"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "out_of_credits",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.31,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        },
+        "seven_day_overage_included": {
+          "utilization": 0.5,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "64d274e5-9483-49c0-b1f3-ef02cb36b34b",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01UmXkxTii8xAEwaApCWRFtw",
+          "type": "tool_result",
+          "content": "(Bash completed with no output)",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "32f99cad-576e-4845-8e52-b70dae2f6bc9",
+    "timestamp": "2026-11-20T14:18:15.426Z",
+    "tool_use_result": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01UmXkxTii8xAEwaApCWRFtw",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKmsHrkKKNVC8QCPoCB",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LNjs17iF9SYPeL9GhtC3Dz",
+          "name": "Bash",
+          "input": {
+            "command": "factory/scripts/thread.sh 564; echo \"exit=$?\"; sed -n 1,60p factory/README.md",
+            "description": "Read the ticket thread and the README's mission"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3006,
+        "cache_read_input_tokens": 25410,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3006
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "08a4dc2f-b9c2-4bd7-b297-4346a7457af1",
+    "timestamp": "2026-11-20T14:18:17.809Z",
+    "request_id": "req_011ChEKms4iygpQ8Umf9DtV8",
+    "wire_tool_inputs": {
+      "toolu_01LNjs17iF9SYPeL9GhtC3Dz": {
+        "command": "factory/scripts/thread.sh 564; echo \"exit=$?\"; sed -n 1,60p factory/README.md",
+        "description": "Read the ticket thread and the README's mission"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01LNjs17iF9SYPeL9GhtC3Dz",
+          "type": "tool_result",
+          "content": "# Ticket #564: Cut `.claude/skills/purpose/SKILL.md` to budget\n\nOpened by github-actions[bot], 2026-11-20T13:13:32Z. State: open. Labels: factory, in-progress.\n\n## Change\n`.claude/skills/purpose/SKILL.md` holds 631 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. Cut the file to its budget: move what only some tasks need to the document those tasks read, and delete what no agent needs to do its work well, to avoid a mistake or to save tokens (`TASTE.md`, \"Writing\"). Do not raise the budget.\n\n## How we will know it works\n`pnpm lint` passes, and prints no line saying that `.claude/skills/purpose/SKILL.md` is over its budget.\nexit=0\n# The factory\n\nA ticket goes in; a reviewed, tested, deployed change comes out. A human decides what gets built and is asked only when the agents can't proceed.\n\nThis file holds the mission and the principles. Each entry of the three lists under them is a file of its own, in the folder named after its list's heading: `README/known-gaps/` beside this file holds the known gaps. `factory/scripts/readme.sh` prints the whole guide ([H484a](decisions/484.md)).\n\n## Mission\n\n**Rapidly validate an idea at zero cost.**\n\nThe factory lets a founder bootstrap a software factory and verify their idea as fast as possible, free of charge, without producing AI slop.\n\nOne cost remains today: the agents run on a Claude subscription, which most founders already have. The factory will eventually run on open-weight models as well; until it does, \"free\" means everything except the model.\n\n## Principles\n\nEvery decision in the record (`decisions.md`) should follow from one of these. When two pull in different directions, the earlier one wins.\n\n1. **Free until the idea is proven.** Use the free plans of services that can also carry a real product: GitHub, Vercel, Neon. When an idea works, the plan is upgraded, not the stack. Leave a free plan only when validated demand requires it. The free-tier log has every limit and what stretches it.\n2. **A script before an agent.** If a linter, a test or a script can decide something, it does, every time and for nothing. Agents are for judgement. Their tokens are the factory's only real cost, so each agent run has to earn its place.\n3. **One opinionated stack.** The stack is chosen once, for speed of prototyping, and a founder is not asked to choose. It is picked for how much is already built: shadcn/ui for the interface, and its AI elements when a product has AI features.\n4. **Stand on giants, and build the least that tests the hypothesis.** Take proven tools at their defaults and do not rebuild what exists. This is not a Ferrari. Minimal does not mean sloppy: tests, review and design rules are what keep quick work from becoming slop.\n5. **Done means proven.** A ticket carries acceptance criteria, each becomes a test written first, and nothing merges or counts as deployed on trust.\n6. **Production is where you find out.** Getting a small change in front of real use teaches more than scrutinising it beforehand, and a small change is cheap to take back. So keep changes small and reversible, ship them, and watch. Tests prove a change does what its ticket says; only use shows whether the ticket was right.\n7. **A person brings the evidence and owns the rules; agents turn evidence into work.** An interview becomes a scoped ticket, or a signal to watch until there is more of it. A ticket that meets the bar is started. A change to what the factory spends or may reach or to the product's bar, and anything the agents cannot settle, comes back to a person.\n8. **It improves itself.** Every finished run is evidence about the factory: where an agent misunderstood, repeated itself or spent tokens a script could have saved. A run with more friction than one fix round gets a retro, and a cause seen twice becomes a proposed change to a skill or script. *A first version is built; it proposes changes and starts those for a repeated fault.*\n9. **The board is the control plane; the monorepo is the brain.** A person sees and steers the work on the GitHub board. Everything the agents know (the purpose, what users said, the rules, their own transcripts) is plain files in the repo. No other tool: nothing to synchronise, nothing complex, nothing paid.\n10. **Every change is a ticket.** A request, whether for the product or for the factory, becomes a ticket of the right type, and the factory builds it. Nobody edits the repo by hand, person or assistant. Two things cannot go this way: setup steps that need the owner's own logins, and a hand step that unsticks a factory too stuck to build its own fix, taken once and with a ticket that removes the need for it (`decisions.md` [A120b](decisions/120.md)).\n11. **Nothing by hand.** The factory acts before it asks a person, who steps in only when a decision is theirs or the factory cannot act. Setup is one command. A step a person has to do is a bug, kept only where a service leaves no other way. So is a comment that gives a person a command the factory could have run.\n12. **An engineer cannot loosen the rules its own change is judged by,** only the owner changes what the factory spends or may reach, and every credential has the least access that works.\n13. **Build what the evidence supports.** A feature carries a hypothesis and a measure of success, and a problem heard once is watched, not built.\n14. **Every decision is written down with its reason.** For two reasons. A decision can then be traced and understood later: otherwise nobody, person or agent, can tell a choice from an accident. And an agent starts every task cold: what is written is the only context it has, and it is what lets it make fewer mistakes and see the wider goal its task serves.\n\n## Where things are\n\n| What | Where |\n|---|---|\n\n## What the factory measures\n\nSeven measures judge a change to the factory. Each merge records its ticket's ([M246](decisions/246.md)); `factory/scripts/measures.sh --week 2026-W47`, or `--month 2026-11`, prints them, and a month's also counts the tickets opened to cut each rule file to its word budget ([H476f](decisions/476.md)).\n\n| Measure | What it is for |\n|---|---|\n\n## Known gaps",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "a3110713-1b3c-4b0e-aca6-a37f697d9c17",
+    "timestamp": "2026-11-20T14:18:18.721Z",
+    "tool_use_result": {
+      "stdout": "# Ticket #564: Cut `.claude/skills/purpose/SKILL.md` to budget\n\nOpened by github-actions[bot], 2026-11-20T13:13:32Z. State: open. Labels: factory, in-progress.\n\n## Change\n`.claude/skills/purpose/SKILL.md` holds 631 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. Cut the file to its budget: move what only some tasks need to the document those tasks read, and delete what no agent needs to do its work well, to avoid a mistake or to save tokens (`TASTE.md`, \"Writing\"). Do not raise the budget.\n\n## How we will know it works\n`pnpm lint` passes, and prints no line saying that `.claude/skills/purpose/SKILL.md` is over its budget.\nexit=0\n# The factory\n\nA ticket goes in; a reviewed, tested, deployed change comes out. A human decides what gets built and is asked only when the agents can't proceed.\n\nThis file holds the mission and the principles. Each entry of the three lists under them is a file of its own, in the folder named after its list's heading: `README/known-gaps/` beside this file holds the known gaps. `factory/scripts/readme.sh` prints the whole guide ([H484a](decisions/484.md)).\n\n## Mission\n\n**Rapidly validate an idea at zero cost.**\n\nThe factory lets a founder bootstrap a software factory and verify their idea as fast as possible, free of charge, without producing AI slop.\n\nOne cost remains today: the agents run on a Claude subscription, which most founders already have. The factory will eventually run on open-weight models as well; until it does, \"free\" means everything except the model.\n\n## Principles\n\nEvery decision in the record (`decisions.md`) should follow from one of these. When two pull in different directions, the earlier one wins.\n\n1. **Free until the idea is proven.** Use the free plans of services that can also carry a real product: GitHub, Vercel, Neon. When an idea works, the plan is upgraded, not the stack. Leave a free plan only when validated demand requires it. The free-tier log has every limit and what stretches it.\n2. **A script before an agent.** If a linter, a test or a script can decide something, it does, every time and for nothing. Agents are for judgement. Their tokens are the factory's only real cost, so each agent run has to earn its place.\n3. **One opinionated stack.** The stack is chosen once, for speed of prototyping, and a founder is not asked to choose. It is picked for how much is already built: shadcn/ui for the interface, and its AI elements when a product has AI features.\n4. **Stand on giants, and build the least that tests the hypothesis.** Take proven tools at their defaults and do not rebuild what exists. This is not a Ferrari. Minimal does not mean sloppy: tests, review and design rules are what keep quick work from becoming slop.\n5. **Done means proven.** A ticket carries acceptance criteria, each becomes a test written first, and nothing merges or counts as deployed on trust.\n6. **Production is where you find out.** Getting a small change in front of real use teaches more than scrutinising it beforehand, and a small change is cheap to take back. So keep changes small and reversible, ship them, and watch. Tests prove a change does what its ticket says; only use shows whether the ticket was right.\n7. **A person brings the evidence and owns the rules; agents turn evidence into work.** An interview becomes a scoped ticket, or a signal to watch until there is more of it. A ticket that meets the bar is started. A change to what the factory spends or may reach or to the product's bar, and anything the agents cannot settle, comes back to a person.\n8. **It improves itself.** Every finished run is evidence about the factory: where an agent misunderstood, repeated itself or spent tokens a script could have saved. A run with more friction than one fix round gets a retro, and a cause seen twice becomes a proposed change to a skill or script. *A first version is built; it proposes changes and starts those for a repeated fault.*\n9. **The board is the control plane; the monorepo is the brain.** A person sees and steers the work on the GitHub board. Everything the agents know (the purpose, what users said, the rules, their own transcripts) is plain files in the repo. No other tool: nothing to synchronise, nothing complex, nothing paid.\n10. **Every change is a ticket.** A request, whether for the product or for the factory, becomes a ticket of the right type, and the factory builds it. Nobody edits the repo by hand, person or assistant. Two things cannot go this way: setup steps that need the owner's own logins, and a hand step that unsticks a factory too stuck to build its own fix, taken once and with a ticket that removes the need for it (`decisions.md` [A120b](decisions/120.md)).\n11. **Nothing by hand.** The factory acts before it asks a person, who steps in only when a decision is theirs or the factory cannot act. Setup is one command. A step a person has to do is a bug, kept only where a service leaves no other way. So is a comment that gives a person a command the factory could have run.\n12. **An engineer cannot loosen the rules its own change is judged by,** only the owner changes what the factory spends or may reach, and every credential has the least access that works.\n13. **Build what the evidence supports.** A feature carries a hypothesis and a measure of success, and a problem heard once is watched, not built.\n14. **Every decision is written down with its reason.** For two reasons. A decision can then be traced and understood later: otherwise nobody, person or agent, can tell a choice from an accident. And an agent starts every task cold: what is written is the only context it has, and it is what lets it make fewer mistakes and see the wider goal its task serves.\n\n## Where things are\n\n| What | Where |\n|---|---|\n\n## What the factory measures\n\nSeven measures judge a change to the factory. Each merge records its ticket's ([M246](decisions/246.md)); `factory/scripts/measures.sh --week 2026-W47`, or `--month 2026-11`, prints them, and a month's also counts the tickets opened to cut each rule file to its word budget ([H476f](decisions/476.md)).\n\n| Measure | What it is for |\n|---|---|\n\n## Known gaps",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01LNjs17iF9SYPeL9GhtC3Dz",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKn7MTRdceKYhibzgzb",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0153aqjJjDTcn5bhGyHgkcCx",
+          "name": "Bash",
+          "input": {
+            "command": "cat -n .claude/skills/purpose/SKILL.md; wc -w .claude/skills/purpose/SKILL.md; grep -n purpose factory/rule-files.txt; git grep -n -i 'rule-files' -- factory/scripts | head -20; ls .claude/skills/purpose .claude/skills/bootstrap/templates | head -50; factory/scripts/decisions.sh | grep -i -n 'purpose' | head -40",
+            "description": "Show the purpose skill, its budget and related decisions"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2187,
+        "cache_read_input_tokens": 28416,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2187
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "98a8e5de-fe08-40d5-87d0-cb48e70be9d3",
+    "timestamp": "2026-11-20T14:18:22.129Z",
+    "request_id": "req_011ChEKn78Zb9Vf92M9LBKSP",
+    "wire_tool_inputs": {
+      "toolu_0153aqjJjDTcn5bhGyHgkcCx": {
+        "command": "cat -n .claude/skills/purpose/SKILL.md; wc -w .claude/skills/purpose/SKILL.md; grep -n purpose factory/rule-files.txt; git grep -n -i 'rule-files' -- factory/scripts | head -20; ls .claude/skills/purpose .claude/skills/bootstrap/templates | head -50; factory/scripts/decisions.sh | grep -i -n 'purpose' | head -40",
+        "description": "Show the purpose skill, its budget and related decisions"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_0153aqjJjDTcn5bhGyHgkcCx",
+          "type": "tool_result",
+          "content": "     1\t---\n     2\tname: purpose\n     3\tdescription: Interview the human and write PURPOSE.md, the mission and the one-page statement every ticket and review is judged against. Use during bootstrap, when PURPOSE.md is missing, or when the purpose or mission has changed.\n     4\t---\n     5\t\n     6\t# Purpose\n     7\t\n     8\t## The questions\n     9\t\n    10\t1. In one sentence, what is it?\n    11\t2. Who is it for? Name one kind of person, not a market.\n    12\t3. What problem do they have, and how do they cope with it today?\n    13\t4. Suppose it worked perfectly for everyone it could ever reach. What is different about their world?\n    14\t5. How will you know it is working three months from now? Give a number if you can.\n    15\t6. What will it deliberately not do?\n    16\t7. Will people sign in to it? Yes, unless you say it has no accounts.\n    17\t\n    18\t## Steps\n    19\t\n    20\t1. **Read what exists:** `PURPOSE.md`, `product/`, open issues, this conversation. State what you already know and ask the human to confirm or correct it.\n    21\t2. **Ask the remaining questions in one message.**\n    22\t3. **Push back once on a weak answer, then accept it:** \"everyone\" as the audience, a problem nobody copes with today, a success measure that cannot be observed, an empty \"will not do\". Offer a sharper version.\n    23\t4. **Draft at least ten missions** from answers 2, 3 and 4, in different shapes. Throw out each that explains, hedges, or could sit in another company's deck, and offer the best three or four as a choice (the question tool if you have one), with room for the human's own. If none has an edge, say so and ask how they would put it to a friend. Their line beats yours.\n    24\t5. **Write `PURPOSE.md`** in the shape of `template.md` in this folder, in the human's words, tightened. One page: no features, roadmap or technology. \"I don't know yet\" is written as an open question in its section; invent nothing. For a product with no accounts, \"What it will not do\" holds the bullet `- **Have accounts.**` in exactly those words, then the reason. Setup reads it (`factory/decisions.md` [S287d](../../../factory/decisions/287.md)). Then put the mission, in bold, and the \"What it is\" sentence at the top of `README.md`, where its comment asks for them, and change them there whenever they change here.\n    25\t6. **Show it.** In a repo with a remote, commit it straight to `main` as `docs: add PURPOSE.md` (or `docs: revise PURPOSE.md`). During bootstrap, leave it for the first commit.\n    26\t\n    27\t## What makes a mission\n    28\t\n    29\tA direction never reached, not a goal with an end (\"launch in ten countries\"); a claim, not an explanation.\n    30\t\n    31\t- **Short.** Eight words or fewer. A phrase beats a sentence.\n    32\t- **A prize the customer would name:** energy, time and money. Not \"potential\", \"motivation\" or \"empowerment\".\n    33\t- **A \"who\" with a point of view:** \"every athlete\", \"the rest of us\". The best say who has been left out.\n    34\t- **One idea.** \"And how\" or \"and why\" is explaining.\n    35\t- **Bigger than the product.** True in twenty years, and if everything were rebuilt.\n    36\t- **Sayable** by the founder to a stranger, and repeatable by a customer.\n    37\t\n    38\tShapes: *[prize] for [who]* · *[strong verb] [something big]* · *to [verb] [who] [prize]*.\n    39\t\n    40\t- Strong: \"Peak performance for the rest of us.\" A prize, and a who that takes a side.\n    41\t- Weak: \"Show everyone what they're capable of, and how to get there.\" It explains the product, its second half hedges, and a careers site could say it.\n576 .claude/skills/purpose/SKILL.md\n17:600 .claude/skills/purpose/SKILL.md\nfactory/scripts/check-rule-files.sh:3:# Usage: check-rule-files.sh          (from the repo root)\nfactory/scripts/check-rule-files.sh:4:#        check-rule-files.sh --over   prints \"<words> <budget> <file>\" for each rule file over its budget, and checks\nfactory/scripts/check-rule-files.sh:12:list=\"factory/rule-files.txt\"\nfactory/scripts/check-rule-files.sh:20:  echo \"check-rule-files.sh must be run inside a git repository: it could not list the $1 with git ls-files, so nothing was checked.\"\nfactory/scripts/cut-rule-files.sh:3:# Usage: cut-rule-files.sh                   after a merge. A file with such a ticket open gets no second, and the third\nfactory/scripts/cut-rule-files.sh:5:#        cut-rule-files.sh count <yyyy-mm>   prints \"<tickets> <file>\" for each file such a ticket was opened for that month\nfactory/scripts/cut-rule-files.sh:21:  [[ \"${2:-}\" =~ ^[0-9]{4}-(0[1-9]|1[0-2])$ ]] || die \"Usage: cut-rule-files.sh count <yyyy-mm>\"\nfactory/scripts/cut-rule-files.sh:26:[ $# -eq 0 ] || die \"Usage: cut-rule-files.sh | cut-rule-files.sh count <yyyy-mm>\"\nfactory/scripts/cut-rule-files.sh:33:over=$(cd \"$tree\" && \"$script_dir/check-rule-files.sh\" --over) \\\nfactory/scripts/cut-rule-files.sh:60:\\`$file\\` holds $words words on \\`main\\`, and its budget in \\`factory/rule-files.txt\\` is $budget words. Two tickets opened in $month already cut it. A file cut this often has too small a budget, or too much is put into it. The owner chooses one:\nfactory/scripts/cut-rule-files.sh:72:\\`$file\\` holds $words words on \\`main\\`, and its budget in \\`factory/rule-files.txt\\` is $budget words. Cut the file to its budget: move what only some tasks need to the document those tasks read, and delete what no agent needs to do its work well, to avoid a mistake or to save tokens (\\`TASTE.md\\`, \\\"Writing\\\"). Do not raise the budget.\nfactory/scripts/measures.sh:85:  cuts=$(\"$script_dir/cut-rule-files.sh\" count \"$period\") \\\nfactory/scripts/ship.sh:372:\"$script_dir/cut-rule-files.sh\" \\\nfactory/scripts/ship.sh:373:  || echo \"Not every rule file over its word budget got its ticket (\\`cut-rule-files.sh\\` failed); the next merge files it.\" >&2\n.claude/skills/bootstrap/templates:\nARCHITECTURE.md\nCLAUDE.md\nDESIGN.md\nREADME.md\nTASTE.md\napps\nproduct\n\n.claude/skills/purpose:\nSKILL.md\ntemplate.md\n168:| A69h | A build takes `needs-human` off its ticket when it starts. | The label after the engineer's step then means this build's engineer stopped on purpose, so a rebuild cut short is still continued and kept. | Leaving it for the owner to remove: a label an earlier cut-short build added would lose the rebuild's work in silence. | #69 |\n346:| A467c | \"In a row\" is read from the ticket's timeline: a comment holds the marker `factory:time-limit`, and one build has started since the last such comment. | The comment is written at such an ending and `in-progress` is added at each start, so no label or file has to keep the state. | A label: `labels.sh` would make it in every repo. The comments alone: a build the engineer stopped on purpose leaves none. The runs: none names its ticket. | #467 |\n448:| M439b | A merge with the button is the owner's approval and overrides the reviewers; one comment says when both reviews had not passed. | The owner decided it on 19 November 2026: pressing the button is a choice they make on purpose. | Taking back a merge a reviewer had failed: it would undo that choice. Saying nothing: the pull request would read as reviewed. | #439 |\n568:| S3 | The owner chooses in the purpose interview whether the repo is public, and it is private unless they say so. | A public repo has no limit on Actions minutes (free-tier [entry #385](../free-tier/385.md)), and not everyone's code can be public. | Every repo private: this factory spent a private repo's 2,000 minutes and $30 more in 18 days. Every repo public, or public by default: not everyone's code can be public. | setup |\n569:| S4 | Setup asks the human nothing except the purpose, and never hands them a command. | The aim is one command to a working factory, and a step done by hand is a bug in setup. | A checklist of manual steps: each is a bug in setup. | setup |\n577:| S287a | A product has accounts unless its `PURPOSE.md` says not, and `sign-in.sh` switches Neon Auth on for it at setup. | Nearly every product has accounts, and Neon Auth keeps users in the database setup already made, so each preview's branch holds its own. | Auth.js: sign-in code for every project to write. Clerk: a second account and free plan. `--meta auth=true` in `database.sh`: nothing for a database that exists. | #287 |\n580:| S287d | For a product with no accounts, `PURPOSE.md` holds the bullet `- **Have accounts.**`: the purpose skill writes it and `sign-in.sh` reads it. | A script cannot judge prose, and the purpose is the one thing setup asks the owner ([S4](setup.md)). | A flag to `bootstrap.sh`: a command for the human to type. A settings file: a second place saying what the product is. An agent reading `PURPOSE.md`: tokens for a `grep`. | #287 |\n587:| S385a | For a public repo, `PURPOSE.md` holds the bullet `- **Keep its repository private.**`: the purpose skill writes it and `github.sh` reads it. | [S287d](287.md) records a setup choice this way already, and the purpose is the one thing setup asks the owner ([S4](setup.md)). | A flag to `github.sh`: a command for the human to type. A section in `PURPOSE.md`: a second shape for one kind of line. A question in `github.sh`: [S4](setup.md). | #385 |\n588:| S385b | `github.sh` gives a repo its visibility only when it creates it; a repo that exists keeps the one it has. | Making a repo public shows its whole history to anyone and cannot be taken back, so a re-run of setup must not do it. | Changing it to match `PURPOSE.md` on each run: an edited line would publish the repo. Stopping on a mismatch: setup could not be re-run to repair anything else. | #385 |\n592:| S563w | Setup makes a private repository and the purpose interview asks for no public one; `github.sh` still makes one public when `PURPOSE.md` says so ([S385a](385.md)). | A public repository shows every ticket, decision and transcript to anyone, and an owner asked in an interview may choose it without seeing that. | Taking the code out: the owner wants it kept for later. Asking with a longer warning: the interview is about the product, and a wrong answer cannot be undone ([S385b](385.md)). | #563 |\n602:| U5 | A change to `preflight.sh`, `scaffold.sh`, `purpose.sh` or `bootstrap.sh` is neither run nor flagged. | They change nothing in a project that is already set up, so a flag would ask for a person with nothing to do. | Flagging every changed script the factory cannot run: a person asked when there is nothing to do. | #36 |\n632:| H1 | Lint fails on a `factory/` file the manifest does not list, or a root document that is no seed, `PURPOSE.md`, `README.md` or `LEARNINGS.md` ([H322](322.md)). | Work leaves plans and notes behind and nobody remembers to delete them; it also catches a factory file missing from the manifest. | A periodic clean-up by a person or an agent: nobody remembers, and a check costs nothing. | setup |",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "fbac3f71-728c-424c-9f5c-b88d22b8e25d",
+    "timestamp": "2026-11-20T14:18:22.217Z",
+    "tool_use_result": {
+      "stdout": "     1\t---\n     2\tname: purpose\n     3\tdescription: Interview the human and write PURPOSE.md, the mission and the one-page statement every ticket and review is judged against. Use during bootstrap, when PURPOSE.md is missing, or when the purpose or mission has changed.\n     4\t---\n     5\t\n     6\t# Purpose\n     7\t\n     8\t## The questions\n     9\t\n    10\t1. In one sentence, what is it?\n    11\t2. Who is it for? Name one kind of person, not a market.\n    12\t3. What problem do they have, and how do they cope with it today?\n    13\t4. Suppose it worked perfectly for everyone it could ever reach. What is different about their world?\n    14\t5. How will you know it is working three months from now? Give a number if you can.\n    15\t6. What will it deliberately not do?\n    16\t7. Will people sign in to it? Yes, unless you say it has no accounts.\n    17\t\n    18\t## Steps\n    19\t\n    20\t1. **Read what exists:** `PURPOSE.md`, `product/`, open issues, this conversation. State what you already know and ask the human to confirm or correct it.\n    21\t2. **Ask the remaining questions in one message.**\n    22\t3. **Push back once on a weak answer, then accept it:** \"everyone\" as the audience, a problem nobody copes with today, a success measure that cannot be observed, an empty \"will not do\". Offer a sharper version.\n    23\t4. **Draft at least ten missions** from answers 2, 3 and 4, in different shapes. Throw out each that explains, hedges, or could sit in another company's deck, and offer the best three or four as a choice (the question tool if you have one), with room for the human's own. If none has an edge, say so and ask how they would put it to a friend. Their line beats yours.\n    24\t5. **Write `PURPOSE.md`** in the shape of `template.md` in this folder, in the human's words, tightened. One page: no features, roadmap or technology. \"I don't know yet\" is written as an open question in its section; invent nothing. For a product with no accounts, \"What it will not do\" holds the bullet `- **Have accounts.**` in exactly those words, then the reason. Setup reads it (`factory/decisions.md` [S287d](../../../factory/decisions/287.md)). Then put the mission, in bold, and the \"What it is\" sentence at the top of `README.md`, where its comment asks for them, and change them there whenever they change here.\n    25\t6. **Show it.** In a repo with a remote, commit it straight to `main` as `docs: add PURPOSE.md` (or `docs: revise PURPOSE.md`). During bootstrap, leave it for the first commit.\n    26\t\n    27\t## What makes a mission\n    28\t\n    29\tA direction never reached, not a goal with an end (\"launch in ten countries\"); a claim, not an explanation.\n    30\t\n    31\t- **Short.** Eight words or fewer. A phrase beats a sentence.\n    32\t- **A prize the customer would name:** energy, time and money. Not \"potential\", \"motivation\" or \"empowerment\".\n    33\t- **A \"who\" with a point of view:** \"every athlete\", \"the rest of us\". The best say who has been left out.\n    34\t- **One idea.** \"And how\" or \"and why\" is explaining.\n    35\t- **Bigger than the product.** True in twenty years, and if everything were rebuilt.\n    36\t- **Sayable** by the founder to a stranger, and repeatable by a customer.\n    37\t\n    38\tShapes: *[prize] for [who]* · *[strong verb] [something big]* · *to [verb] [who] [prize]*.\n    39\t\n    40\t- Strong: \"Peak performance for the rest of us.\" A prize, and a who that takes a side.\n    41\t- Weak: \"Show everyone what they're capable of, and how to get there.\" It explains the product, its second half hedges, and a careers site could say it.\n576 .claude/skills/purpose/SKILL.md\n17:600 .claude/skills/purpose/SKILL.md\nfactory/scripts/check-rule-files.sh:3:# Usage: check-rule-files.sh          (from the repo root)\nfactory/scripts/check-rule-files.sh:4:#        check-rule-files.sh --over   prints \"<words> <budget> <file>\" for each rule file over its budget, and checks\nfactory/scripts/check-rule-files.sh:12:list=\"factory/rule-files.txt\"\nfactory/scripts/check-rule-files.sh:20:  echo \"check-rule-files.sh must be run inside a git repository: it could not list the $1 with git ls-files, so nothing was checked.\"\nfactory/scripts/cut-rule-files.sh:3:# Usage: cut-rule-files.sh                   after a merge. A file with such a ticket open gets no second, and the third\nfactory/scripts/cut-rule-files.sh:5:#        cut-rule-files.sh count <yyyy-mm>   prints \"<tickets> <file>\" for each file such a ticket was opened for that month\nfactory/scripts/cut-rule-files.sh:21:  [[ \"${2:-}\" =~ ^[0-9]{4}-(0[1-9]|1[0-2])$ ]] || die \"Usage: cut-rule-files.sh count <yyyy-mm>\"\nfactory/scripts/cut-rule-files.sh:26:[ $# -eq 0 ] || die \"Usage: cut-rule-files.sh | cut-rule-files.sh count <yyyy-mm>\"\nfactory/scripts/cut-rule-files.sh:33:over=$(cd \"$tree\" && \"$script_dir/check-rule-files.sh\" --over) \\\nfactory/scripts/cut-rule-files.sh:60:\\`$file\\` holds $words words on \\`main\\`, and its budget in \\`factory/rule-files.txt\\` is $budget words. Two tickets opened in $month already cut it. A file cut this often has too small a budget, or too much is put into it. The owner chooses one:\nfactory/scripts/cut-rule-files.sh:72:\\`$file\\` holds $words words on \\`main\\`, and its budget in \\`factory/rule-files.txt\\` is $budget words. Cut the file to its budget: move what only some tasks need to the document those tasks read, and delete what no agent needs to do its work well, to avoid a mistake or to save tokens (\\`TASTE.md\\`, \\\"Writing\\\"). Do not raise the budget.\nfactory/scripts/measures.sh:85:  cuts=$(\"$script_dir/cut-rule-files.sh\" count \"$period\") \\\nfactory/scripts/ship.sh:372:\"$script_dir/cut-rule-files.sh\" \\\nfactory/scripts/ship.sh:373:  || echo \"Not every rule file over its word budget got its ticket (\\`cut-rule-files.sh\\` failed); the next merge files it.\" >&2\n.claude/skills/bootstrap/templates:\nARCHITECTURE.md\nCLAUDE.md\nDESIGN.md\nREADME.md\nTASTE.md\napps\nproduct\n\n.claude/skills/purpose:\nSKILL.md\ntemplate.md\n168:| A69h | A build takes `needs-human` off its ticket when it starts. | The label after the engineer's step then means this build's engineer stopped on purpose, so a rebuild cut short is still continued and kept. | Leaving it for the owner to remove: a label an earlier cut-short build added would lose the rebuild's work in silence. | #69 |\n346:| A467c | \"In a row\" is read from the ticket's timeline: a comment holds the marker `factory:time-limit`, and one build has started since the last such comment. | The comment is written at such an ending and `in-progress` is added at each start, so no label or file has to keep the state. | A label: `labels.sh` would make it in every repo. The comments alone: a build the engineer stopped on purpose leaves none. The runs: none names its ticket. | #467 |\n448:| M439b | A merge with the button is the owner's approval and overrides the reviewers; one comment says when both reviews had not passed. | The owner decided it on 19 November 2026: pressing the button is a choice they make on purpose. | Taking back a merge a reviewer had failed: it would undo that choice. Saying nothing: the pull request would read as reviewed. | #439 |\n568:| S3 | The owner chooses in the purpose interview whether the repo is public, and it is private unless they say so. | A public repo has no limit on Actions minutes (free-tier [entry #385](../free-tier/385.md)), and not everyone's code can be public. | Every repo private: this factory spent a private repo's 2,000 minutes and $30 more in 18 days. Every repo public, or public by default: not everyone's code can be public. | setup |\n569:| S4 | Setup asks the human nothing except the purpose, and never hands them a command. | The aim is one command to a working factory, and a step done by hand is a bug in setup. | A checklist of manual steps: each is a bug in setup. | setup |\n577:| S287a | A product has accounts unless its `PURPOSE.md` says not, and `sign-in.sh` switches Neon Auth on for it at setup. | Nearly every product has accounts, and Neon Auth keeps users in the database setup already made, so each preview's branch holds its own. | Auth.js: sign-in code for every project to write. Clerk: a second account and free plan. `--meta auth=true` in `database.sh`: nothing for a database that exists. | #287 |\n580:| S287d | For a product with no accounts, `PURPOSE.md` holds the bullet `- **Have accounts.**`: the purpose skill writes it and `sign-in.sh` reads it. | A script cannot judge prose, and the purpose is the one thing setup asks the owner ([S4](setup.md)). | A flag to `bootstrap.sh`: a command for the human to type. A settings file: a second place saying what the product is. An agent reading `PURPOSE.md`: tokens for a `grep`. | #287 |\n587:| S385a | For a public repo, `PURPOSE.md` holds the bullet `- **Keep its repository private.**`: the purpose skill writes it and `github.sh` reads it. | [S287d](287.md) records a setup choice this way already, and the purpose is the one thing setup asks the owner ([S4](setup.md)). | A flag to `github.sh`: a command for the human to type. A section in `PURPOSE.md`: a second shape for one kind of line. A question in `github.sh`: [S4](setup.md). | #385 |\n588:| S385b | `github.sh` gives a repo its visibility only when it creates it; a repo that exists keeps the one it has. | Making a repo public shows its whole history to anyone and cannot be taken back, so a re-run of setup must not do it. | Changing it to match `PURPOSE.md` on each run: an edited line would publish the repo. Stopping on a mismatch: setup could not be re-run to repair anything else. | #385 |\n592:| S563w | Setup makes a private repository and the purpose interview asks for no public one; `github.sh` still makes one public when `PURPOSE.md` says so ([S385a](385.md)). | A public repository shows every ticket, decision and transcript to anyone, and an owner asked in an interview may choose it without seeing that. | Taking the code out: the owner wants it kept for later. Asking with a longer warning: the interview is about the product, and a wrong answer cannot be undone ([S385b](385.md)). | #563 |\n602:| U5 | A change to `preflight.sh`, `scaffold.sh`, `purpose.sh` or `bootstrap.sh` is neither run nor flagged. | They change nothing in a project that is already set up, so a flag would ask for a person with nothing to do. | Flagging every changed script the factory cannot run: a person asked when there is nothing to do. | #36 |\n632:| H1 | Lint fails on a `factory/` file the manifest does not list, or a root document that is no seed, `PURPOSE.md`, `README.md` or `LEARNINGS.md` ([H322](322.md)). | Work leaves plans and notes behind and nobody remembers to delete them; it also catches a factory file missing from the manifest. | A periodic clean-up by a person or an agent: nobody remembers, and a check costs nothing. | setup |",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_0153aqjJjDTcn5bhGyHgkcCx",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKn7MTRdceKYhibzgzb",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01KmWaVtdrc7euSa9JjAVjsG",
+          "name": "Bash",
+          "input": {
+            "command": "git checkout -q -b docs/564-shorter-purpose-skill && git commit -q --allow-empty -m \"chore: start work on #564\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>\" && git push -q -u origin docs/564-shorter-purpose-skill && gh pr create --draft --title \"docs: Cut \\`.claude/skills/purpose/SKILL.md\\` to budget\" --body \"Closes #564\"",
+            "description": "Create the branch and the draft pull request"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2187,
+        "cache_read_input_tokens": 28416,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2187
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "766c923f-9596-416e-8dde-88dd4065771c",
+    "timestamp": "2026-11-20T14:18:23.665Z",
+    "request_id": "req_011ChEKn78Zb9Vf92M9LBKSP",
+    "wire_tool_inputs": {
+      "toolu_01KmWaVtdrc7euSa9JjAVjsG": {
+        "command": "git checkout -q -b docs/564-shorter-purpose-skill && git commit -q --allow-empty -m \"chore: start work on #564\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>\" && git push -q -u origin docs/564-shorter-purpose-skill && gh pr create --draft --title \"docs: Cut \\`.claude/skills/purpose/SKILL.md\\` to budget\" --body \"Closes #564\"",
+        "description": "Create the branch and the draft pull request"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "vcs_state_changed",
+    "kind": "push",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "uuid": "42a2e1d2-70a7-454c-bb97-3112c6b3a8e6",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01KmWaVtdrc7euSa9JjAVjsG",
+          "type": "tool_result",
+          "content": "remote: \nremote: Create a pull request for 'docs/564-shorter-purpose-skill' on GitHub by visiting:        \nremote:      https://github.com/edmulraney/tinyfactory/pull/new/docs/564-shorter-purpose-skill        \nremote: \nhttps://github.com/edmulraney/tinyfactory/pull/566",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "a9a2979b-92c3-45a5-8242-7d04c0942bc0",
+    "timestamp": "2026-11-20T14:18:27.066Z",
+    "tool_use_result": {
+      "stdout": "remote: \nremote: Create a pull request for 'docs/564-shorter-purpose-skill' on GitHub by visiting:        \nremote:      https://github.com/edmulraney/tinyfactory/pull/new/docs/564-shorter-purpose-skill        \nremote: \nhttps://github.com/edmulraney/tinyfactory/pull/566",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false,
+      "gitOperation": {
+        "pr": {
+          "number": 566,
+          "url": "https://github.com/edmulraney/tinyfactory/pull/566",
+          "action": "created"
+        }
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01KmWaVtdrc7euSa9JjAVjsG",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "code_change_published",
+    "provider": "github",
+    "url": "https://github.com/edmulraney/tinyfactory/pull/566",
+    "repo": "edmulraney/tinyfactory",
+    "identifier": "566",
+    "action": "created",
+    "branch": "docs/564-shorter-purpose-skill",
+    "uuid": "f541805e-a045-43f1-8bb9-7061f2a2c9f8",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKnj2oJVi75DfyGFRZK",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQShwUKEAgUGAI4AUIIdGhpbmtpbmcSDHuL8zuUpUliZ7KL8BoMx5NPz10002xiqY/jIjAgA4+wteu7V4AKYFMmcnFeLc7jfps/gQ/C/pe/k3QrCHa6pKFDhrrvkg/BciJcKOsqpAQHivMPCHzLvWuaS8NCc4yD05vhX9VPHZTK4L/9eydIY9hhmNAs39I89iBlS64WEqVEGD2qkId71xYry7DzyyUxSpT5xz3+gTTgY3WkDrXdL51OIrYoGEHH+B1dU/SOB1aue96ke0g/FGphbB9BSGoJ8hFYUq/jTWr5Yp3sdVn+6SZIl4WMtbKzG6GO91WjH98y0cgykNkJdqagwr2YovqH9on1yY7BCv9GHxoj4rafPW0cQii7X8z5jElBR/I+nnAqMplAHhWVFpcM+q2DctHXQcjfZQd8rp5XFzAtQy8LFtUSVtspgZ/6MjDSKTeurMVHzwVlbHYVJBsN9SfRnax7P54xWe/1HTzgj4RJ/vMb2OjZ+T4bc8/SK5qjMeG/H5zySoekWTfEK9l7DEV0XsyTm7w8qUSvfbQJirYPJEyAyCl8bzVGqQWT2MqKncQlXxYfot1EB7LNXaghTg9zWHbZgRrDXereI9/0khRqwTuzx5V+yYvFsa6l8Bx9JIKq5gy8nCeBL0suYXmTInoiH/aIpqzmCeHZZowLLFWAmkN+suCPeXTSDb32JdNNzseWrBYmaGqEeDHdcyChMmrZedJGyvorhSSj7daIvxU8md2ihAAATI+bXkMmUyPaYRcbFwjjQQPOZ1U1aWTvfhYDIEN95vwRFvq2OvvZbnMTPnz2f0sxPCocZch526jyv5sWSiY4V5GfiS4GRiI/6mAIKr4jDDEDAhgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4747,
+        "cache_read_input_tokens": 30603,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4747
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "c93a6490-8671-4c1b-96bc-c626b48db8fa",
+    "timestamp": "2026-11-20T14:18:29.644Z",
+    "request_id": "req_011ChEKnimw4YVhL2hCRqfbW",
+    "thinking_duration_ms": 954,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKnj2oJVi75DfyGFRZK",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Nk5LvPUgXqXfvmvypUJtEz",
+          "name": "Bash",
+          "input": {
+            "command": "factory/scripts/check-rule-files.sh --over; echo \"exit=$?\"; cat factory/scripts/check-rule-files.sh; cat .claude/skills/purpose/template.md; git log --oneline -3 -- .claude/skills/purpose/SKILL.md",
+            "description": "Run the word-budget check and read how it counts"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4747,
+        "cache_read_input_tokens": 30603,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4747
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "eb278101-d371-44de-bb47-4875268368a4",
+    "timestamp": "2026-11-20T14:18:30.327Z",
+    "request_id": "req_011ChEKnimw4YVhL2hCRqfbW",
+    "wire_tool_inputs": {
+      "toolu_01Nk5LvPUgXqXfvmvypUJtEz": {
+        "command": "factory/scripts/check-rule-files.sh --over; echo \"exit=$?\"; cat factory/scripts/check-rule-files.sh; cat .claude/skills/purpose/template.md; git log --oneline -3 -- .claude/skills/purpose/SKILL.md",
+        "description": "Run the word-budget check and read how it counts"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Nk5LvPUgXqXfvmvypUJtEz",
+          "type": "tool_result",
+          "content": "exit=0\n#!/usr/bin/env bash\n# Keeps facts that change by themselves out of rule files and script comments, and keeps rule files short.\n# Usage: check-rule-files.sh          (from the repo root)\n#        check-rule-files.sh --over   prints \"<words> <budget> <file>\" for each rule file over its budget, and checks\n#                                     only the list; it needs no git repository\nset -euo pipefail\n\nonly_over=false\n[ \"${1:-}\" != --over ] || only_over=true\n\n# Each rule file and its word budget (decisions H172b).\nlist=\"factory/rule-files.txt\"\nif [ ! -f \"$list\" ]; then\n  echo \"$list: there is no such file, so no rule file was checked\"\n  exit 1\nfi\n\n# Each listing is on a line of its own, so a failed one is not taken for a repo with no files (decisions H106).\nunlisted() {\n  echo \"check-rule-files.sh must be run inside a git repository: it could not list the $1 with git ls-files, so nothing was checked.\"\n  exit 1\n}\nskills=\"\"; scripts=\"\"\nif [ \"$only_over\" = false ]; then\n  # A new file is listed before it is added (decisions H464).\n  skills=$(git ls-files --cached --others --exclude-standard '.claude/skills/*/SKILL.md') || unlisted \"skills\"\n  # The tests' own files are left out (decisions H172d).\n  scripts=$(git ls-files --cached --others --exclude-standard 'factory/scripts/*.sh' '.claude/skills/bootstrap/scripts/*.sh') || unlisted \"scripts\"\nfi\n\nfailed=0\nrule_files=\"\"\nnumber=0\nwhile IFS= read -r line || [ -n \"$line\" ]; do\n  number=$((number + 1))\n  line=${line%$'\\r'}\n  case \"$line\" in '' | '#'*) continue ;; esac\n  budget=${line%% *}\n  file=${line#* }\n  case \"$budget\" in\n    '' | *[!0-9]*)\n      echo \"$list:$number: a line is \\\"<words> <path>\\\", and this is not: $line\"\n      failed=1\n      continue\n      ;;\n  esac\n  if [ ! -f \"$file\" ]; then\n    # A project with no interface has no DESIGN.md (decisions H501a), and a private one no SECURITY.md (U563r).\n    case \"$file\" in DESIGN.md | SECURITY.md) continue ;; esac\n    echo \"$list:$number: $file is not a file: take the line out, or correct its path\"\n    failed=1\n    continue\n  fi\n  rule_files+=\"$file\"$'\\n'\n  words=$(wc -w < \"$file\" | tr -d ' ')\n  [ \"$words\" -gt \"$budget\" ] || continue\n  if [ \"$only_over\" = true ]; then\n    echo \"$words $budget $file\"\n  # More than a fifth over fails; less merges, and a ticket cuts the file afterwards (decisions H172b, H476a).\n  elif [ $((words * 5)) -gt $((budget * 6)) ]; then\n    echo \"$file: it holds $words words and its budget is $budget, and lint fails a file more than a fifth over its budget. Cut it: a line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens (TASTE.md)\"\n    failed=1\n  else\n    echo \"$file: it holds $words words and its budget is $budget. This fails nothing: once the pull request merges, the factory files a ticket that cuts the file to its budget\"\n  fi\ndone < \"$list\"\n[ \"$only_over\" = false ] || exit \"$failed\"\n\nwhile IFS= read -r skill; do\n  [ -n \"$skill\" ] || continue\n  if ! grep -qxF \"$skill\" <<<\"$rule_files\"; then\n    echo \"$skill: $list does not name it. Add a line with its word budget: every skill is a rule file\"\n    failed=1\n  fi\ndone <<<\"$skills\"\n\n# Of a script, only the comments (decisions H172a). For any awk: no \\b, no {n,m}, and a lowered copy of the line.\nscan() {\n  local comments_only=\"$1\"\n  shift\n  awk -v comments_only=\"$comments_only\" '\n    # Says what was found and the words themselves, trimmed of the character either side that\n    # only marked where they begin and end.\n    function found(what, line, pattern) {\n      if (!match(line, pattern)) return\n      words = substr(line, RSTART, RLENGTH)\n      gsub(/^[^#A-Za-z0-9]+|[^A-Za-z0-9]+$/, \"\", words)\n      print FILENAME \":\" FNR \": \" what \": \\\"\" words \"\\\"\"\n      bad = 1\n    }\n    BEGIN {\n      months = \"(January|February|March|April|May|June|July|August|September|October|November|December)\"\n      states = \"(open|closed|merged|unmerged|deployed|shipped|done|in progress|in-progress|in flight|in review)\"\n      phrases = \"(currently|so far|not yet)\"\n    }\n    { sub(/\\r$/, \"\") }\n    comments_only && !/^[ \\t]*#/ { next }\n    {\n      lower = tolower($0)\n      found(\"the state of a ticket beside its number\", lower, \"#[0-9]+[,:]? ?[(]?(is |was |still |now )*\" states \"([^a-z]|$)\")\n      found(\"the state of a ticket beside its number\", lower, \"(^|[^a-z])\" states \" (ticket |issue |pull request |pr )?#[0-9]+\")\n      found(\"a date\", $0, \"(^|[^0-9])[0-9][0-9]?(st|nd|rd|th)? \" months \"([^a-z]|$)\")\n      found(\"a date\", $0, \"(^|[^A-Za-z])\" months \" [0-9]+\")\n      found(\"a date\", $0, \"(^|[^0-9])20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]([^0-9]|$)\")\n      found(\"a phrase that is true only for now\", lower, \"(^|[^a-z])\" phrases \"([^a-z]|$)\")\n    }\n    END { exit bad }' \"$@\"\n}\n\nreport=\"\"\nif [ -n \"$rule_files\" ]; then\n  # shellcheck disable=SC2086\n  report=$(IFS=$'\\n'; scan 0 $rule_files) || failed=1\nfi\nif [ -n \"$scripts\" ]; then\n  # shellcheck disable=SC2086\n  comments=$(scan 1 $scripts) || failed=1\n  report+=${report:+${comments:+$'\\n'}}$comments\nfi\nif [ -n \"$report\" ]; then\n  printf '%s\\n' \"$report\"\n  echo \"Each of these is true only for now, and is wrong once a ticket merges or the day passes. A rule file holds what stays true until someone edits it (TASTE.md): write the rule, and leave what happened to the ticket, a decision row or a free-tier entry.\"\nfi\n[ \"$failed\" -eq 0 ] && echo \"rule files ok: $(grep -c . <<<\"$rule_files\") files and the comments of $(wc -w <<<\"$scripts\" | tr -d ' ') scripts\"\nexit \"$failed\"\n# Purpose\n\n## Mission\n\n<One line. The direction the business always moves in and never finishes.>\n\n## What it is\n\n<One sentence a stranger would understand.>\n\n## If it works\n\n<What is different about their world when this works for everyone it could reach.>\n\n## Who it is for\n\n<One kind of person.>\n\n## The problem\n\n<What they struggle with, and how they cope today.>\n\n## How we will know it is working\n\n<What we expect to observe in three months, with a number where there is one.>\n\n## What it will not do\n\n<What we are deliberately leaving out.>\n59e4e3c ci: install the workflow changes merged in #565",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "bb6b1e9e-3740-499b-8157-c3347a58f9e3",
+    "timestamp": "2026-11-20T14:18:30.434Z",
+    "tool_use_result": {
+      "stdout": "exit=0\n#!/usr/bin/env bash\n# Keeps facts that change by themselves out of rule files and script comments, and keeps rule files short.\n# Usage: check-rule-files.sh          (from the repo root)\n#        check-rule-files.sh --over   prints \"<words> <budget> <file>\" for each rule file over its budget, and checks\n#                                     only the list; it needs no git repository\nset -euo pipefail\n\nonly_over=false\n[ \"${1:-}\" != --over ] || only_over=true\n\n# Each rule file and its word budget (decisions H172b).\nlist=\"factory/rule-files.txt\"\nif [ ! -f \"$list\" ]; then\n  echo \"$list: there is no such file, so no rule file was checked\"\n  exit 1\nfi\n\n# Each listing is on a line of its own, so a failed one is not taken for a repo with no files (decisions H106).\nunlisted() {\n  echo \"check-rule-files.sh must be run inside a git repository: it could not list the $1 with git ls-files, so nothing was checked.\"\n  exit 1\n}\nskills=\"\"; scripts=\"\"\nif [ \"$only_over\" = false ]; then\n  # A new file is listed before it is added (decisions H464).\n  skills=$(git ls-files --cached --others --exclude-standard '.claude/skills/*/SKILL.md') || unlisted \"skills\"\n  # The tests' own files are left out (decisions H172d).\n  scripts=$(git ls-files --cached --others --exclude-standard 'factory/scripts/*.sh' '.claude/skills/bootstrap/scripts/*.sh') || unlisted \"scripts\"\nfi\n\nfailed=0\nrule_files=\"\"\nnumber=0\nwhile IFS= read -r line || [ -n \"$line\" ]; do\n  number=$((number + 1))\n  line=${line%$'\\r'}\n  case \"$line\" in '' | '#'*) continue ;; esac\n  budget=${line%% *}\n  file=${line#* }\n  case \"$budget\" in\n    '' | *[!0-9]*)\n      echo \"$list:$number: a line is \\\"<words> <path>\\\", and this is not: $line\"\n      failed=1\n      continue\n      ;;\n  esac\n  if [ ! -f \"$file\" ]; then\n    # A project with no interface has no DESIGN.md (decisions H501a), and a private one no SECURITY.md (U563r).\n    case \"$file\" in DESIGN.md | SECURITY.md) continue ;; esac\n    echo \"$list:$number: $file is not a file: take the line out, or correct its path\"\n    failed=1\n    continue\n  fi\n  rule_files+=\"$file\"$'\\n'\n  words=$(wc -w < \"$file\" | tr -d ' ')\n  [ \"$words\" -gt \"$budget\" ] || continue\n  if [ \"$only_over\" = true ]; then\n    echo \"$words $budget $file\"\n  # More than a fifth over fails; less merges, and a ticket cuts the file afterwards (decisions H172b, H476a).\n  elif [ $((words * 5)) -gt $((budget * 6)) ]; then\n    echo \"$file: it holds $words words and its budget is $budget, and lint fails a file more than a fifth over its budget. Cut it: a line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens (TASTE.md)\"\n    failed=1\n  else\n    echo \"$file: it holds $words words and its budget is $budget. This fails nothing: once the pull request merges, the factory files a ticket that cuts the file to its budget\"\n  fi\ndone < \"$list\"\n[ \"$only_over\" = false ] || exit \"$failed\"\n\nwhile IFS= read -r skill; do\n  [ -n \"$skill\" ] || continue\n  if ! grep -qxF \"$skill\" <<<\"$rule_files\"; then\n    echo \"$skill: $list does not name it. Add a line with its word budget: every skill is a rule file\"\n    failed=1\n  fi\ndone <<<\"$skills\"\n\n# Of a script, only the comments (decisions H172a). For any awk: no \\b, no {n,m}, and a lowered copy of the line.\nscan() {\n  local comments_only=\"$1\"\n  shift\n  awk -v comments_only=\"$comments_only\" '\n    # Says what was found and the words themselves, trimmed of the character either side that\n    # only marked where they begin and end.\n    function found(what, line, pattern) {\n      if (!match(line, pattern)) return\n      words = substr(line, RSTART, RLENGTH)\n      gsub(/^[^#A-Za-z0-9]+|[^A-Za-z0-9]+$/, \"\", words)\n      print FILENAME \":\" FNR \": \" what \": \\\"\" words \"\\\"\"\n      bad = 1\n    }\n    BEGIN {\n      months = \"(January|February|March|April|May|June|July|August|September|October|November|December)\"\n      states = \"(open|closed|merged|unmerged|deployed|shipped|done|in progress|in-progress|in flight|in review)\"\n      phrases = \"(currently|so far|not yet)\"\n    }\n    { sub(/\\r$/, \"\") }\n    comments_only && !/^[ \\t]*#/ { next }\n    {\n      lower = tolower($0)\n      found(\"the state of a ticket beside its number\", lower, \"#[0-9]+[,:]? ?[(]?(is |was |still |now )*\" states \"([^a-z]|$)\")\n      found(\"the state of a ticket beside its number\", lower, \"(^|[^a-z])\" states \" (ticket |issue |pull request |pr )?#[0-9]+\")\n      found(\"a date\", $0, \"(^|[^0-9])[0-9][0-9]?(st|nd|rd|th)? \" months \"([^a-z]|$)\")\n      found(\"a date\", $0, \"(^|[^A-Za-z])\" months \" [0-9]+\")\n      found(\"a date\", $0, \"(^|[^0-9])20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]([^0-9]|$)\")\n      found(\"a phrase that is true only for now\", lower, \"(^|[^a-z])\" phrases \"([^a-z]|$)\")\n    }\n    END { exit bad }' \"$@\"\n}\n\nreport=\"\"\nif [ -n \"$rule_files\" ]; then\n  # shellcheck disable=SC2086\n  report=$(IFS=$'\\n'; scan 0 $rule_files) || failed=1\nfi\nif [ -n \"$scripts\" ]; then\n  # shellcheck disable=SC2086\n  comments=$(scan 1 $scripts) || failed=1\n  report+=${report:+${comments:+$'\\n'}}$comments\nfi\nif [ -n \"$report\" ]; then\n  printf '%s\\n' \"$report\"\n  echo \"Each of these is true only for now, and is wrong once a ticket merges or the day passes. A rule file holds what stays true until someone edits it (TASTE.md): write the rule, and leave what happened to the ticket, a decision row or a free-tier entry.\"\nfi\n[ \"$failed\" -eq 0 ] && echo \"rule files ok: $(grep -c . <<<\"$rule_files\") files and the comments of $(wc -w <<<\"$scripts\" | tr -d ' ') scripts\"\nexit \"$failed\"\n# Purpose\n\n## Mission\n\n<One line. The direction the business always moves in and never finishes.>\n\n## What it is\n\n<One sentence a stranger would understand.>\n\n## If it works\n\n<What is different about their world when this works for everyone it could reach.>\n\n## Who it is for\n\n<One kind of person.>\n\n## The problem\n\n<What they struggle with, and how they cope today.>\n\n## How we will know it is working\n\n<What we expect to observe in three months, with a number where there is one.>\n\n## What it will not do\n\n<What we are deliberately leaving out.>\n59e4e3c ci: install the workflow changes merged in #565",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Nk5LvPUgXqXfvmvypUJtEz",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "3ba9dc86-3d43-4261-b56b-d87104ab58ba"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 150,
+    "estimated_tokens_delta": 100,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "db2437e7-6165-467b-960b-603a2e6194e3"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 365,
+    "estimated_tokens_delta": 215,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "994044a5-3052-4df8-87d1-74f00b2b5316"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKnyQk1bvr2StcvbT3x",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSqQsKEAgUGAI4AUIIdGhpbmtpbmcSDB/w9vfzTD0BoW88/BoMdffWxqbnY6BSwIceIjBKwbTlM06EAtE2i7WQuxgt66EaOsX42OpgVuBDAuOmVhTONWsMkU4kv6zpZDFTzSUqxgqod+/gtWmM66OEcSlXKClK1gXzcltdd0WX6NVvCNFh3sbvPg8vW4Lo0klJodUcXQUBxUd5Kd/uLMu6OPPJ2dtaMaWaX3frWTR/B0/TEp/dBdsWfTUzvCsHD5IxSLBndlToNSlGB1+yYcwGlDZhIi0BuE7CWBD6qsJ/qUSE5pNowGHOcsKhyU26UJfkpZupmniiyfoR85TWbijsrZKERKOtc+mfejW/+USVosmoLpsY+tIUGD7jqIKzGFnbu7ZISuP8Jy39kXIudZkzyLcyKevZD2GMbsiFC9VmAoW/6zLQ50cm9WJmtxmHSuFzYBO2OJ1Zx+5g2bg/2C/0B+Fl6/eRtPEDPpmp23IY9rZM9AjKYSMY4tyomIuGpQVA01gyvTcaxpwimBPsOdrzeFwTDDGhPZ1F7Dl+eLE2UG5taHaT05oWnaWla2aJpWR1QWTLNSeK+roVxYPuOZDx2MqC+hjJ9s+iyQTV9BhJ8L3iS78xTnf93oYMhvldj33eNPVtcdgRykgowxyJKaa2bpcljIt1T3eCdoG2qiREtwE63HUbYobVGYe0CEMQ2srWoplHUxWXs/yFZtJjcRW0bRDPaOTFZeBNEHxkBnZzXDgAjC95/00qaXw0C7A28+ZqwSagm0VWkORZul/EMbCljHMb5O8uJe22jux0RzQnZ6d9eegWfqE7uE2rklvHcBve0DwQVt2KqoTgQQgKKDzeWnO0EziY4esUbWplaT2cExNE1SEkJeyeAiUn4oSlMFUrPjZ4NMfgXOKuSIC9uKLvVR56BiMFiScmynydWnrqDyv28yp6+a7kH9o4yZOmCnymd2Je2dauBBZW7bYWx8JchBgfvqWZijH37qx78rI1fIbRBCCjA2m5RdbzGuIcz46B9OP5RAKB+Z8q5iYTAvxNya8UzrQ9MxUbXKqVuRUqBgw91gqkSrgcBMTNdMkx/ebaqitI0Wh6G4G13/OTZvEHfa6Xvueled4RGQLad8lXHEnS3gKV+s9cken2pqrcW3WaklFqNfkdB5oVC7DelDPiBYE3KFQp1MS1qqmPuU4D9g+VAvZI+fBYd3qdFBcmgJ7v7WWU0Z5pE8+7WE5DGD4BU5hEqFOLyGcuVylRdBkRoCSnDBtSkvY5e+93h3BwDrmf0bCALRpDG37fM4YQIrgWJeb1E6nx89ZfV4wQZSHJa/ZdvJCjaCq2FJL+3Cx21YrPw9cNk2fgb9AZXcWmBCH+Q5/PHz8yMeFx31YX7ESjZKDzbTA4dLDFdscILI9O2ppJp1rJIuvUfAlUb/IibQtuNY3GMtwm8mSFuN2oRziwLPwPh5Ufdgbl549D4yFoiDIKOouM7Q4sBYFaU3Ohb3mUJnOqFvFh0xIkqh8L0JR8/UJgRwXkXXsp9UfgPMUmM2W8R6tBz8/gnjTMckdTb1QfAc70Y3KhStKfxpKM4etxLfFTeEyKtchnkpBngN+ChCpoQR5N19RzYikCbBbrhCPwmOUO+qP2ORLRp0Paxt3HmuzoMt+IiiKkWiG8qm0wrRKljQS4pQprGEW5aZ0YfWuwz0zOZh2baEGT3/p3cIf4RoeKsbr/jyfYdj8tg1rI40x73XsLjM5qp8hSEfOF/V+XmiEI/x7Xqx21SSE2S8Uj5iRd7yjKi2011sYdux4qXzGWF0RdZasud2Ev8YsC2pQBYJ4s9dalsMw9NBRHHQdmdZnNMY2oKYXnQhn7nFZZKErpwkuJWefMkdnl0OELFXXK4MvQ9FUPUbYFnoS7BXcTNawRetfyPP/kHsXZQ5yChLzB2eoKJkowy5rQvBIYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2810,
+        "cache_read_input_tokens": 35350,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2810
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "df29beee-da0d-4fae-b466-38dd2d960d27",
+    "timestamp": "2026-11-20T14:18:35.516Z",
+    "request_id": "req_011ChEKnyC6SYnapoHNt8jF3",
+    "thinking_duration_ms": 3473,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKnyQk1bvr2StcvbT3x",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017ii7gQKjY4AnMYiq6H7JLw",
+          "name": "Bash",
+          "input": {
+            "command": "git fetch -q --unshallow origin main 2>/dev/null || git fetch -q origin main; git log --format='%h %cI %s' -5 origin/main -- .claude/skills/purpose/SKILL.md; for c in $(git log --format=%h -3 origin/main -- .claude/skills/purpose/SKILL.md); do echo \"$c $(git show $c:.claude/skills/purpose/SKILL.md | wc -w)\"; done; git log --format='%h %cI %s' -4 origin/main; pnpm lint 2>&1 | grep -n -i -E 'purpose|rule files ok|budget' ; echo \"lint=${PIPESTATUS[0]}\"",
+            "description": "Find when the file came under budget and run lint"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2810,
+        "cache_read_input_tokens": 35350,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2810
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "9f65552f-c5c0-4b68-a911-dee7b91bbb88",
+    "timestamp": "2026-11-20T14:18:37.338Z",
+    "request_id": "req_011ChEKnyC6SYnapoHNt8jF3",
+    "wire_tool_inputs": {
+      "toolu_017ii7gQKjY4AnMYiq6H7JLw": {
+        "command": "git fetch -q --unshallow origin main 2>/dev/null || git fetch -q origin main; git log --format='%h %cI %s' -5 origin/main -- .claude/skills/purpose/SKILL.md; for c in $(git log --format=%h -3 origin/main -- .claude/skills/purpose/SKILL.md); do echo \"$c $(git show $c:.claude/skills/purpose/SKILL.md | wc -w)\"; done; git log --format='%h %cI %s' -4 origin/main; pnpm lint 2>&1 | grep -n -i -E 'purpose|rule files ok|budget' ; echo \"lint=${PIPESTATUS[0]}\"",
+        "description": "Find when the file came under budget and run lint"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_017ii7gQKjY4AnMYiq6H7JLw",
+          "type": "tool_result",
+          "content": "1d1455a 2026-11-20T14:17:06Z fix: act only for an account with write access (#565)\nea74b71 2026-11-20T13:13:11Z chore: bring the factory's files up to date (#562)\nad90610 2026-11-18T22:21:57Z feat: give a new project a README\nec3d1bf 2026-11-18T16:18:03Z feat: publish tinyfactory\n1d1455a 576\nea74b71 631\nad90610 576\n59e4e3c 2026-11-20T14:17:21Z ci: install the workflow changes merged in #565\n1d1455a 2026-11-20T14:17:06Z fix: act only for an account with write access (#565)\nea74b71 2026-11-20T13:13:11Z chore: bring the factory's files up to date (#562)\n68cd3a3 2026-11-19T16:51:57Z feat: set tinyfactory's repository up to run its own factory\n9:rule files ok: 17 files and the comments of 106 scripts\nlint=0",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "f3b0b0c1-280b-48e9-a323-5f3a50c0fd0b",
+    "timestamp": "2026-11-20T14:18:54.515Z",
+    "tool_use_result": {
+      "stdout": "1d1455a 2026-11-20T14:17:06Z fix: act only for an account with write access (#565)\nea74b71 2026-11-20T13:13:11Z chore: bring the factory's files up to date (#562)\nad90610 2026-11-18T22:21:57Z feat: give a new project a README\nec3d1bf 2026-11-18T16:18:03Z feat: publish tinyfactory\n1d1455a 576\nea74b71 631\nad90610 576\n59e4e3c 2026-11-20T14:17:21Z ci: install the workflow changes merged in #565\n1d1455a 2026-11-20T14:17:06Z fix: act only for an account with write access (#565)\nea74b71 2026-11-20T13:13:11Z chore: bring the factory's files up to date (#562)\n68cd3a3 2026-11-19T16:51:57Z feat: set tinyfactory's repository up to run its own factory\n9:rule files ok: 17 files and the comments of 106 scripts\nlint=0",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_017ii7gQKjY4AnMYiq6H7JLw",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "44ce59ae-39e8-402f-8072-89a0bff0f0ba"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 150,
+    "estimated_tokens_delta": 100,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "79b50683-e30e-49d8-aee1-dd4619c49792"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 272,
+    "estimated_tokens_delta": 122,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "f416878e-2411-465d-a5c8-e4819c46b70d"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKpkNUepEwA7rS4HwZq",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQStQgKEAgUGAI4AUIIdGhpbmtpbmcSDLy8xyoBMxU+hCfteRoMv/zrAEuuR+FcXSnpIjCopGU3FVO0OnUa0cQVzFmvfNMgIQkfEatvSMZgT4i3YO2bwzhRexuK689J08H1Lj8q0geajqFc1+4Td001z7jm8SVGPWX0nIDZLi5LworZFcku6zZav3bw0LTo1n58UUzycYPqqmftM48Fbg8qroaNkR3vSusOkLn9ln0tbadh5Mxg9+aA4uo7t0OjIBVdaA9HpchAGWOw4wNiRorPFQq0YRzFnqOTciFVq6artkLxmdvaPjpCGtMjSFe9qjJcyulPbms+Brx0f2Vs4dKARVNBsBIwkRyxL96Chq+ea+R+uLjqaMwuO33JPc8mMn3bnrMUP2MSX/A1E/2tu5zYUDV8lDJrUmuuYxnagfpmI5XaXCJTa1fU91FRRt/DmS9Cq6VfUbUR3ZpvDn/KL+C6SduYQqqDgkySU4w2Ja6xBKp+1HJwFFOX0npYWIWSV2LWh3vrQ70Wv8w4uaowdais12+vksl39VS2vpg/9susQc/DTUx8jYu4UGxw+NftrovvEydgtDI74QR29IXrAfhQHj1u5DzbfIgygHbaW1jP8iOzMTM5HbcY4+y3N8eyD1pMa6D2gvtBDmvmfFD6Yre0ejV3gA++o7aH2JjoluXeM7swRgePcIRJXe3HWNeiKmr8BqxkUAI91YGWy4OTgO3BCY74HD8USjdIlHv9mVAIkRwt+O1WaP99XntA9++cilK/K7oIpDDOmcEUuYncc9wZ6zUKFyck3SWfNJczzOolUiq35pr3NqKq1v08VGW5MSF+KjGUyQMV76ktRvXXPgp9OYrRSAFCEbJdjl0Yf27h601aJU20fdjhhdCTbgpwAtCHcEDVx3yfDnMfDkSjDBH3W+vsxZ3bZptKhAMmFrFjZsCvxwKJneCU6HdryWecGtWe3HAhVpnrqgPurItlGsdH6vRmUIutEYYYtrNazlH3gHI2arflwEKt394myN3NYwKa+zYFmmd7mP8yVONNfwv1iExAsxHIrhSK7JA/78ms4Z2n9ZDVA9T+fGM5wxWhZXhTzSh/jz+L726Z0UfjA42+iySSFrTetIDyB5VqqeyZromVesNbE+yExpYXpwhwHc2RQaJvLLnqfqvHQqX3QXUIzRQm/Jhz/DIusfjadmeToBV30x45ygCwFSHVwr3pO8K0GuOgwbpqq7Ezh9xJtycb/6aCPclrP17yvAnt124m08s+kEe2SCD4KBzoVdNArQfJC8/eacpc9VJWlOqtKHgTS0FU93jdlqy5xhX8G5zNzdU/hDwkLNU2+J5GE9vfhQnCD4xLHDY6RiDkxHgV+L3G12EHEco34NtL2iLG97qhQs7ezeImUs1XN1Eqi2tQqTETdOVSolZhy4Fi+GVgLfptmP4XMZrQGlsYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 938,
+        "cache_read_input_tokens": 38160,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 938
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "f1f683e6-4e6e-42a3-bd67-125c271f9e56",
+    "timestamp": "2026-11-20T14:18:58.341Z",
+    "request_id": "req_011ChEKpkAa7q9v57NDjBYhM",
+    "thinking_duration_ms": 2190,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKpkNUepEwA7rS4HwZq",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01M1qzamYtZdVD51yRaLcLDB",
+          "name": "Bash",
+          "input": {
+            "command": "factory/scripts/decisions.sh | grep -n -i -E 'already (done|met|true|fixed)|nothing to (build|change)|empty pull request|no change|changed nothing|pushed nothing' | head -20; cat factory/decisions/371.md | tail -5; gh pr view 565 --json title,body -q '.title,.body' | head -30",
+            "description": "Search the decision record for a ticket that is already done"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 938,
+        "cache_read_input_tokens": 38160,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 938
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "5f8229b4-f616-450b-846b-49110dbecedd",
+    "timestamp": "2026-11-20T14:18:59.641Z",
+    "request_id": "req_011ChEKpkAa7q9v57NDjBYhM",
+    "wire_tool_inputs": {
+      "toolu_01M1qzamYtZdVD51yRaLcLDB": {
+        "command": "factory/scripts/decisions.sh | grep -n -i -E 'already (done|met|true|fixed)|nothing to (build|change)|empty pull request|no change|changed nothing|pushed nothing' | head -20; cat factory/decisions/371.md | tail -5; gh pr view 565 --json title,body -q '.title,.body' | head -30",
+        "description": "Search the decision record for a ticket that is already done"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01M1qzamYtZdVD51yRaLcLDB",
+          "type": "tool_result",
+          "content": "53:| T85d | A ticket for what only a later run can show is titled \"Confirm …\" and carries `proof` alone: no type and no `needs-human`. | It holds nothing to build and nothing is stuck, yet eight of them were a quarter of the open issues, counted as both. | `needs-human` and `factory` as before: counted as stuck and as work. A type beside `proof`: every count of work to build would have to leave it out. | #85 |\n56:| T85g | `check-ticket.sh` refuses a ticket labelled `proof`, and the `ticket` skill files one without running it. | The check is the gate before a build, and a proof ticket given `ready` by mistake would otherwise start one with nothing to build. | The check passing a proof ticket on its title and sections: `implement.yml` would then start a build. Its old answer, \"add a type\": following it undoes [T85d](85.md). | #85 |\n137:| A22 | A retro proposes on a first occurrence when the run lost work or money or stopped for a person, unless [A184c](184.md) bars its check. | Each of those costs the owner more than a fix round, and tickets #67 and #69 were filed only because the owner asked. | Waiting for a second occurrence: the same loss twice. Any outage: one handled well needs no change. Something left wrong or nobody told, alone: below the owner's bar ([A223a](223.md)). | #70, #184, #223 |\n167:| A69g | A fix round that pushed nothing is continued once; if the engineer then ends the session again without pushing, it is not continued again. | A round may rebut every finding and push nothing, and an engineer told nothing was pushed who still pushes nothing has answered. | Continuing twice like a build: two paid sessions that change nothing. Reading the comments for a rebuttal: Fred's pull requests always carry `needs-human`, and whose comment counts is a guess. | #69 |\n205:| A160a | A reviewer's pass is carried to a new head, with no agent, when every commit since merges `main` and the change reads the same. | On 16 November the reviews ran 63 times for 33 pull requests, at about $2.50 a pair, mostly after a merge of `main` changed nothing they read. | Reviewing every push: the cost. Skipping both jobs by a condition: deciding needs the branch's history, so a job runs anyway. Carrying a fail: its fix changes the diff. | #160 |\n278:| A368b | `start-fix-round.sh` starts no round for a labelled pull request, and flags it `needs-human`. | A round can fix nothing outside the pull request, and flagged it holds no place among the three while it waits ([T361b](361.md)). | A round each time its checks fail: #340 paid $1.20 for one that pushed nothing. No flag: three waiting pull requests would stop every build. | #368 |\n287:| A371b | When a fix round's engineer ends the session having pushed nothing, the first line of its answer is the first line of the factory's comment. | The engineer knows what it needs, and `continue-session.sh` has asked it to answer with that line alone. | A marker the engineer writes in its comment: one more read of the pull request, and a guess at whose comment counts ([A69g](69.md)). The whole answer: it repeats that comment. | #371 |\n308:| A395d | `record-fix-round.sh` writes no marker for a fix round the usage limit ended, of whichever kind. | An attempt the provider refused did no work, and on #390 it took the third place, so a real finding started no round. | Leaving uncounted only a round that pushed nothing, as the retro of #390 worded it: the script would read the head too, for a case that is rare. | #395 |\n312:| A396b | A request for changes gets one owner's round: a round's record names its review, and `begin-fix-round.sh` refuses the round of a review a record names. | A round that pushed nothing leaves the review standing. A round is recorded when its session ends, so only a run queued behind it sees the record. | The check in `start-retests.sh`: a merge during a round passes it. Counting rounds recorded after the review: a second request during a round starts nothing. Matching the opening comment ([A28](76.md)). | #396 |\n350:| A475b | `fix.yml`'s session settings hold a `PermissionRequest` hook, `allow-skill-write.sh`, which allows `Edit` or `Write` on a skill file the pull request already changes. | A script answers the same every time and grants one write; the fix round on #474 pushed nothing and asked a person to apply two lines. | `--permission-mode auto`: a model's review would pass every protected write ([A353e](353.md)). An allow rule: Claude Code checks `.claude/` before it. The hook in `implement.yml`: a new branch changes no file. | #475 |\n481:| M530 | `owner-decides.sh` holds no pull request for a change to `factory/free-tier.md` or a file in `factory/free-tier/`. | They record a measurement; the limit is a line of a workflow or script, held by itself, and 6 of 59 merged pull requests waited for the record alone. | Holding them as spend or limits, as before: the owner approved all six with no change to an entry. Holding only the tables of limits: no script reads one. | #530 |\n704:| H242c | A name GitHub or the `sessions` branch already holds keeps its spelling: job ids, comment markers, labels, session roles, lesson fields. | Scripts read runs, comments and lessons saved under those names, so a new spelling changes what they find. | Renaming them and reading both spellings: two names kept for good, where the ticket allows no change in behaviour. | #242 |\n705:| H242d | `continue-session.sh` keeps `again` as its last argument's word, and holds it in the variable `retried`. | Until the installer copies the changed `fix.yml`, the installed one passes `again` to the script `main` already holds. | Renaming the word too: until the install, a fix round that twice pushed nothing would be continued a third time. | #242 |\n766:| H450 | What the owner does to use the factory is in `factory/owner-guide.md`, which has no word budget; `factory/README.md` holds what an agent changing the factory needs. | Every factory build reads the README, and its 669 words on using the factory changed nothing an engineer does. | The root `README.md`: no new project is handed it ([H2](44.md)). A skill: the owner reads none. A budget for the guide: no agent run reads it. | #450 |\n778:| H484b | A list's folder is named after its heading, in small letters with hyphens for spaces, and `readme.sh` stops on a folder no heading has. | A new list then takes a heading and a folder and no change to the script, and a misspelt folder cannot drop its entries unseen. | The lists named in the script: a second place to change for each new list. A marker line in `README.md` for each folder: it repeats the heading. | #484 |\n| A371c | The comment for an unfinished review keeps the reviewer's name in bold before that line. | `carry-review.sh` and `run-facts.sh` find a reviewer's latest comment by the name it starts with, and an unfinished review must hide an earlier pass. | The name on the second line, and both scripts reading it there: comments already posted start with the name, so each script would match two shapes. | #371 |\n\n| ID | Decision | Why | Rejected | Source |\n|---|---|---|---|---|\n| H371 | `implement` may hold 800 words and `factory-engineer` 1,100. | The line saying how a comment for a person starts took each over a budget with under three words to spare. | Cutting other sentences: the ticket names none, and each changes what an engineer does. The line in `CLAUDE.md` alone: every agent would pay for a rule three follow. | #371 |\nfix: act only for an account with write access\nCloses #563\n\nThe factory now acts only for an account with write access to the repository and for its own two bots. Anyone else's issue, comment or review starts nothing, is read by no agent and changes no count. One script decides, and no answer means no.\n\nDiffers from the ticket: only this repository holds a `SECURITY.md`, no project does. It also brings the one-job review, the README update and the board's filter text, and setup asks for no public repository.\nNeeds from the owner after merging: switch on private vulnerability reporting, and close #502 to #510 and #564.",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "4e5a3e51-74e0-4517-ab5a-ef9277e4b8d8",
+    "timestamp": "2026-11-20T14:19:00.057Z",
+    "tool_use_result": {
+      "stdout": "53:| T85d | A ticket for what only a later run can show is titled \"Confirm …\" and carries `proof` alone: no type and no `needs-human`. | It holds nothing to build and nothing is stuck, yet eight of them were a quarter of the open issues, counted as both. | `needs-human` and `factory` as before: counted as stuck and as work. A type beside `proof`: every count of work to build would have to leave it out. | #85 |\n56:| T85g | `check-ticket.sh` refuses a ticket labelled `proof`, and the `ticket` skill files one without running it. | The check is the gate before a build, and a proof ticket given `ready` by mistake would otherwise start one with nothing to build. | The check passing a proof ticket on its title and sections: `implement.yml` would then start a build. Its old answer, \"add a type\": following it undoes [T85d](85.md). | #85 |\n137:| A22 | A retro proposes on a first occurrence when the run lost work or money or stopped for a person, unless [A184c](184.md) bars its check. | Each of those costs the owner more than a fix round, and tickets #67 and #69 were filed only because the owner asked. | Waiting for a second occurrence: the same loss twice. Any outage: one handled well needs no change. Something left wrong or nobody told, alone: below the owner's bar ([A223a](223.md)). | #70, #184, #223 |\n167:| A69g | A fix round that pushed nothing is continued once; if the engineer then ends the session again without pushing, it is not continued again. | A round may rebut every finding and push nothing, and an engineer told nothing was pushed who still pushes nothing has answered. | Continuing twice like a build: two paid sessions that change nothing. Reading the comments for a rebuttal: Fred's pull requests always carry `needs-human`, and whose comment counts is a guess. | #69 |\n205:| A160a | A reviewer's pass is carried to a new head, with no agent, when every commit since merges `main` and the change reads the same. | On 16 November the reviews ran 63 times for 33 pull requests, at about $2.50 a pair, mostly after a merge of `main` changed nothing they read. | Reviewing every push: the cost. Skipping both jobs by a condition: deciding needs the branch's history, so a job runs anyway. Carrying a fail: its fix changes the diff. | #160 |\n278:| A368b | `start-fix-round.sh` starts no round for a labelled pull request, and flags it `needs-human`. | A round can fix nothing outside the pull request, and flagged it holds no place among the three while it waits ([T361b](361.md)). | A round each time its checks fail: #340 paid $1.20 for one that pushed nothing. No flag: three waiting pull requests would stop every build. | #368 |\n287:| A371b | When a fix round's engineer ends the session having pushed nothing, the first line of its answer is the first line of the factory's comment. | The engineer knows what it needs, and `continue-session.sh` has asked it to answer with that line alone. | A marker the engineer writes in its comment: one more read of the pull request, and a guess at whose comment counts ([A69g](69.md)). The whole answer: it repeats that comment. | #371 |\n308:| A395d | `record-fix-round.sh` writes no marker for a fix round the usage limit ended, of whichever kind. | An attempt the provider refused did no work, and on #390 it took the third place, so a real finding started no round. | Leaving uncounted only a round that pushed nothing, as the retro of #390 worded it: the script would read the head too, for a case that is rare. | #395 |\n312:| A396b | A request for changes gets one owner's round: a round's record names its review, and `begin-fix-round.sh` refuses the round of a review a record names. | A round that pushed nothing leaves the review standing. A round is recorded when its session ends, so only a run queued behind it sees the record. | The check in `start-retests.sh`: a merge during a round passes it. Counting rounds recorded after the review: a second request during a round starts nothing. Matching the opening comment ([A28](76.md)). | #396 |\n350:| A475b | `fix.yml`'s session settings hold a `PermissionRequest` hook, `allow-skill-write.sh`, which allows `Edit` or `Write` on a skill file the pull request already changes. | A script answers the same every time and grants one write; the fix round on #474 pushed nothing and asked a person to apply two lines. | `--permission-mode auto`: a model's review would pass every protected write ([A353e](353.md)). An allow rule: Claude Code checks `.claude/` before it. The hook in `implement.yml`: a new branch changes no file. | #475 |\n481:| M530 | `owner-decides.sh` holds no pull request for a change to `factory/free-tier.md` or a file in `factory/free-tier/`. | They record a measurement; the limit is a line of a workflow or script, held by itself, and 6 of 59 merged pull requests waited for the record alone. | Holding them as spend or limits, as before: the owner approved all six with no change to an entry. Holding only the tables of limits: no script reads one. | #530 |\n704:| H242c | A name GitHub or the `sessions` branch already holds keeps its spelling: job ids, comment markers, labels, session roles, lesson fields. | Scripts read runs, comments and lessons saved under those names, so a new spelling changes what they find. | Renaming them and reading both spellings: two names kept for good, where the ticket allows no change in behaviour. | #242 |\n705:| H242d | `continue-session.sh` keeps `again` as its last argument's word, and holds it in the variable `retried`. | Until the installer copies the changed `fix.yml`, the installed one passes `again` to the script `main` already holds. | Renaming the word too: until the install, a fix round that twice pushed nothing would be continued a third time. | #242 |\n766:| H450 | What the owner does to use the factory is in `factory/owner-guide.md`, which has no word budget; `factory/README.md` holds what an agent changing the factory needs. | Every factory build reads the README, and its 669 words on using the factory changed nothing an engineer does. | The root `README.md`: no new project is handed it ([H2](44.md)). A skill: the owner reads none. A budget for the guide: no agent run reads it. | #450 |\n778:| H484b | A list's folder is named after its heading, in small letters with hyphens for spaces, and `readme.sh` stops on a folder no heading has. | A new list then takes a heading and a folder and no change to the script, and a misspelt folder cannot drop its entries unseen. | The lists named in the script: a second place to change for each new list. A marker line in `README.md` for each folder: it repeats the heading. | #484 |\n| A371c | The comment for an unfinished review keeps the reviewer's name in bold before that line. | `carry-review.sh` and `run-facts.sh` find a reviewer's latest comment by the name it starts with, and an unfinished review must hide an earlier pass. | The name on the second line, and both scripts reading it there: comments already posted start with the name, so each script would match two shapes. | #371 |\n\n| ID | Decision | Why | Rejected | Source |\n|---|---|---|---|---|\n| H371 | `implement` may hold 800 words and `factory-engineer` 1,100. | The line saying how a comment for a person starts took each over a budget with under three words to spare. | Cutting other sentences: the ticket names none, and each changes what an engineer does. The line in `CLAUDE.md` alone: every agent would pay for a rule three follow. | #371 |\nfix: act only for an account with write access\nCloses #563\n\nThe factory now acts only for an account with write access to the repository and for its own two bots. Anyone else's issue, comment or review starts nothing, is read by no agent and changes no count. One script decides, and no answer means no.\n\nDiffers from the ticket: only this repository holds a `SECURITY.md`, no project does. It also brings the one-job review, the README update and the board's filter text, and setup asks for no public repository.\nNeeds from the owner after merging: switch on private vulnerability reporting, and close #502 to #510 and #564.",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01M1qzamYtZdVD51yRaLcLDB",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "e0ecbb43-df28-4ebd-bbfb-ae95a4731101"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 100,
+    "estimated_tokens_delta": 50,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "5c83a770-c84f-4195-b070-c3e9a105878a"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 271,
+    "estimated_tokens_delta": 171,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "ee6a457a-b533-4433-bcd1-207048a1d1e6"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKqAAhULPVHfZcf3TKs",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSswgKEAgUGAI4AUIIdGhpbmtpbmcSDEgK4c+pI/+AScOmLBoMJ/Pmgxvv6tFJwYzWIjDuGtj4jx/mlooIScvdTYdEfy6YiKIPnCEgc+a1KTmMmxmQDtNs18kF7oMdEetXVsoq0AfXfNPztKlZ3bCmnCYo6uCpj8a2G9jTVX/9Yrml6ATTzqdpK8i82QBjVaE1HFGiOyTNHYEDVqvQzuO/VtNAxNQ5jY3L4kjxfahwQPNUOpVG0u4G1FUbrOPEMq7bfQ/K3w3jQjIZtdhwf1r8ra5k+aUxfBU4Wj+SEiWul5Wt3RAdqoyP9CH0vn37fw6u5xxQc+Fg2wEjLkNvJ33qwulqjf+4MgkFfUI0BEqG42BzKM1rlDG9ahkTMX+JJshSlchVp0pfq6huEylW+mPdHF+LdTgikuODjWIOjGUqMcb/NqSS7whhsD2Ewx0ySjPKHD3XfzfZn/251jDXMugEcp5d7wQE75khIwY8kjQ/ju1Fhm99bk8QUcAAbwNp6kMs7WOoKKs4Jasou0Fiy5nL3TnLCslZU3/cGMamIWKjhFu5wavF/az4P/cT4ePEVup763ZcvUL/hpQ2CbL8gMKD17j6QhiBcPBtJMkAZc/yfsHvXqV3Rzz0MinXnJIT337xNYGoZbt1obrpXl2uZy8W3s6Z5S4LQeZN9WB/NYugvtqrhY0h6hgEY3pV84v1A+EB8TiPGzkOEZ0UTeE60yYiboTuQXJg6iMYcK+zCvporwF0A1mM9RiDUYo6nhzOlfzL16OOdpdJbaV3qaUfhADtElv1Iur93PQCl6PYpTfUUSRCkKRSauNFa5fniycQOZjIms3fXsaY+kbs7bILJ7+fTX6MFoE4KpJfCznT9XR42I8lLKrfrljT0EKjdlcLPtaFQz1bP93KMFWWMV+y8maSXmF3dHZllG8b8TNVSDJHhzHocSAAtZWyYasLtlxa4j9KDZozro3VPVKomeZkV9wm/2NMjMOa4/C5mNVOq2noIqKxlWeQhCCg/2JopsFOhCEYhnz/J+91qGfmhcYyvxfwoveYMHvBMtV+mERZ4Z0ikZnfiqyjEWCzyj0HC1AQbw1wp0r4YBxUgVU3iRiZ50lcL1As9HHLSuhxmuWy95O2bdSXmvbi6yzrzbFY3LM6D3alZHYvajzPh/vEs7+pHhG0ngj17HeifZJrWrHQ6TiN2UWt6ESdSQBNJCoeeKp+6AWXXn+wcdzwuqL6AvS39AwPKPJ4x95B11p7ryZfEGm2zICAbjCQf/7rJT8jFqneRMC5/O//9uxGuJEGZuC96GwanS19Rf0Rv6v9i/+6P2O/Oouu5I40xJtzKwxSGCUWxy/WOlkgps7EMECVVTaUBkpUe2jlyLKEYecoPHqTGqi5axOvLN8yTdeWEOPntQw8v1b4J++8CBkeQqvgtbI9xE10JwWN3zBBGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3115,
+        "cache_read_input_tokens": 39098,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3115
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "3deac641-b024-4e61-ad7f-6b7e72a68843",
+    "timestamp": "2026-11-20T14:19:03.813Z",
+    "request_id": "req_011ChEKq9u67jAp3z4Tx84D2",
+    "thinking_duration_ms": 2084,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKqAAhULPVHfZcf3TKs",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LKum3WqZSrTXh8RkDz6rhy",
+          "name": "Bash",
+          "input": {
+            "command": "cat > /tmp/564-comment.md <<'EOF'\nClose this ticket: the file is already within its budget, so there is nothing to build. The factory does nothing more here.\n\n`.claude/skills/purpose/SKILL.md` holds 576 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. It held 631 words when this ticket was opened, at commit ea74b71 (#562). Pull request #565 merged an hour later and took the file back to 576 words, and its description already asks the owner to close this ticket.\n\n`pnpm lint` passes on `main` at 59e4e3c and prints no line about this file, and `factory/scripts/check-rule-files.sh --over` prints nothing. I closed the empty draft pull request #566 and deleted its branch.\nEOF\ngh pr close 566 --delete-branch --comment \"Closed with no change: \\`.claude/skills/purpose/SKILL.md\\` already holds 576 words on \\`main\\`, where its budget is 600 words, since #565 merged. Ticket #564 has the detail.\" && gh issue comment 564 --body-file /tmp/564-comment.md && gh issue edit 564 --add-label needs-human; git status -sb | head -3",
+            "description": "Close the empty draft, comment on the ticket and flag it"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3115,
+        "cache_read_input_tokens": 39098,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3115
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "ec308b54-121f-4a77-967b-0b9fa52387c4",
+    "timestamp": "2026-11-20T14:19:07.604Z",
+    "request_id": "req_011ChEKq9u67jAp3z4Tx84D2",
+    "wire_tool_inputs": {
+      "toolu_01LKum3WqZSrTXh8RkDz6rhy": {
+        "command": "cat > /tmp/564-comment.md <<'EOF'\nClose this ticket: the file is already within its budget, so there is nothing to build. The factory does nothing more here.\n\n`.claude/skills/purpose/SKILL.md` holds 576 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. It held 631 words when this ticket was opened, at commit ea74b71 (#562). Pull request #565 merged an hour later and took the file back to 576 words, and its description already asks the owner to close this ticket.\n\n`pnpm lint` passes on `main` at 59e4e3c and prints no line about this file, and `factory/scripts/check-rule-files.sh --over` prints nothing. I closed the empty draft pull request #566 and deleted its branch.\nEOF\ngh pr close 566 --delete-branch --comment \"Closed with no change: \\`.claude/skills/purpose/SKILL.md\\` already holds 576 words on \\`main\\`, where its budget is 600 words, since #565 merged. Ticket #564 has the detail.\" && gh issue comment 564 --body-file /tmp/564-comment.md && gh issue edit 564 --add-label needs-human; git status -sb | head -3",
+        "description": "Close the empty draft, comment on the ticket and flag it"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01LKum3WqZSrTXh8RkDz6rhy",
+          "type": "tool_result",
+          "content": "✓ Closed pull request edmulraney/tinyfactory#566 (docs: Cut `.claude/skills/purpose/SKILL.md` to budget)\n✓ Deleted branch docs/564-shorter-purpose-skill and switched to branch main\nhttps://github.com/edmulraney/tinyfactory/issues/564#issuecomment-7041851297\nhttps://github.com/edmulraney/tinyfactory/issues/564\n## main...origin/main",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "e29aec40-4625-45cc-ad71-4bd946c5c9a8",
+    "timestamp": "2026-11-20T14:19:14.419Z",
+    "tool_use_result": {
+      "stdout": "✓ Closed pull request edmulraney/tinyfactory#566 (docs: Cut `.claude/skills/purpose/SKILL.md` to budget)\n✓ Deleted branch docs/564-shorter-purpose-skill and switched to branch main\nhttps://github.com/edmulraney/tinyfactory/issues/564#issuecomment-7041851297\nhttps://github.com/edmulraney/tinyfactory/issues/564\n## main...origin/main",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false,
+      "gitOperation": {
+        "pr": {
+          "number": 566,
+          "action": "closed"
+        }
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01LKum3WqZSrTXh8RkDz6rhy",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "code_change_published",
+    "provider": "github",
+    "url": "https://github.com/edmulraney/tinyfactory/pull/566",
+    "repo": "edmulraney/tinyfactory",
+    "identifier": "566",
+    "action": "closed",
+    "uuid": "5803e230-8a15-4466-be6f-e9f22c66737d",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChEKrDgZgweGe7mkU7jsF",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I built nothing for #564: the ticket is already met on `main`, so I stopped at step 2 of the skill and flagged it for you to close.\n\n- **Why there is nothing to cut:** `.claude/skills/purpose/SKILL.md` holds 576 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. It held 631 words when the ticket was opened (commit ea74b71, #562). Pull request #565 merged an hour later and took it back to 576 words.\n- **Proof:** `pnpm lint` passes on `main` at 59e4e3c and prints no line about this file, and `factory/scripts/check-rule-files.sh --over` prints nothing.\n- **What I did on GitHub:** I commented on #564 with the above and added `needs-human`. I had opened the empty draft pull request #566 before checking the word count, so I closed it and deleted its branch.\n\nThe one thing left is yours: close #564. The description of #565 already asks you to close it."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 836,
+        "cache_read_input_tokens": 42213,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 836
+        },
+        "output_tokens": 325,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "uuid": "3a0f28d3-221f-4543-bdad-d0851b270c6b",
+    "timestamp": "2026-11-20T14:19:18.905Z",
+    "request_id": "req_011ChEKrDHGNAqezgreLAzBW"
+  },
+  {
+    "duration_api_ms": 39479,
+    "stop_reason": "end_turn",
+    "session_id": "d6158777-aa14-44a3-bd6d-324a307f7965",
+    "total_cost_usd": 0.6470838,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 30056,
+      "cache_read_input_tokens": 252243,
+      "output_tokens": 2887,
+      "output_tokens_details": {
+        "thinking_tokens": 626
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 30056,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 325,
+          "cache_read_input_tokens": 42213,
+          "cache_creation_input_tokens": 836,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 836
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1217,
+        "outputTokens": 19,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0001312,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 16,
+        "outputTokens": 2887,
+        "cacheReadInputTokens": 252243,
+        "cacheCreationInputTokens": 30056,
+        "webSearchRequests": 0,
+        "costUSD": 0.6469526,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 626,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 30056,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 10,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "I built nothing for #564: the ticket is already met on `main`, so I stopped at step 2 of the skill and flagged it for you to close.\n\n- **Why there is nothing to cut:** `.claude/skills/purpose/SKILL.md` holds 576 words on `main`, and its budget in `factory/rule-files.txt` is 600 words. It held 631 words when the ticket was opened (commit ea74b71, #562). Pull request #565 merged an hour later and took it back to 576 words.\n- **Proof:** `pnpm lint` passes on `main` at 59e4e3c and prints no line about this file, and `factory/scripts/check-rule-files.sh --over` prints nothing.\n- **What I did on GitHub:** I commented on #564 with the above and added `needs-human`. I had opened the empty draft pull request #566 before checking the word count, so I closed it and deleted its branch.\n\nThe one thing left is yours: close #564. The description of #565 already asks you to close it.",
+    "ttft_ms": 3093,
+    "type": "result",
+    "duration_ms": 68802,
+    "uuid": "4dfd08f0-8a93-49a0-abfa-31aee960ca7e",
+    "ttft_stream_ms": 2516,
+    "time_to_request_ms": 151,
+    "first_content_frame_ms": 2516,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1217,
+        "outputTokens": 19,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0001312,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 16,
+        "outputTokens": 2887,
+        "cacheReadInputTokens": 252243,
+        "cacheCreationInputTokens": 30056,
+        "webSearchRequests": 0,
+        "costUSD": 0.6469526,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 626,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 30056,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
