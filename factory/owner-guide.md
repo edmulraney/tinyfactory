@@ -1,0 +1,25 @@
+# Using the factory
+
+What the owner does. How the factory is built is in `README.md` beside this file.
+
+The `ready` label starts a build. Dragging a card starts nothing.
+
+1. **File a ticket.** Ask a Claude Code session in this repo (the `ticket` skill), or use an issue template. Initiative, Bug and Tweak change behaviour and carry numbered acceptance criteria; Chore changes none; Research answers a question in `product/`; Factory changes the factory.
+1. **Add the `ready` label,** or ask the `promote` skill to. Five tickets are built or checked at once at most, and a pull request that waits for you is not one of them ([T64a](decisions/64.md)). Five pull requests wait for you at most: while five do, no build starts ([T361a](decisions/361.md)). A ticket with no place waits with `ready`, a comment on it says which limit holds it, and when a place frees the waiting ticket highest in Backlog starts first: drag a card up to build it sooner ([T335a](decisions/335.md)). The card is matched to its ticket by title, so a ticket that shares its title with another Backlog card starts after the rest ([T523](decisions/523.md)). A ticket whose body has a line `After #<n>` waits with `ready` until #<n> has closed ([T339a](decisions/339.md)).
+1. **Watch or walk away.** The issue goes `in-progress` and a draft pull request appears, the engineer marks it ready, checks and reviews run, and it waits to merge: those that wait are tested with `main` together, once, then merged ([M455a](decisions/455.md)). The issue closes with `deployed` once production reports the last commit of its group ([M455g](decisions/455.md)); a group that changes the factory's own folders alone deploys nothing, and its tickets close without the label. The card is in **In progress** from the draft until the issue closes, then in **Deployed**, shipped or not: the label says which.
+1. **Look for `needs-human`,** on the **Needs you** tab. The ticket was unclear, three fix rounds did not reach green, a session was cut short, nothing was working on it, or only you may decide the change; a comment says what to do.
+   - **A pull request that waits for you:** approve it and it ships.
+   - **A pull request you want changed:** submit a "Request changes" review saying what. The engineer makes or answers each change, and it comes back for your approval.
+   - **A pull request you merge with GitHub's merge button:** the button is your approval, whatever the reviewers said. The factory tests `main`, then finishes shipping. If the merge broke `main`, the factory takes it back and builds its ticket again ([M439a](decisions/439.md) to [M439f](decisions/439.md)).
+   - **A pull request labelled `waits-for-main`:** what failed lies outside it, and its comment says what. The next merge to `main` tests it again ([A368a](decisions/368.md)).
+   - **A ticket you accept:** add `ready`.
+   - **A shipped ticket you want back out:** add the `revert` label to it, and an engineer opens the pull request that reverts it; the label goes, and a comment says so if nothing was started. Once that merges the ticket reopens as `reverted`; add `ready` to build it again.
+1. **Read what the factory suggests,** on the **Proposals** tab: add `ready` to accept one, or close it.
+1. **Confirm what only use can show,** on the **Proofs** tab. When only a later run can show that a merged ticket works, you or the session driving the backlog file a `proof` ticket titled "Confirm …"; the engineer never does ([T170](decisions/170.md)). Close it once you have seen the run. A changed workflow needs none: a retro of its first run says on the pull request what it found ([T185](decisions/185.md)).
+1. **Hand a whole backlog to a session.** It follows the `operate` skill, keeps the state in one issue, and never approves a pull request, pushes to `main` or edits a protected file ([A120d](decisions/120.md)).
+1. **Share a user interview** in a session: the `intake` skill files tickets only where the evidence is strong.
+1. **When an agent run fails with no clear error,** run the `agent-check` workflow: it prints the API error.
+1. **Move the agents to another model,** as when one model's usage limit holds them: `gh variable set AGENT_MODEL --body claude-opus-5-5` and `gh variable set AGENT_EFFORT --body xhigh`, with your own login, or in the repo's Settings → Secrets and variables → Actions → Variables. Every agent that starts afterwards runs with them, and no pull request is needed ([A504a](decisions/504.md)). Then run the `resume` workflow, which lifts the hold of a usage limit and starts again what waited. `gh variable delete AGENT_MODEL` and `gh variable delete AGENT_EFFORT` put back `claude-fable-5-2` and `medium`.
+1. **Ask for help** in any comment that holds `@claude`: an agent replies ([A372a](decisions/372.md)), and a retro proposes what would have made the request unneeded ([A446a](decisions/446.md)).
+1. **Open an Idea:** Peta proposes slices, then files them unstarted once you answer ([A353a](decisions/353.md)).
+1. **Judge a model as the reviewers** with the `benchmark` workflow; a `factory` ticket adds each problem both reviewers missed ([A345d](decisions/345.md)).

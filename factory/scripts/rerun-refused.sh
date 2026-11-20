@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Runs again, once and oldest first, the jobs GitHub refused to start for billing (decisions H220a, H220e).
-# Usage: rerun-refused.sh   (by flag-idle.yml on its schedule, and by the driver once jobs start again)
+# Usage: rerun-refused.sh   (by flag-idle.yml on its schedule, by start-waiting.yml and ship.sh before they start a
+#        waiting ticket, and by the driver once jobs start again)
 #        Needs GH_TOKEN (actions: write, checks: read) and GH_REPO, or a checkout gh can read.
 set -euo pipefail
 

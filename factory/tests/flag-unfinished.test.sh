@@ -5,13 +5,15 @@
 branch=feat/12-export-forecast-csv
 
 # ended <api-error|rate-limit|usage-limit|max-turns|none|completed>; $T/fail holds one line per gh call, by its first words, that should fail.
+# $T/timeline.json holds the comments and label events of ticket #12, none when absent.
 # $T/pulls.json holds the pull requests, open unless `state` says not; $T/pulls.later.json answers from the third ask.
-# What start-waiting.sh reads is as waiting_on_github says.
+# What start-waiting.sh reads is as waiting_on_github says. The hold of the usage limit is read from the sessions branch
+# of the repo the pushes go to; $resets_at is the reset time a session the usage limit ended holds.
 ended() {
   local result
   case "$1" in
     api-error) result='{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":529,"session_id":"c22ab626"}' ;;
-    usage-limit) result='{"type":"assistant","error":"rate_limit","api_error_status":429,"api_error":"usage_limit_reached","api_error_params":{"rate_limit_info":{"status":"rejected","resetsAt":1795431600}}},{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"api_error":"usage_limit_reached","result":"You'\''ve hit your Fable limit · resets Nov 23, 11am (UTC). Switch to another model to continue.","session_id":"c22ab626"}' ;;
+    usage-limit) result='{"type":"assistant","error":"rate_limit","api_error_status":429,"api_error":"usage_limit_reached","api_error_params":{"rate_limit_info":{"status":"rejected","resetsAt":'"${resets_at:-1795431600}"'}}},{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"api_error":"usage_limit_reached","result":"You'\''ve hit your Fable limit · resets Nov 23, 11am (UTC). Switch to another model to continue.","session_id":"c22ab626"}' ;;
     rate-limit) result='{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"session_id":"c22ab626"}' ;;
     max-turns) result='{"type":"result","subtype":"error_max_turns","is_error":true,"terminal_reason":"max_turns","session_id":"c22ab626"}' ;;
     none) result='{"type":"assistant"}' ;;
@@ -34,11 +36,14 @@ ended() {
         json "$(jq -c "[.[] | select(.state != \"CLOSED\" and .state != \"MERGED\")]" "$pulls")" "$@" ;;
       "pr view 9 --json isDraft,labels "*) json "{\"isDraft\":false,\"labels\":[]}" "$@" ;;
       "api repos/{owner}/{repo}/issues/9/comments?per_page=100 --paginate --jq "*) json "[]" "$@" ;;
-      "workflow run fix.yml -f pr=9") echo "created workflow_dispatch event" ;;
+      "api repos/{owner}/{repo}/issues/12/timeline?per_page=100 --paginate --jq "*) json "$(cat "$T/timeline.json" 2>/dev/null || echo "[]")" "$@" ;;
+      "workflow run fix.yml -f pr=9"|"workflow run retro.yml -f pr=7") echo "created workflow_dispatch event" ;;
       "issue view 12 --json labels "*) json "$(cat "$T/labels.json")" "$@" ;;
       "pr view 7 --json headRefOid,labels "*) json "{\"headRefOid\":\"$(cat "$T/head")\",\"labels\":$(cat "$T/pr-labels.json" 2>/dev/null || echo "[]")}" "$@" ;;
       "pr view 7 --json body "*) json "{\"body\":\"Closes #12\"}" "$@" ;;
-      "issue comment 12 --body "*|"pr comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
+      "issue comment 12 --body "*|"pr comment 7 --body "*|"issue comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
+      "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*)
+        git -C "$T/github.git" show sessions:usage-limit 2>/dev/null || { echo "gh: Not Found (HTTP 404)" >&2; exit 1; } ;;
       "issue edit 12 "*|"pr edit 7 --add-label needs-human") ;;
       *) waiting_on_github "$@" ;;
     esac'
@@ -50,7 +55,8 @@ ended() {
   git -C "$T/seed" commit -q -m "chore: start"
   git -C "$T/seed" push -q "$T/github.git" main
   git clone -q "$T/github.git" .
-  git config "url.$T/github.git.insteadOf" "https://x-access-token:token@github.com/owner/repo.git"
+  # For every repo: usage-limit.sh pushes the hold from a clone of its own.
+  pushes_go_to github
   git checkout -q -b "$branch"
 }
 fix_ended() {
@@ -62,10 +68,11 @@ fix_ended() {
   echo "$before" > "$T/head"
 }
 on_github() { git -C "$T/github.git" "$@"; }
-no_pushing() {
-  git config --unset "url.$T/github.git.insteadOf"
-  git config "url.$T/nowhere.git.insteadOf" "https://x-access-token:token@github.com/owner/repo.git"
+pushes_go_to() {
+  printf '[url "%s/%s.git"]\n  insteadOf = https://x-access-token:token@github.com/owner/repo.git\n' "$T" "$1" > "$T/gitconfig"
+  export GIT_CONFIG_GLOBAL="$T/gitconfig"
 }
+no_pushing() { pushes_go_to nowhere; }
 expect_posted() {
   [[ "$(cat "$T/posted")" == *"$1"* ]] || fail "expected the comment to hold: $1"$'\n'"it was: $(cat "$T/posted")"
 }
@@ -176,7 +183,7 @@ expect_call "gh issue edit 12 --remove-label in-progress"
 
 scenario "a build that ends with needs-human and no pull request, while a ticket waits with ready, starts that ticket's build"
 ended completed
-echo '[{"number":20},{"number":21}]' > "$T/issues"
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
 echo '[{"number":31},{"number":30}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
@@ -190,7 +197,7 @@ expect_output "started the build of issue #30, which waited with ready"
 scenario "an engineer who stopped on purpose gives the place to the ticket that waits with ready"
 ended completed
 echo '{"labels":[{"name":"in-progress"},{"name":"needs-human"}]}' > "$T/labels.json"
-echo '[{"number":20},{"number":21}]' > "$T/issues"
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
 echo '[{"number":30}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 0
@@ -201,12 +208,12 @@ expect_call "gh workflow run implement.yml -f issue=30"
 
 scenario "a build that ended at a draft still holds its place: the ticket that waits is not started"
 ended completed
-echo '[{"number":20},{"number":21}]' > "$T/issues"
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
 echo '[{"number":40,"headRefName":"feat/12-export-forecast-csv","author":{"login":"app/claude"},"labels":[],"isDraft":true}]' > "$T/pulls"
 echo '[{"number":30}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
-expect_output "3 tickets are being built or checked, so no waiting ticket was started"
+expect_output "5 tickets are being built or checked, so no waiting ticket was started"
 expect_no_call "gh workflow run"
 
 scenario "a build that used all its turns gives the place to the ticket that waits"
@@ -217,7 +224,7 @@ expect_status 1
 expect_call "gh workflow run implement.yml -f issue=30"
 
 # An ending that is not the ticket's own would meet the next build too (decisions T297b).
-for how in usage-limit api-error rate-limit none; do
+for how in api-error rate-limit none; do
   scenario "a build ended by $how starts no waiting ticket: its build could end the same way"
   ended "$how"
   echo '[{"number":30}]' > "$T/ready"
@@ -317,40 +324,71 @@ run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
 expect_posted "the agent ended its session before the work was handed over. What the engineer had is on the branch \`$branch\`"
 
-scenario "a build the usage limit ended keeps the work and flags the ticket once, with the reset time, and the job passes"
+scenario "a build the usage limit ended keeps the work, holds every agent until the reset time and waits with ready, and the job passes"
 ended usage-limit
 echo "export" > export.ts
+echo '[{"number":30}]' > "$T/ready"
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 0
 [ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
-[ "$(head -n 1 "$T/posted")" = "<!-- factory:usage-limit 1795431600 -->Add the \`ready\` label again after 2026-11-23 11:00 UTC: the next build starts from the branch \`$branch\`." ] \
-  || fail "expected the comment to start with the reset time start-build.sh reads, then what a person must do and when, got: $(head -n 1 "$T/posted")"
+[ "$(on_github show sessions:usage-limit 2>&1)" = 1795431600 ] || fail "expected the reset time on the sessions branch, got: $(on_github show sessions:usage-limit 2>&1)"
+expect_first_line "gh issue comment 12 --body" "Nothing to do: after the Claude usage limit resets on 2026-11-23 11:00 UTC, the next build starts from the branch \`$branch\`."
 expect_posted "The build ended with no pull request ready for review: the Claude usage limit was reached (\"You've hit your Fable limit · resets Nov 23, 11am (UTC)\"). What the engineer had is on the branch \`$branch\`"
 [ "$(grep -c "^gh issue comment" "$T/calls")" = 1 ] || fail "expected one comment"
-[ "$(grep -c -- "--add-label needs-human" "$T/calls")" = 1 ] || fail "expected one flag"
-expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+expect_no_call "--add-label needs-human"
+expect_output "no waiting ticket was started: its build could end the same way"
+expect_no_call "gh workflow run"
 
-scenario "a build the usage limit ended still fails the job when its work is lost"
+scenario "a build the usage limit ended, whose reset time and work cannot be pushed, asks for a person and fails the job"
 ended usage-limit
 echo "export" > export.ts
 no_pushing
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
+expect_output "that could not be written to the sessions branch, so nothing holds the other agents until then"
+expect_first_line "gh issue comment 12 --body" "Add the \`ready\` label again: the build starts again from the beginning."
 expect_posted "could not be pushed, and is lost with the runner."
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
 
-scenario "a build cut short by anything else carries no reset time"
+scenario "a build cut short by anything else holds no agent"
 ended api-error
 run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
 expect_status 1
-expect_not_posted "factory:usage-limit"
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+! on_github show sessions:usage-limit >/dev/null 2>&1 || fail "expected no hold on the sessions branch"
 
-scenario "a fix round the usage limit ended says so with the reset time, flags once, and the job passes"
-fix_ended usage-limit
+# 99999999999 is a reset time that stays ahead: a round waits only while the limit holds.
+scenario "a fix round the usage limit ended keeps its place and asks for no person, and the job passes"
+resets_at=99999999999 fix_ended usage-limit
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\` after 2026-11-23 11:00 UTC: a new fix round starts."
-expect_posted "The fix round ended without pushing a fix: the Claude usage limit was reached (\"You've hit your Fable limit · resets Nov 23, 11am (UTC)\")."
-[ "$(grep -c -- "--add-label needs-human" "$T/calls")" = 1 ] || fail "expected one flag"
+[ "$(on_github show sessions:usage-limit 2>&1)" = "99999999999"$'\n'"run 900" ] || fail "expected the reset time and run 900 on the sessions branch, got: $(on_github show sessions:usage-limit 2>&1)"
+expect_first_line "gh issue comment 7 --body" "Nothing to do: a new fix round starts after the Claude usage limit resets on 5138-11-16 09:46 UTC."
+[ "$(wc -l < "$T/posted")" -eq 3 ] || fail "expected one comment, got: $(cat "$T/posted")"
+expect_no_call "needs-human"
+expect_output "the fix round pushed nothing: the Claude usage limit was reached"
+
+scenario "the owner's fix round the usage limit ended leaves its ticket in progress"
+resets_at=99999999999 fix_ended usage-limit
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" false
+expect_status 0
+expect_no_call "needs-human"
+expect_no_call "gh pr view 7 --json body"
+
+scenario "a fix round the usage limit ended, which cannot be told that it waits, stops with what a person must run"
+resets_at=99999999999 fix_ended usage-limit
+echo "issue comment 7" > "$T/fail"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
+expect_status 1
+expect_output "its place could not be kept: run \`gh workflow run fix.yml -f pr=7\` after 5138-11-16 09:46 UTC."
+
+scenario "a fix round ended by a usage limit that has already reset asks for a person as before"
+resets_at=1000000000 fix_ended usage-limit
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
+expect_status 0
+expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\` after 2001-09-09 01:46 UTC: a new fix round starts."
+expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "a build with nothing to keep says so, and still fails the job"
 ended api-error
@@ -380,6 +418,118 @@ run "$scripts/flag-unfinished.sh" build 12 ""
 expect_status 1
 expect_posted "The build ended with no pull request ready for review: the agent left no result that could be read."
 [ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
+
+# A job stopped at its time limit leaves no result, and its build starts again (decisions A467a, A467b).
+scenario "a build stopped at its time limit keeps the work, names the limit and starts again with nobody asked"
+ended none
+echo '[{"number":12}]' > "$T/ready"
+echo "export" > export.ts
+run "$scripts/flag-unfinished.sh" build 12 "" true
+[ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
+expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the next build starts from the branch \`$branch\`."
+expect_posted "The build ended with no pull request ready for review: the job reached its time limit."
+expect_not_posted "no result that could be read"
+expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+expect_no_call "--add-label needs-human"
+expect_call "gh workflow run implement.yml -f issue=12"
+[ "$(grep -n 'workflow run' "$T/calls" | cut -d: -f1)" -gt "$(grep -n 'issue edit 12' "$T/calls" | cut -d: -f1)" ] \
+  || fail "expected the build to be started after the ticket was labelled ready"
+at_limit=$(cat "$T/posted")
+
+scenario "a second build in a row stopped at its time limit asks for the ticket to be split, and gives no command"
+ended none
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "ready"}}, {event: "commented", body: "Waiting: 5 tickets are being built or checked."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+echo '[{"number":30}]' > "$T/ready"
+echo "export" > export.ts
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_status 1
+expect_first_line "gh issue comment 12 --body" "Split this ticket into smaller tickets: two builds in a row reached the job's time limit, so it is too large for one session."
+expect_posted "The build ended with no pull request ready for review: the job reached its time limit. What the engineer had is on the branch \`$branch\`"
+expect_not_posted "label"
+expect_not_posted "gh "
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+expect_no_call "issue=12"
+expect_call "gh workflow run implement.yml -f issue=30"
+split=$(cat "$T/posted")
+
+scenario "a build stopped at its time limit after the ticket was asked to be split asks again"
+ended none
+jq -n --arg first "$at_limit" --arg second "$split" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $first}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $second}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_first_line "gh issue comment 12 --body" "Split this ticket into smaller tickets: two builds in a row reached the job's time limit, so it is too large for one session."
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+
+scenario "a build stopped at its time limit starts again when the build before it ended another way"
+ended none
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: "Add the `ready` label again.\n\nThe build ended with no pull request ready for review: the model'"'"'s API was overloaded (error 529)."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+echo '[{"number":12}]' > "$T/ready"
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the build starts again from the beginning."
+expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+expect_call "gh workflow run implement.yml -f issue=12"
+
+scenario "a build stopped at its time limit starts again when the engineer stopped the build before it on purpose"
+ended none
+jq -n --arg body "$at_limit" '[{event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: $body}, {event: "labeled", label: {name: "in-progress"}}, {event: "commented", body: "This ticket cannot be built as written."}, {event: "labeled", label: {name: "in-progress"}}]' > "$T/timeline.json"
+echo '[{"number":12}]' > "$T/ready"
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_first_line "gh issue comment 12 --body" "Nothing to do: the factory builds this ticket again when a place is free, and the build starts again from the beginning."
+expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+
+scenario "a build stopped at its time limit whose draft holds its place starts again beside four others in flight"
+ended none
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
+echo '[{"number":40,"headRefName":"feat/12-export-forecast-csv","author":{"login":"app/claude"},"labels":[],"isDraft":true}]' > "$T/pulls"
+echo '[{"number":12},{"number":30}]' > "$T/ready"
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_call "gh workflow run implement.yml -f issue=12"
+expect_no_call "issue=30"
+
+scenario "a build stopped at its time limit that cannot be started keeps ready, and the job says so"
+ended none
+echo '[{"number":12}]' > "$T/ready"
+echo "workflow run implement.yml" > "$T/fail"
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_status 1
+expect_call "gh issue edit 12 --add-label ready --remove-label in-progress"
+expect_output "the tickets that wait with ready were not all started; each is started when a place next frees"
+
+scenario "a build stopped before its time limit, with no result, asks for a person as before"
+ended none
+echo '[{"number":12}]' > "$T/ready"
+run "$scripts/flag-unfinished.sh" build 12 "" ""
+expect_status 1
+expect_posted "The build ended with no pull request ready for review: the agent left no result that could be read."
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+expect_no_call "issues/12/timeline"
+expect_no_call "gh workflow run"
+
+scenario "a build the usage limit ended in a job stopped at its time limit waits for the reset, not for a rebuild"
+ended usage-limit
+run "$scripts/flag-unfinished.sh" build 12 "$T/session.json" true
+expect_posted "Nothing to do: after the Claude usage limit resets on"
+expect_posted "the Claude usage limit was reached"
+expect_no_call "issues/12/timeline"
+expect_no_call "gh workflow run"
+
+scenario "stops when the ticket's timeline cannot be read: that is not 'the build before ended another way'"
+ended none
+echo "api repos/{owner}/{repo}/issues/12/timeline" > "$T/fail"
+echo "export" > export.ts
+run "$scripts/flag-unfinished.sh" build 12 "" true
+expect_status 1
+expect_output "The timeline of issue #12 could not be read from GitHub"
+expect_silence
+expect_no_call "gh issue edit"
+[ "$(on_github show "$branch:export.ts" 2>&1)" = export ] || fail "expected the work on GitHub"
+
+scenario "the build's job tells the script whether it stopped at its time limit, having worked that out first"
+workflow="$root/factory/workflows/implement.yml"
+# shellcheck disable=SC2016
+grep -qF '/flag-unfinished.sh" build "$ISSUE" "$FILE" "${{ steps.limit.outputs.reached }}"' "$workflow" \
+  || fail "expected the job to pass what its time-limit step found to flag-unfinished.sh"
+[ "$(grep -n -E '^      - name: (Tell whether this job stopped at its time limit|Keep the work and flag the ticket)' "$workflow" | head -n 1 | grep -c 'Tell whether')" = 1 ] \
+  || fail "expected the time-limit step to come before the step that flags the ticket"
 
 scenario "stops when the pull requests cannot be read: that is not 'none was opened'"
 ended api-error
@@ -436,6 +586,20 @@ expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh issue edit"
 [ "$(on_github rev-parse "$branch")" = "$before" ] || fail "expected the branch on GitHub to be left alone"
 
+scenario "a fix round whose engineer stopped for a person starts a retro: the job passes, so no failed job starts one"
+fix_ended completed
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
+expect_status 0
+expect_calls 1 "gh workflow run retro.yml -f pr=7"
+
+scenario "a fix round whose engineer stopped for a person stops with a message when the retro cannot be started"
+fix_ended completed
+echo "workflow run retro.yml" > "$T/fail"
+run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
+expect_status 1
+expect_output "The fix round on pull request #7 pushed nothing and a person was asked, but the retro could not be started."
+expect_call "gh pr edit 7 --add-label needs-human"
+
 scenario "a fix round whose engineer answered what it needs starts its comment with the first line of that answer"
 fix_ended completed
 jq -c '.[-1].result = "Switch Magic Link on in Neon for branch `main`, then run the `e2e` job again.\n\nThe rest."' "$T/session.json" > "$T/answered.json"
@@ -456,6 +620,7 @@ expect_posted "The fix round pushed nothing: the engineer labelled this pull req
 expect_not_posted "gh workflow run fix.yml"
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "gh issue edit"
+expect_no_call "gh workflow run retro.yml"
 
 scenario "a labelled pull request whose fix round was cut short is told the cause, and that it needs a person"
 fix_ended api-error
@@ -472,6 +637,7 @@ expect_status 0
 expect_posted "The fix round pushed nothing"
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+expect_no_call "gh workflow run retro.yml"
 
 scenario "the owner's round that pushed leaves the ticket in progress: the checks have it now"
 fix_ended completed
@@ -509,6 +675,7 @@ expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=
 expect_posted "The fix round ended without pushing a fix: the model's API was overloaded (error 529). The engineer left no work to keep"
 expect_not_posted "unverified"
 expect_call "gh pr edit 7 --add-label needs-human"
+expect_no_call "gh workflow run retro.yml"
 
 scenario "a fix round cut short with uncommitted work has it pushed, and says it is unverified"
 fix_ended api-error
@@ -519,12 +686,15 @@ expect_status 1
 expect_first_line "gh pr comment 7 --body" "Submit a \"Request changes\" review saying what is left to do: the engineer carries on from the branch in a fix round that is not one of the three."
 expect_posted "The fix round ended without handing over a fix: the model's API was overloaded (error 529). What the engineer had is on the branch \`$branch\`, unfinished and unverified; no checks ran on it."
 
-scenario "a fix round the usage limit ended with work kept asks for the review after the reset time"
+scenario "a fix round the usage limit ended with work kept asks for the review after the reset time: its head has no failed check to begin from"
 fix_ended usage-limit
 echo "more" >> export.ts
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
+expect_call "gh pr edit 7 --add-label needs-human"
+[ "$(on_github show sessions:usage-limit 2>&1)" = 1795431600 ] || fail "expected the reset time on the sessions branch, and no run that waits"
 expect_first_line "gh pr comment 7 --body" "Submit a \"Request changes\" review after 2026-11-23 11:00 UTC saying what is left to do: the engineer carries on from the branch in a fix round that is not one of the three."
+expect_no_call "gh workflow run retro.yml"
 
 scenario "a fix the engineer committed, never pushed, and ended the session on is pushed and said to be unverified"
 fix_ended completed
@@ -534,6 +704,7 @@ run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
 [ "$(on_github log -1 --format=%s "$branch")" = "fix: quote the fields" ] || fail "expected the commit on GitHub"
 expect_posted "What the engineer had is on the branch \`$branch\`, unfinished and unverified; no checks ran on it."
+expect_call "gh workflow run retro.yml -f pr=7"
 
 scenario "an engineer who never checked the pull request out left no work"
 fix_ended api-error
@@ -551,6 +722,7 @@ expect_status 1
 expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
 expect_posted "What the engineer had could not be pushed, and is lost with the runner."
 expect_not_posted "is on the branch"
+expect_no_call "gh workflow run retro.yml"
 
 scenario "stops when the pull request cannot be read: that is not 'nothing was pushed'"
 fix_ended completed

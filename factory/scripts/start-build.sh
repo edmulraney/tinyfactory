@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Decides, as the first step of a build (implement.yml), whether a ticket's build may start: it needs a free place.
 # Usage: start-build.sh <issue-number>
-#        Needs GH_TOKEN (issues: write; pull requests: read) and GITHUB_REPOSITORY.
+#        Needs GH_TOKEN (issues: write; pull requests and contents: read) and GITHUB_REPOSITORY.
 #        GITHUB_EVENT_NAME, which a workflow sets, says whether the ticket's label or another workflow started the run.
 set -euo pipefail
 
@@ -67,27 +67,16 @@ if [ -n "$taken" ]; then
   refuse "$why, so issue #$issue waits with ready until a place frees"
 fi
 
-# A ticket flagged when the Claude usage limit ended its build waits for the limit to reset (decisions A231b).
-if [[ " $labels " == *" needs-human "* ]]; then
-  # The REST timeline names the account in full, so a marker a person wrote holds no build back.
-  # A removal of needs-human reads as a reset time of 0: a marker older than one holds nothing (decisions A231b).
-  resets=$(gh api "repos/{owner}/{repo}/issues/$issue/timeline?per_page=100" --paginate \
-      --jq '.[] | if .event == "unlabeled" and .label.name == "needs-human" then "0"
-        elif .event == "commented" and .user.login == "github-actions[bot]" then (.body // "") | capture("^<!-- factory:usage-limit (?<at>[0-9]{1,12}) -->").at
-        else empty end') \
-    || die "Issue #$issue was not started: its comments could not be read from GitHub, so it is not known whether a usage limit holds it. It keeps the ready label; take it off and add it again to start the build."
-  resets=$(tail -n 1 <<<"$resets")
-  if [ -n "$resets" ] && [ "$(date +%s)" -lt "$resets" ]; then
-    when=$(jq -rn --argjson at "$resets" '$at | strftime("%Y-%m-%d %H:%M UTC")')
-    # The first line says what a person must do (decisions A371a).
-    gh issue comment "$issue" --body "Add the \`ready\` label again after $when: the build starts then.
-
-Not started: the Claude usage limit ended this ticket's last build, and it resets on $when. If the limit was lifted sooner, take \`needs-human\` off first." >/dev/null \
-      || die "Issue #$issue was not started, because the Claude usage limit has not reset, but it could not be told so. It keeps the ready label."
-    gh issue edit "$issue" --remove-label ready >/dev/null \
-      || die "Issue #$issue was not started, because the Claude usage limit has not reset, but the ready label could not be taken off it."
-    refuse "the Claude usage limit ended the last build of issue #$issue, and resets on $when"
+# No build starts while the Claude usage limit holds every agent: ready stays on, and usage-limit.sh starts the ticket (decisions A231b).
+limit=$("$script_dir/usage-limit.sh" held) \
+  || die "Issue #$issue was not started: whether the Claude usage limit holds every agent could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build."
+if [ -n "$limit" ]; then
+  # A ticket the waiting were started from was told when it was labelled (decisions T64c).
+  if [ "${GITHUB_EVENT_NAME:-}" != workflow_dispatch ]; then
+    gh issue comment "$issue" --body "Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $limit. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once." >/dev/null \
+      || die "Issue #$issue waits, because the Claude usage limit holds every agent until $limit, but it could not be told so. It keeps the ready label, and is started after the limit resets."
   fi
+  refuse "the Claude usage limit holds every agent until $limit, so issue #$issue waits with ready"
 fi
 
 # A free place goes to the first ticket in the queue, and a newly labelled one takes it only in its turn (decisions T323, T335a).
@@ -133,9 +122,9 @@ if [ -n "$taken" ]; then
     give_back "which ticket took its place first could not be read from GitHub"
     die "Issue #$issue was not started: another ticket asked for the last place at the same moment, and which took it first could not be read from GitHub. Its place was given back; add the ready label again to start the build."
   }
-  # Only a ticket with nothing but the label: a draft held its place before (decisions T64h).
+  # With or without a draft: one left unfinished held no place while its ticket waited with ready (decisions T505c).
   while read -r number; do
-    [ -z "$number" ] || in_flight_now=$(grep -vxF "$number #$number (being built)" <<<"$in_flight_now" || true)
+    [ -z "$number" ] || in_flight_now=$(grep -vE "^$number #$number \(being built(, in [^)]*)?\)$" <<<"$in_flight_now" || true)
   done <<<"$later"
   taken=$(no_place "$in_flight_now")
 fi

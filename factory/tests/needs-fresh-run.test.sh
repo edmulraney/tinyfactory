@@ -30,11 +30,18 @@ fresh
 expect_status 0
 expect_result "true $ci_yml"
 
-scenario "true when one review's pass was carried and the other ended that way"
+scenario "false when the review job failed and the job that posts verdicts does not say the run is behind"
 checks_failed; reviews_behind
-echo '{"jobs":[{"id":33,"name":"adam","conclusion":"success"},{"id":34,"name":"ryan","conclusion":"failure"}]}' > "$T/jobs"
+echo "Ryan (correctness): review not finished." > "$T/log-34"
 fresh
-expect_result "true $ci_yml"
+expect_result false
+
+scenario "false when the review job's log alone holds the sentence: the job that posts verdicts did not fail for it"
+checks_failed; reviews_behind
+echo '{"jobs":[{"id":30,"name":"checks","conclusion":"success"},{"id":33,"name":"review","conclusion":"failure"}]}' > "$T/jobs"
+echo "$review_behind" > "$T/log-33"
+fresh
+expect_result false
 
 scenario "false once a round for a fresh run has run while main held this ci.yml: the same sentence again is no install"
 checks_failed; not_settled "$stale_run"
@@ -73,32 +80,8 @@ echo '{"jobs":[{"id":30,"name":"checks","conclusion":"failure"},{"id":31,"name":
 fresh
 expect_result false
 
-scenario "false when one review ended that way and the other failed the pull request"
-checks_failed; reviews_behind
-echo "Ryan (correctness): FAIL" > "$T/log-34"
-fresh
-expect_result false
-[ ! -s "$T/calls" ] || fail "expected no call to GitHub"
-
 scenario "false when the pull request is in conflict as well"
 checks_failed; not_settled "$stale_run"; in_conflict
-fresh
-expect_result false
-
-scenario "true when main has overtaken a workflow change as well: the merge of main answers both"
-checks_failed; not_settled "$stale_run"; overtaken_by_main
-fresh
-expect_status 0
-expect_result "true $ci_yml"
-grep -qF "===== overtaken by main =====" "$T/failed.txt" || fail "expected the file to say main overtook the workflow change"
-
-scenario "false when main has overtaken a workflow change and nothing failed: that round is the one for a conflict"
-checks_failed; nothing_failed; overtaken_by_main
-fresh
-expect_result false
-
-scenario "false when main has overtaken a workflow change beside any other failure of checks"
-checks_failed; overtaken_by_main
 fresh
 expect_result false
 

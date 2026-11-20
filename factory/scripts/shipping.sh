@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Shared by the scripts that ship a pull request: asks GitHub again, and says when one was not merged.
-# Usage: . shipping.sh   (sourced by merge-gate.sh, approve-merge.sh and ship.sh, which set $pr first; revert.sh takes only retry)
+# Usage: . shipping.sh   (sourced by merge-gate.sh, approve-merge.sh and merge-queue.sh, which set $pr first; revert.sh, first-runs.sh and minutes.sh take only retry; begin-fix-round.sh takes retry and run_log, and ship.sh start_merge_group too)
 
-# retry <command> [args]: for a call safe to make twice, never the merge or a workflow start (decisions M26).
+# retry <command> [args]: for a call safe to make twice, never the merge, nor a workflow start that a second would repeat (decisions M26).
 retry() {
   local out try
   for try in 1 2 3 4 5 6; do
@@ -14,6 +14,10 @@ retry() {
   done
   return 1
 }
+
+# start_merge_group [try]: starts merge-group.yml, asked again when the start fails: a second run only waits behind
+# the first and finds what is left (decisions M455j).
+start_merge_group() { retry gh workflow run merge-group.yml ${1:+-f try="$1"} >/dev/null; }
 
 # Where the log of this run is, for a comment: GitHub's own error is there.
 run_log() {

@@ -23,6 +23,14 @@ sessions_remote() {
   stub sleep 'exit 0'
 }
 on_github() { git --git-dir="$T/remote.git" "$@"; }
+# hold_is <resets> [<line>...]: the hold usage-limit.sh keeps on the sessions branch, after `sessions_remote sessions`.
+hold_is() {
+  printf '%s\n' "$@" > "$T/seed/usage-limit"
+  git -C "$T/seed" add -A && git -C "$T/seed" commit --quiet -m hold
+  git -C "$T/seed" push --quiet "$T/remote.git" sessions
+}
+# the_hold: what the sessions branch holds of it, or nothing.
+the_hold() { on_github show sessions:usage-limit 2>/dev/null || true; }
 pushed_files() { on_github ls-tree -r --name-only sessions 2>/dev/null; }
 
 # refuses_pushes [n]: refuses every push, or only the first n, as when another job's push got there first.

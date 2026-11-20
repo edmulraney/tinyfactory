@@ -1,0 +1,1 @@
+- **The bypass header for previews is sent on every request Playwright makes**, including to third-party hosts a page might load.

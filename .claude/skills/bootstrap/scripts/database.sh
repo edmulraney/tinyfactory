@@ -65,7 +65,7 @@ fi
 # Previews kept for one day. Why: a preview's database branch is deleted only when Vercel deletes
 # the last deployment of its git branch. Kept as long as Vercel's default, a month's pull requests
 # outrun the branches Neon's free plan allows, and the next gets no database and fails to build.
-# The numbers are in factory/free-tier.md. Vercel's project API rejects this setting
+# The numbers are in factory/free-tier/entry-1.md. Vercel's project API rejects this setting
 # (`deploymentExpiration`), so it is the one step left for the human; the script reads it back and
 # confirms it.
 team=$(jq -r '.dashboard // empty' <<<"$resource" | sed -E 's|https://vercel.com/([^/]+)/.*|\1|')
@@ -86,7 +86,7 @@ one browser step is left, because Vercel's API rejects this setting (now: up to 
             Pre-Production Deployments → 1 day
             Production Deployments → leave at 30 days, so production can be rolled back
    click    Save
-it keeps the project inside Neon's free plan: see factory/free-tier.md.
+it keeps the project inside Neon's free plan: see factory/free-tier/entry-1.md.
 NOTE
   if [ "$created" = yes ]; then (open "$settings" || xdg-open "$settings") >/dev/null 2>&1 || true; fi
 fi

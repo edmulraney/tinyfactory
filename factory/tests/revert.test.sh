@@ -34,20 +34,27 @@ shipped() {
         jq -n --arg title "$4" --arg label "$6" --arg ready "$8" --arg body "${10}" "{title: \$title, body: \$body, labels: [{name: \$label}, {name: \$ready}], createdAt: \"2026-11-18T09:00:00Z\"}" > "$T/ticket.json"
         cat "$T/url" 2>/dev/null || echo "https://github.com/owner/myapp/issues/30" ;;
       "issue view 30 --json title,body,labels,createdAt") cat "$T/ticket.json" ;;
-      "issue view 30 --json title "*) json "$(cat "$T/ticket.json")" "$@" ;;
+      "issue view 30 --json title "* | "issue view 30 --json body "*) json "$(cat "$T/ticket.json")" "$@" ;;
       "workflow run implement.yml -f issue=30" | "issue close 30 --reason not planned") ;;
       "issue reopen 12" | "issue edit 12 --add-label reverted --remove-label deployed" | "issue comment 12 "* | "pr comment 7 "*) ;;
+      "issue edit 12 --remove-label revert" | "issue comment 7 "* | "issue edit 7 --remove-label revert") ;;
+      "issue edit 12 --add-label reverted --add-label ready --remove-label deployed --remove-label needs-human --remove-label in-progress" | "workflow run implement.yml -f issue=12") ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub sleep ':'
 }
 start() { run env GH_TOKEN=workflow-token "$scripts/revert.sh" start "${1:-12}" "${2:-repo-owner}" repo-owner; }
+# The owner merged #7 with GitHub's merge button, and main then failed: button-merge.sh runs this, in nobody's name.
+button() { run env GH_TOKEN=workflow-token FAILED="${printed-FAILED factory/tests/ship.test.sh: expected exit 0}" "$scripts/revert.sh" button 7; }
 merged() { run env GH_TOKEN=workflow-token "$scripts/revert.sh" shipped 30 31; }
 filed() { jq -r "$1" "$T/ticket.json"; }
-# Nothing changed: no ticket was filed, closed or touched, and no build was started.
+# expect_nothing_changed [labelled]: the labelled ticket, #12 unless given, is told why and loses the label; no ticket was
+# filed, closed or reopened, and no build was started.
 expect_nothing_changed() {
   expect_output "Nothing was changed."
-  expect_no_call "gh issue "
+  expect_calls 1 "gh issue comment ${1:-12} --body Not started: "
+  expect_calls 1 "gh issue edit ${1:-12} --remove-label revert"
+  expect_calls 2 "gh issue "
   expect_no_call "gh workflow run"
 }
 
@@ -64,6 +71,8 @@ expect_call "gh workflow run implement.yml -f issue=30"
 expect_output "ticket #30 takes back pull request #7: its build was started, and Esme opens the pull request that reverts abcdef0"
 expect_no_call "gh issue close"
 expect_no_call "gh issue reopen"
+expect_call "gh issue edit 12 --remove-label revert"
+expect_no_call "gh issue comment"
 
 scenario "the ticket it files passes the check every build begins with"
 shipped
@@ -125,20 +134,20 @@ expect_status 0
 expect_call "Take back pull request #7 (\`feat: export forecast as CSV\`): the owner asked for it."
 expect_no_call "which shipped ticket"
 
-scenario "refuses a run the owner did not start, before asking GitHub anything"
+scenario "the label added by anyone but the owner changes nothing except a comment on the ticket that says so, and the label goes"
 shipped
-start 12 "github-actions[bot]"
+start 12 mallory
 expect_status 1
-expect_output "Not started: only the repo's owner, repo-owner, may take a ticket back, and github-actions[bot] started this run."
+expect_output "Not started: only the repo's owner, repo-owner, may take a ticket back, and mallory asked for it."
 expect_nothing_changed
-expect_no_call "gh "
+expect_call "gh issue comment 12 --body Not started: only the repo's owner, repo-owner, may take a ticket back, and mallory asked for it. Nothing was changed."
+expect_calls 2 "gh "
 
 scenario "refuses what is not a number"
 shipped
 start "12; rm -rf ."
 expect_status 1
-expect_output "is not the number of a ticket or a pull request"
-expect_nothing_changed
+expect_output "is not the number of a ticket or a pull request. Nothing was changed."
 expect_no_call "gh "
 
 scenario "stops for a ticket no merged pull request closes"
@@ -148,6 +157,7 @@ start 12
 expect_status 1
 expect_output "Not started: no merged pull request closes ticket #12, so it shipped nothing to take back."
 expect_nothing_changed
+expect_call "gh issue comment 12 --body Not started: no merged pull request closes ticket #12, so it shipped nothing to take back. Nothing was changed."
 
 scenario "stops for a pull request that is not merged"
 shipped
@@ -156,7 +166,7 @@ echo '{"state":"OPEN","mergeCommit":null,"mergedAt":null,"title":"feat: export f
 start 7
 expect_status 1
 expect_output "Not started: pull request #7 is not merged, so it shipped nothing to take back."
-expect_nothing_changed
+expect_nothing_changed 7
 
 scenario "stops when a ticket that takes the pull request back is already open"
 shipped
@@ -206,6 +216,8 @@ echo "issue create" > "$T/fail"
 start 12
 expect_status 1
 expect_output "Not started: the ticket that takes back pull request #7 could not be filed. Nothing was changed."
+expect_call "gh issue comment 12 --body Not started: the ticket that takes back pull request #7 could not be filed."
+expect_call "gh issue edit 12 --remove-label revert"
 expect_no_call "gh workflow run"
 [ "$(grep -c "^gh issue create" "$T/calls")" = 1 ] || fail "expected the ticket to be filed once, never again"
 
@@ -215,6 +227,8 @@ echo "Created." > "$T/url"
 start 12
 expect_status 1
 expect_output "GitHub did not say which ticket it filed to take back pull request #7. Find it, take the \`ready\` label off it and add it again."
+expect_call "gh issue comment 12 --body Not started: GitHub did not say which ticket it filed to take back pull request #7."
+expect_call "gh issue edit 12 --remove-label revert"
 expect_no_call "gh workflow run"
 
 scenario "a build that cannot be started leaves no ticket behind, and is started once"
@@ -224,6 +238,8 @@ start 12
 expect_status 1
 expect_call "gh issue close 30 --reason not planned"
 expect_output "Not started: the build that takes back pull request #7 could not be started, and the ticket filed for it, #30, was closed. Nothing was changed."
+expect_call "gh issue comment 12 --body Not started: the build that takes back pull request #7 could not be started"
+expect_call "gh issue edit 12 --remove-label revert"
 [ "$(grep -c "^gh workflow run" "$T/calls")" = 1 ] || fail "expected the build to be started once, never again"
 
 scenario "a build that cannot be started, whose ticket cannot be closed, says how to start it"
@@ -233,6 +249,35 @@ start 12
 expect_status 1
 expect_output "Not started: the build of ticket #30, which takes back pull request #7, could not be started. Take the \`ready\` label off it and add it again."
 expect_no_output "Nothing was changed."
+expect_call "gh issue comment 12 --body Not started: the build of ticket #30, which takes back pull request #7, could not be started."
+expect_call "gh issue edit 12 --remove-label revert"
+
+scenario "a refusal the ticket cannot be told still takes the label off, and says both"
+shipped
+echo "issue comment 12" > "$T/fail"
+start 12 mallory
+expect_status 1
+expect_output "Not started: only the repo's owner"
+expect_output "Ticket #12 could not be told so."
+expect_call "gh issue edit 12 --remove-label revert"
+
+scenario "a label that cannot be taken off fails the run, after the take-back started once"
+shipped
+echo "issue edit 12 --remove-label revert" > "$T/fail"
+start 12
+expect_status 1
+expect_output "ticket #30 takes back pull request #7: its build was started"
+expect_output "The \`revert\` label could not be taken off ticket #12."
+expect_calls 1 "gh workflow run implement.yml -f issue=30"
+
+scenario "tells the ticket and takes the label off again when either call fails once"
+shipped
+printf 'issue comment 12\nissue edit 12 --remove-label revert\n' > "$T/flaky"
+start 12 mallory
+expect_status 1
+expect_calls 2 "gh issue comment 12 --body Not started: "
+expect_calls 2 "gh issue edit 12 --remove-label revert"
+expect_no_output "could not be"
 
 scenario "once the revert has merged, the ticket taken back is reopened, labelled and told"
 shipped
@@ -321,9 +366,164 @@ merged
 expect_status 1
 expect_output "Pull request #7 could not be told that pull request #31 took it back."
 
+scenario "takes back a merge with the button that broke main: no owner starts it, and the ticket says what failed"
+shipped
+echo '{"__typename":"PullRequest","number":7}' > "$T/what.json"
+button
+expect_status 0
+expect_call "gh issue create --title Take back the button merge of pull request #7 --label chore --label ready --body ## Change"
+expect_call "Take back pull request #7 (\`feat: export forecast as CSV\`), which shipped ticket #12: it was merged with GitHub's merge button, and \`main\` then failed, having passed before the merge. The test of \`main\` ended:
+
+\`\`\`
+FAILED factory/tests/ship.test.sh: expected exit 0
+\`\`\`
+
+Take it back whole. On your branch run \`git revert --no-edit $commit\`, and change nothing else."
+expect_no_call "the owner asked for it"
+expect_call "gh workflow run implement.yml -f issue=30"
+expect_output "ticket #30 takes back pull request #7: its build was started, and Esme opens the pull request that reverts abcdef0"
+expect_no_call "--remove-label revert"
+run env GH_TOKEN=workflow-token "$scripts/check-ticket.sh" 30
+expect_status 0
+
+scenario "a test of main that printed nothing, or a fence, still leaves one fenced block in the ticket"
+shipped
+echo '{"__typename":"PullRequest","number":7}' > "$T/what.json"
+printed="" button
+expect_status 0
+expect_call "
+\`\`\`
+It printed nothing.
+\`\`\`"
+printed='before
+```
+after' button
+expect_status 0
+expect_call "
+\`\`\`
+before
+after
+\`\`\`"
+
+for title in "Take back the button merge of pull request #7" "Take back pull request #7"; do
+  scenario "a merge with the button is taken back once: \"$title\" is already filed, so it says so and files nothing"
+  shipped
+  echo '{"__typename":"PullRequest","number":7}' > "$T/what.json"
+  jq -n --arg title "$title" '[{number: 29, title: $title, state: "closed", state_reason: "completed"}]' > "$T/issues.json"
+  button
+  expect_status 0
+  expect_output "ticket #29 already takes back pull request #7; no second one was filed"
+  expect_no_call "gh issue create"
+  expect_no_call "gh workflow run"
+done
+
+scenario "the owner cannot start a second take-back of a merge the factory is taking back"
+shipped
+echo '[{"number":29,"title":"Take back the button merge of pull request #7","state":"open","state_reason":null}]' > "$T/issues.json"
+start 12
+expect_status 1
+expect_output "Not started: ticket #29 already takes back pull request #7."
+expect_nothing_changed
+
+for read in "api graphql" "pr view 7 --json state" "pr view 7 --json body" "api --method GET repos/{owner}/{repo}/issues" "api repos/{owner}/{repo}/pulls/7/files" "issue create" "workflow run"; do
+  scenario "a take-back of a merge with the button fails when GitHub does not answer: $read"
+  shipped
+  echo '{"__typename":"PullRequest","number":7}' > "$T/what.json"
+  echo "$read" > "$T/fail"
+  button
+  expect_status 1
+  expect_output "Not started: "
+  expect_no_call "gh issue reopen"
+  expect_no_call "gh issue comment"
+  expect_no_call "--remove-label revert"
+done
+
+# Ticket #30 took back the merge with the button, and pull request #31, which reverts it, has merged.
+taken_back() {
+  shipped
+  jq -n '{title: "Take back the button merge of pull request #7", body: "## Change\nTake back pull request #7. The test of `main` ended:\n\n```\nFAILED factory/tests/ship.test.sh: expected exit 0\n```\n\nTake it back whole.\n\n## Docs to update\nNone."}' > "$T/ticket.json"
+}
+
+scenario "once the take-back of a merge with the button has merged, the ticket is told what failed and is in progress again"
+taken_back
+merged
+expect_status 0
+expect_call "gh issue reopen 12"
+expect_call "gh issue comment 12 --body Taken back: pull request #31 reverted pull request #7, and \`main\` no longer holds its change. Pull request #7 was merged with GitHub's merge button, and \`main\` then failed, having passed before the merge. This ticket is being built again: build it so that this passes, starting from the commits of pull request #7 (\`git fetch origin refs/pull/7/head\`). The test of \`main\` ended:
+
+\`\`\`
+FAILED factory/tests/ship.test.sh: expected exit 0
+\`\`\`"
+expect_call "gh issue edit 12 --add-label reverted --add-label ready --remove-label deployed --remove-label needs-human --remove-label in-progress"
+[ "$(grep -c "^gh workflow run" "$T/calls")" = 1 ] || fail "expected the build to be started once"
+expect_no_call "add \`ready\`"
+expect_output "ticket #12 was reopened and its build started again: pull request #31 took back pull request #7"
+[ "$(grep -n '^gh workflow run implement.yml' "$T/calls" | cut -d: -f1)" -gt "$(grep -n '^gh issue edit 12 --add-label reverted --add-label ready' "$T/calls" | cut -d: -f1)" ] \
+  && [ "$(grep -n '^gh issue edit 12 --add-label reverted --add-label ready' "$T/calls" | cut -d: -f1)" -gt "$(grep -n '^gh issue comment 12 ' "$T/calls" | cut -d: -f1)" ] \
+  || fail "expected the ticket to be told, then labelled ready, then built"
+
+scenario "a take-back the owner started still waits for ready: no build is started"
+shipped
+merged
+expect_status 0
+expect_no_call "gh workflow run"
+expect_no_call "--add-label ready"
+
+scenario "a ticket that cannot be told what failed is still built again, and the script fails"
+taken_back
+echo "issue view 30 --json body" > "$T/fail"
+merged
+expect_status 1
+expect_output "GitHub did not return what ticket #30 says failed on \`main\`, so ticket #12 is not told it."
+expect_call "gh issue comment 12 --body Taken back: pull request #31 reverted pull request #7"
+expect_call "gh workflow run implement.yml -f issue=12"
+
+scenario "a ticket that cannot be labelled ready gets no build, which would be refused, and the script says how to start it"
+taken_back
+echo "issue edit 12" > "$T/fail"
+merged
+expect_status 1
+expect_call "gh issue reopen 12"
+expect_output "Ticket #12 could not be labelled \`reverted\` and \`ready\`, so its build was not started. Add \`ready\` to start it."
+expect_no_call "gh workflow run"
+
+scenario "a build that cannot be started again is asked for once, and the script says how to start it"
+taken_back
+echo "workflow run" > "$T/fail"
+merged
+expect_status 1
+expect_output "The build of ticket #12 could not be started. Take the \`ready\` label off it and add it again."
+[ "$(grep -c "^gh workflow run" "$T/calls")" = 1 ] || fail "expected the build to be asked for once, never again"
+
+scenario "the take-back of a merge with the button that closed no ticket tells that pull request, and builds nothing"
+taken_back
+echo "A person's own pull request." > "$T/body"
+merged
+expect_status 0
+expect_call "gh pr comment 7 --body Taken back: pull request #31 reverted pull request #7, and \`main\` no longer holds its change."
+expect_no_call "gh workflow run"
+
 scenario "says how it is used when given neither half"
 shipped
 run "$scripts/revert.sh" 12 repo-owner repo-owner
 expect_status 1
 expect_output "Usage: revert.sh start"
 expect_no_call "gh "
+
+# A change to the workflow must fail here: nothing runs revert.yml before it is installed.
+scenario "revert.yml starts for the \`revert\` label and for no other label, and for no command"
+workflow="$root/factory/workflows/revert.yml"
+cd "$root"
+run "$scripts/events.sh"
+expect_status 0
+expect_output "| \`revert.yml\` | issues (types: labeled) | The \`revert\` label on a shipped ticket takes it back: an engineer opens the pull request that reverts it. | no script or workflow |"
+[ "$(grep -c '^    if: ' "$workflow")" = 1 ] && grep -qxF "    if: github.event.label.name == 'revert'" "$workflow" \
+  || fail "the job of revert.yml does not run for the \`revert\` label alone"
+[ "$(grep -c '^  [a-z-]*:$' <<<"$(sed -n '/^jobs:/,$p' "$workflow")")" = 1 ] || fail "revert.yml has a second job, which the label does not guard"
+grep -qxF '          NUMBER: ${{ github.event.issue.number }}' "$workflow" || fail "revert.yml does not take the number of the labelled ticket"
+grep -qxF '          STARTED_BY: ${{ github.triggering_actor }}' "$workflow" || fail "revert.yml does not say who started the run"
+grep -qxF '        run: factory/scripts/revert.sh start "$NUMBER" "$STARTED_BY" "$OWNER"' "$workflow" || fail "revert.yml does not run revert.sh start"
+
+scenario "what the owner reads names the label, and no command that takes a ticket back"
+! grep -rn 'gh workflow run revert' "$root/factory/README.md" "$root/factory/owner-guide.md" || fail "a document hands the owner a command to take a ticket back"
+grep -qF 'add the `revert` label' "$root/factory/owner-guide.md" || fail "owner-guide.md does not name the \`revert\` label"

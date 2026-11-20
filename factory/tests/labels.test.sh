@@ -27,7 +27,7 @@ scenario "creates every label the factory uses, the six types, proposal, retro, 
 github_holds ready
 run "$labels" owner/myapp
 expect_status 0
-for label in ready needs-human factory initiative tweak bug chore research in-progress deployed reverted proposal retro waits-for-main proof idea; do
+for label in ready needs-human factory initiative tweak bug chore research in-progress deployed reverted revert proposal retro waits-for-main proof idea; do
   expect_call "gh label create $label -R owner/myapp --force"
 done
 expect_output "labels ok: owner/myapp"

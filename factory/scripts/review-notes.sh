@@ -36,10 +36,11 @@ case "${1:-}" in
     made=""
     if [ -z "$ticket" ]; then
       # The engineer is told here, in a ticket read once a week, not in a skill read on every build (decisions A241d).
+      # It looks for a note's owner itself (decisions A453).
       body="## Change
-Apply the reviewers' notes: each is in a comment on this ticket headed by a reviewer's name and a pull request's number (\`gh issue view <this ticket> --comments\`); skip any other comment. A note fails no review, so nothing else acts on one.
+Apply the reviewers' notes: each is in a comment on this ticket headed by a reviewer's name and a pull request's number (\`gh issue view <this ticket> --comments\`); skip any other comment.
 
-- Apply each note in the file it names, \`apps/\` included, or answer it in one line saying why not.
+- First search the open tickets and pull requests for each note's subject (\`gh issue list --search\`, \`gh pr list --search\`): a note one of them holds is not applied, and its answer names that number. Apply each other note in the file it names, \`apps/\` included, or answer it in one line saying why not.
 - Put the answers in one comment on this ticket, and name there each kind of note seen three times: a repeat is a rule or a check that is missing.
 
 ## How we will know it works

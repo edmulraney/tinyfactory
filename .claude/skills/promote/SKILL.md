@@ -10,13 +10,13 @@ description: Add the `ready` label, which starts an unattended build, to a backl
 ## The bar
 
 1. **It follows its template:** `factory/scripts/check-ticket.sh <n>` passes, and the title is an imperative verb and what changes, not only where.
-2. **It was asked for** by the owner, an interview `intake` sorted as "build now", or a retro proposal the owner accepted. Your own idea: ask the owner before filing it (`factory/decisions.md` T223).
+2. **It was asked for** by the owner, an interview `intake` sorted as "build now", or a retro proposal the owner accepted. Your own idea: ask the owner before filing it (`factory/decisions.md` [T223](../../../factory/decisions/223.md)).
 3. **It fits `PURPOSE.md`** and is nothing under "What it will not do".
 4. **You can picture the Playwright test for each criterion.** A chore has none and changes no behaviour; a research ticket lists checks on its files; a factory ticket says how it will be proven.
-5. **An Initiative has** a hypothesis, a success metric, and a signal with three independent sources in `product/signals.md`, none of them synthetic (`factory/decisions.md` A33c), or the owner's explicit request. A Tweak or Bug is cheap and plainly right.
+5. **An Initiative has** a hypothesis, a success metric, and a signal with three independent sources in `product/signals.md`, none of them synthetic (`factory/decisions.md` [A33c](../../../factory/decisions/33.md)), or the owner's explicit request. A Tweak or Bug is cheap and plainly right.
 6. **It is one pull request's worth,** or split it and promote the first.
 7. **Its builder may touch it.** Esme builds initiative, bug, tweak and chore tickets and changes none of the factory's files (`CLAUDE.md`, "Off limits"). Rosa builds `research` tickets and changes only `product/`. Fred builds `factory` tickets. Tell the owner the pull request waits for them if the ticket changes what only they decide, the product's bar or `CLAUDE.md`.
-8. **It is not in flight** (`factory/scripts/in-flight.sh`). The exception: this ticket's line ending `left unfinished` is a build cut short, which `ready` builds again (`factory/decisions.md` T64h). With three others being built or checked, or five pull requests waiting for the owner, it waits with `ready`, and is started when a place frees (T269a).
+8. **It is not in flight** (`factory/scripts/in-flight.sh`). The exception: this ticket's line ending `left unfinished` is a build cut short, which `ready` builds again (`factory/decisions.md` [T64h](../../../factory/decisions/64.md)). With five others being built or checked, or five pull requests waiting for the owner, it waits with `ready`, and is started when a place frees ([T269a](../../../factory/decisions/269.md)).
 
 ## Steps
 

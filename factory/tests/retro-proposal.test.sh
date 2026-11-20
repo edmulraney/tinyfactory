@@ -8,7 +8,7 @@ saved() {
     lesson: {summary: "three fix rounds", title: "Fail a build that pushes untyped code", cause: "check-missing",
       detail: "the story", evidence: ["https://github.com/o/r/pull/7"],
       change: {kind: "check", target: "factory/scripts/ship.sh", proposal: "Run the type check first.", removes: "nothing"},
-      cost: {amount: "3 fix rounds, $2.10 and 14 minutes", kind: ["stopped"]},
+      cost: {amount: "3 fix rounds, $2.10 and 14 minutes", minutes: 14, kind: ["stopped"]},
       saves: "2 fix rounds, about $1.40", repeats: [], handling: [], retry: "not-applicable", propose: true}}
     | '"$1" > "$T/lesson.json"
 }
@@ -117,6 +117,13 @@ run "$scripts/retro-proposal.sh" "$T/lesson.json"
 expect_status 0
 expect_output "Seen in the first run of \`ci\` since pull request #12 changed it, https://github.com/o/r/actions/runs/99."
 
+scenario "a request for help: the proposal names the comment and the run that answered it"
+saved '.facts = {run: 99, workflow: "claude", url: "https://github.com/o/r/actions/runs/99", pr: null, issue: 5, ask: {comment: "@claude start #5", url: "https://github.com/o/r/issues/5#issuecomment-3"}}'
+run "$scripts/retro-proposal.sh" "$T/lesson.json"
+expect_status 0
+expect_output "Seen in the request for help https://github.com/o/r/issues/5#issuecomment-3, which the \`claude\` run https://github.com/o/r/actions/runs/99 answered."
+expect_no_output "failed"
+
 scenario "a file that holds no lesson stops it, and is not taken for a lesson below the bar"
 printf 'not json\n' > "$T/lesson.json"
 run "$scripts/retro-proposal.sh" "$T/lesson.json"
@@ -139,9 +146,10 @@ workflow="$root/factory/workflows/retro.yml"
 schema=$(sed -n "s/^  LESSON_SCHEMA: '\(.*\)'$/\1/p" "$workflow")
 skill="$root/.claude/skills/retro/SKILL.md"
 
-scenario "the schema makes a lesson carry the cost, its kinds and the saving"
+scenario "the schema makes a lesson carry the cost, its minutes as a number, its kinds and the saving"
 run jq -e '(.required | index("cost") != null and index("saves") != null)
-  and (.properties.cost.required == ["amount", "kind"])
+  and (.properties.cost.required == ["amount", "minutes", "kind"])
+  and (.properties.cost.properties.minutes.type == "number")
   and (.properties.cost.properties.kind.items.enum == ["lost-work", "lost-money", "stopped"])' <<<"$schema"
 expect_status 0
 

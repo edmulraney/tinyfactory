@@ -1,0 +1,16 @@
+### 13. A session cut short is continued on the runner it ran on
+
+- **Set:** in `implement.yml`, `fix.yml` and `ci.yml` (job `review`), a session that ends before its work is handed over is continued in the same job, twice at most. One the Claude usage limit ended is not continued: its work is kept, its job passes, no retro starts and no agent starts until the limit resets (`decisions.md` [A231a](../decisions/231.md), [A231c](../decisions/231.md); [entry #395](395.md)). The retro is not continued but started afresh, with waits of its own ([entry 11](entry-11.md)). After an API error the job waits first: 2 minutes before the first continuation, 5 before the second (ticket #69; `decisions.md` [A69a](../decisions/69.md) to [A69h](../decisions/69.md)).
+- **Protects:** Claude usage and Actions minutes.
+- **What happened:** on 16 November 2026 two builds finished their work and lost it with the runner. Ticket #57: 16 minutes and $5.44, ended by an overloaded API on the last step; building it again took 21 minutes and $6.82. Ticket #67: 15 minutes and $6.13, ended by the engineer's own early stop.
+- **Numbers:**
+  - A session that is not cut short: one more step, which asks GitHub whether the work was handed over. Seconds, in a job that already runs, so no Actions minutes unless it tips the job over a minute boundary.
+  - A wait is billed like any other minute of the job: 2 minutes for one continuation after an API error, 7 for two. That is the most a job can wait, and a ticket whose build and reviews both waited the full time would use 14 minutes, about 1% of the month's 2,000.
+  - A session the agent ended early is continued with no wait.
+  - A fix round that pushes nothing on purpose, every finding rebutted, looks the same from outside as one that stopped early, so it is continued once: one resumed session that answers in a turn and changes nothing. It is not continued a second time (`decisions.md` [A69g](../decisions/69.md)). Not measured yet: no round has been continued.
+  - Against that, what a continuation saves is a build from nothing: about 16 Actions minutes and $5 to $7 on each of the two tickets above.
+  - The job limits are unchanged (60 minutes for a build or a fix round, 20 for a review), so the waits and the continued runs can never add more than the job was already allowed.
+  - Rejected, longer waits or more tries: every minute waited is billed while nothing runs, and Claude Code has already retried for about a minute before the session ends.
+- **A build that still hands over no pull request now fails its job,** where one whose engineer ended the turn early used to pass. A failed `implement` run starts a retro ([entry 11](entry-11.md)): 2 to 3 minutes and $1 to $2, for a failure that used to teach nothing.
+- **Unfinished work that is kept:** when a build still hands over no pull request, its branch is pushed (`keep-work.sh`). Vercel builds a preview of any branch, so that is 1 of the 100 deployments a day, and its database branch holds one of Neon's 9 preview slots ([entry 8](entry-8.md)) until the git branch is deleted: at the merge, once the next build has finished its pull request from it. A ticket that is dropped instead keeps the slot until its branch is deleted.
+- **Automated:** yes.

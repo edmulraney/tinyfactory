@@ -46,8 +46,8 @@ a_session() {  # a_session <folder> <role> <run> <cost>
   echo "[{\"type\":\"system\",\"subtype\":\"init\",\"model\":\"claude-fable-5-2\"},{\"type\":\"assistant\"},{\"type\":\"result\",\"is_error\":false,\"total_cost_usd\":$4,\"num_turns\":20,\"duration_ms\":60400}]" \
     > "$T/sessions/$1/20261116T080000Z-$2-run$3.json"
 }
-a_job() {  # a_job <run> <conclusion or null> <started hh:mm:ss> <completed hh:mm:ss> [workflow]
-  echo "{\"run_id\":$1,\"conclusion\":\"$2\",\"started_at\":\"2026-11-16T$3Z\",\"completed_at\":\"2026-11-16T$4Z\",\"workflow_name\":\"${5:-ci}\"}"
+a_job() {  # a_job <run> <conclusion or null> <started hh:mm:ss> <completed hh:mm:ss> [workflow] [runner, or null] [runner group]
+  echo "{\"run_id\":$1,\"conclusion\":\"$2\",\"started_at\":\"2026-11-16T$3Z\",\"completed_at\":\"2026-11-16T$4Z\",\"workflow_name\":\"${5:-ci}\",\"runner_id\":${6:-1000000001},\"runner_group_name\":\"${7:-GitHub Actions}\"}"
 }
 labelled() {  # labelled <events file> <labeled or unlabeled> <label> <hh:mm>
   jq -c --arg event "$2" --arg label "$3" --arg at "2026-11-16T$4:00Z" '. + [{event: $event, label: {name: $label}, created_at: $at}]' "$T/$1" > "$T/$1.new"
@@ -81,7 +81,7 @@ expect_output "- **Claude usage:** \$10.21 at API prices, in 3 sessions on claud
 expect_output "- **Actions minutes:** 11, in 2 runs"
 expect_output "- **Fix rounds:** 0"
 expect_output "- **Ready to merged:** 1 h 12 min"
-expect_no_output "could not be read"
+expect_no_output "gave no cost"
 
 scenario "a ticket with two fix rounds: their sessions, their runs and the rounds are in the sum"
 github; one_build
@@ -179,7 +179,7 @@ github; one_build
 echo '[{"type":"result","total_cost_usd":1.8' > "$T/sessions/pr-72/20261116T080000Z-ryan-run801.json"
 cost 72 "$T/sessions"
 expect_status 0
-expect_output "- **Claude usage:** \$8.66 at API prices, in 2 sessions on claude-fable-5-2; 1 more transcript could not be read, so its cost is not in the sum"
+expect_output "- **Claude usage:** \$8.66 at API prices, in 2 sessions on claude-fable-5-2; 1 more transcript gave no cost"
 expect_output "- **Actions minutes:** 11, in 2 runs"
 
 scenario "a transcript that is an empty file: said, and not left out"
@@ -187,7 +187,7 @@ github; one_build
 : > "$T/sessions/pr-72/20261116T080000Z-ryan-run801.json"
 cost 72 "$T/sessions"
 expect_status 0
-expect_output "- **Claude usage:** \$8.66 at API prices, in 2 sessions on claude-fable-5-2; 1 more transcript could not be read, so its cost is not in the sum"
+expect_output "- **Claude usage:** \$8.66 at API prices, in 2 sessions on claude-fable-5-2; 1 more transcript gave no cost"
 
 scenario "a transcript that ends with no result: said, and not counted as a session that cost nothing"
 github; one_build
@@ -195,7 +195,7 @@ echo '[{"type":"system","subtype":"init","model":"claude-fable-5-2"},{"type":"as
 : > "$T/sessions/pr-72/20261116T080000Z-adam-run801.json"
 cost 72 "$T/sessions"
 expect_status 0
-expect_output "- **Claude usage:** \$6.82 at API prices, in 1 session on claude-fable-5-2; 2 more transcripts could not be read, so their cost is not in the sum"
+expect_output "- **Claude usage:** \$6.82 at API prices, in 1 session on claude-fable-5-2; 2 more transcripts gave no cost"
 
 scenario "no transcript at all: no session and no model, and the runs still counted"
 github; one_build
@@ -221,7 +221,7 @@ expect_output "- **Fix rounds:** 1, and 1 the owner asked for"
 
 scenario "a job still running is counted to now, and every attempt of a run is asked for"
 github; one_build
-jq -n '{jobs: [{run_id: 801, conclusion: null, started_at: (now - 90 | todate), completed_at: null}]}' > "$T/jobs/801"
+jq -n '{jobs: [{run_id: 801, conclusion: null, started_at: (now - 90 | todate), completed_at: null, runner_id: 1000000001}]}' > "$T/jobs/801"
 cost 72 "$T/sessions"
 expect_status 0
 expect_output "- **Actions minutes:** 5, in 2 runs"
@@ -233,6 +233,21 @@ jobs_of 801 '{"run_id":801,"conclusion":"cancelled","started_at":null,"completed
   "$(a_job 801 cancelled 08:10:00 08:10:00)"
 cost 72 "$T/sessions"
 expect_output "- **Actions minutes:** 3, in 1 run"
+
+scenario "a job cancelled while it waited for a runner is billed nothing, however long it waited"
+github; one_build
+jobs_of 801 "$(a_job 801 cancelled 08:10:00 08:16:00 ci null)" "$(a_job 801 cancelled 08:10:00 08:16:00 ci 0)"
+cost 72 "$T/sessions"
+expect_output "- **Actions minutes:** 3, in 1 run"
+
+scenario "a job on a runner the owner keeps is billed nothing, and the split still counts the time it ran"
+github; one_build
+jobs_of 800 "$(a_job 800 success 08:01:00 08:03:10 implement 7 Default)"
+jobs_of 801 "$(a_job 801 success 08:10:00 08:16:00 ci 7 Default)" "$(a_job 801 success 08:10:00 08:10:30)"
+cost 72 "$T/sessions"
+expect_output "- **Actions minutes:** 1, in 2 runs"
+cost --json 72 "$T/sessions"
+[ "$(jq -c .split <<<"$out")" = '{"build":130,"review":360,"fix":0,"waiting":3830}' ] || fail "expected the split, found: $(jq -c .split <<<"$out")"
 
 scenario "a ticket that took days: the time is in days and hours"
 github; one_build
@@ -379,17 +394,25 @@ cost --month 2026-11 "$T/sessions"
 expect_status 0
 expect_output "| Ticket | Claude usage | Sessions | Model | Actions minutes | Runs | Fix rounds | Ready to merged |"
 expect_output "| #57 feat: test with main | \$10.21 | 3 | claude-fable-5-2 | 11 | 2 | 0 | 1 h 12 min |"
-expect_output "| #58 feat: test with main | \$0.50; 1 more transcript could not be read, so its cost is not in the sum | 1 | claude-fable-5-2 | 11 | 3 | 0 | 14 d 16 h |"
+expect_output "| #58 feat: test with main | \$0.50; 1 more transcript gave no cost | 1 | claude-fable-5-2 | 11 | 3 | 0 | 14 d 16 h |"
 [ "$(grep -c '^|' <<<"$out")" = 4 ] || fail "expected a heading, a rule and two rows"
 expect_no_call "pr view 74"
 expect_no_call "pr view 76"
+
+scenario "a month: a merged pull request that closes no ticket has no row, and its cost is not worked out"
+github; a_month
+echo "api --method GET repos/{owner}/{repo}/actions/runs -f branch=feat/none-test-with-main" > "$T/fail"
+cost --month 2026-11 "$T/sessions"
+expect_status 0
+[ "$(grep -c '^|' <<<"$out")" = 4 ] || fail "expected a heading, a rule and two rows"
+expect_no_call "pr view 75 --json number,"
 
 scenario "a month with no sessions folder: the branch is listed once, and each merged ticket's folders are downloaded"
 github; a_month
 cost --month 2026-11
 expect_status 0
 expect_output "| #57 feat: test with main | \$10.21 | 3 | claude-fable-5-2 | 11 | 2 | 0 | 1 h 12 min |"
-expect_output "| #58 feat: test with main | \$0.50; 1 more transcript could not be read, so its cost is not in the sum | 1 |"
+expect_output "| #58 feat: test with main | \$0.50; 1 more transcript gave no cost | 1 |"
 [ "$(grep -c "git/trees/sessions" "$T/calls")" = 1 ] || fail "expected the branch's folders to be listed once"
 expect_call "git/trees/issue-58"
 nothing_left

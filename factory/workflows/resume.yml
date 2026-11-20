@@ -1,0 +1,23 @@
+# Lifts the hold the Claude usage limit put on every agent, and starts again what waited, when the owner runs it.
+name: resume
+
+on:
+  # By hand, for an owner who lifted the limit before its reset time; flag-idle.yml does the same once the time has passed (decisions A395e).
+  workflow_dispatch:
+
+jobs:
+  resume:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write       # to remove the hold from the sessions branch
+      issues: write         # to tell a waiting ticket which ticket it waits for (decisions T339a)
+      pull-requests: read   # to see which tickets are in flight
+      actions: write        # to run again each run that waited, and to start implement.yml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lift the hold and start again what waited
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)
+        run: factory/scripts/usage-limit.sh resume now

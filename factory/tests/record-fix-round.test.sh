@@ -72,6 +72,15 @@ expect_count 1
 [ "$(count owner)" = 1 ] || fail "expected one round of the owner's to be recorded"
 expect_no_call "needs-human"
 
+scenario "the owner's round is recorded for the review it was begun for, and for no other"
+github; a_session
+record "$T/execution.json" false 5555555555555555555555555555555555555555 41
+expect_status 0
+expect_call "gh pr comment 7 --body <!-- factory:owner-round 41 -->The owner's fix round: the engineer's session ran. It is not one of the three fix rounds."
+[ "$(count owner)" = 1 ] || fail "expected one round of the owner's to be recorded"
+[ "$(count owner 41)" = 1 ] || fail "expected the owner's round to be recorded for the review it was begun for"
+[ "$(count owner 42)" = 0 ] || fail "expected no owner's round to be recorded for another review"
+
 scenario "a round begun with only a conflict to fix is not counted: it is recorded for the head it began with, and for no other"
 github; a_session
 record "$T/execution.json"
@@ -238,3 +247,15 @@ github; a_session
 record "$T/execution.json"
 record ""
 [ -z "$(find "$T/work" "$T/tmp" -mindepth 1)" ] || fail "expected no file left in the working or temporary directory"
+
+# The attempt was refused, so it takes no place among the three, nor a head's one round of another kind (decisions A395d).
+for counted in "" false conflict "fresh-run:6666666666666666666666666666666666666666"; do
+  scenario "a round the Claude usage limit ended is not counted or recorded: ${counted:-a counted round}"
+  github
+  echo '[{"type":"result","is_error":true,"terminal_reason":"api_error","api_error":"usage_limit_reached","session_id":"abc-123"}]' > "$T/execution.json"
+  record "$T/execution.json" $counted 5555555555555555555555555555555555555555
+  expect_status 0
+  expect_output "the Claude usage limit ended the fix round on pull request #7: it is not counted"
+  [ ! -s "$T/calls" ] || fail "expected no comment and no label"
+  expect_count 0
+done

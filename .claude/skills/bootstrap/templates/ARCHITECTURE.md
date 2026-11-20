@@ -33,7 +33,7 @@ flowchart TD
 
 - **Production:** `main`, deployed by Vercel on every merge that changes the app. A merge that changes only the factory's own folders (`factory/`, `.claude/`, `.github/`) is not built.
 - **Preview:** every pull request that changes the app gets its own Vercel URL and its own branch of the database: a copy of production's schema and data that it can change freely. End-to-end tests run against it. Both are gone a day later.
-- **Sign-in:** a product with accounts keeps them in Neon Auth, inside the same database, switched on at setup (`sign-in.sh`; `factory/decisions.md` S287a). The app reads its address from `NEON_AUTH_BASE_URL` and signs cookies with `NEON_AUTH_COOKIE_SECRET`. A preview's database branch holds its own copy of the users, so a test signs nobody up in production.
+- **Sign-in:** a product with accounts keeps them in Neon Auth, inside the same database, switched on at setup (`sign-in.sh`; `factory/decisions.md` [S287a](factory/decisions/287.md)). The app reads its address from `NEON_AUTH_BASE_URL` and signs cookies with `NEON_AUTH_COOKIE_SECRET`. A preview's database branch holds its own copy of the users, so a test signs nobody up in production.
 
 Why a preview never shares the production database:
 

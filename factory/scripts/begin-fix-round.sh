@@ -1,27 +1,42 @@
 #!/usr/bin/env bash
 # Decides, as the first step of a fix round (fix.yml), whether the round goes ahead and for whom.
 # Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login]
-#        Needs GH_TOKEN (pull-requests, issues and actions: write) and GITHUB_REPOSITORY.
+#        Needs GH_TOKEN (pull-requests, issues, actions and contents: write) and GITHUB_REPOSITORY.
 set -euo pipefail
 
 usage="Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login]"
 pr="${1:?$usage}"; failures="${2:?$usage}"; owner="${3:-}"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 outputs="${GITHUB_OUTPUT:-/dev/null}"
+. "$script_dir/shipping.sh"
 
 skip() { echo "go=false" >> "$outputs"; echo "no fix round: $1"; exit 0; }
 die() { echo "go=false" >> "$outputs"; echo "$1" >&2; exit 1; }
+# not_begun <what GitHub did not do> <message>: the pull request was told a round began, so it is told that none did (decisions A433).
+not_begun() {
+  # The first line says what a person must do (decisions A371a).
+  retry gh pr comment "$pr" --body "Start the fix round again: \`gh workflow run fix.yml -f pr=$pr\`
+
+No fix round began, though the comment before this one says one did: $1.$(run_log)" >/dev/null \
+    || echo "Could not say on pull request #$pr that no fix round began." >&2
+  die "$2"
+}
 
 # The number goes into a prompt and into calls, and no caller is taken on trust (decisions A89f).
 [[ "$pr" =~ ^[0-9]+$ ]] || die "\"$pr\" is not a pull request number."
 
 # Read on a line of its own (decisions H7). gh writes the app that opens the factory's pull requests as `app/claude`.
-pull=$(gh pr view "$pr" --json state,author,headRefOid,headRefName,labels \
+pull=$(retry gh pr view "$pr" --json state,author,headRefOid,headRefName,labels \
     --jq '"\(.state) \(.author.login) \(.headRefOid) \(.headRefName) \([.labels[].name] | index("waits-for-main") != null)"') \
   || die "Could not read pull request #$pr from GitHub, so no fix round was begun."
 read -r state author head branch marked <<<"$pull"
 [ "$state" = OPEN ] || skip "pull request #$pr is not open"
 [ "$author" = app/claude ] || skip "pull request #$pr was not opened by the factory, and is its author's to fix"
+
+# No fix round begins while the Claude usage limit holds every agent: usage-limit.sh runs this run again (decisions A231b, A395b).
+limit=$("$script_dir/usage-limit.sh" wait "$pr" "a fix round") \
+  || die "Whether the Claude usage limit holds every agent is not known, so no fix round was begun for pull request #$pr."
+[ -z "$limit" ] || skip "$limit"
 
 "$script_dir/collect-failures.sh" "$failures" "$pr" >&2 \
   || die "What failed on pull request #$pr could not be read, so no fix round was begun."
@@ -30,6 +45,12 @@ if [ -n "$owner" ]; then
   # The file is the engineer's evidence, and is not left without part of it.
   requested=$("$script_dir/owner-review.sh" "$pr" "$owner" "$failures") \
     || { rm -f "$failures"; die "What $owner asked for on pull request #$pr could not be read, so no fix round was begun."; }
+fi
+if [ -n "$requested" ]; then
+  # A request gets one owner's round, refused here as a round started while that one ran is queued behind it (decisions A396b).
+  answered=$("$script_dir/fix-rounds.sh" "$pr" owner "$requested") \
+    || die "The owner's fix rounds of pull request #$pr could not be counted, so no fix round was begun."
+  [ "$answered" -eq 0 ] || skip "the owner's fix round already ran for what $owner asked for on pull request #$pr, and pushed nothing: it waits for its owner"
 fi
 [ -s "$failures" ] || skip "nothing is there to fix on pull request #$pr: the latest ci run for its head ${head:0:7} has no failed job, GitHub reports no conflict, and its owner has not sent it back"
 
@@ -55,8 +76,8 @@ retest=false
 
 conflict=false
 if [ -z "$requested" ] && [ "$retest" = false ] && [ -z "$workflow" ]; then
-  # No failed job but `fits-main` leaves only a conflict to fix (decisions A124b).
-  others=$(awk '/^===== failed job: / && $0 != "===== failed job: fits-main =====" { n++ } END { print n + 0 }' "$failures")
+  # No failed job leaves only a conflict, or what the test of a group found, to fix (decisions A124b).
+  others=$(grep -c '^===== failed job: ' "$failures" || true)
   [ "$others" -ne 0 ] || conflict=true
   # After the check above: a pull request its third round got to green is not told it stopped (decisions A89h).
   rounds=$("$script_dir/fix-rounds.sh" "$pr") \
@@ -78,7 +99,7 @@ issue=$("$script_dir/linked-issue.sh" "$pr") \
   || die "The ticket pull request #$pr closes could not be read, so who built it is not known."
 type=""
 if [ -n "$issue" ]; then
-  type=$(gh issue view "$issue" --json labels --jq '[.labels[].name] | map(select(. == "factory" or . == "research")) | first // ""') \
+  type=$(retry gh issue view "$issue" --json labels --jq '[.labels[].name] | map(select(. == "factory" or . == "research")) | first // ""') \
     || die "Issue #$issue could not be read from GitHub, so who built pull request #$pr is not known."
 fi
 tools="Read,Write,Edit,Glob,Grep,Bash"
@@ -116,7 +137,7 @@ elif [ "$retest" = true ]; then
   } > "$failures"
 elif [ -n "$workflow" ]; then
   counted="fresh-run:$workflow"; label="fix round for a fresh run"
-  message="A fix round for a fresh run: $name is merging the base into the branch. Its checks ran with a workflow the base no longer holds, in which no reviewer is given a token, and only a push starts a run with the one it holds now. Nothing else failed, so it is not one of the three fix rounds."
+  message="A fix round for a fresh run: $name is merging the base into the branch. Its checks ran with a workflow the base no longer holds, and only a push starts a run with the one it holds now. Nothing else failed, so it is not one of the three fix rounds."
 elif [ "$conflict" = true ]; then
   counted=conflict; label="fix round for a conflict"
   message="A fix round for a conflict: $name is fitting the branch to its base. Nothing else failed, so it is not one of the three fix rounds."
@@ -131,7 +152,7 @@ else
     echo "Then say in one pull request comment what the pull request waits for. The next merge to main starts a round that tests it again."
   } >> "$failures"
 fi
-gh pr comment "$pr" --body "$message$run_link" >/dev/null \
+retry gh pr comment "$pr" --body "$message$run_link" >/dev/null \
   || die "Could not say on pull request #$pr that a fix round has begun, so it was not begun."
 
 # Last, so that a pull request no round was begun for still waits for its owner.
@@ -139,11 +160,11 @@ gh pr comment "$pr" --body "$message$run_link" >/dev/null \
 # The label comes off with it: one retest for each time a pull request is labelled (decisions A368a).
 unmark=""
 [ "$marked" != true ] || unmark=waits-for-main
-gh pr edit "$pr" --remove-label needs-human ${unmark:+--remove-label "$unmark"} >/dev/null \
-  || die "Could not take needs-human off pull request #$pr, so no fix round was begun."
+retry gh pr edit "$pr" --remove-label needs-human ${unmark:+--remove-label "$unmark"} >/dev/null \
+  || not_begun "GitHub did not take the \`needs-human\` label off this pull request" "Could not take needs-human off pull request #$pr, so no fix round was begun."
 if [ -n "$requested" ] && [ -n "$issue" ]; then
-  gh issue edit "$issue" --remove-label needs-human --add-label in-progress >/dev/null \
-    || die "Could not mark issue #$issue as in progress again, so the owner's fix round on pull request #$pr was not begun."
+  retry gh issue edit "$issue" --remove-label needs-human --add-label in-progress >/dev/null \
+    || not_begun "GitHub did not mark ticket #$issue as in progress again" "Could not mark issue #$issue as in progress again, so the owner's fix round on pull request #$pr was not begun."
 fi
 
 {
@@ -153,6 +174,7 @@ fi
   echo "label=$label"
   echo "branch=$branch"
   echo "head=$head"
+  [ -z "$requested" ] || echo "review=$requested"
   echo "name=$name"
   echo "role=$role"
   echo "skill=$skill"

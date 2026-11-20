@@ -1,0 +1,1 @@
+- **An `in-progress` label no build holds is taken off by hand.** A pull request closed unmerged, or a runner that dies mid-build, leaves its ticket holding a place.

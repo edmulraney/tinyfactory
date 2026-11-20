@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Records a merged ticket's measures on the `sessions` branch, and prints a week's or a month's as a table of six.
+# Records a merged ticket's measures on the `sessions` branch, and prints a week's or a month's as a table of seven.
 # Usage: ticket-cost.sh --json <pr-number> | measures.sh record   writes the ticket's one line in measures.jsonl
 #        measures.sh --week <yyyy>-W<ww> [sessions-dir]           the tickets merged in that ISO week (UTC)
-#        measures.sh --month <yyyy-mm> [sessions-dir]             the tickets merged in that month (UTC)
+#        measures.sh --month <yyyy-mm> [sessions-dir]             the tickets merged in that month (UTC), and how many
+#                                                                 tickets were opened in it to cut each rule file
 #        sessions-dir is a checkout of the sessions branch; without one the record alone is downloaded.
 #        Needs GH_TOKEN (contents and issues: read); record needs contents: write, and GITHUB_REPOSITORY.
 set -euo pipefail
@@ -78,11 +79,27 @@ since=$(jq -rs --arg found "" "$from"'map(ready) | min | todate' <<<"$lines")
 found=$(naming "$since") \
   || die "Could not list the issues changed since $since, so the tickets opened from those merged in $period, and the bugs traced to them, are not known."
 
+# Decisions H476f.
+cuts=""
+if [[ "$period" != *W* ]]; then
+  cuts=$("$script_dir/cut-rule-files.sh" count "$period") \
+    || die "Could not count the tickets opened in $period to cut a rule file to its word budget, so the measures of $period are not printed."
+fi
+
+# Counted now, so a week recorded before the measure was added holds it too (decisions H481).
+conflict_rounds=0
+for pr in $(jq -r .pr <<<"$lines"); do
+  rounds=$("$script_dir/fix-rounds.sh" "$pr" conflict all) \
+    || die "Could not count the fix rounds for a conflict of pull request #$pr, so the measures of $period are not printed."
+  conflict_rounds=$((conflict_rounds + rounds))
+done
+
 # Decisions H246f.
-jq -rs --arg period "$period" --arg found "$found" "$from"'
+jq -rs --arg period "$period" --arg found "$found" --argjson conflict_rounds "$conflict_rounds" "$from"'
   def plural(word): "\(.) \(word)" + (if . == 1 then "" else "s" end);
   def mean(f): (map(f) | add) / length;
   def tenth: (. * 10 | round) / 10;
+  def hundredth: (. * 100 | round) / 100;
   def dollars: (. * 100 | round) as $cents
     | "$\($cents / 100 | floor).\($cents % 100 | tostring | if length < 2 then "0" + . else . end)";
   def took: (. / 60 | round) as $m
@@ -93,20 +110,22 @@ jq -rs --arg period "$period" --arg found "$found" "$from"'
   | ($all | map(select(.seconds != null))) as $timed
   | ($all | map(.unread // 0) | add) as $unread
   | ($all | map(select(.fix_rounds + .owner_rounds == 0)) | length) as $clean
-  | "The six measures for \($period), over \($n | plural("merged ticket")):",
+  | "The seven measures for \($period), over \($n | plural("merged ticket")):",
     "",
     "| Measure | Figure |",
     "|---|---|",
     "| Cost per ticket | \($all | mean(.cost_usd) | dollars) of Claude usage at API prices and \($all | mean(.minutes) | round) Actions minutes"
-      + (if $unread == 0 then "" else "; \($unread | plural("transcript")) could not be read, so the usage is more" end) + " |",
+      + (if $unread == 0 then "" else "; \($unread | plural("transcript")) gave no cost, so the usage is more" end) + " |",
     "| Time to merge | "
       + (if ($timed | length) == 0 then "not known: no ticket was labelled `ready`"
          else "\($timed | mean(.seconds) | took): \($timed | mean(.split.build) | took) building, \($timed | mean(.split.review) | took) in review, "
            + "\($timed | mean(.split.fix) | took) in fix rounds, \($timed | mean(.split.waiting) | took) waiting"
            + (if ($timed | length) == $n then "" else ", over the \($timed | length) labelled `ready`" end) end) + " |",
     "| Passing with no fix round | \($clean) of \($n) (\($clean * 100 / $n | round)%) |",
+    "| Fix rounds for a conflict per merged pull request | \($conflict_rounds / $n | hundredth): \($conflict_rounds | plural("round")) over \($n | plural("merged pull request")) |",
     "| Stops for a person per ten tickets | \($all | mean(.stops // 0) * 10 | tenth) |",
     "| Tickets opened per merge | \($all | mean(.opened | length) | tenth) |",
     "| Bugs traced to a ticket | \($all | map(.bugs | length) | add)"
       + ($all | map(select(.bugs != []) | (.bugs | map("#\(.)") | join(", ")) + " to #\(.issue)") | if . == [] then "" else ": " + join("; ") end) + " |"
 ' <<<"$lines"
+[ -z "$cuts" ] || printf '\nTickets opened in %s to cut a rule file to its word budget:\n\n%s\n' "$period" "$(sed -E 's/^([0-9]+) (.*)$/- `\2`: \1/' <<<"$cuts")"

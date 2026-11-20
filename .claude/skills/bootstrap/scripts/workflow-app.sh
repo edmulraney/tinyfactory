@@ -8,8 +8,10 @@
 # .github/workflows/ once the owner has approved it. A workflow's own token cannot write a
 # workflow file, so that one step asks this app for a token, which lasts an hour.
 # Why an app and not a token of the owner's: decisions W5.
-# Safe to re-run: skips when the secret and the variables exist (FORCE=1 makes a new app; delete
-# the old one at https://github.com/settings/apps).
+# Where GitHub locks main with the ruleset github.sh sets (a public repo, or a paid plan), it also
+# puts the app on that ruleset's bypass list, or the installer's push would be refused (decisions S385c).
+# Safe to re-run: skips making an app when the secret and the variables exist (FORCE=1 makes a new
+# app; delete the old one at https://github.com/settings/apps), and still checks the bypass list.
 # Usage: workflow-app.sh [name]   (name defaults to the directory name; run after github.sh)
 set -euo pipefail
 
@@ -18,6 +20,27 @@ owner=$(gh api user --jq .login)
 repo="$owner/$name"
 api="https://api.github.com"
 
+# pass_ruleset <slug>: puts the app on the bypass list of the ruleset on main, when there is one.
+pass_ruleset() {
+  local rulesets id app ruleset
+  if ! rulesets=$(gh api "repos/$repo/rulesets" 2>&1); then
+    # GitHub answers 403 where the plan has no rulesets, so main has none (free-tier entry 7).
+    grep -q 'HTTP 403' <<<"$rulesets" && return 0
+    echo "cannot read the rulesets of $repo, so the app may be refused on main; re-run: $rulesets"; exit 1
+  fi
+  id=$(jq -r '[.[] | select(.name == "main is merge-only")][0].id // empty' <<<"$rulesets")
+  [ -n "$id" ] || return 0
+  app=$(gh api "apps/$1" --jq .id) || { echo "cannot read the id of the app '$1'; re-run"; exit 1; }
+  ruleset=$(gh api "repos/$repo/rulesets/$id") || { echo "cannot read the ruleset on main of $repo; re-run"; exit 1; }
+  if jq -e --argjson app "$app" 'any(.bypass_actors[]?; .actor_type == "Integration" and .actor_id == $app)' <<<"$ruleset" >/dev/null; then
+    return 0
+  fi
+  jq --argjson app "$app" '{bypass_actors: ((.bypass_actors // []) + [{actor_id: $app, actor_type: "Integration", bypass_mode: "always"}])}' <<<"$ruleset" \
+    | gh api -X PUT "repos/$repo/rulesets/$id" --input - >/dev/null \
+    || { echo "cannot put the app '$1' on the bypass list of the ruleset on main of $repo, so its push would be refused; re-run"; exit 1; }
+  echo "the ruleset on main lets '$1' push: the installer's commit is not refused"
+}
+
 # Read on their own lines so that a login that cannot read them stops here, before an app is made.
 secrets=$(gh secret list -R "$repo" --json name --jq '.[].name') \
   || { echo "cannot read the secrets of $repo: sign in to gh as an admin of the repo and re-run"; exit 1; }
@@ -25,6 +48,8 @@ variables=$(gh variable list -R "$repo" --json name --jq '.[].name') \
   || { echo "cannot read the variables of $repo: sign in to gh as an admin of the repo and re-run"; exit 1; }
 if [ "${FORCE:-}" != 1 ] && grep -qx WORKFLOW_APP_PRIVATE_KEY <<<"$secrets" \
   && grep -qx WORKFLOW_APP_CLIENT_ID <<<"$variables" && grep -qx WORKFLOW_APP_SLUG <<<"$variables"; then
+  slug=$(gh variable get WORKFLOW_APP_SLUG -R "$repo") || { echo "cannot read the variable WORKFLOW_APP_SLUG of $repo; re-run"; exit 1; }
+  pass_ruleset "$slug"
   echo "workflow app ok: secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG already set (FORCE=1 to replace them)"
   exit 0
 fi
@@ -160,4 +185,5 @@ gh variable set WORKFLOW_APP_CLIENT_ID -R "$repo" --body "$client_id"
 gh variable set WORKFLOW_APP_SLUG -R "$repo" --body "$slug"
 printf '%s\n' "$pem" | gh secret set WORKFLOW_APP_PRIVATE_KEY -R "$repo"
 stored=1
+pass_ruleset "$slug"
 echo "workflow app ok: '$slug' is installed on $repo only and may write contents and workflows; secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG stored"

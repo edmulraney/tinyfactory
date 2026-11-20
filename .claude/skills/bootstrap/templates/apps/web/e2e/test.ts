@@ -5,7 +5,7 @@ import { expect, test as base } from "@playwright/test";
 // Every test that opens a page then ends with an accessibility scan of what it left on screen,
 // so each screen a ticket builds is checked without anyone remembering to. It fails only on
 // problems rated serious or critical against WCAG 2 A and AA: unreadable contrast, a control
-// with no name, an image with no text. Why it is here from day one: factory/decisions.md.
+// with no name, an image with no text. Why it is here from day one: decisions D6.
 export const test = base.extend<{ accessibility: void }>({
   accessibility: [
     async ({ page }, use, testInfo) => {

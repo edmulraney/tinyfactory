@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 # Flags for a person each ticket in flight that no run is working on and nothing has touched for an hour.
 # Usage: flag-idle.sh   (by flag-idle.yml, on its schedule)
-#        Needs GH_TOKEN (actions: write; pull-requests: read; issues: write) and GITHUB_REPOSITORY, or a checkout gh can read.
+#        First it starts again what the Claude usage limit held, once the limit has reset, and then flags nothing.
+#        Needs GH_TOKEN (actions and contents: write; pull-requests: read; issues: write) and GITHUB_REPOSITORY, or a checkout gh can read.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1, so nothing was flagged." >&2; exit 1; }
+
+# While the usage limit holds every agent nothing works on a ticket, and what this look starts again has no run yet (decisions A395e).
+limit=$("$script_dir/usage-limit.sh" resume) || die "What the Claude usage limit held could not all be started again"
+if [ -n "$limit" ]; then
+  echo "$limit"
+  echo "Nothing was flagged: what the usage limit held is not idle."
+  exit 0
+fi
 
 # Longer than any gap between two runs of a ticket that is being worked on (decisions T271b).
 idle_minutes=60
@@ -26,7 +35,7 @@ for state in queued in_progress waiting requested pending; do
   running+="$runs"$'\n'
 done
 # Only a `ci` run names its pull request's branch: a run of the others stands for every ticket (decisions T271c).
-any=$(awk '$1 == "implement" || $1 == "fix" || $1 == "approve-merge" || $1 == "rerun-fits-main" { print $1; exit }' <<<"$running")
+any=$(awk '$1 == "implement" || $1 == "fix" || $1 == "approve-merge" || $1 == "merge-group" { print $1; exit }' <<<"$running")
 
 # All is read before anything is flagged, so a failed read leaves no ticket flagged and another not.
 to_flag=""
@@ -35,6 +44,11 @@ while IFS= read -r line; do
   what=${line#* }
   if [ "$ticket" = - ]; then
     echo "left: $what"
+    continue
+  fi
+  # A ticket that waits with ready for a place is started by start-waiting.sh (decisions T505a).
+  if [[ "$what" == "#$ticket (waiting with ready; "* ]]; then
+    echo "left: #$ticket waits with ready for a place"
     continue
   fi
   about=${what#*(}

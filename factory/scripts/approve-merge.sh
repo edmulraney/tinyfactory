@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Ships a pull request the repo's owner approved, once its checks passed for that commit: approve-merge.yml runs it.
+# Makes a pull request the repo's owner approved wait to merge, once its checks passed for that commit.
 # Usage: approve-merge.sh <pr-number> <owner-login>
-#        Needs what ship.sh needs: GH_TOKEN, PRODUCTION_URL and, when set, BOARD_TOKEN.
+#        Needs GH_TOKEN (pull-requests, issues and actions: write).
 set -euo pipefail
 
 pr="$1"; owner="$2"
@@ -12,7 +12,7 @@ view=$(retry gh pr view "$pr" --json state,headRefOid,reviews) \
   || not_merged "GitHub did not return this pull request, so its approval could not be checked"
 if [ "$(jq -r .state <<<"$view")" != OPEN ]; then echo "pull request #$pr is not open; nothing to do"; exit 0; fi
 head=$(jq -r .headRefOid <<<"$view")
-# A push after the approval needs a fresh one.
+# A commit pushed after the approval is the merge gate's to judge (decisions M456a).
 approved=$(jq -r --arg owner "$owner" --arg head "$head" \
   '[.reviews[] | select(.author.login == $owner)] | last | (.state == "APPROVED" and .commit.oid == $head)' <<<"$view")
 if [ "$approved" != true ]; then echo "the owner has not approved commit ${head:0:7}; nothing to do"; exit 0; fi
@@ -40,4 +40,4 @@ case "$checks" in
   *) not_passed "ci: ${checks:-none has finished}" ;;
 esac
 
-exec "$script_dir/ship.sh" "$pr" "$head"
+exec "$script_dir/merge-queue.sh" add "$pr" "$head"

@@ -167,8 +167,8 @@ job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 
 # condition <job> <step>: the `if:` of the step that runs this command.
 condition() { job "$1" | grep -B1 -xF -- "        run: $2" | sed -n 's/^      - if: //p'; }
 
-scenario "ci.yml asks it in checks and in fits-main, before any check it decides, and lint runs whatever it says"
-for asking in checks fits-main; do
+scenario "ci.yml asks it in checks, before any check it decides, and lint runs whatever it says"
+for asking in checks; do
   checks_needed_line=$(job "$asking" | grep -n 'run: factory/scripts/checks-needed.sh' | cut -d: -f1)
   [ -n "$checks_needed_line" ] || { fail "the $asking job does not ask checks-needed.sh"; continue; }
   job "$asking" | grep -F 'run: factory/scripts/checks-needed.sh' | grep -qF '>> "$GITHUB_OUTPUT"' \
@@ -177,10 +177,10 @@ for asking in checks fits-main; do
     [ "$(condition "$asking" "$check")" = "steps.needed.outputs.app != 'false'" ] \
       || fail "expected \"$check\" in $asking to run on anything but a plain app=false, got: $(condition "$asking" "$check")"
   done
-  [ "$(condition "$asking" factory/scripts/test-factory.sh)" = "steps.needed.outputs.factory != 'false'" ] \
+  [ "$(condition "$asking" "factory/scripts/test-factory.sh HEAD^1")" = "steps.needed.outputs.factory != 'false'" ] \
     || fail "expected the factory's tests in $asking to run on anything but a plain factory=false"
   job "$asking" | grep -qxF '      - run: pnpm lint' || fail "expected $asking to run pnpm lint with no condition"
-  for check in "pnpm typecheck" factory/scripts/test-factory.sh "pnpm -r test" "pnpm build"; do
+  for check in "pnpm typecheck" "factory/scripts/test-factory.sh HEAD^1" "pnpm -r test" "pnpm build"; do
     at=$(job "$asking" | grep -n -xF -- "        run: $check" | cut -d: -f1)
     [ -n "$at" ] && [ "$at" -gt "$checks_needed_line" ] || fail "expected \"$check\" in $asking after the step that asks"
   done
@@ -188,15 +188,15 @@ for asking in checks fits-main; do
   ! job "$asking" | grep -qE 'run: pnpm test$' || fail "expected $asking to run the two halves of pnpm test apart"
 done
 
-scenario "ci.yml gives it main's commit: the merge's first parent in checks, the commit it merged in fits-main"
+scenario "ci.yml gives it, and the factory's tests, main's commit: the first parent of the merge commit checks runs on"
 job checks | grep -qxF '        run: factory/scripts/checks-needed.sh HEAD^1 >> "$GITHUB_OUTPUT"' \
   || fail "expected checks to compare with the first parent of GitHub's merge commit"
+# With no commit test-factory.sh runs every test file, whatever changed (decisions H429a).
+job checks | grep -qxF '        run: factory/scripts/test-factory.sh HEAD^1' \
+  || fail "expected the factory's tests in checks to be given the first parent of GitHub's merge commit"
 # Without the parents in the checkout the comparison fails and every check runs, every time.
 job checks | grep -A2 -xF '      - uses: actions/checkout@v4' | grep -qxF '          fetch-depth: 2' \
   || fail "expected the checkout of checks to fetch the merge commit's parents"
-job fits-main | grep -qxF '        run: factory/scripts/checks-needed.sh "$MAIN" >> "$GITHUB_OUTPUT"' \
-  || fail "expected fits-main to compare with the commit of main it merged"
-job fits-main | grep -qxF '          MAIN: ${{ steps.main.outputs.sha }}' || fail "expected fits-main to pass the commit its merge step noted"
 
 scenario "the two halves ci.yml runs are the whole of pnpm test"
 [ "$(jq -r .scripts.test "$root/package.json")" = "factory/scripts/test-factory.sh && pnpm -r test" ] \

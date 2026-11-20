@@ -1,0 +1,1 @@
+| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `bootstrap` |

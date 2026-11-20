@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
-# Counts a fix round after the engineer's step, when that step left an execution file, and flags one that never ran.
-# Usage: record-fix-round.sh <pr-number> <execution-file> [counted] [head]
+# Counts a fix round after the engineer's step, unless the usage limit ended its session, and flags one that never ran.
+# Usage: record-fix-round.sh <pr-number> <execution-file> [counted] [head] [review]
 #        <execution-file>  the one the engineer's step, or its last continuation, left; may be empty.
 #        [counted]         what begin-fix-round.sh wrote: `false`, `conflict`, `retest` and `fresh-run:<id>` leave a round uncounted.
 #        [head]            the commit the round began with, also from begin-fix-round.sh.
+#        [review]          the id of the owner's review the owner's round was begun for, also from begin-fix-round.sh.
 #        Needs GH_TOKEN (pull-requests and issues: write) and, for the owner's round, flag-ticket.sh.
 set -euo pipefail
 
-pr="${1:?Usage: record-fix-round.sh <pr-number> <execution-file> [counted]}"; file="${2:-}"; counted="${3:-true}"; head="${4:-}"
+pr="${1:?Usage: record-fix-round.sh <pr-number> <execution-file> [counted]}"; file="${2:-}"; counted="${3:-true}"; head="${4:-}"; review="${5:-}"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 die() { echo "$1" >&2; exit 1; }
 
 # A round that never ran leaves no count behind (decisions A89c).
 if [ -n "$file" ] && [ -s "$file" ]; then
+  # Nor does one the Claude usage limit ended: the limit refused the attempt, and no marker of any kind is written (decisions A395d).
+  if [ "$("$script_dir/session-ending.sh" "$file")" = usage_limit ]; then
+    echo "the Claude usage limit ended the fix round on pull request #$pr: it is not counted"
+    exit 0
+  fi
   # The owner asking again is a decision, not a loop, and its marker gets a retro (decisions A48a, A48d).
   if [ "$counted" = false ]; then
-    gh pr comment "$pr" --body "<!-- factory:owner-round -->The owner's fix round: the engineer's session ran. It is not one of the three fix rounds." >/dev/null \
+    # Its marker names the review: a request gets one such round, and a later request its own (decisions A396b).
+    gh pr comment "$pr" --body "<!-- factory:owner-round ${review:+$review }-->The owner's fix round: the engineer's session ran. It is not one of the three fix rounds." >/dev/null \
       || die "The owner's fix round on pull request #$pr ran, but could not be recorded: the comment that records it could not be posted."
     echo "the owner's fix round ran on pull request #$pr: it is recorded, and not counted"
     exit 0

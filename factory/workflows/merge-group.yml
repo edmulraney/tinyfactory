@@ -1,0 +1,175 @@
+# Tests the pull requests that wait to merge with main, one group at a time, and merges those that pass.
+name: merge-group
+
+on:
+  # merge-queue.sh starts it for each pull request it adds, and ship.sh to test a group again (decisions M455a).
+  workflow_dispatch:
+    inputs:
+      try:
+        description: Which test of the group this is after a fault. Leave it at 1.
+        default: '1'
+
+# One group at a time, so nothing else moves main while one is tested. A run that waits takes every pull request
+# added since, so the one GitHub keeps waiting is enough (decisions M22).
+concurrency:
+  group: merge-group
+
+jobs:
+  begin:
+    runs-on: ubuntu-latest
+    # Five minutes of it are the wait for a merged workflow change to be installed (decisions M455f).
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: write   # to see that a pull request's own checks already tested it with this main (decisions M17), and to start the retro
+    outputs:
+      main: ${{ steps.group.outputs.main }}
+      group: ${{ steps.group.outputs.group }}
+      test: ${{ steps.group.outputs.test }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main as it is when the run starts, not as it was when the run was asked for.
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Which pull requests wait to merge, and do they need a test?
+        id: group
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/begin-group.sh "$RUNNER_TEMP/group.json" >> "$GITHUB_OUTPUT"
+      - name: Keep the result of a group that needs no test
+        if: steps.group.outputs.group != '' && steps.group.outputs.test == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: group-result
+          path: ${{ runner.temp }}/group.json
+          retention-days: 7
+          overwrite: true   # a run started again records the same name
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 10   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1
+
+  test:
+    needs: begin
+    if: needs.begin.outputs.test == 'true'
+    runs-on: ubuntu-latest
+    # The checks once for the group and, when they fail, once more for each pull request in it.
+    timeout-minutes: 60
+    # It runs the pull requests' code, so it may read the repo and nothing else, and is given no secret (decisions M20).
+    # It can start no retro: without its result the merge job fails, and starts the run's (decisions M455i).
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.begin.outputs.main }}
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      # Pushed nowhere, so each pull request stays the commit that was reviewed and approved (decisions M16).
+      - name: Apply each pull request to main as its merge would, and run the checks on the result
+        env:
+          GROUP: ${{ needs.begin.outputs.group }}
+        # The scripts run as main has them, not as the pull requests leave them in the checkout.
+        run: |
+          cp -R factory/scripts "$RUNNER_TEMP/scripts"
+          # shellcheck disable=SC2086
+          "$RUNNER_TEMP/scripts/test-group.sh" "$RUNNER_TEMP/group.json" $GROUP
+      - name: Keep the result
+        uses: actions/upload-artifact@v4
+        with:
+          name: group-result
+          path: ${{ runner.temp }}/group.json
+          retention-days: 7
+          overwrite: true   # a run started again records the same name
+
+  merge:
+    needs: [begin, test]
+    # A status function, or a test that was skipped or failed would skip this job, which tells the group (decisions M30).
+    # A begin job that failed began no group: this job starts the run again, or asks a person (decisions M455j).
+    if: ${{ !cancelled() && (needs.begin.result != 'success' || needs.begin.outputs.group != '') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write   # to start a fix round, the installer, a retro and the next group
+      statuses: read   # to see that Vercel skipped a deployment (decisions M33)
+      checks: read     # to read why a job never started, and run it again if for billing (decisions H386a)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # main's copy of the scripts: this job runs nothing of a pull request's.
+          ref: ${{ github.event.repository.default_branch }}
+      # No result is not a pass: ship.sh then merges nothing, and starts the test of the group again.
+      - name: Fetch what the test found
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: group-result
+          path: ${{ runner.temp }}
+      - name: Merge those that passed, and send back those that did not
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets apply-setup.sh re-run a changed board.sh, and start-waiting.sh read the order of the board
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+          GROUP: ${{ needs.begin.outputs.group }}
+          TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)
+        run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '"$RUNNER_TEMP/group.json" $GROUP' || '--not-begun' }}
+      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
+      - name: Tell whether this job stopped at its time limit
+        id: limit
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LIMIT_MINUTES: 20   # this job's timeout-minutes
+        run: |
+          started=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n "$started" ] || {
+            echo "Could not read from GitHub when this job started, so whether it stopped at its time limit is not known." >&2
+            exit 1
+          }
+          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
+          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          echo "this job ran into minute $minutes of $LIMIT_MINUTES"
+          [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
+      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
+      - name: Start a retro when this job failed
+        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for _ in 1 2 3; do
+            if gh workflow run retro.yml -f run="$GITHUB_RUN_ID"; then exit 0; fi
+            sleep 20
+          done
+          exit 1

@@ -1,0 +1,8 @@
+### 15. Nothing runs on a draft pull request
+
+- **Set:** the jobs in `ci.yml` that need no other (`checks` and `e2e`) each carry the condition `github.event.pull_request.draft == false`, and every other job depends on them, so a run for a draft skips every job. Marking the pull request ready raises `ready_for_review`, already one of the workflow's triggers, and that run does everything (ticket #50; `decisions.md` [A50c](../decisions/50.md)).
+- **Protects:** Actions minutes, and Claude usage.
+- **Why:** an engineer now opens the pull request as a draft when the build starts, so that the board shows the ticket in progress (`decisions.md` [T50a](../decisions/50.md)). A draft holds an empty commit and a one-line description, so its checks would fail.
+- **Numbers:** a skipped job is billed nothing, so a ticket stays at 9 minutes. Without the condition the draft's first push would run `checks` (1 minute, failing on the description), then `start-fix` (1 minute), which would ask for a fix round on a build still going: 2 minutes a ticket at the least, about 220 tickets a month becoming about 180. `start-fix-round.sh` refuses a draft as well (`decisions.md` [A50b](../decisions/50.md)), for a draft checked by a `ci.yml` older than this entry.
+- **Vercel and Neon:** the draft's empty first commit is one more push to the branch. Vercel skips a commit that changes nothing it builds (`decisions.md` [M33](../decisions/67.md)), and by 17 November 2026 it had skipped this one on every draft ("Skipped - Not affected", ticket #123), so a ticket still uses 2 of the 100 deployments a day and holds none of Neon's 9 preview slots ([entry 8](entry-8.md)) before its first real push.
+- **Automated:** yes.

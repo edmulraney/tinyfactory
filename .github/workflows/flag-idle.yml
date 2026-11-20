@@ -1,4 +1,4 @@
-# Four times a day, runs again the jobs refused for billing, then flags each ticket in flight nothing works on.
+# Four times a day, runs again the jobs refused for billing or held by the usage limit, then flags each idle ticket.
 name: flag-idle
 
 on:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      contents: read
+      contents: write       # to lift the hold of the Claude usage limit once it has reset (decisions A395e)
       issues: write         # to flag a ticket and tell it what was found
       pull-requests: read   # to see which tickets are in flight
       actions: write        # to run a refused run again (decisions H220a)
@@ -23,7 +23,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: factory/scripts/rerun-refused.sh
       # A refused run that could not be read or run again hides no idle ticket (decisions T271f).
-      - name: Flag each ticket in flight that nothing is working on
+      - name: Start again what the usage limit held, or flag each ticket in flight that nothing is working on
         if: ${{ !cancelled() }}
         env:
           GH_TOKEN: ${{ github.token }}

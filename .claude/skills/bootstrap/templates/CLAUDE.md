@@ -59,7 +59,7 @@ A decision with no written reason is not finished. If the right place is off lim
 ## Off limits
 
 - **The factory's files:** `.claude/`, `.github/`, `factory/`. Only a `factory` ticket changes them, and only **Fred** builds one. His pull request merges once both reviewers pass it, unless it changes what only the owner decides (`factory/scripts/owner-decides.sh`), which waits for their approval:
-  - **spend or limits:** a model, effort, turn limit or timeout, a free plan's limit, the tickets in flight;
+  - **spend or limits:** a model, effort, turn limit or timeout, the tickets in flight;
   - **secrets or permissions:** a `permissions:` block, a secret, a token or key script, the tools or bots an agent may use;
   - **this rule:** the scripts that decide the hold.
 - **The product's bar:** `TASTE.md`, `DESIGN.md`, the design theme (`globals.css`, `components.json`), and lint, TypeScript and test configuration (including `e2e/test.ts`). **Esme** changes one when her ticket asks for it. Whoever changes one, the pull request waits for the owner.
@@ -68,4 +68,4 @@ A decision with no written reason is not finished. If the right place is off lim
 
 ## Every change is a ticket
 
-When the owner asks for something, do not make the change yourself. Write the ticket of the right type (the `ticket` skill) and start it (the `promote` skill); the factory builds it. That holds for the product and for the factory, workflows included. The two exceptions are a setup step that needs the owner's own logins, and a hand step to unstick the factory, as the `operate` skill limits it (`factory/decisions.md` A120b).
+When the owner asks for something, do not make the change yourself. Write the ticket of the right type (the `ticket` skill) and start it (the `promote` skill); the factory builds it. That holds for the product and for the factory, workflows included. The two exceptions are a setup step that needs the owner's own logins, and a hand step to unstick the factory, as the `operate` skill limits it (`factory/decisions.md` [A120b](factory/decisions/120.md)).

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Checks that the free-tier log, and each ticket's file of entries beside it, keep their shape (decisions H105c, H130e).
+# Checks the shape of the free-tier log: its own file and each file of the folder beside it (decisions H105c, H483).
 # Usage: check-free-tier.sh [file]   (from the repo root; default: factory/free-tier.md)
 set -euo pipefail
 
@@ -20,14 +20,10 @@ if git rev-parse --git-dir >/dev/null 2>&1 \
   # shellcheck disable=SC2086
   git fetch --quiet $depth origin "$branch" 2>/dev/null && tip=$(git rev-parse FETCH_HEAD) || tip=""
 fi
-# A log main does not hold has no numbered entry: all of them are new.
+# The log main holds, in its own file or the folder: one that holds no numbered entry makes all of them new.
 held=""
 if [ -n "$tip" ]; then
-  held=$(git show "$tip:./$file" 2>/dev/null | awk '
-    { sub(/\r$/, "") }
-    /^## / { in_log = $0 == "## Log" }
-    in_log && /^### [1-9][0-9]*\. / { count++ }
-    END { print count + 0 }' || true)
+  held=$(git grep -h -E '^### [1-9][0-9]*\. ' "$tip" -- "$file" "$folder" 2>/dev/null | awk 'END { print NR }' || true)
 else
   echo "origin/$branch could not be read, so the numbered entries were not checked for a new one"
 fi
@@ -39,12 +35,15 @@ if [ -d "$folder" ]; then
   for entry in "$folder"/*; do
     if [ -f "$entry" ] && [ ! -s "$entry" ]; then
       # awk never opens an empty file, so it is refused here.
-      echo "$entry: a ticket's file holds at least one entry"
+      echo "$entry: this file is empty, and a file here holds entries or a section of the log"
+      failed=1
+    elif [ -f "$entry" ] && [[ "$entry" != *.md ]]; then
+      echo "$entry: a file here is named \"<name>.md\", and free-tier.sh prints no other, so this one would be left out of the log"
       failed=1
     elif [ -f "$entry" ]; then
       set -- "$@" "$entry"
     elif [ -e "$entry" ]; then
-      echo "$entry: only the files of tickets belong beside the log, and this is no file"
+      echo "$entry: only files belong beside the log, and this is no file"
       failed=1
     fi
   done
@@ -76,68 +75,56 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
   # Before the first line of each file: the entry the last file ended with, and that file itself.
   function close_file() {
     close_entry("")
-    if (ticket != "" && entries == 0) { print previous_file ": a ticket'"'"'s file holds at least one entry"; bad = 1 }
+    if ((kind == "ticket" || kind == "numbered") && entries == 0) { print previous_file ": this file holds no entry"; bad = 1 }
   }
   { sub(/\r$/, "") }
   FNR == 1 {
     close_file()
     previous_file = FILENAME
     blank = 0
-    in_log = 0
     entries = 0
-    ticket = ""
-    if (FILENAME != file) {
-      # A file in the folder is named for the ticket whose entry it holds.
-      ticket = substr(FILENAME, length(folder) + 2)
-      if (ticket ~ /^[1-9][0-9]*\.md$/) sub(/\.md$/, "", ticket)
-      else {
-        problem(FNR, "a file here holds one ticket'"'"'s entry and is named for it, like \"62.md\"")
-        ticket = "?"
-      }
+    # A file of the folder is named for what it holds: a ticket, a numbered entry, or a section.
+    name = FILENAME == file ? "" : substr(FILENAME, length(folder) + 2)
+    owner = name
+    gsub(/[^0-9]/, "", owner)
+    if (name == "") kind = "frame"
+    else if (name ~ /^[1-9][0-9]*\.md$/) kind = "ticket"
+    else if (name ~ /^entry-[1-9][0-9]*\.md$/) {
+      kind = "numbered"
+      numbered[owner + 0] = 1
+      if (owner + 0 > highest) highest = owner + 0
+    } else {
+      kind = "section"
+      if (!($0 in sections) || $0 == "## Log")
+        problem(FNR, "a file named for no ticket (\"62.md\") and no numbered entry (\"entry-8.md\") holds a section of the log other than Log, and starts with its heading, as it is in " file)
+      else if ($0 in holder) problem(FNR, "the section \"" $0 "\" is already in " holder[$0])
+      else holder[$0] = FILENAME
+      next
     }
   }
 
-  # The log'"'"'s own file: the entries numbered in order, under "## Log".
-  FILENAME == file && /^## / {
-    close_entry("")
-    in_log = $0 == "## Log"
-    if (in_log) found = 1
-  }
-  FILENAME == file && in_log && /^### #[1-9][0-9]*[a-z]?\. / {
-    id = $2
-    sub(/\.$/, "", id)
-    close_entry(id)
-    number = id
-    gsub(/[^0-9]/, "", number)
-    problem(FNR, "entry " id " is named after its ticket, so it goes in " folder "/" number ".md, and this file holds only the entries numbered in order")
-    open_entry(id)
+  # The log'"'"'s own file: how an entry is written, then the headings of its sections (decisions H483).
+  kind == "frame" {
+    if (/^## /) { sections[$0] = 1; in_sections = 1; reported = 0 }
+    else if (in_sections && !reported && $0 !~ /^[ \t]*$/) {
+      problem(FNR, "this file holds only how an entry is written and the headings of the log, and this line goes in a file of " folder "/: " substr($0, 1, 60))
+      reported = 1
+    }
     next
   }
-  FILENAME == file && in_log && /^###/ {
-    number = ""
-    if ($0 ~ /^### [1-9][0-9]*\. [^ ]/) { number = $2; sub(/\.$/, "", number) }
-    close_entry(number == "" ? "one with no number" : number)
-    if (number == "") problem(FNR, "a heading under Log is \"### <n>. <title>\", and this is not: " substr($0, 1, 60))
-    else {
-      count++
-      if (number != previous + 1)
-        problem(FNR, "entry " number " follows " (previous == 0 ? "the Log heading" : "entry " previous) ", and should be entry " (previous + 1) ": entries count 1, 2, 3 with no gap or repeat")
-      # An entry main does not hold is named after the ticket that adds it (decisions H132b).
-      else if (held != "" && number + 0 > held + 0)
-        problem(FNR, "entry " number " is new, and a new entry is named after the ticket that adds it: it goes in " folder "/<ticket>.md, headed \"### #<ticket>. <title>\"; decisions H132a")
-      previous = number
-    }
-    open_entry(number == "" ? "?" : number)
+  kind == "section" {
+    if (/^#+ /) problem(FNR, "a section'"'"'s file holds its one heading, on its first line, and this is another: " substr($0, 1, 60))
     next
   }
 
-  # A ticket'"'"'s file: its entries, and nothing else.
-  FILENAME != file && /^#+ / {
+  # A file of entries: a ticket'"'"'s, or the one entry numbered in order that it is named for.
+  /^#+ / {
     id = ""
-    if ($0 ~ /^### #[1-9][0-9]*[a-z]?\. [^ ]/) { id = $2; sub(/\.$/, "", id) }
+    if ($0 ~ (kind == "ticket" ? "^### #[1-9][0-9]*[a-z]?\\. [^ ]" : "^### [1-9][0-9]*\\. [^ ]")) { id = $2; sub(/\.$/, "", id) }
     close_entry(id == "" ? "one with no name" : id)
     if (id == "") {
-      problem(FNR, "a heading in a ticket'"'"'s file is \"### #<ticket>. <title>\", and this is not: " substr($0, 1, 60))
+      if (kind == "ticket") problem(FNR, "a heading in a ticket'"'"'s file is \"### #<ticket>. <title>\", and this is not: " substr($0, 1, 60))
+      else problem(FNR, "the heading in " name " is \"### " owner ". <title>\", and this is not: " substr($0, 1, 60))
       open_entry("?")
       next
     }
@@ -145,10 +132,17 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     entries++
     number = id
     gsub(/[^0-9]/, "", number)
-    if (ticket != "?" && number != ticket)
-      problem(FNR, "entry " id " is named after ticket #" number ", and " ticket ".md holds the entries of ticket #" ticket " (#" ticket ", or #" ticket "a, #" ticket "b for several)")
+    if (number != owner && kind == "ticket")
+      problem(FNR, "entry " id " is named after ticket #" number ", and " name " holds the entries of ticket #" owner " (#" owner ", or #" owner "a, #" owner "b for several)")
+    else if (number != owner)
+      problem(FNR, "entry " id " does not belong in " name ", which is named for entry " owner)
     else if (id in used) problem(FNR, "entry " id " is already at " used[id])
-    else used[id] = FILENAME ":" FNR
+    else {
+      used[id] = FILENAME ":" FNR
+      # An entry main does not hold is named after the ticket that adds it (decisions H132b).
+      if (kind == "numbered" && held != "" && number + 0 > held + 0)
+        problem(FNR, "entry " number " is new, and a new entry is named after the ticket that adds it: it goes in " folder "/<ticket>.md, headed \"### #<ticket>. <title>\"; decisions H132a")
+    }
     open_entry(id)
     next
   }
@@ -159,10 +153,12 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     if ($0 ~ /^- \*\*Automated:\*\*/) automated++
     next
   }
-  FILENAME != file { problem(FNR, "only entries belong in a ticket'"'"'s file, and this line is in none: " substr($0, 1, 60)) }
+  { problem(FNR, "only entries belong in this file, and this line is in none: " substr($0, 1, 60)) }
   END {
     close_file()
-    if (!found) { print file ": there is no \"## Log\" section"; bad = 1 }
+    if (!("## Log" in sections)) { print file ": there is no \"## Log\" section"; bad = 1 }
+    for (number = 1; number < highest; number++)
+      if (!(number in numbered)) { print folder "/entry-" number ".md: there is no such file, and the numbered entries count 1, 2, 3 with no gap"; bad = 1 }
     if (!bad && !failed) print "free-tier log ok: " (count + 0) " entries"
     exit bad
   }' "$@" || failed=1

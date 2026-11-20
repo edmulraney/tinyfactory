@@ -147,9 +147,7 @@ expect_no_call "gh"
 # job <name>: the lines of that job in ci.yml.
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
 needs() { job "$1" | sed -n 's/^    needs: //p'; }
-draft="github.event.pull_request.draft == false"
 
-# A change to the order must fail here: a review that waits for `checks` again costs every run its length (decisions A2).
 scenario "ci.yml asks it in the e2e job, which waits for no job and runs no test on a plain false"
 job e2e | grep -qF 'run: factory/scripts/needs-e2e.sh "$PR" >> "$GITHUB_OUTPUT"' || fail "the e2e job of ci.yml does not write its answer to the step's outputs"
 [ -z "$(needs e2e)" ] || fail "expected e2e to need no job, got: $(needs e2e)"
@@ -162,35 +160,4 @@ for step in 'uses: ./.github/actions/setup' 'name: Wait for the Vercel preview' 
   [ -n "$at" ] && [ "$at" -gt "$needs_e2e_line" ] || fail "expected the step \"$step\" after the one that asks"
   job e2e | sed -n "$((at + 1)),$((at + 2))p" | grep -qxF "        if: steps.needed.outputs.run != 'false'" \
     || fail "expected the step \"$step\" to run on anything but a plain false"
-done
-
-scenario "ci.yml starts each review when e2e has passed, without waiting for checks"
-for reviewer in adam ryan; do
-  [ "$(needs "$reviewer")" = e2e ] || fail "expected $reviewer to need e2e alone, got: $(needs "$reviewer")"
-  # With a status function in its condition it would have to name e2e's result, or run after a failed e2e.
-  ! job "$reviewer" | grep '^    if:' | grep -qE 'always\(|cancelled\(|failure\(|success\(' \
-    || fail "expected $reviewer to carry no status function, so that a failed or skipped e2e skips it"
-done
-
-scenario "ci.yml merges only when every job passed, and starts a fix round when any failed"
-for last in merge start-fix; do
-  [ "$(needs "$last")" = "[checks, e2e, adam, ryan, fits-main]" ] || fail "expected $last to need every other job, got: $(needs "$last")"
-done
-merge=$(job merge | sed -n '/^    if: >-$/,/^    runs-on:/p')
-for passed in checks e2e adam ryan; do
-  grep -qF "needs.$passed.result == 'success'" <<<"$merge" || fail "expected merge to run only when $passed passed"
-done
-# Without `skipped` no first attempt would merge: fits-main runs only when asked for again (decisions M17).
-grep -qF "(needs.fits-main.result == 'success' || needs.fits-main.result == 'skipped')" <<<"$merge" \
-  || fail "expected merge to run only when fits-main passed or was skipped"
-grep -qF '!cancelled()' <<<"$merge" || fail "expected merge not to run in a cancelled run"
-fix=$(job start-fix | sed -n '/^    if: >-$/,/^    runs-on:/p')
-for failed in checks e2e adam ryan fits-main; do
-  grep -qF "needs.$failed.result == 'failure'" <<<"$fix" || fail "expected start-fix to run when $failed failed"
-done
-
-scenario "ci.yml runs nothing on a draft: each job that needs no other carries the condition"
-for first in checks e2e fits-main; do
-  [ -z "$(needs "$first")" ] || fail "expected $first to need no job, got: $(needs "$first")"
-  job "$first" | grep -q "^    if: $draft" || fail "expected $first to be skipped for a draft"
 done
