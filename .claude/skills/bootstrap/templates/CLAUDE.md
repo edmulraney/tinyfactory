@@ -1,6 +1,6 @@
 # {{name}}
 
-Read `PURPOSE.md` (who this is for and what it will not do), `ARCHITECTURE.md` (how the code is organised), `DESIGN.md` (how the interface looks and behaves) and `TASTE.md` (what good work looks like) before changing code.
+Read `PURPOSE.md` (who this is for and what it will not do), `ARCHITECTURE.md` (how the code is organised), `DESIGN.md` (how the interface looks and behaves), `TASTE.md` (what good work looks like) and `SECURITY.md` (who is trusted) before changing code.
 
 @TASTE.md
 

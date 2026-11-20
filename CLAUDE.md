@@ -1,6 +1,6 @@
 # tinyfactory
 
-This repository is tinyfactory itself: the factory every project gets, and the command that sets a project up. Its own factory builds it. Read `PURPOSE.md` (who this is for and what it will not do), `ARCHITECTURE.md` (how the repository is organised and what reaches a project) and `TASTE.md` (what good work looks like) before changing anything. The mission and principles are at the top of `factory/README.md`; follow them.
+This repository is tinyfactory itself: the factory every project gets, and the command that sets a project up. Its own factory builds it. Read `PURPOSE.md` (who this is for and what it will not do), `ARCHITECTURE.md` (how the repository is organised and what reaches a project), `TASTE.md` (what good work looks like) and `SECURITY.md` (who is trusted) before changing anything. The mission and principles are at the top of `factory/README.md`; follow them.
 
 @TASTE.md
 

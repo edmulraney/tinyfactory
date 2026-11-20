@@ -184,13 +184,14 @@ LIST
 # The automations that add the tickets and move them. GitHub's API can read whether each is on
 # but cannot switch one on or say what it is set to, so this is a step left for the human; the
 # script prints the clicks and confirms on its next run. A copied board lacks only the first.
+# GitHub fills in the first one's filter with a text that leaves most tickets out (decisions S563q).
 off=""
 while IFS='|' read -r workflow setting; do
   if [ "$(jq -r --arg n "$workflow" '[.workflows.nodes[] | select(.name == $n) | .enabled] | any' <<<"$board")" != true ]; then
     off+="   select   $workflow"$'\n'"   set      $setting"$'\n'"   click    Save and turn on workflow"$'\n'
   fi
 done <<LIST
-Auto-add to project|Filters: the repository $owner/$name
+Auto-add to project|Filters: the repository $owner/$name, and the text is:issue is:open
 Item added to project|Set value: Status → Backlog
 Pull request linked to issue|Set value: Status → In progress
 Item closed|Set value: Status → Deployed

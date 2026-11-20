@@ -187,14 +187,14 @@ expect_output "created board #9, a copy of template-owner's board #7"
 expect_output "board ok: https://github.com/users/owner/projects/9"
 expect_no_call "gh project "
 
-scenario "prints one click, auto-add with the repository it names, on a board just copied"
+scenario "prints one click, auto-add with the repository it names and the text of its filter, on a board just copied"
 github_holds
 echo '[]' > "$T/projects.json"
 change '.workflows.nodes |= map(select(.name != "Auto-add to project"))'
 run "$board" myapp
 expect_status 0
 expect_output "select   Auto-add to project"
-expect_output "set      Filters: the repository owner/myapp"
+expect_output "set      Filters: the repository owner/myapp, and the text is:issue is:open"
 [ "$(grep -c '^   select ' <<<"$out")" = 1 ] || fail "expected one click, got: $(grep '^   select ' <<<"$out")"
 
 scenario "creates the board when the only one of that name is closed"
