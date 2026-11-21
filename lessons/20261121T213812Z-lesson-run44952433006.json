@@ -1,0 +1,66 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 44949492728,
+    "workflow": "close-idea",
+    "event": "issues",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44949492728",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 586,
+      "issue": 584,
+      "title": "chore: bring the factory's files up to date",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "close",
+        "step": "Close the idea whose last open slice this ticket was",
+        "conclusion": "success"
+      },
+      {
+        "job": "close",
+        "step": "Stop unless the account that started this run may write to the repository",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first close-idea run after pull request #586 did what the change claimed for a ticket with no parent idea: the write-access step passed for the owner, `close-idea.sh` read ticket #590 and closed nothing; the path that closes an idea has not run yet, and nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #586 added the `close-idea` workflow: on a closed ticket it runs `factory/scripts/trusted.sh` on the account that closed it, then `factory/scripts/close-idea.sh`, which closes the parent idea only when the ticket was its last open slice and otherwise says why it closed nothing. In run 44949492728 both changed steps succeeded: `trusted.sh` passed the sender `edmulraney`, and `close-idea.sh 590` printed \"issue #590 is a slice of no idea: nothing was closed\" and exited 0, which is the script's stated behaviour for a ticket with no parent. Neither reviewer left an assumption. This run did not exercise the branch that closes an idea, and I could not read ticket #590 from GitHub in this session to confirm independently that it has no parent; the log is the only evidence of that.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44949492728",
+      "https://github.com/edmulraney/tinyfactory/pull/586"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded with no agent session, 0 dollars and 0 turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
