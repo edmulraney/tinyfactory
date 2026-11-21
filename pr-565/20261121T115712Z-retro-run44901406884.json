@@ -1,0 +1,1802 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-fable-5-2",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "061aa7fa-61db-4f1b-819c-c1b045af732d",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2549.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2mmQvu1XT1ijXjEwKZ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019fEJxjeYdc3DbpPX6onx2G",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9304,
+        "cache_read_input_tokens": 17101,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9304
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "4122a960-8839-4c6d-86d2-e7ef3816d9b6",
+    "timestamp": "2026-11-21T11:56:32.068Z",
+    "request_id": "req_011ChG2mmHjhFn3FB1EscXwd",
+    "wire_tool_inputs": {
+      "toolu_019fEJxjeYdc3DbpPX6onx2G": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_019fEJxjeYdc3DbpPX6onx2G",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, or both.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## When to propose\n50\t\n51\t`propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n52\t\n53\t- **The run lost work or money, or stopped for a person:** `cost.kind` is not empty.\n54\t- **The cause has been seen before:** step 4 lists a lesson.\n55\t\n56\tEvery kind of retro is held to this bar (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)).\n57\t\n58\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n59\t\n60\t## Output\n61\t\n62\tReturn the required structured format:\n63\t\n64\t- `summary`: one sentence a person can act on.\n65\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n66\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n67\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n68\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n69\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n70\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n71\t- `repeats`: the file names of step 4's lessons.\n72\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n73\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n74\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "dd747a5c-e8c3-4025-919c-d938e5b5394c",
+    "timestamp": "2026-11-21T11:56:32.100Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, or both.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## When to propose\n\n`propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- **The run lost work or money, or stopped for a person:** `cost.kind` is not empty.\n- **The cause has been seen before:** step 4 lists a lesson.\n\nEvery kind of retro is held to this bar (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)).\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\nReturn the required structured format:\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 74,
+        "startLine": 1,
+        "totalLines": 74
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_019fEJxjeYdc3DbpPX6onx2G",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2mmQvu1XT1ijXjEwKZ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ad5PZpFp9L7g9wbjXG7BgS",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.sessions/facts.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9304,
+        "cache_read_input_tokens": 17101,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9304
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "7f922e9d-16c0-428e-96eb-39a1c0475b1c",
+    "timestamp": "2026-11-21T11:56:32.648Z",
+    "request_id": "req_011ChG2mmHjhFn3FB1EscXwd",
+    "wire_tool_inputs": {
+      "toolu_01Ad5PZpFp9L7g9wbjXG7BgS": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.sessions/facts.json"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Ad5PZpFp9L7g9wbjXG7BgS",
+          "type": "tool_result",
+          "content": "1\t{\n2\t  \"run\": 44901340724,\n3\t  \"workflow\": \"approve-merge\",\n4\t  \"event\": \"pull_request_review\",\n5\t  \"attempt\": 1,\n6\t  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/44901340724\",\n7\t  \"conclusion\": \"success\",\n8\t  \"pr\": null,\n9\t  \"issue\": null,\n10\t  \"failed\": [],\n11\t  \"factory_failure\": false,\n12\t  \"agents\": [],\n13\t  \"cost_usd\": 0,\n14\t  \"turns\": 0,\n15\t  \"changed_by\": {\n16\t    \"pr\": 565,\n17\t    \"issue\": 563,\n18\t    \"title\": \"fix: act only for an account with write access\",\n19\t    \"assumptions\": {\n20\t      \"adam\": [\n21\t        {\n22\t          \"assumes\": \"With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.\",\n23\t          \"if_wrong\": \"Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it.\"\n24\t        }\n25\t      ],\n26\t      \"ryan\": [\n27\t        {\n28\t          \"assumes\": \"GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.\",\n29\t          \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n30\t        }\n31\t      ]\n32\t    }\n33\t  },\n34\t  \"changed_steps\": [\n35\t    {\n36\t      \"job\": \"ship\",\n37\t      \"step\": \"Start a retro when this job failed\",\n38\t      \"conclusion\": \"skipped\",\n39\t      \"log\": null\n40\t    },\n41\t    {\n42\t      \"job\": \"ship\",\n43\t      \"step\": \"Stop unless the account that started this run may write to the repository\",\n44\t      \"conclusion\": \"success\",\n45\t      \"log\": \"From https://github.com/edmulraney/tinyfactory\\n * [new branch]      main       -> origin/main\\n[command]/usr/bin/git branch --list --remote origin/main\\n  origin/main\\n[command]/usr/bin/git sparse-checkout disable\\n[command]/usr/bin/git config --local --unset-all extensions.worktreeConfig\\n[command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main\\nSwitched to a new branch 'main'\\nbranch 'main' set up to track 'origin/main'.\\n[command]/usr/bin/git log -1 --format=%H\\n59e4e3c7b1d34dccb1e1345d29a8652a4630c950\\nfactory/scripts/trusted.sh \\\"$SENDER\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  GH_TOKEN: ***\\n  SENDER: edmulraney\\nfactory/scripts/approve-merge.sh \\\"$PR\\\" \\\"$OWNER\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  GH_TOKEN: ***\\n  PR: 568\\n  OWNER: edmulraney\"\n46\t    }\n47\t  ]\n48\t}\n49\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "126630a9-556d-40a4-b70a-bf550c2701c5",
+    "timestamp": "2026-11-21T11:56:32.663Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.sessions/facts.json",
+        "content": "{\n  \"run\": 44901340724,\n  \"workflow\": \"approve-merge\",\n  \"event\": \"pull_request_review\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/44901340724\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 565,\n    \"issue\": 563,\n    \"title\": \"fix: act only for an account with write access\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.\",\n          \"if_wrong\": \"Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it.\"\n        }\n      ],\n      \"ryan\": [\n        {\n          \"assumes\": \"GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.\",\n          \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n        }\n      ]\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"ship\",\n      \"step\": \"Start a retro when this job failed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"ship\",\n      \"step\": \"Stop unless the account that started this run may write to the repository\",\n      \"conclusion\": \"success\",\n      \"log\": \"From https://github.com/edmulraney/tinyfactory\\n * [new branch]      main       -> origin/main\\n[command]/usr/bin/git branch --list --remote origin/main\\n  origin/main\\n[command]/usr/bin/git sparse-checkout disable\\n[command]/usr/bin/git config --local --unset-all extensions.worktreeConfig\\n[command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main\\nSwitched to a new branch 'main'\\nbranch 'main' set up to track 'origin/main'.\\n[command]/usr/bin/git log -1 --format=%H\\n59e4e3c7b1d34dccb1e1345d29a8652a4630c950\\nfactory/scripts/trusted.sh \\\"$SENDER\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  GH_TOKEN: ***\\n  SENDER: edmulraney\\nfactory/scripts/approve-merge.sh \\\"$PR\\\" \\\"$OWNER\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  GH_TOKEN: ***\\n  PR: 568\\n  OWNER: edmulraney\"\n    }\n  ]\n}\n",
+        "numLines": 49,
+        "startLine": 1,
+        "totalLines": 49
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Ad5PZpFp9L7g9wbjXG7BgS",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2mmQvu1XT1ijXjEwKZ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01U8nPJYfKgvGxc4hKBk8nfF",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions && find . -type f | head -100 && wc -c tickets.json",
+            "description": "List session files"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9304,
+        "cache_read_input_tokens": 17101,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9304
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "6424b4df-493c-443b-9f71-34373b2f6a3c",
+    "timestamp": "2026-11-21T11:56:33.899Z",
+    "request_id": "req_011ChG2mmHjhFn3FB1EscXwd",
+    "wire_tool_inputs": {
+      "toolu_01U8nPJYfKgvGxc4hKBk8nfF": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions && find . -type f | head -100 && wc -c tickets.json",
+        "description": "List session files"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "out_of_credits",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.42,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        },
+        "seven_day_overage_included": {
+          "utilization": 0.72,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "2ed2481a-9427-4f71-be1a-00eca4e62865",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01U8nPJYfKgvGxc4hKBk8nfF",
+          "type": "tool_result",
+          "content": "./facts.json\n./measures.jsonl\n./.git/index\n./.git/packed-refs\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.pack\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.idx\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.rev\n./.git/logs/refs/heads/sessions\n./.git/logs/HEAD\n./.git/config\n./.git/info/exclude\n./.git/refs/heads/sessions\n./.git/description\n./.git/hooks/post-update.sample\n./.git/hooks/push-to-checkout.sample\n./.git/hooks/pre-merge-commit.sample\n./.git/hooks/pre-push.sample\n./.git/hooks/fsmonitor-watchman.sample\n./.git/hooks/pre-rebase.sample\n./.git/hooks/prepare-commit-msg.sample\n./.git/hooks/applypatch-msg.sample\n./.git/hooks/update.sample\n./.git/hooks/pre-applypatch.sample\n./.git/hooks/pre-commit.sample\n./.git/hooks/commit-msg.sample\n./.git/hooks/sendemail-validate.sample\n./.git/hooks/pre-receive.sample\n./.git/HEAD\n./.git/shallow\n./tickets.json\n./pr-565/20261120T140557Z-ryan-run44749322815.json\n./pr-565/20261120T140555Z-adam-run44749322815.json\n./issue-567/20261121T004908Z-fred-run44844260396.json\n./apps/web/vercel.json\n./pr-568/20261121T005018Z-adam-run44846307451.json\n./pr-568/20261121T005021Z-ryan-run44846307451.json\n./issue-564/20261120T141920Z-fred-run44752034867.json\n3 tickets.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "a9a34a14-46e8-4a01-baec-680e45c13153",
+    "timestamp": "2026-11-21T11:56:34.309Z",
+    "tool_use_result": {
+      "stdout": "./facts.json\n./measures.jsonl\n./.git/index\n./.git/packed-refs\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.pack\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.idx\n./.git/objects/pack/pack-adddff4c76c21955a99c3782e9e48723ccf19dbd.rev\n./.git/logs/refs/heads/sessions\n./.git/logs/HEAD\n./.git/config\n./.git/info/exclude\n./.git/refs/heads/sessions\n./.git/description\n./.git/hooks/post-update.sample\n./.git/hooks/push-to-checkout.sample\n./.git/hooks/pre-merge-commit.sample\n./.git/hooks/pre-push.sample\n./.git/hooks/fsmonitor-watchman.sample\n./.git/hooks/pre-rebase.sample\n./.git/hooks/prepare-commit-msg.sample\n./.git/hooks/applypatch-msg.sample\n./.git/hooks/update.sample\n./.git/hooks/pre-applypatch.sample\n./.git/hooks/pre-commit.sample\n./.git/hooks/commit-msg.sample\n./.git/hooks/sendemail-validate.sample\n./.git/hooks/pre-receive.sample\n./.git/HEAD\n./.git/shallow\n./tickets.json\n./pr-565/20261120T140557Z-ryan-run44749322815.json\n./pr-565/20261120T140555Z-adam-run44749322815.json\n./issue-567/20261121T004908Z-fred-run44844260396.json\n./apps/web/vercel.json\n./pr-568/20261121T005018Z-adam-run44846307451.json\n./pr-568/20261121T005021Z-ryan-run44846307451.json\n./issue-564/20261120T141920Z-fred-run44752034867.json\n3 tickets.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01U8nPJYfKgvGxc4hKBk8nfF",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "968754c5-a194-414b-accf-b9d96b46e698"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 168,
+    "estimated_tokens_delta": 118,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "1f52c2c9-e87d-4f82-8104-4c1d362137b9"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2n8ThdCrEVd6AFGdqU",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSlgUKEAgUGAI4AUIIdGhpbmtpbmcSDEvKlmZ+f1gNGvjWhhoM07CHDE2SV8FymR4NIjAFoex1/Y1rXoaO5BcHOVxNUluTf+35j4JA334fVZv+rgyQg7U6iUouGTKWe2HXCrEqswR298b60zVWOZzHKEFSxbosbPsfMWygc9Hrd3ohSUuBGtu+LayuzbXVUpdZoOJcqdJBNlc2Df0rL2IloyY5DWkNbZPC7hfKco27NlRfDmWY4rPFyQGMIL/i9p9vKjk/8sSYHoPDFskMxaAI0eNVdDPnqlIyW6mgCAEmz8tf17vWqXcCvdAr1l39vXEaHJnBnc3HDmaXjh06n87StG84u2DuzpUkN5bk3HnbOkzZfVMDhO1MYzVBcV0r4jan9ANADGO+52Q1gkHocvrIdVjSEziXShYZIeE4uH0q7CgEgTQuqd5erAUZXpqin1zvqLfKPbmViy75tVBadr+T+ogwADIclHv2cZdOwXK6ah19rBg2dDOiL6lepzhDNRSLdie/trfNbMHg1M+/XtMQ5GwDOo++2CL1zm5z2GCuyZYoEWxP+pvyuFwtLDIClUu2JIAkLzYqm5S9reE+Mh5gpbXmMwM5fFf9susIpxh9bfDQt5CUsVHZAnuCjiW2XhMKLGpqGv4rx3LtiAtIyDQdANtFoF9xepTVmm7ZLHa+Uk+nr4c2nm69kibqh5pWbv0rzo220IULdhEv16LVrRzzpi5eq8RlODMHMnebzm1PCU3JRjLe5oa67W2VUEl1SRGmEP9yujHPOLWEbfzb0xfP91vlzK1dUg1FM81W2dHM2jZK/NyiYg0td81lMC7lyyNSQDBQURkblMiFS0Z3/2XWakarusf07Lse6C0sdT+GXunlEJ18NaQ9RRgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4797,
+        "cache_read_input_tokens": 26405,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4797
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "d730926f-a696-4aab-80b5-7a644f1141d2",
+    "timestamp": "2026-11-21T11:56:37.808Z",
+    "request_id": "req_011ChG2n8JnXBhwNUAriou8o",
+    "thinking_duration_ms": 924,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2n8ThdCrEVd6AFGdqU",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01T9cMhUzh7uJmoJtG6tY2YM",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 -- 2>/dev/null | awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p' | head -150; gh run view 44901340724 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}' 2>&1 | head -60",
+            "description": "Show tickets, lessons, the PR's diff for the workflow, and the run's steps"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4797,
+        "cache_read_input_tokens": 26405,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4797
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "b4ae5ec4-8286-49a7-8bae-41939efe504c",
+    "timestamp": "2026-11-21T11:56:39.627Z",
+    "request_id": "req_011ChG2n8JnXBhwNUAriou8o",
+    "wire_tool_inputs": {
+      "toolu_01T9cMhUzh7uJmoJtG6tY2YM": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 -- 2>/dev/null | awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p' | head -150; gh run view 44901340724 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}' 2>&1 | head -60",
+        "description": "Show tickets, lessons, the PR's diff for the workflow, and the run's steps"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01T9cMhUzh7uJmoJtG6tY2YM",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p'",
+    "uuid": "17573f66-7058-456a-a00d-1752342eb324",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p'",
+          "is_error": true,
+          "tool_use_id": "toolu_01T9cMhUzh7uJmoJtG6tY2YM"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "31c05813-1108-4790-9ef1-d9f24f4f80ee",
+    "timestamp": "2026-11-21T11:56:39.654Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p'",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01T9cMhUzh7uJmoJtG6tY2YM",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2nXGQGqtE9MKcnFBhm",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WXfstt1egYDnN76osqBEP2",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 > /tmp/pr565.diff; grep -n '^diff --git' /tmp/pr565.diff",
+            "description": "Show tickets, lessons and the files the PR changed"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 390,
+        "cache_read_input_tokens": 31202,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 390
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "7ce54d26-1ccd-4169-af7d-85865c832af4",
+    "timestamp": "2026-11-21T11:56:43.031Z",
+    "request_id": "req_011ChG2nX6VGEvGAqQ7wXKVH",
+    "wire_tool_inputs": {
+      "toolu_01WXfstt1egYDnN76osqBEP2": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 > /tmp/pr565.diff; grep -n '^diff --git' /tmp/pr565.diff",
+        "description": "Show tickets, lessons and the files the PR changed"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01WXfstt1egYDnN76osqBEP2",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: head; gh pr diff 565 ; grep -n '^diff --git' /tmp/pr565.diff",
+    "uuid": "3865e125-5269-498d-ad0f-41067edc8658",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: head; gh pr diff 565 ; grep -n '^diff --git' /tmp/pr565.diff",
+          "is_error": true,
+          "tool_use_id": "toolu_01WXfstt1egYDnN76osqBEP2"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "7b88d4c1-664b-4eaa-8bc7-c890b49569f7",
+    "timestamp": "2026-11-21T11:56:43.054Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: head; gh pr diff 565 ; grep -n '^diff --git' /tmp/pr565.diff",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01WXfstt1egYDnN76osqBEP2",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2nXGQGqtE9MKcnFBhm",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014SNguQcu9vJJmde88nJxJu",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory && gh run view 44901340724 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+            "description": "Show the run's jobs and steps"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 390,
+        "cache_read_input_tokens": 31202,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 390
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "73f74958-bb8a-442c-88af-527a106c08aa",
+    "timestamp": "2026-11-21T11:56:43.678Z",
+    "request_id": "req_011ChG2nX6VGEvGAqQ7wXKVH",
+    "wire_tool_inputs": {
+      "toolu_014SNguQcu9vJJmde88nJxJu": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory && gh run view 44901340724 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+        "description": "Show the run's jobs and steps"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_014SNguQcu9vJJmde88nJxJu",
+          "type": "tool_result",
+          "content": "{\"conclusion\":\"success\",\"name\":\"ship\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Stop unless the account that started this run may write to the repository\"},{\"conclusion\":\"success\",\"name\":\"Let it wait to merge, if the owner approved this exact commit and its checks passed\"},{\"conclusion\":\"skipped\",\"name\":\"Do what follows a merge with GitHub's merge button, or take back one that broke main\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"skipped\",\"name\":\"test-main\",\"steps\":[]}\n{\"conclusion\":\"skipped\",\"name\":\"send-back\",\"steps\":[]}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "ee832716-f29d-4217-ac87-cb734c6e495f",
+    "timestamp": "2026-11-21T11:56:44.721Z",
+    "tool_use_result": {
+      "stdout": "{\"conclusion\":\"success\",\"name\":\"ship\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Stop unless the account that started this run may write to the repository\"},{\"conclusion\":\"success\",\"name\":\"Let it wait to merge, if the owner approved this exact commit and its checks passed\"},{\"conclusion\":\"skipped\",\"name\":\"Do what follows a merge with GitHub's merge button, or take back one that broke main\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"skipped\",\"name\":\"test-main\",\"steps\":[]}\n{\"conclusion\":\"skipped\",\"name\":\"send-back\",\"steps\":[]}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_014SNguQcu9vJJmde88nJxJu",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2ntv9hsnDgNKfactm8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01YKmMvjX1qm6GVL6qJy9qVx",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 565 > /tmp/pr565.diff",
+            "description": "Save the PR's diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 856,
+        "cache_read_input_tokens": 31592,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 856
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "101fa40a-2e40-4e51-805f-54c0175d9122",
+    "timestamp": "2026-11-21T11:56:47.714Z",
+    "request_id": "req_011ChG2ntmxuW3WdipFJNsVg",
+    "wire_tool_inputs": {
+      "toolu_01YKmMvjX1qm6GVL6qJy9qVx": {
+        "command": "gh pr diff 565 > /tmp/pr565.diff",
+        "description": "Save the PR's diff"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01YKmMvjX1qm6GVL6qJy9qVx",
+    "message": "Output redirection to '/tmp/pr565.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+    "uuid": "1760c465-85c9-4b3a-858b-527e5d48aee5",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "Output redirection to '/tmp/pr565.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+          "is_error": true,
+          "tool_use_id": "toolu_01YKmMvjX1qm6GVL6qJy9qVx"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "bc4d7aa6-b701-460f-a732-1dc2b7d3dc67",
+    "timestamp": "2026-11-21T11:56:47.728Z",
+    "tool_use_result": "Error: Output redirection to '/tmp/pr565.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01YKmMvjX1qm6GVL6qJy9qVx",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2ntv9hsnDgNKfactm8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01M4sDg3BTp3zFxXQgaZ1sVM",
+          "name": "Bash",
+          "input": {
+            "command": "cat .sessions/tickets.json",
+            "description": "Show open tickets"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 856,
+        "cache_read_input_tokens": 31592,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 856
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "288eb415-2afc-4c5d-a852-e49a122fb704",
+    "timestamp": "2026-11-21T11:56:48.319Z",
+    "request_id": "req_011ChG2ntmxuW3WdipFJNsVg",
+    "wire_tool_inputs": {
+      "toolu_01M4sDg3BTp3zFxXQgaZ1sVM": {
+        "command": "cat .sessions/tickets.json",
+        "description": "Show open tickets"
+      }
+    }
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2ntv9hsnDgNKfactm8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Bz1niKtAujNzjMCUu6iBMc",
+          "name": "Glob",
+          "input": {
+            "pattern": ".sessions/lessons/*"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 856,
+        "cache_read_input_tokens": 31592,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 856
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "34aa045f-d2ab-4ee0-ab6a-f30f39d85548",
+    "timestamp": "2026-11-21T11:56:48.327Z",
+    "request_id": "req_011ChG2ntmxuW3WdipFJNsVg",
+    "wire_tool_inputs": {
+      "toolu_01Bz1niKtAujNzjMCUu6iBMc": {
+        "pattern": ".sessions/lessons/*"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Bz1niKtAujNzjMCUu6iBMc",
+          "type": "tool_result",
+          "content": "No files found"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "e958a339-d96c-45bd-be98-fdd7c2f839c2",
+    "timestamp": "2026-11-21T11:56:48.354Z",
+    "tool_use_result": {
+      "filenames": [],
+      "durationMs": 14,
+      "numFiles": 0,
+      "truncated": false,
+      "totalMatches": 0,
+      "countIsComplete": true
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Bz1niKtAujNzjMCUu6iBMc",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01M4sDg3BTp3zFxXQgaZ1sVM",
+          "type": "tool_result",
+          "content": "[]",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "ff9854b8-086c-4305-a74d-856d66ffcadc",
+    "timestamp": "2026-11-21T11:56:48.389Z",
+    "tool_use_result": {
+      "stdout": "[]",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01M4sDg3BTp3zFxXQgaZ1sVM",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2ntv9hsnDgNKfactm8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015gLu3VEgJH7rLvxg4xeXSt",
+          "name": "Bash",
+          "input": {
+            "command": "gh run view 44901340724 --log",
+            "description": "Show the run's log"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 856,
+        "cache_read_input_tokens": 31592,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 856
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "95bd92b9-e66b-49a1-9a72-1feb0093cd48",
+    "timestamp": "2026-11-21T11:56:48.873Z",
+    "request_id": "req_011ChG2ntmxuW3WdipFJNsVg",
+    "wire_tool_inputs": {
+      "toolu_015gLu3VEgJH7rLvxg4xeXSt": {
+        "command": "gh run view 44901340724 --log",
+        "description": "Show the run's log"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_015gLu3VEgJH7rLvxg4xeXSt",
+          "type": "tool_result",
+          "content": "ship\tSet up job\t﻿2026-11-21T11:55:00.9002641Z Current runner version: '2.338.2'\nship\tSet up job\t2026-11-21T11:55:00.9041715Z ##[group]Runner Image Provisioner\nship\tSet up job\t2026-11-21T11:55:00.9043272Z Hosted Compute Agent\nship\tSet up job\t2026-11-21T11:55:00.9044513Z Version: 20261111.635\nship\tSet up job\t2026-11-21T11:55:00.9046040Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed\nship\tSet up job\t2026-11-21T11:55:00.9047475Z Build Date: 2026-11-11T01:49:01Z\nship\tSet up job\t2026-11-21T11:55:00.9048725Z Worker ID: {96a2eeac-7129-4d7f-911a-bba71eb38c6d}\nship\tSet up job\t2026-11-21T11:55:00.9050141Z Region: westus\nship\tSet up job\t2026-11-21T11:55:00.9051278Z Cloud: Azure\nship\tSet up job\t2026-11-21T11:55:00.9052272Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9054797Z ##[group]Operating System\nship\tSet up job\t2026-11-21T11:55:00.9056275Z Ubuntu\nship\tSet up job\t2026-11-21T11:55:00.9057226Z 26.04.1\nship\tSet up job\t2026-11-21T11:55:00.9058276Z LTS\nship\tSet up job\t2026-11-21T11:55:00.9059196Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9060161Z ##[group]Runner Image\nship\tSet up job\t2026-11-21T11:55:00.9061373Z Image: ubuntu-26.04\nship\tSet up job\t2026-11-21T11:55:00.9062458Z Version: 20261116.202.1\nship\tSet up job\t2026-11-21T11:55:00.9064505Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md\nship\tSet up job\t2026-11-21T11:55:00.9068034Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202\nship\tSet up job\t2026-11-21T11:55:00.9069869Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9072837Z ##[group]GITHUB_TOKEN Permissions\nship\tSet up job\t2026-11-21T11:55:00.9077045Z Actions: write\nship\tSet up job\t2026-11-21T11:55:00.9078130Z Checks: read\nship\tSet up job\t2026-11-21T11:55:00.9079268Z Contents: write\nship\tSet up job\t2026-11-21T11:55:00.9080375Z Issues: write\nship\tSet up job\t2026-11-21T11:55:00.9081351Z Metadata: read\nship\tSet up job\t2026-11-21T11:55:00.9082345Z PullRequests: write\nship\tSet up job\t2026-11-21T11:55:00.9083292Z Statuses: read\nship\tSet up job\t2026-11-21T11:55:00.9084291Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9087863Z Secret source: Actions\nship\tSet up job\t2026-11-21T11:55:00.9089625Z Cache mode: write\nship\tSet up job\t2026-11-21T11:55:00.9090819Z Prepare workflow directory\nship\tSet up job\t2026-11-21T11:55:00.9799860Z Prepare all required actions\nship\tSet up job\t2026-11-21T11:55:00.9876707Z Getting action download info\nship\tSet up job\t2026-11-21T11:55:01.3351580Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)\nship\tSet up job\t2026-11-21T11:55:01.5469953Z Complete job name: ship\nship\tRun actions/checkout@v4\t﻿2026-11-21T11:55:01.6386134Z ##[group]Run actions/checkout@v4\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6387117Z with:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6387548Z   ref: main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6388002Z   repository: edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6391660Z   token: ***\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6392111Z   ssh-strict: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6392561Z   ssh-user: git\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393016Z   persist-credentials: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393522Z   clean: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393988Z   sparse-checkout-cone-mode: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6394533Z   fetch-depth: 1\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6394975Z   fetch-tags: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6395575Z   show-progress: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396035Z   lfs: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396458Z   submodules: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396912Z   set-safe-directory: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6397433Z   allow-unsafe-pr-checkout: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6398219Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9895452Z Syncing repository: edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9899124Z ##[group]Getting Git version info\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9900837Z Working directory is '/home/runner/work/tinyfactory/tinyfactory'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9903184Z [command]/usr/bin/git version\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9905938Z git version 2.56.1\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9913670Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9975946Z Temporarily overriding HOME='/home/runner/work/_temp/32a8db92-8454-4963-980c-3b9a928f8d24' before making global git config changes\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9979250Z Adding repository directory to the temporary git global config as a safe directory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9982166Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tinyfactory/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0138332Z Deleting the contents of '/home/runner/work/tinyfactory/tinyfactory'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0140853Z ##[group]Initializing the repository\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0143420Z [command]/usr/bin/git init /home/runner/work/tinyfactory/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0328224Z hint: Using 'master' as the name for the initial branch. This default branch name\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0350898Z hint: will change to \"main\" in Git 3.0. To configure the initial branch name\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0357955Z hint: to use in all of your new repositories, which will suppress this warning,\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1679088Z hint: call:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1680113Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1681338Z hint: \tgit config --global init.defaultBranch <name>\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1682633Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1683849Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1687508Z hint: 'development'. The just-created branch can be renamed via this command:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1689148Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1690050Z hint: \tgit branch -m <name>\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1691085Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1692435Z hint: Disable this message with \"git config set advice.defaultBranchName false\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1694617Z Initialized empty Git repository in /home/runner/work/tinyfactory/tinyfactory/.git/\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1698749Z [command]/usr/bin/git remote add origin https://github.com/edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1702362Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1704096Z ##[group]Disabling automatic garbage collection\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1705000Z [command]/usr/bin/git config --local gc.auto 0\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1708491Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1710176Z ##[group]Setting up auth\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1711559Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1726597Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1731291Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1738288Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2007605Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2043827Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2349271Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2394752Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2397566Z ##[group]Fetching the repository\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2408218Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +refs/heads/main*:refs/remotes/origin/main* +refs/tags/main*:refs/tags/main*\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0915048Z From https://github.com/edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0917360Z  * [new branch]      main       -> origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0930071Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0932845Z ##[group]Determining the checkout info\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0935422Z [command]/usr/bin/git branch --list --remote origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0965436Z   origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0971736Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0976776Z [command]/usr/bin/git sparse-checkout disable\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1040491Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1077603Z ##[group]Checking out the ref\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1080562Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1537049Z Switched to a new branch 'main'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1546511Z branch 'main' set up to track 'origin/main'.\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1552811Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1604476Z [command]/usr/bin/git log -1 --format=%H\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1634552Z 59e4e3c7b1d34dccb1e1345d29a8652a4630c950\nship\tStop unless the account that started this run may write to the repository\t﻿2026-11-21T11:55:03.1947647Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1949459Z ^[[36;1mfactory/scripts/trusted.sh \"$SENDER\"^[[0m\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1990238Z shell: /usr/bin/bash -e {0}\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1991514Z env:\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2002458Z   GH_TOKEN: ***\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2003571Z   SENDER: edmulraney\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2004695Z ##[endgroup]\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t﻿2026-11-21T11:55:03.7242082Z ##[group]Run factory/scripts/approve-merge.sh \"$PR\" \"$OWNER\"\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7330812Z ^[[36;1mfactory/scripts/approve-merge.sh \"$PR\" \"$OWNER\"^[[0m\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7374472Z shell: /usr/bin/bash -e {0}\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7374941Z env:\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7379689Z   GH_TOKEN: ***\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7380506Z   PR: 568\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7381136Z   OWNER: edmulraney\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7381580Z ##[endgroup]\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:08.1714735Z pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\nship\tPost Run actions/checkout@v4\t﻿2026-11-21T11:55:08.1891918Z Post job cleanup.\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.2916112Z [command]/usr/bin/git version\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.2985994Z git version 2.56.1\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3078443Z Temporarily overriding HOME='/home/runner/work/_temp/f94f714f-f92b-4c6c-987c-970e87e3981f' before making global git config changes\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3080145Z Adding repository directory to the temporary git global config as a safe directory\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3081503Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tinyfactory/tinyfactory\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3136038Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3214573Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3619385Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3673786Z http.https://github.com/.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3711368Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3817071Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.4646281Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.4696330Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\nship\tComplete job\t﻿2026-11-21T11:55:08.5370412Z Cleaning up orphan processes\nship\tComplete job\t2026-11-21T11:55:08.5736711Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "774cc3c6-797a-4691-97a1-5cc6d95b8a28",
+    "timestamp": "2026-11-21T11:56:50.506Z",
+    "tool_use_result": {
+      "stdout": "ship\tSet up job\t﻿2026-11-21T11:55:00.9002641Z Current runner version: '2.338.2'\nship\tSet up job\t2026-11-21T11:55:00.9041715Z ##[group]Runner Image Provisioner\nship\tSet up job\t2026-11-21T11:55:00.9043272Z Hosted Compute Agent\nship\tSet up job\t2026-11-21T11:55:00.9044513Z Version: 20261111.635\nship\tSet up job\t2026-11-21T11:55:00.9046040Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed\nship\tSet up job\t2026-11-21T11:55:00.9047475Z Build Date: 2026-11-11T01:49:01Z\nship\tSet up job\t2026-11-21T11:55:00.9048725Z Worker ID: {96a2eeac-7129-4d7f-911a-bba71eb38c6d}\nship\tSet up job\t2026-11-21T11:55:00.9050141Z Region: westus\nship\tSet up job\t2026-11-21T11:55:00.9051278Z Cloud: Azure\nship\tSet up job\t2026-11-21T11:55:00.9052272Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9054797Z ##[group]Operating System\nship\tSet up job\t2026-11-21T11:55:00.9056275Z Ubuntu\nship\tSet up job\t2026-11-21T11:55:00.9057226Z 26.04.1\nship\tSet up job\t2026-11-21T11:55:00.9058276Z LTS\nship\tSet up job\t2026-11-21T11:55:00.9059196Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9060161Z ##[group]Runner Image\nship\tSet up job\t2026-11-21T11:55:00.9061373Z Image: ubuntu-26.04\nship\tSet up job\t2026-11-21T11:55:00.9062458Z Version: 20261116.202.1\nship\tSet up job\t2026-11-21T11:55:00.9064505Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md\nship\tSet up job\t2026-11-21T11:55:00.9068034Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202\nship\tSet up job\t2026-11-21T11:55:00.9069869Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9072837Z ##[group]GITHUB_TOKEN Permissions\nship\tSet up job\t2026-11-21T11:55:00.9077045Z Actions: write\nship\tSet up job\t2026-11-21T11:55:00.9078130Z Checks: read\nship\tSet up job\t2026-11-21T11:55:00.9079268Z Contents: write\nship\tSet up job\t2026-11-21T11:55:00.9080375Z Issues: write\nship\tSet up job\t2026-11-21T11:55:00.9081351Z Metadata: read\nship\tSet up job\t2026-11-21T11:55:00.9082345Z PullRequests: write\nship\tSet up job\t2026-11-21T11:55:00.9083292Z Statuses: read\nship\tSet up job\t2026-11-21T11:55:00.9084291Z ##[endgroup]\nship\tSet up job\t2026-11-21T11:55:00.9087863Z Secret source: Actions\nship\tSet up job\t2026-11-21T11:55:00.9089625Z Cache mode: write\nship\tSet up job\t2026-11-21T11:55:00.9090819Z Prepare workflow directory\nship\tSet up job\t2026-11-21T11:55:00.9799860Z Prepare all required actions\nship\tSet up job\t2026-11-21T11:55:00.9876707Z Getting action download info\nship\tSet up job\t2026-11-21T11:55:01.3351580Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)\nship\tSet up job\t2026-11-21T11:55:01.5469953Z Complete job name: ship\nship\tRun actions/checkout@v4\t﻿2026-11-21T11:55:01.6386134Z ##[group]Run actions/checkout@v4\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6387117Z with:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6387548Z   ref: main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6388002Z   repository: edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6391660Z   token: ***\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6392111Z   ssh-strict: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6392561Z   ssh-user: git\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393016Z   persist-credentials: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393522Z   clean: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6393988Z   sparse-checkout-cone-mode: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6394533Z   fetch-depth: 1\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6394975Z   fetch-tags: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6395575Z   show-progress: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396035Z   lfs: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396458Z   submodules: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6396912Z   set-safe-directory: true\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6397433Z   allow-unsafe-pr-checkout: false\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.6398219Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9895452Z Syncing repository: edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9899124Z ##[group]Getting Git version info\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9900837Z Working directory is '/home/runner/work/tinyfactory/tinyfactory'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9903184Z [command]/usr/bin/git version\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9905938Z git version 2.56.1\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9913670Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9975946Z Temporarily overriding HOME='/home/runner/work/_temp/32a8db92-8454-4963-980c-3b9a928f8d24' before making global git config changes\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9979250Z Adding repository directory to the temporary git global config as a safe directory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:01.9982166Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tinyfactory/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0138332Z Deleting the contents of '/home/runner/work/tinyfactory/tinyfactory'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0140853Z ##[group]Initializing the repository\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0143420Z [command]/usr/bin/git init /home/runner/work/tinyfactory/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0328224Z hint: Using 'master' as the name for the initial branch. This default branch name\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0350898Z hint: will change to \"main\" in Git 3.0. To configure the initial branch name\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.0357955Z hint: to use in all of your new repositories, which will suppress this warning,\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1679088Z hint: call:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1680113Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1681338Z hint: \tgit config --global init.defaultBranch <name>\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1682633Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1683849Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1687508Z hint: 'development'. The just-created branch can be renamed via this command:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1689148Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1690050Z hint: \tgit branch -m <name>\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1691085Z hint:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1692435Z hint: Disable this message with \"git config set advice.defaultBranchName false\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1694617Z Initialized empty Git repository in /home/runner/work/tinyfactory/tinyfactory/.git/\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1698749Z [command]/usr/bin/git remote add origin https://github.com/edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1702362Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1704096Z ##[group]Disabling automatic garbage collection\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1705000Z [command]/usr/bin/git config --local gc.auto 0\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1708491Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1710176Z ##[group]Setting up auth\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1711559Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1726597Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1731291Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.1738288Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2007605Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2043827Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2349271Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2394752Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2397566Z ##[group]Fetching the repository\nship\tRun actions/checkout@v4\t2026-11-21T11:55:02.2408218Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +refs/heads/main*:refs/remotes/origin/main* +refs/tags/main*:refs/tags/main*\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0915048Z From https://github.com/edmulraney/tinyfactory\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0917360Z  * [new branch]      main       -> origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0930071Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0932845Z ##[group]Determining the checkout info\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0935422Z [command]/usr/bin/git branch --list --remote origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0965436Z   origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0971736Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.0976776Z [command]/usr/bin/git sparse-checkout disable\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1040491Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1077603Z ##[group]Checking out the ref\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1080562Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1537049Z Switched to a new branch 'main'\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1546511Z branch 'main' set up to track 'origin/main'.\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1552811Z ##[endgroup]\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1604476Z [command]/usr/bin/git log -1 --format=%H\nship\tRun actions/checkout@v4\t2026-11-21T11:55:03.1634552Z 59e4e3c7b1d34dccb1e1345d29a8652a4630c950\nship\tStop unless the account that started this run may write to the repository\t﻿2026-11-21T11:55:03.1947647Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1949459Z ^[[36;1mfactory/scripts/trusted.sh \"$SENDER\"^[[0m\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1990238Z shell: /usr/bin/bash -e {0}\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.1991514Z env:\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2002458Z   GH_TOKEN: ***\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2003571Z   SENDER: edmulraney\nship\tStop unless the account that started this run may write to the repository\t2026-11-21T11:55:03.2004695Z ##[endgroup]\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t﻿2026-11-21T11:55:03.7242082Z ##[group]Run factory/scripts/approve-merge.sh \"$PR\" \"$OWNER\"\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7330812Z ^[[36;1mfactory/scripts/approve-merge.sh \"$PR\" \"$OWNER\"^[[0m\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7374472Z shell: /usr/bin/bash -e {0}\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7374941Z env:\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7379689Z   GH_TOKEN: ***\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7380506Z   PR: 568\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7381136Z   OWNER: edmulraney\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:03.7381580Z ##[endgroup]\nship\tLet it wait to merge, if the owner approved this exact commit and its checks passed\t2026-11-21T11:55:08.1714735Z pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\nship\tPost Run actions/checkout@v4\t﻿2026-11-21T11:55:08.1891918Z Post job cleanup.\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.2916112Z [command]/usr/bin/git version\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.2985994Z git version 2.56.1\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3078443Z Temporarily overriding HOME='/home/runner/work/_temp/f94f714f-f92b-4c6c-987c-970e87e3981f' before making global git config changes\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3080145Z Adding repository directory to the temporary git global config as a safe directory\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3081503Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tinyfactory/tinyfactory\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3136038Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3214573Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3619385Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3673786Z http.https://github.com/.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3711368Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.3817071Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.4646281Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\nship\tPost Run actions/checkout@v4\t2026-11-21T11:55:08.4696330Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\nship\tComplete job\t﻿2026-11-21T11:55:08.5370412Z Cleaning up orphan processes\nship\tComplete job\t2026-11-21T11:55:08.5736711Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_015gLu3VEgJH7rLvxg4xeXSt",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2oKgfS7eY2f3XAhysW",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSwAUKEAgUGAI4AUIIdGhpbmtpbmcSDKiIFSojoLFE4c4bxxoM3mvbVZd5bZcuR0uUIjBXi8KI6Y49scP0rBz+ScBdnyZF+Q1Su1Ps1sLqfONJ12FOLSlHFPbCpAjtgE3fDx4q3QQoSUwAJXj6BL30tBUgnRDDMevH0zmtu6HwBx8hYSFO7RDGdTTmPKRehXOeVZtFBuUXxE07LzpU4h+5CeTayf+A+loKAzfgoO+sNAzGFL/foM2+s85Sp1vHrmcPFSsBaFHDtWj4a7xT3AhlAcfkYeLTDMXzDVaPx2bBji6L5S0X0JKKFgNWO6/JK9DC/JMMWlqvGC1wF/iQkVKd6nzJjqtf6MQa8wUGQCxK/vIkPNNt+ViA/SGJDFUXtbxnkgwpdajggegvPgYQeWDvcv4ncw4KeBJ+o4/dyDsREngUJHQFB+bdIjAGBhDO90iYIhJDr26GGIqMSxHCBeArEf+o06w3jrpZQDjv2lh957vc8BKbGMm8BGoA3oeocw4OQrfafQwBGTwQEevEzUbuVVppM/nqAlPiOq94NQFGpCsfINis9nbhwKJKpW3Ykzy3gMZj+s5xGWsDjqYmsUHCeQg9cXVr1Ioj+8S0YuwdyR+BamYOBYKE4xD5e1FRryrrgWwIwb95eC3CmMq8CwBxP9ApLkTgr2eg3PaAYOSgOzsuMHfOi+ka56qPJzIQM9d8cCJhitLEqpkQGWVx44R9sjkqCM3dCAEYzzKTV7EB+FC9+aSTPyoCj1C5EU1RtXNm8dLnAsui+7lDQzXjVPrdrv3V1q/uJfm4rm/0A9AaxnSQ5ingtP8CWJUg43l+oTmZOEEusI/lT3lMXosdzZCCZpDXtZbTEOcLG26spkLwevCcgO8yaBhwGmWxA4ID8F1goyxQJaS/BeS+sp654pCDvbErQnxlnqB7EftyBbUIoQUAgBgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 8296,
+        "cache_read_input_tokens": 32448,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 8296
+        },
+        "output_tokens": 2,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "5fe30923-919e-479e-8d97-8a2cedb990ee",
+    "timestamp": "2026-11-21T11:56:53.403Z",
+    "request_id": "req_011ChG2oKV1U7XTQQp879nHN",
+    "thinking_duration_ms": 847,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2oKgfS7eY2f3XAhysW",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017Da4dbpu2w8sTGNc5trHuu",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 565 | grep -n -A45 '^diff --git a/factory/workflows/approve-merge.yml'",
+            "description": "Show the PR's changes to the approve-merge workflow"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 8296,
+        "cache_read_input_tokens": 32448,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 8296
+        },
+        "output_tokens": 2,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "7dfe8703-80f0-479f-a08b-39888f04bbf7",
+    "timestamp": "2026-11-21T11:56:53.901Z",
+    "request_id": "req_011ChG2oKV1U7XTQQp879nHN",
+    "wire_tool_inputs": {
+      "toolu_017Da4dbpu2w8sTGNc5trHuu": {
+        "command": "gh pr diff 565 | grep -n -A45 '^diff --git a/factory/workflows/approve-merge.yml'",
+        "description": "Show the PR's changes to the approve-merge workflow"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_017Da4dbpu2w8sTGNc5trHuu",
+          "type": "tool_result",
+          "content": "4427:diff --git a/factory/workflows/approve-merge.yml b/factory/workflows/approve-merge.yml\n4428-index 9484f4e..75ff523 100644\n4429---- a/factory/workflows/approve-merge.yml\n4430-+++ b/factory/workflows/approve-merge.yml\n4431-@@ -13,15 +13,15 @@ on:\n4432-         description: Pull request number, already approved by the owner\n4433-         required: true\n4434- \n4435--concurrency:\n4436--  group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n4437--\n4438- jobs:\n4439-   test-main:\n4440-     # The button skips the test with main as it is now, and only the factory's own are taken back (decisions M439a).\n4441-     if: >-\n4442-       github.event_name == 'pull_request_target' && github.event.pull_request.merged == true &&\n4443-       github.event.pull_request.user.login == 'claude[bot]'\n4444-+    # One job at a time for a pull request. On each job, so a run whose jobs are skipped takes the place of none that waits (decisions W563h).\n4445-+    concurrency:\n4446-+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n4447-     runs-on: ubuntu-latest\n4448-     timeout-minutes: 30\n4449-     # It runs code no reviewer may have passed, so it may only read, is given no secret, and starts no retro (decisions M439i).\n4450-@@ -41,6 +41,13 @@ jobs:\n4451-         with:\n4452-           ref: ${{ github.event.pull_request.merge_commit_sha }}\n4453-           fetch-depth: 2   # the commit before the merge is tested when the merge fails\n4454-+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n4455-+      - name: Stop unless the account that started this run may write to the repository\n4456-+        id: trusted\n4457-+        env:\n4458-+          GH_TOKEN: ${{ github.token }}\n4459-+          SENDER: ${{ github.event.sender.login }}\n4460-+        run: factory/scripts/trusted.sh \"$SENDER\"\n4461-       - name: Did the pull request's checks pass with main as it was before the merge?\n4462-         id: tested\n4463-         env:\n4464-@@ -78,10 +85,13 @@ jobs:\n4465-   ship:\n4466-     needs: test-main\n4467-     # A status function, or the skipped test-main would skip this job too (decisions M75c).\n4468-+    # Nobody's review but the owner's; only an account that may write merges, or starts this by number (decisions W563d).\n4469-     if: >-\n4470-       !cancelled() && (github.event_name == 'workflow_dispatch' ||\n4471-       (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) ||\n4472-       (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "038707a2-5217-44b4-8a7a-de65239c5307",
+    "timestamp": "2026-11-21T11:56:54.889Z",
+    "tool_use_result": {
+      "stdout": "4427:diff --git a/factory/workflows/approve-merge.yml b/factory/workflows/approve-merge.yml\n4428-index 9484f4e..75ff523 100644\n4429---- a/factory/workflows/approve-merge.yml\n4430-+++ b/factory/workflows/approve-merge.yml\n4431-@@ -13,15 +13,15 @@ on:\n4432-         description: Pull request number, already approved by the owner\n4433-         required: true\n4434- \n4435--concurrency:\n4436--  group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n4437--\n4438- jobs:\n4439-   test-main:\n4440-     # The button skips the test with main as it is now, and only the factory's own are taken back (decisions M439a).\n4441-     if: >-\n4442-       github.event_name == 'pull_request_target' && github.event.pull_request.merged == true &&\n4443-       github.event.pull_request.user.login == 'claude[bot]'\n4444-+    # One job at a time for a pull request. On each job, so a run whose jobs are skipped takes the place of none that waits (decisions W563h).\n4445-+    concurrency:\n4446-+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n4447-     runs-on: ubuntu-latest\n4448-     timeout-minutes: 30\n4449-     # It runs code no reviewer may have passed, so it may only read, is given no secret, and starts no retro (decisions M439i).\n4450-@@ -41,6 +41,13 @@ jobs:\n4451-         with:\n4452-           ref: ${{ github.event.pull_request.merge_commit_sha }}\n4453-           fetch-depth: 2   # the commit before the merge is tested when the merge fails\n4454-+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n4455-+      - name: Stop unless the account that started this run may write to the repository\n4456-+        id: trusted\n4457-+        env:\n4458-+          GH_TOKEN: ${{ github.token }}\n4459-+          SENDER: ${{ github.event.sender.login }}\n4460-+        run: factory/scripts/trusted.sh \"$SENDER\"\n4461-       - name: Did the pull request's checks pass with main as it was before the merge?\n4462-         id: tested\n4463-         env:\n4464-@@ -78,10 +85,13 @@ jobs:\n4465-   ship:\n4466-     needs: test-main\n4467-     # A status function, or the skipped test-main would skip this job too (decisions M75c).\n4468-+    # Nobody's review but the owner's; only an account that may write merges, or starts this by number (decisions W563d).\n4469-     if: >-\n4470-       !cancelled() && (github.event_name == 'workflow_dispatch' ||\n4471-       (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) ||\n4472-       (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_017Da4dbpu2w8sTGNc5trHuu",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2oeSne6TZZyYXRd33k",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UrcbC6joXm9oqffWiye4Uj",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 565 | sed -n '4472,4540p'",
+            "description": "Show the rest of the workflow's diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1214,
+        "cache_read_input_tokens": 40744,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1214
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "e2ce08ee-6b62-4db4-b8c9-3061937ffe27",
+    "timestamp": "2026-11-21T11:56:57.947Z",
+    "request_id": "req_011ChG2oeEt5iAavJEy56G4o",
+    "wire_tool_inputs": {
+      "toolu_01UrcbC6joXm9oqffWiye4Uj": {
+        "command": "gh pr diff 565 | sed -n '4472,4540p'",
+        "description": "Show the rest of the workflow's diff"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01UrcbC6joXm9oqffWiye4Uj",
+          "type": "tool_result",
+          "content": "       (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))\n+    concurrency:\n+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n     runs-on: ubuntu-latest\n     timeout-minutes: 20\n     permissions:\n@@ -96,6 +106,13 @@ jobs:\n         with:\n           # main's copy of the scripts, never the pull request's.\n           ref: ${{ github.event.repository.default_branch }}\n+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n+      - name: Stop unless the account that started this run may write to the repository\n+        id: trusted\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n+          SENDER: ${{ github.event.sender.login }}\n+        run: factory/scripts/trusted.sh \"$SENDER\"\n       - name: Let it wait to merge, if the owner approved this exact commit and its checks passed\n         if: github.event_name != 'pull_request_target'\n         env:\n@@ -133,8 +150,9 @@ jobs:\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n+      # None for a run an account that is not trusted started (decisions W563c).\n       - name: Start a retro when this job failed\n-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n         env:\n           GH_TOKEN: ${{ github.token }}\n           GH_REPO: ${{ github.repository }}\n@@ -150,6 +168,8 @@ jobs:\n     if: >-\n       github.event_name == 'pull_request_review' &&\n       github.event.review.state == 'changes_requested' && github.event.review.user.login == github.repository_owner\n+    concurrency:\n+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n     runs-on: ubuntu-latest\n     timeout-minutes: 5\n     permissions:\n@@ -161,6 +181,13 @@ jobs:\n         with:\n           # main's copy of the scripts, never the pull request's.\n           ref: ${{ github.event.repository.default_branch }}\n+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n+      - name: Stop unless the account that started this run may write to the repository\n+        id: trusted\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n+          SENDER: ${{ github.event.sender.login }}\n+        run: factory/scripts/trusted.sh \"$SENDER\"\n       - name: Start the owner's fix round\n         env:\n           GH_TOKEN: ${{ github.token }}\n@@ -186,8 +213,9 @@ jobs:\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n+      # None for a run an account that is not trusted started (decisions W563c).\n       - name: Start a retro when this job failed\n-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n         env:\n           GH_TOKEN: ${{ github.token }}\n           GH_REPO: ${{ github.repository }}\ndiff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\nindex 1b194be..2a69cd8 100644\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "4b280c43-6028-40c2-9cc2-355c41a8ca6e",
+    "timestamp": "2026-11-21T11:56:58.920Z",
+    "tool_use_result": {
+      "stdout": "       (github.event.review.state == 'approved' && github.event.review.user.login == github.repository_owner))\n+    concurrency:\n+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n     runs-on: ubuntu-latest\n     timeout-minutes: 20\n     permissions:\n@@ -96,6 +106,13 @@ jobs:\n         with:\n           # main's copy of the scripts, never the pull request's.\n           ref: ${{ github.event.repository.default_branch }}\n+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n+      - name: Stop unless the account that started this run may write to the repository\n+        id: trusted\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n+          SENDER: ${{ github.event.sender.login }}\n+        run: factory/scripts/trusted.sh \"$SENDER\"\n       - name: Let it wait to merge, if the owner approved this exact commit and its checks passed\n         if: github.event_name != 'pull_request_target'\n         env:\n@@ -133,8 +150,9 @@ jobs:\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n+      # None for a run an account that is not trusted started (decisions W563c).\n       - name: Start a retro when this job failed\n-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n         env:\n           GH_TOKEN: ${{ github.token }}\n           GH_REPO: ${{ github.repository }}\n@@ -150,6 +168,8 @@ jobs:\n     if: >-\n       github.event_name == 'pull_request_review' &&\n       github.event.review.state == 'changes_requested' && github.event.review.user.login == github.repository_owner\n+    concurrency:\n+      group: approve-merge-${{ inputs.pr || github.event.pull_request.number }}\n     runs-on: ubuntu-latest\n     timeout-minutes: 5\n     permissions:\n@@ -161,6 +181,13 @@ jobs:\n         with:\n           # main's copy of the scripts, never the pull request's.\n           ref: ${{ github.event.repository.default_branch }}\n+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n+      - name: Stop unless the account that started this run may write to the repository\n+        id: trusted\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n+          SENDER: ${{ github.event.sender.login }}\n+        run: factory/scripts/trusted.sh \"$SENDER\"\n       - name: Start the owner's fix round\n         env:\n           GH_TOKEN: ${{ github.token }}\n@@ -186,8 +213,9 @@ jobs:\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n+      # None for a run an account that is not trusted started (decisions W563c).\n       - name: Start a retro when this job failed\n-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n+        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n         env:\n           GH_TOKEN: ${{ github.token }}\n           GH_REPO: ${{ github.repository }}\ndiff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\nindex 1b194be..2a69cd8 100644\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01UrcbC6joXm9oqffWiye4Uj",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2owdeK6iSHTSQPTxoy",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS3wUKEAgUGAI4AUIIdGhpbmtpbmcSDAk9WUcaNI93hX3cMxoMP+2cMIR+guVy4jcyIjCiHfeBIZbTuO0BJrrQ72vk9Vf9nMjQwbCCXlgygPjKFg7ZPaTEQnEDecLPIhZ7ILoq/ARqTs6/OjU0Y3kdje7G7V0hvgCoY4zRyBBQ5Vefb8hO0Hxd8zTu5QPJoRXXNKxA5GrifL32wTH4ehxaN9n2joScba2cLh6SIdM85vNg4O1L6cLnoo/b2noXKeNLVPEGY9S1v6w6ZJsUb4Tfl42U2dVM05+X8DFoaQbqLV1HsKbcOlHGuDFB4Io0qBFkJkrXjQsrBJ+ixKq3yR/HG0ho4d/0//M+6Ae5MxRYNSck5vBOhcsPwEjHlNbj8MF36fY3bUsJ0QKGuJ+3TpD7T24NRm/QvFyQBpcjQclR+ohpZISSQZxC2BsVzIAzWzlvplrqXSdF83ohylambmajmv+jPblNoURZmPA+Iwmd9B4+D2r89NCxSaARRTHsEFkZ8mWFSipJ3jwA7GV5LbHxrpjCLmXMhSZwK1j4QNeCBYgODV79YeyE8p2AI/P1nWF+PjJ38pgrDUZhB04fwl5YB+TNMyBfJX96aHb9vmyYkLiQjjilsPG9VbsP7XnwBMn+8OL3WPeS1T3q4OikTlrDIP5zK11YWBikjmBq3T8YIMldvcas+/CO5KvJJz5IILb0f3+FWeAUsOQquWZ6+HfDryXA85Jr9MaXhIUeDer6RApmYTV7GetyjfLsB+oJAfwNIErUZvcd0iOIhEgXReYLcF68lJiE83/eEybGXrc3LdU9/j0F7cR+H8uwIppyrF626Lzt9I1cFSHbAcvdzmwKfV809rn4YvoxzwkZPKglWuM3NvD5x89WrwcgkAwwf3uH/7U/lQ/sEm29QsrfSSI+kKJAfiLGJUzNp9XLgnnT42gEwRUbxoq6WHqAd/yvRopRB9CR7sLfcvGYqfF0xUd0SIIYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1609,
+        "cache_read_input_tokens": 41958,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1609
+        },
+        "output_tokens": 5,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "35b0a18f-ba9f-40b4-9559-7271089e13c1",
+    "timestamp": "2026-11-21T11:57:02.549Z",
+    "request_id": "req_011ChG2owUU7iLGh5EzGwVtj",
+    "thinking_duration_ms": 988,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChG2owdeK6iSHTSQPTxoy",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_018dtxBhtaR1wpPV93WAj73P",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #565 added to each approve-merge job a step that asks GitHub whether the account that started the run may write (`factory/scripts/trusted.sh \"$SENDER\"`), moved the concurrency group from the workflow to each job, and made the retro step skip a run that an untrusted account started. Run 44901340724 was started by the owner's approving review of pull request #568. In the `ship` job the new step ran with `SENDER: edmulraney` and succeeded, the next step printed \"pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\", and the retro step was skipped because nothing failed. The `test-main` and `send-back` jobs were skipped, as their conditions say for an approving review, and they did not block `ship`. The run exercised only the trusted path: a refusal of an account without write access, and the retro staying silent after one, were not observed here. Neither reviewer's assumption (the `review` job's token in review.yml, the `commented` event's author in `flag-unfinished.sh`) concerns this workflow, so this run confirms neither.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/44901340724",
+              "https://github.com/edmulraney/tinyfactory/pull/565",
+              "https://github.com/edmulraney/tinyfactory/pull/568"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+              "removes": "nothing"
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded in about 8 seconds, with 0 agent sessions and a cost of $0.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: there was no fault to prevent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1609,
+        "cache_read_input_tokens": 41958,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1609
+        },
+        "output_tokens": 5,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "42b64fc9-8aec-409e-ae2a-c7b2390efa7a",
+    "timestamp": "2026-11-21T11:57:09.379Z",
+    "request_id": "req_011ChG2owUU7iLGh5EzGwVtj",
+    "wire_tool_inputs": {
+      "toolu_018dtxBhtaR1wpPV93WAj73P": {
+        "summary": "The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #565 added to each approve-merge job a step that asks GitHub whether the account that started the run may write (`factory/scripts/trusted.sh \"$SENDER\"`), moved the concurrency group from the workflow to each job, and made the retro step skip a run that an untrusted account started. Run 44901340724 was started by the owner's approving review of pull request #568. In the `ship` job the new step ran with `SENDER: edmulraney` and succeeded, the next step printed \"pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\", and the retro step was skipped because nothing failed. The `test-main` and `send-back` jobs were skipped, as their conditions say for an approving review, and they did not block `ship`. The run exercised only the trusted path: a refusal of an account without write access, and the retro staying silent after one, were not observed here. Neither reviewer's assumption (the `review` job's token in review.yml, the `commented` event's author in `flag-unfinished.sh`) concerns this workflow, so this run confirms neither.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/44901340724",
+          "https://github.com/edmulraney/tinyfactory/pull/565",
+          "https://github.com/edmulraney/tinyfactory/pull/568"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+          "removes": "nothing"
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded in about 8 seconds, with 0 agent sessions and a cost of $0.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: there was no fault to prevent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_018dtxBhtaR1wpPV93WAj73P",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "uuid": "79b0d173-710e-4095-84ed-3176f276a652",
+    "timestamp": "2026-11-21T11:57:09.385Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_018dtxBhtaR1wpPV93WAj73P",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 36619,
+    "stop_reason": "tool_use",
+    "session_id": "c5595d69-9181-4426-8850-9f7985eff02c",
+    "total_cost_usd": 0.56752,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 26466,
+      "cache_read_input_tokens": 221450,
+      "output_tokens": 2488,
+      "output_tokens_details": {
+        "thinking_tokens": 124
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 26466,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 981,
+          "cache_read_input_tokens": 41958,
+          "cache_creation_input_tokens": 1609,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1609
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 14,
+        "outputTokens": 2488,
+        "cacheReadInputTokens": 221450,
+        "cacheCreationInputTokens": 26466,
+        "webSearchRequests": 0,
+        "costUSD": 0.5673779999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 124,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 26466,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01T9cMhUzh7uJmoJtG6tY2YM",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 -- 2>/dev/null | awk '/^diff --git/{p=($0 ~ /approve-merge|trusted/)} p' | head -150; gh run view 44901340724 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}' 2>&1 | head -60",
+          "description": "Show tickets, lessons, the PR's diff for the workflow, and the run's steps"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01WXfstt1egYDnN76osqBEP2",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory && cat .sessions/tickets.json; ls .sessions/lessons 2>&1 | head; gh pr diff 565 > /tmp/pr565.diff; grep -n '^diff --git' /tmp/pr565.diff",
+          "description": "Show tickets, lessons and the files the PR changed"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01YKmMvjX1qm6GVL6qJy9qVx",
+        "tool_input": {
+          "command": "gh pr diff 565 > /tmp/pr565.diff",
+          "description": "Save the PR's diff"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 14,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #565 added to each approve-merge job a step that asks GitHub whether the account that started the run may write (`factory/scripts/trusted.sh \\\"$SENDER\\\"`), moved the concurrency group from the workflow to each job, and made the retro step skip a run that an untrusted account started. Run 44901340724 was started by the owner's approving review of pull request #568. In the `ship` job the new step ran with `SENDER: edmulraney` and succeeded, the next step printed \\\"pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\\\", and the retro step was skipped because nothing failed. The `test-main` and `send-back` jobs were skipped, as their conditions say for an approving review, and they did not block `ship`. The run exercised only the trusted path: a refusal of an account without write access, and the retro staying silent after one, were not observed here. Neither reviewer's assumption (the `review` job's token in review.yml, the `commented` event's author in `flag-unfinished.sh`) concerns this workflow, so this run confirms neither.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/44901340724\",\"https://github.com/edmulraney/tinyfactory/pull/565\",\"https://github.com/edmulraney/tinyfactory/pull/568\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"Nothing: the changed steps did what pull request #565 claimed.\",\"removes\":\"nothing\"},\"cost\":{\"amount\":\"Nothing: the run succeeded in about 8 seconds, with 0 agent sessions and a cost of $0.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: there was no fault to prevent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #565 added to each approve-merge job a step that asks GitHub whether the account that started the run may write (`factory/scripts/trusted.sh \"$SENDER\"`), moved the concurrency group from the workflow to each job, and made the retro step skip a run that an untrusted account started. Run 44901340724 was started by the owner's approving review of pull request #568. In the `ship` job the new step ran with `SENDER: edmulraney` and succeeded, the next step printed \"pull request #568 waits to merge at 8e7e78a, and merge-group.yml was started\", and the retro step was skipped because nothing failed. The `test-main` and `send-back` jobs were skipped, as their conditions say for an approving review, and they did not block `ship`. The run exercised only the trusted path: a refusal of an account without write access, and the retro staying silent after one, were not observed here. Neither reviewer's assumption (the `review` job's token in review.yml, the `commented` event's author in `flag-unfinished.sh`) concerns this workflow, so this run confirms neither.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/44901340724",
+        "https://github.com/edmulraney/tinyfactory/pull/565",
+        "https://github.com/edmulraney/tinyfactory/pull/568"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+        "removes": "nothing"
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded in about 8 seconds, with 0 agent sessions and a cost of $0.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: there was no fault to prevent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 2910,
+    "type": "result",
+    "duration_ms": 40234,
+    "uuid": "32ad39fa-8a74-48f8-905a-ee1d99c75088",
+    "ttft_stream_ms": 2349,
+    "time_to_request_ms": 228,
+    "first_content_frame_ms": 2350,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 14,
+        "outputTokens": 2488,
+        "cacheReadInputTokens": 221450,
+        "cacheCreationInputTokens": 26466,
+        "webSearchRequests": 0,
+        "costUSD": 0.5673779999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 124,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 26466,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
