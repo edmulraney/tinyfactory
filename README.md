@@ -11,7 +11,7 @@ npx tinyfactory my-idea
 One command sets up, on free tiers:
 
 - a GitHub repository and a project board;
-- a factory in it, with sandboxed AI agents for product, engineering, research, architecture review and correctness review;
+- a factory in it, with sandboxed AI agents for product, design, engineering, research, architecture review and correctness review;
 - a Next.js web app hosted on Vercel;
 - a database and sign-in on Neon Postgres and Better Auth (through Neon Auth).
 
@@ -21,7 +21,7 @@ tinyfactory is a small software factory for a technical founder, or a tiny team,
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
-> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it has merged 260 pull requests. This repository holds its files, and the factory runs here on its own pull requests too. Build, review and ship work. Refine and design are new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
+> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it has merged 280 pull requests. This repository holds its files, and the factory runs here on its own pull requests too. Build, review and ship work. Refine and design are new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
@@ -88,7 +88,7 @@ Anything else that needs you is labelled `needs-human`, with a comment that says
 
 ## How it improves
 
-The factory you get improves itself while it builds your product. After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket: a new check, a clearer instruction or a better design. The factory builds that ticket like any other, so each kind of mistake should need a person only once. Add the `bug` label to a ticket for a defect you met in the product, and a retro finds the step that let it through. `factory/decisions.md` records every decision with its reason and what was rejected.
+The factory you get improves itself while it builds your product. After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket: a new check, a clearer instruction or a better design. The factory builds that ticket like any other, so the same kind of mistake should not happen twice. Add the `bug` label to a ticket for a defect you met in the product, and a retro finds the step that let it through. `factory/decisions.md` records every decision with its reason and what was rejected.
 
 ## What a project gets
 
