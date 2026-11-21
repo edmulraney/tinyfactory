@@ -1,0 +1,133 @@
+{
+  "pr": 568,
+  "issue": 567,
+  "facts": {
+    "run": 44846307451,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44846307451",
+    "conclusion": "success",
+    "pr": 568,
+    "issue": 567,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 1.2,
+    "turns": 25,
+    "changed_by": {
+      "pr": 565,
+      "issue": 563,
+      "title": "fix: act only for an account with write access",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.",
+            "if_wrong": "Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it."
+          }
+        ],
+        "ryan": [
+          {
+            "assumes": "GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.",
+            "if_wrong": "The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "review",
+        "step": "Adam reviews architecture and taste, and Ryan correctness, at the same time",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Ask for a person when the reviews did not start and nothing starts them again",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Ask for a person when the reviews were stopped at the time limit",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Carry Adam's earlier pass forward when the push only merged main",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Carry Ryan's earlier pass forward when the push only merged main",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Fetch the pull request's commit, which a checkout of the base lacks",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Fetch the screenshots the end-to-end tests took",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Keep a second copy of the transcripts on this run",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Post each verdict and save each transcript",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Show the acceptance tests' screenshots on the pull request",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Tell whether this job stopped at its time limit",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Wait while the Claude usage limit holds every agent",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Write what a reviewer reads from GitHub beside the checkout",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first `ci` run after pull request #565 did what the change claimed: the two reviewers ran with no GitHub token, the `review` job posted both verdicts itself, and nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #565 folded the `verdicts` job into `review` in `ci.yml`: the checkout keeps no credentials, the pull request's commit is fetched with a token given to that one command, the reviewers' sessions get no `GH_TOKEN` and no `gh` tools and read what `review.sh context` wrote, and the job then posts each verdict. Run 44846307451, on pull request #568, reached 8 of the 13 changed steps and all 8 succeeded. The fetch worked with the one-command credential helper. Both carry steps found no earlier verdict, so both reviews ran. The usage-limit wait passed. The sessions' step shows only `CLAUDE_CODE_OAUTH_TOKEN` in its environment and a tool list without `gh`. Adam and Ryan each completed (36 and 41 seconds, $0.59 and $0.61, no tool call refused or failed). The verdicts step posted both comments and saved both transcripts, and the artifact took the new name with the attempt, `session-review-44846307451-1`. The 5 skipped steps were skipped as written: the two screenshot steps because no end-to-end tests ran, and the three that ask for a person or read the time limit because nothing failed or was cancelled, so this run does not prove those paths. Adam's assumption on #565, that no file a session can read holds the job's token, is supported only in part: the checkout's cleanup found no stored credential in the repository's git config at the end of the job; other files on the runner were not checked. Ryan's assumption concerns `flag-unfinished.sh`, which this run did not use. No earlier lessons and no open tickets were given.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44846307451",
+      "https://github.com/edmulraney/tinyfactory/pull/565",
+      "https://github.com/edmulraney/tinyfactory/pull/568#issuecomment-7054518255",
+      "https://github.com/edmulraney/tinyfactory/pull/568#issuecomment-7054519243"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its two reviews cost $1.20 and 77 seconds of sessions as any review does.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
