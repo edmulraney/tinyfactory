@@ -21,7 +21,7 @@ tinyfactory is a small software factory for a technical founder, or a tiny team,
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
-> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it has merged 280 pull requests. This repository holds its files, and the factory runs here on its own pull requests too. Build, review and ship work. Refine and design are new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
+> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it has merged 280 pull requests. This repository holds its files, and the factory runs here on its own pull requests too. Build, review and ship work. Refine and design are new. Observe is not built yet. [The first post about it](https://emul.dev/posts/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
