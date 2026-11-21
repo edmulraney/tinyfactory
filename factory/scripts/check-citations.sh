@@ -18,7 +18,7 @@ present=""
 while IFS= read -r document; do
   [ ! -f "$document" ] || present+="$document"$'\n'
 done <<<"$documents"
-rows=$(grep -E '^(factory|product)/decisions/[^/]+\.md$' <<<"$present" || true)
+rows=$(grep -E '^(factory|product|architecture)/decisions/[^/]+\.md$' <<<"$present" || true)
 entries=$(grep -E '^factory/free-tier/[^/]+\.md$' <<<"$present" || true)
 
 # Each record's rows are read first, then every document; with no document, awk would wait for one typed in.

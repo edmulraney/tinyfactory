@@ -67,6 +67,19 @@ grep -qxF "A: after the race. Go." .refine/idea.md || fail "expected the file to
 [ "$(grep -n 'How I read it' .refine/idea.md | cut -d: -f1)" -lt "$(grep -n 'after the race' .refine/idea.md | cut -d: -f1)" ] \
   || fail "expected the comments in the order they were written"
 
+scenario "Peta is given Dara's designs, so a slice she files after the owner's go can link its design"
+github
+jq '.[1] = {id: 2, user: {login: "claude[bot]", type: "Bot"}, created_at: "2026-11-17T10:00:00Z",
+  body: "Dara\u0027s designs for the screens the proposal above adds or changes.\n\n**2-race-card**: [2-race-card.html](https://github.com/owner/repo/blob/sessions/issue-12/designs/0123456789ab/2-race-card.html)"}' \
+  "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
+start 3
+expect_status 0
+expect_written true
+grep -qF "[2-race-card.html](https://github.com/owner/repo/blob/sessions/issue-12/designs/0123456789ab/2-race-card.html)" .refine/idea.md \
+  || fail "expected the file to hold the address of the design's HTML file"
+[ "$(grep -n '2-race-card.html' .refine/idea.md | cut -d: -f1)" -lt "$(grep -n 'after the race' .refine/idea.md | cut -d: -f1)" ] \
+  || fail "expected the designs before the owner's answer to them"
+
 scenario "a comment by anyone but the owner starts nothing"
 github
 start 2

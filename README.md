@@ -21,7 +21,7 @@ tinyfactory is a small software factory for a technical founder, or a tiny team,
 
 It is deliberately narrow. Its job is to get an MVP validated with real users at zero cost, without the slow decay into slop that agents produce when they build a product by themselves. It is not an enterprise factory. If the idea gets traction, you carry on building in the same factory, on the same stack.
 
-> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it merged 235 pull requests in its first week. This repository holds its files, and the factory now runs here on its own pull requests. Build, review and ship work. Refine is new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
+> **Status: version 0.0.1.** It is not ready for real work yet, and it is being improved every day to get there. tinyfactory is being built with tinyfactory: it grew inside one private project in November 2026, where it has merged 260 pull requests. This repository holds its files, and the factory runs here on its own pull requests too. Build, review and ship work. Refine and design are new. Observe is not built yet. [The first post about it](https://emul.dev/writing/introducing-tinyfactory/) says what it is for and how it is built.
 
 ## The loop
 
@@ -33,13 +33,13 @@ flowchart LR
 | Step | Who | What happens |
 |---|---|---|
 | Idea | You or an agent | A ticket is added to the board. A rough idea is enough: who has the problem, what would change for the business, and notes. |
-| Refine | Peta, the product agent | She turns a rough idea into small tickets with acceptance criteria, and asks you for the decisions that are yours. |
+| Refine | Peta, the product agent, and Dara, the designer | Peta turns a rough idea into small tickets with acceptance criteria, and asks you for the decisions that are yours. Dara shows each screen a ticket adds or changes as pictures, before anything is built. |
 | Build | Esme, the product engineer | She writes the acceptance tests first, then the change, and opens a pull request. Fred does the same for a change to the factory itself. |
-| Review | Scripts, then Adam and Ryan | Lint, types, unit tests, a build, and end-to-end tests on a preview deployment. Adam reviews architecture and Ryan reviews correctness. A failure starts a fix round; after three, a person is asked. |
+| Review | Scripts, then Adam and Ryan | Lint, types, unit tests, a build, and end-to-end tests on a preview deployment. Adam reviews architecture and Ryan reviews correctness, and the pull request shows a screenshot for each acceptance criterion. A failure starts a fix round; after three, a person is asked. |
 | Ship | The factory | The pull request merges and deploys, and the factory checks that production runs the merged commit. |
 | Observe | Not built yet | An incident or a bug in production will become a ticket. |
 
-Two more agents work beside the loop. Rosa answers a research ticket from public sources. The retro looks at a run that went wrong and proposes a change to the factory.
+Two more agents work beside the loop. Rosa answers a research ticket from public sources. The retro looks at a run that went wrong, or at a bug you met in the product, and proposes a change to the factory.
 
 ## Product, as well as engineering
 
@@ -64,6 +64,8 @@ Every agent starts from the purpose and from its ticket, so the engineer acts as
 
 **A script before an agent.** Whatever a linter, a test or a script can decide, it decides. A script costs no tokens and gives the same answer on every run. Agents are kept for what needs judgement.
 
+**A stated structure.** A project's code lives in five folders: `domain` holds what the product knows and does, as one module for each concept behind a single `index.ts`; `components` holds the design system; `app` holds the screens; `lib` and `db` hold the rest. Lint fails an import that crosses a boundary, and `ARCHITECTURE.md` names one reference feature that the engineer reads before every build.
+
 **Two reviewers with different jobs.** Adam judges whether the approach fits the codebase's architecture and design rules. Ryan checks that the change does what its ticket asks and that it works.
 
 **As few pull requests as possible wait for you.** A pull request that passes its checks and both reviews merges by itself, unless it changes one of these:
@@ -86,7 +88,7 @@ Anything else that needs you is labelled `needs-human`, with a comment that says
 
 ## How it improves
 
-The factory you get improves itself while it builds your product. After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket: a new check, a clearer instruction or a better design. The factory builds that ticket like any other, so each kind of mistake should need a person only once. `factory/decisions.md` records every decision with its reason and what was rejected.
+The factory you get improves itself while it builds your product. After a run that went wrong or cost more than it should, the retro finds the cause and proposes a change to the factory as a ticket: a new check, a clearer instruction or a better design. The factory builds that ticket like any other, so each kind of mistake should need a person only once. Add the `bug` label to a ticket for a defect you met in the product, and a retro finds the step that let it through. `factory/decisions.md` records every decision with its reason and what was rejected.
 
 ## What a project gets
 
@@ -134,14 +136,13 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 
 ## Known gaps
 
-- **Visual design is not covered.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan. Nothing yet keeps taste in how a product looks, feels and moves.
+- **Visual design has only just started.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan, and Dara shows a new screen before it is built. Nothing yet keeps taste in how a product feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
 - **No database code yet.** A project gets a Postgres database, and no ORM or migrations. Drizzle is planned.
-- **No set structure for features yet.** A skill that has the engineer build each feature as its own slice (Feature-Sliced Design) is planned.
 - **Ordering waiting tickets by dragging their cards is new.** It has not yet been seen working with tickets waiting; until it is, expect the ticket that has waited longest to start first.
 - **An agent holds the Claude token.** Every agent session needs it to run, so an agent that reads a hostile page could be talked into sending it out. [`SECURITY.md`](SECURITY.md) says what is protected and what is not.
 - **The factory's own tests need Linux.** They run on GitHub's runner, and many fail on a Mac's older bash, awk and git. Setup itself runs on a Mac.
-- **The factory has only just started running in this repository.** Until 20 November 2026 it was built in a private project and copied here.
+- **The factory is built in a private project and published from here.** Each change is made there, where a product exercises it, and brought here with its decision records.
 
 ## Where things are
 

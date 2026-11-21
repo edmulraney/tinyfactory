@@ -2,8 +2,8 @@
 # They are the same in every project and are replaced by factory upgrades, unlike the seeds in
 # templates/ (CLAUDE.md, ARCHITECTURE.md, DESIGN.md, TASTE.md), which each project edits after creation.
 # One path per line, as it is in a project; a directory means everything under it.
-# The factory's repo holds no app, so a path under apps/ is copied from templates/, where it is kept
-# beside the seeds, over whatever a generator wrote there.
+# A path under apps/ is copied from this repo where it holds the app, and from templates/ where it
+# holds none, over whatever a generator wrote there.
 # A file listed under apps/ imports nothing but a package, a listed file or a seed (decisions S309).
 # .github/workflows is not listed: scaffold.sh makes it from factory/workflows.
 .gitattributes

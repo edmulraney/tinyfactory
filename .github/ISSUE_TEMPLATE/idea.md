@@ -4,7 +4,7 @@ about: A rough idea. Peta turns it into tickets with you; nothing is built from 
 labels: idea
 ---
 
-<!-- Every part is optional: a line of notes is enough. Peta answers in a comment with how she read it, the slices, the decisions that are yours and what she left out. Answer her, or say "go", and she files the slices. -->
+<!-- Every part is optional: a line of notes is enough. Peta answers in a comment with how she read it, the slices, the decisions that are yours and what she left out. Dara then shows each screen they add or change as pictures. Answer, or say "go", which accepts the designs, and Peta files the slices. -->
 
 ## Who has the problem
 <!-- Who, and what it costs them. -->

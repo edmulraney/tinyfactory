@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Checks that a decision record, its file and the folder of its tickets' rows, keeps its format.
-# Usage: check-decisions.sh [record...]   (from the repo root; default: both records)
+# Usage: check-decisions.sh [record...]   (from the repo root; default: every record)
 set -euo pipefail
 
-[ $# -gt 0 ] || set -- factory/decisions.md product/decisions.md
+[ $# -gt 0 ] || set -- factory/decisions.md product/decisions.md architecture/decisions.md
 
 # The header every record carries under its title, word for word (decisions H11).
 header='- One row per decision, and nothing else: no paragraph, list or note. This file holds only the sections; `factory/scripts/decisions.sh <this file>` prints the whole record.

@@ -1,0 +1,33 @@
+# Closes an idea when a person closes its last open slice; ship.sh does the same for a ticket it closes.
+name: close-idea
+
+on:
+  # A ticket ship.sh closes starts no workflow, so ship.sh runs the script itself (decisions T569b).
+  issues:
+    types: [closed]
+
+jobs:
+  close:
+    # The event must say a trusted account opened the ticket (decisions W563b).
+    if: >-
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
+      contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write   # to close the idea
+    steps:
+      - uses: actions/checkout@v4
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
+      - name: Close the idea whose last open slice this ticket was
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: factory/scripts/close-idea.sh "$ISSUE"

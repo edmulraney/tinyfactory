@@ -10,8 +10,12 @@ import { expect, test } from "../test";
 test("AC1: a visitor sees the product name on the home page", async ({ page }) => { … });
 ```
 
-Import from `../test`, not from `@playwright/test`: it adds an accessibility scan to every test
-that opens a page.
+Import from `../test`, not from `@playwright/test`: every test that opens a page then ends with an
+accessibility scan, and fails when the page scrolls sideways.
+
+Every test runs twice, at the two screens Myapp supports (`DESIGN.md`, "Supported screens"): the
+`mobile` project is 375px wide and the `desktop` project 1280px (`playwright.config.ts`). So no test
+sets a width, and no ticket needs a criterion for one.
 
 The page a test leaves on screen is what its pull request shows for that criterion: CI posts the
 screenshot taken at the end of each test, captioned with the test's title

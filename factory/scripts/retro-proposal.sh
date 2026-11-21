@@ -32,6 +32,7 @@ fi
 body=$(jq -r '
   (if .facts.changed_by then "the first run of `\(.facts.workflow)` since pull request #\(.facts.changed_by.pr) changed it, \(.facts.url)"
    elif .facts.ask then "the request for help \(.facts.ask.url), which the `claude` run \(.facts.url) answered"
+   elif .facts.defect then "the defect #\(.issue), which the owner met in use"
    elif .facts.run then "the failed `\(.facts.workflow)` run \(.facts.url)" else "pull request #\(.pr)" end) as $seen
   | "## Change\n\n`\(.lesson.change.target)` (\(.lesson.change.kind))\n\n\(.lesson.change.proposal)\n\nRemoves: \(.lesson.change.removes)\n\n"
   + "## How we will know it works\n\n\(.lesson.saves)\n\n"

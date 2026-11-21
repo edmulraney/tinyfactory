@@ -51,3 +51,12 @@ So a change to a file in the manifest changes every project set up afterwards. W
 | Seed | A template a project edits after setup |
 | Fix round | A fresh session that fixes a pull request after a failed check or review |
 | Retro | The agent that finds the cause of a run's friction and may propose a change |
+
+## Reference feature
+
+A new project starts with one feature, the health endpoint, shaped as its own `ARCHITECTURE.md` says. These are its files as this repository keeps them, and `pnpm lint` fails when one names no file.
+
+- **A route handler that only answers.** `.claude/skills/bootstrap/templates/apps/web/src/app/api/health/route.ts`
+- **A module's door, deciding a rule.** `.claude/skills/bootstrap/templates/apps/web/src/domain/health/index.ts`
+- **A unit test through the door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/health/index.test.ts`
+- **An end-to-end test.** `.claude/skills/bootstrap/templates/apps/web/e2e/smoke.spec.ts`

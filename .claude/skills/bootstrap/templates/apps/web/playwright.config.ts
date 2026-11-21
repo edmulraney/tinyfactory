@@ -19,7 +19,11 @@ export default defineConfig({
     trace: "retain-on-failure",
     extraHTTPHeaders: bypass ? { "x-vercel-protection-bypass": bypass } : undefined,
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  // Every test runs at both screens Myapp supports (DESIGN.md, "Supported screens").
+  projects: [
+    { name: "mobile", use: { ...devices["Desktop Chrome"], viewport: { width: 375, height: 812 } } },
+    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+  ],
   webServer: process.env.BASE_URL
     ? undefined
     : {

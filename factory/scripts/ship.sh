@@ -362,6 +362,8 @@ for pr in $shipped; do
   # Closed here, before the queue is read, not in GitHub's own time after the merge (decisions T359b).
   retry gh issue close "$issue" >/dev/null || unfinished "$pr" "ticket #$issue could not be closed"
   closed+="--closed $issue "
+  # Closing the ticket here starts no workflow, so the idea it is the last open slice of is closed here (decisions T569b).
+  retry "$script_dir/close-idea.sh" "$issue" || unfinished "$pr" "whether ticket #$issue was the last open slice of an idea is not known, so no idea was closed; close the idea by hand if every ticket under its \"Sub-issues\" has closed"
 done
 
 # A merge shows that jobs start again, and the sweep still runs again what this leaves (decisions H386a, H386b).

@@ -60,6 +60,14 @@ expect_status 0
 expect_call "gh issue comment 40 --body A retro of the \`implement\` run https://github.com/o/r/actions/runs/99 proposes"
 expect_no_call "gh issue create"
 
+scenario "the lesson of a defect met in use names the defect's ticket in its note"
+saved '.lesson.held_by = 40 | .pr = null | .issue = 574 | .facts = {pr: null, issue: 574, defect: {title: "Let a runner keep more than one race"}}'
+github
+file
+expect_status 0
+expect_call "gh issue comment 40 --body A retro of the defect #574, which the owner met in use, proposes"
+expect_no_call "gh issue create"
+
 scenario "a lesson naming no ticket files with both labels, and retro beside them"
 saved .
 github

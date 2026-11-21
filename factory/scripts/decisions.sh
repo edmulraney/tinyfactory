@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Prints a whole decision record: its own file, with each ticket's rows put under their section (decisions H130a).
-# Usage: decisions.sh [record]   (from the repo root; default: factory/decisions.md)
+# Prints a decision record, each ticket's rows under their section, or only the rows asked for (decisions H130a, H579).
+# Usage: decisions.sh [record]                    (from the repo root; default: factory/decisions.md)
+#        decisions.sh <record> <ID or word>...    the rows with those IDs and the rows that hold a word, in any case
 set -euo pipefail
 
 record="${1:-factory/decisions.md}"
@@ -8,6 +9,16 @@ if [ ! -s "$record" ]; then
   echo "$record: there is no such decision record" >&2
   exit 1
 fi
+[ $# -eq 0 ] || shift
+wanted=""
+for term in "$@"; do
+  if [ -z "$term" ] || [[ "$term" == *$'\n'* ]]; then
+    echo "$record: an ID or word to look for is empty or holds a line break" >&2
+    exit 1
+  fi
+  wanted+="$term"$'\n'
+done
+export wanted
 folder="${record%.md}"
 set -- "$record"
 for file in "$folder"/*.md; do
@@ -50,6 +61,32 @@ awk -F'|' -v record="$record" '
         lost = 1
       }
     if (lost) exit 1
+    terms = split(ENVIRON["wanted"], term, "\n") - 1
+    if (terms > 0) {
+      for (i = 1; i <= lines; i++) {
+        if (frame[i] !~ /^## [A-Z]: /) continue
+        current = substr(frame[i], 4, 1)
+        for (at = 1; at <= rows[current]; at++) {
+          keep = 0
+          for (t = 1; t <= terms; t++) {
+            if (term[t] ~ /^[A-Z][0-9]+[a-z]?$/) match_found = ids[current, at] == term[t]
+            else match_found = index(tolower(text[current, at]), tolower(term[t])) > 0
+            if (match_found) keep = found[t] = 1
+          }
+          if (keep) picked[++picks] = text[current, at]
+        }
+      }
+      for (t = 1; t <= terms; t++)
+        if (!(t in found)) {
+          if (term[t] ~ /^[A-Z][0-9]+[a-z]?$/) {
+            print record ": no row has the ID " term[t] > "/dev/stderr"
+            lost = 1
+          } else print record ": no row holds \"" term[t] "\"" > "/dev/stderr"
+        }
+      if (lost) exit 1
+      for (i = 1; i <= picks; i++) print picked[i]
+      exit 0
+    }
     for (i = 1; i <= lines; i++) {
       print frame[i]
       if (frame[i] ~ /^## [A-Z]: /) current = substr(frame[i], 4, 1)

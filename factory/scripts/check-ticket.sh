@@ -65,6 +65,12 @@ case "${found[0]}" in
   # A change to the factory itself cannot be tested through the app; it says how it will be proven.
   factory)    required=("Change" "How we will know it works") ;;
 esac
+# A ticket that changes what a person sees lists each screen's states; one opened before the rule is not asked (decisions T575a, T575d).
+states_began="2026-11-22T00:00:00Z"
+states=false
+case "${found[0]}" in
+  initiative|bug|tweak) if [[ -z "$created" || ! "$created" < "$states_began" ]]; then states=true; required+=("States"); fi ;;
+esac
 
 # Text under a "## Heading", up to the next heading, without template comments or blank lines.
 section() {
@@ -89,6 +95,29 @@ if [[ " ${required[*]} " == *" Acceptance criteria "* ]] && ! section "Acceptanc
   echo "- No numbered acceptance criteria. Write each as \"- **AC1:** Given …, when …, then …\"."
   problems=1
 fi
+# Each row names a criterion the ticket has, or says "unchanged" (decisions T575b, T575c).
+rows=$(section "States")
+if $states && [ -n "$rows" ] && ! [[ "$rows" =~ ^[[:space:]]*[Nn]o\ screen\.?[[:space:]]*$ ]]; then
+  row_format='Write each as "- <screen>, <state>: <what the person sees> (AC1)" or "- <screen>, <state>: unchanged", or the one line "No screen".'
+  criteria=$(section "Acceptance criteria" | grep -oE 'AC[0-9]+' || true)
+  while read -r row; do
+    if [[ "$row" != "- "* ]]; then
+      echo "- The line \"$row\" under \"## States\" is not a row. $row_format"
+      problems=1
+      continue
+    fi
+    cited=$(grep -oE 'AC[0-9]+' <<<"$row" | sort -u || true)
+    if [ -z "$cited" ] && ! grep -qiw 'unchanged' <<<"$row"; then
+      echo "- The row \"$row\" under \"## States\" names no criterion and does not say \"unchanged\". $row_format"
+      problems=1
+    fi
+    for id in $cited; do
+      grep -qxF "$id" <<<"$criteria" && continue
+      echo "- The row \"$row\" under \"## States\" names $id, and the ticket has no criterion $id."
+      problems=1
+    done
+  done <<<"$rows"
+fi
 # A ticket check-research.sh would refuse after the build is refused here before it (decisions T33g).
 if [[ " ${required[*]} " == *" Checks "* ]] && [ -n "$(section "Checks")" ]; then
   checks=$(section "Checks" | grep -E '^- ' || true)
@@ -100,5 +129,31 @@ if [[ " ${required[*]} " == *" Checks "* ]] && [ -n "$(section "Checks")" ]; the
     sed 's/^/- /' <<<"$refused"
     problems=1
   fi
+fi
+# A word is named as a label in backticks beside "label" or "labelled", alone or in a list, or after --label or --add-label (decisions T576a, T576c).
+word='[A-Za-z0-9][A-Za-z0-9-]*'
+more="((,|,? (or|and)) \`$word\`)"
+list="\`$word\`$more*"
+text=$(sed 's/<!--.*-->//g' <<<"$body")
+named=$({
+  # "labels" after one name is a verb, as in "`implement` labels the ticket".
+  grep -oiE "label(s|led)? $list|$list label($|[^[:alpha:]])|\`$word\`$more+ labels" <<<"$text" | grep -oE "\`$word\`" | tr -d '`'
+  grep -oE -- "--(add-)?label[ =][\"']?$word(,$word)*" <<<"$text" | sed "s/^--[a-z-]*[ =][\"']\{0,1\}//" | tr ',' '\n'
+} | sort -u || true)
+if [ -n "$named" ]; then
+  # A copy of the scripts set aside outside the repo reads the labels of the repo it is run in (decisions T576b).
+  labels_script=.claude/skills/bootstrap/scripts/labels.sh
+  for repo in "$(dirname "$0")/../.." .; do
+    [ ! -f "$repo/$labels_script" ] || break
+  done
+  existing=$(sed -n 's/^gh label create \([^ ]*\) .*/\1/p' "$repo/$labels_script" 2>/dev/null || true)
+  [ -n "$existing" ] || { echo "Could not read the factory's labels from $labels_script, so the ticket was not checked." >&2; exit 2; }
+  any=$(paste -sd '|' - <<<"$existing")
+  while read -r label; do
+    grep -qxF -- "$label" <<<"$existing" && continue
+    grep -qE "^New label: \`?$label\`?\. \`?($any)\`? cannot serve because [^[:space:]]" <<<"$text" && continue
+    echo "- The ticket names the label \`$label\`, which the factory does not have. Its labels are: $(paste -sd ',' - <<<"$existing" | sed 's/,/, /g'). Use one of them, or add the line \"New label: $label. <existing label> cannot serve because <reason>\"."
+    problems=1
+  done <<<"$named"
 fi
 exit "$problems"
