@@ -287,7 +287,6 @@ jobs:
             if gh workflow run install-workflows.yml -f pr="$next" ${rest:+-f then="$rest"}; then exit 0; fi
             sleep 20
           done
-          # The first line says what a person must do (decisions A371a).
           {
             printf 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `%s`' "$next"
             [ -z "$rest" ] || printf ' and `then` to `%s`' "$rest"
