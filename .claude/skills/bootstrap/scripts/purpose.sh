@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-# Starts the purpose interview: a Claude Code session that runs the `purpose` skill, asks the
-# human about the product, offers mission statements to choose from, and writes PURPOSE.md.
-# The interview lives in one place, the skill; this script only opens it from a terminal.
-# Safe to re-run: skips when PURPOSE.md exists. With no terminal attached (an agent is running
-# the bootstrap) it starts nothing: that agent runs the skill in its own conversation.
+# Starts the purpose interview: a Claude Code session that runs the `purpose` skill, which writes PURPOSE.md.
 # Usage: purpose.sh [name]   (name defaults to the directory name)
+#        Safe to re-run: skips when PURPOSE.md exists. With no terminal attached it starts nothing: the agent
+#        that runs the bootstrap runs the skill in its own conversation.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"

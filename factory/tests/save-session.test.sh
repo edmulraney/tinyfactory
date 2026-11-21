@@ -6,7 +6,6 @@
 transcript() { echo '{"turns": 3}' > "$T/out.json"; }
 # A home of the test's own, so that the sessions of whoever runs the tests are never read.
 save() { run env GITHUB_RUN_ID=900 HOME="$T/home" "$scripts/save-session.sh" "$@"; }
-# session_file <project> <session> <line>...: a file Claude Code wrote as it ran, a JSON value a line.
 session_file() {
   local file="$T/home/.claude/projects/$1/$2.jsonl"
   mkdir -p "$(dirname "$file")"

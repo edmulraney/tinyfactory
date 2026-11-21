@@ -3,8 +3,6 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import tailwind from "eslint-plugin-better-tailwindcss";
 
-// ARCHITECTURE.md, "Structure": the app's code sits in five folders, and each may import only some
-// of the others. A module of src/domain is a deep module: what is outside its folder uses its index.ts.
 const useTheIndex =
   "Import a module through its index.ts (@/domain/<module>). What several modules or screens share with no product knowledge goes in src/lib.";
 const pastTheIndex = { group: ["@/domain/*/**", "**/domain/*/**"], message: useTheIndex };
@@ -125,9 +123,7 @@ const eslintConfig = defineConfig([
       ],
     },
   },
-  // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",

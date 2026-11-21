@@ -16,9 +16,7 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# issue <number> <title> <login> <type>: an open issue as GitHub lists it.
 issue() { echo "{\"number\":$1,\"title\":\"$2\",\"user\":{\"login\":\"$3\",\"type\":\"$4\"}}"; }
-# expect_part <heading> <words>: the ticket holds the words under that heading.
 expect_part() {
   sed -n "/^## $1\$/,/^## /p" "$T/body" 2>/dev/null | grep -qF -- "$2" || fail "expected under \"$1\": $2"
 }

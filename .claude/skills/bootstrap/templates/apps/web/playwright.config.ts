@@ -1,7 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// With BASE_URL set (CI, against a Vercel preview) the tests hit that deployment.
-// Without it they build and start the app locally.
 const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
 // Vercel previews sit behind a login; this header lets automation through.
 const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;

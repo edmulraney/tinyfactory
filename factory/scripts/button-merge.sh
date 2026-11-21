@@ -36,7 +36,6 @@ case "$1" in
   finish)
     main="${3:-}"; before="${4:-}"
     printed="${FAILED:-It printed nothing.}"; fence='```'; printed="${printed//$fence/}"
-    # stop <why>: stops the script as failed, having said why on the pull request.
     stop() {
       local body="Run the failed \`approve-merge\` run for this pull request again: \`main\` is tested and what follows a merge is done then.
 

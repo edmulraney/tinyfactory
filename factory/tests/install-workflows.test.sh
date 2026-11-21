@@ -57,7 +57,6 @@ merged_next() {
   git merge --quiet --squash next >/dev/null 2>&1; git commit --quiet -m "feat: build it another way (#8)"
   jq --arg head "$(git rev-parse next)" --arg merge "$(git rev-parse HEAD)" '.headRefOid = $head | .mergeCommit.oid = $merge' "$T/view.json" > "$T/view-8.json"
 }
-# check [<pr>]: the step, for pull request #7 unless another is named.
 check() {
   : > "$T/output"
   run env GH_TOKEN=workflow-token PR="${1:-7}" DEFAULT_BRANCH=main OWNER=repo-owner RULE="$rule" CARRY="$carry" GITHUB_REPOSITORY=owner/myapp \

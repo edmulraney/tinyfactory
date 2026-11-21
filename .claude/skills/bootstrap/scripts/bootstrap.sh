@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
-# Runs the whole bootstrap in order, in the current directory. `npx tinyfactory <name>` makes the
-# folder and runs this in it. Each step is safe to re-run and leaves alone what an earlier run
-# finished, so after fixing a failure the same command carries on from where it stopped.
-# It opens the purpose interview (what are we building, and its mission), then needs only browser
-# approvals: the Neon sign-in, the board token, the workflow app, the Claude token, and two settings no API
-# exposes (Vercel's preview retention and the board's automations).
+# Runs every setup step in order, in the current directory. `npx tinyfactory <name>` makes the folder and runs this.
 # Usage: bootstrap.sh [name]   (name defaults to the directory name)
+#        Safe to re-run: each step leaves alone what an earlier run finished, so the same command carries on.
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"

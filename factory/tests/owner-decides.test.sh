@@ -48,7 +48,6 @@ change() {
     git diff --cached
   ) > "$T/diff"
 }
-# in_workflow <old> <new>: a workflow source with that one change.
 in_workflow() {
   replace_first "$workflow" "$1" "$2"
   change factory/workflows/build.yml "$workflow" "$replaced"
@@ -63,7 +62,6 @@ expect_unheld() {
   [ -z "$out" ] || fail "expected it to print nothing"
 }
 
-# Spend or limits.
 while IFS='|' read -r what old new; do
   scenario "holds a workflow's changed $what, as spend or limits"
   in_workflow "$old" "$new"
@@ -115,7 +113,6 @@ change factory/scripts/in-flight.sh 'die() { echo "$1" >&2; exit 1; }' 'die() { 
 decides
 expect_unheld
 
-# Secrets or permissions.
 scenario "holds a changed permission, though the hunk does not show the block it is in"
 in_workflow "      actions: write" "      actions: read"
 decides

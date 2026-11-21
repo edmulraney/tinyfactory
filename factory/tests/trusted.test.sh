@@ -17,7 +17,6 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# may <permission> [role]: GitHub's answer for an account with that base permission, and that role's name.
 may() { jq -cn --arg permission "$1" --arg role "${2:-$1}" '{permission: $permission, role_name: $role, user: {login: "someone"}}'; }
 trusted() { run env GH_TOKEN=workflow-token "$scripts/trusted.sh" "$@"; }
 
@@ -120,9 +119,7 @@ workflows="$root/factory/workflows"
 name="Stop unless the account that started this run"
 jobs_of() { sed -n '/^jobs:$/,$p' "$workflows/$1.yml" | sed -n 's/^  \([a-z0-9-]*\):$/\1/p'; }
 job() { awk -v job="  $2:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$workflows/$1.yml"; }
-# condition <workflow> <job>: the job's `if:`, on one line.
 condition() { job "$1" "$2" | awk '/^    if:/ { on = 1; print; next } on && /^      / { print; next } { on = 0 }' | sed 's/^ *//' | paste -sd' ' -; }
-# trust_step <workflow> <job>: the lines of the step that asks trusted.sh.
 trust_step() { job "$1" "$2" | awk -v first="      - name: $name" 'index($0, first) == 1 { on = 1; print; next } /^      (- |#)/ { on = 0 } on'; }
 commands() {
   if grep -qx '        run: |' <<<"$1"; then sed -n '/^        run: |$/,$p' <<<"$1" | sed '1d; s/^          //'

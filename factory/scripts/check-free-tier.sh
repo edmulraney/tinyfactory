@@ -63,7 +63,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     }
     entry = ""
   }
-  # Opens the entry whose heading is this line.
   function open_entry(name) {
     if (blank != FNR - 1) problem(FNR, "the heading of entry " name " needs a blank line above it")
     entry = name
@@ -72,7 +71,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     automated = 0
     last = ""
   }
-  # Before the first line of each file: the entry the last file ended with, and that file itself.
   function close_file() {
     close_entry("")
     if ((kind == "ticket" || kind == "numbered") && entries == 0) { print previous_file ": this file holds no entry"; bad = 1 }
@@ -117,7 +115,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     next
   }
 
-  # A file of entries: a ticket'"'"'s, or the one entry numbered in order that it is named for.
   /^#+ / {
     id = ""
     if ($0 ~ (kind == "ticket" ? "^### #[1-9][0-9]*[a-z]?\\. [^ ]" : "^### [1-9][0-9]*\\. [^ ]")) { id = $2; sub(/\.$/, "", id) }

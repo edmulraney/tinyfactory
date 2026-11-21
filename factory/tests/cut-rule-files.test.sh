@@ -2,7 +2,6 @@
 # Tests for cut-rule-files.sh, which files the ticket that cuts a rule file over its word budget (decisions H476a).
 . "$(dirname "$0")/helpers.sh"
 
-# main_holds <budget> <words> <file>: `main` on GitHub lists the file with that budget, and the file holds that many words.
 main_holds() {
   mkdir -p "$T/main/repo/factory" "$(dirname "$T/main/repo/$3")"
   echo "$1 $3" >> "$T/main/repo/factory/rule-files.txt"
@@ -36,7 +35,6 @@ github() {
     esac'
 }
 cut() { run "$scripts/cut-rule-files.sh" "$@"; }
-# expect_buildable <n>: the gate that starts a build passes ticket #<n> as it was filed.
 expect_buildable() {
   local problems
   problems=$("$scripts/check-ticket.sh" --draft factory "$(cat "$T/title-$1")" "$T/body-$1") \

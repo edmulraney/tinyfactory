@@ -44,7 +44,6 @@ pull() {
   jq -cn --arg branch "$2" --argjson ago "$3" --arg mergeable "${4:-MERGEABLE}" --argjson draft "${5:-false}" \
     '{updatedAt: (now - $ago * 60 | todate), headRefName: $branch, mergeable: $mergeable, isDraft: $draft}' > "$T/pull-$1"
 }
-# a_run <state> <workflow> <branch>
 a_run() { jq -cn --arg name "$2" --arg branch "$3" '{name: $name, head_branch: $branch}' >> "$T/runs-$1"; }
 flags() { grep -c '^gh issue edit' "$T/calls" || true; }
 
@@ -351,7 +350,6 @@ expect_status 1
 expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress"
 expect_output "Ticket #64 was flagged needs-human, with nothing working on it, but it could not be told why."
 
-# The workflow: what the script is left to rely on.
 workflow="$root/factory/workflows/flag-idle.yml"
 scenario "the workflow runs rerun-refused.sh first, and flag-idle.sh even when that failed"
 steps=$(grep -n 'run: factory/scripts/' "$workflow" | sed 's/.*run: //' | tr '\n' ';')

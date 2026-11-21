@@ -98,7 +98,6 @@ entries=$(grep -E '^factory/free-tier/[^/]+\.md$' <<<"$present" || true)
     }
     return out
   }
-  # Writes the file just read, when --fix changed a line of it.
   function close_file(   i) {
     if (changed) {
       printf "" > current

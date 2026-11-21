@@ -22,7 +22,6 @@ Export the forecast.
 ## Docs to update
 None. AC9 is mentioned here and is not a criterion.'
 
-# spec <file> <import source> <test title>...
 spec() {
   local file="$dir/$1" from="$2" title
   shift 2

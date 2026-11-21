@@ -1,19 +1,9 @@
 #!/usr/bin/env bash
-# Gives a product with accounts somewhere to keep them: switches Neon Auth on for the production
-# branch of the database, and sets what the app needs to use it on the Vercel project:
-# NEON_AUTH_BASE_URL (the auth address) and NEON_AUTH_COOKIE_SECRET (generated here, never printed).
-# People sign in to a product unless its PURPOSE.md says it has no accounts (the purpose skill
-# writes that line); for such a product this script does nothing.
-# Why Neon Auth: the users live in the database the project already has, so a preview's own
-# database branch holds its own users, and there is no second service or account (decisions S287a).
-# People sign in by a link sent to their email and never by a password (decisions S342a): it
-# switches Neon Auth's Magic Link on and its email and password off, for the production branch
-# and for each preview's branch, which copied production's settings on the day it was made. A
-# preview's branch made before Neon Auth was on has none, and is passed over (decisions S384).
-# Safe to re-run: Neon answers an "enable" for a branch that has auth with what is there, and a
-# variable Vercel already lists, or a branch whose two settings are already so, is left alone, so
-# a second run changes nothing.
+# Switches Neon Auth on for the database's production branch, and sets on Vercel what the app needs to use it.
 # Usage: sign-in.sh [name]   (name defaults to the directory name; run after database-key.sh)
+#        Sets NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET on the Vercel project.
+#        Does nothing for a product whose PURPOSE.md says it has no accounts.
+#        Safe to re-run: a branch that has auth, a variable Vercel lists and settings already so are left alone.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -24,6 +14,7 @@ if [ ! -f PURPOSE.md ]; then
   echo "sign-in skipped: there is no PURPOSE.md, so nobody has said whether people sign in. Run the purpose skill, then this script again."
   exit 0
 fi
+# A product has accounts unless its PURPOSE.md says not, and keeps them in the database it already has (decisions S287a).
 if grep -qF -- '- **Have accounts.**' PURPOSE.md; then
   echo "sign-in skipped: PURPOSE.md says the product has no accounts"
   exit 0
@@ -72,6 +63,7 @@ echo "Neon Auth is on for the production branch ($branch): $url"
 # no command that changes Magic Link, so its `api` command sends each request with the login the
 # CLI holds; it prints Neon's JSON and fails when Neon refuses (neonctl 9.6.3).
 settings() { neon api "/projects/$project/branches/$1/auth/plugins" | jq -r '"\(.magic_link.enabled) \(.email_and_password.enabled)"'; }
+# People sign in by an emailed link and never by a password (decisions S342a).
 # by_link_only <branch id> <its name in a sentence>: sets the two, and does not take Neon's word.
 by_link_only() {
   local now
@@ -96,7 +88,6 @@ by_link_only "$branch" "the production branch"
 # a variable it already lists.
 vars=$(envs) || { echo "cannot read the environment variables of '$name' from Vercel now that sign-in is on; run this script again"; exit 1; }
 
-# add: reads a variable as JSON on stdin and adds it to the Vercel project.
 add() { vc api "/v10/projects/$name/env" -X POST --input - --raw >/dev/null 2>&1; }
 
 # The address is set for production only. A preview has auth of its own, on its own database
@@ -136,6 +127,7 @@ for wanted in "NEON_AUTH_BASE_URL production" "NEON_AUTH_COOKIE_SECRET productio
   listed $wanted || { echo "Vercel does not list $wanted after it was set; run this script again"; exit 1; }
 done
 
+# A preview's branch copied production's settings on the day it was made, so each is set as well.
 # Last, so that a preview's branch Neon refuses leaves production complete. Vercel's integration
 # names a preview's branch `preview/<git branch>`. On descriptor 3, so that npx cannot read the
 # list as its own input.
@@ -145,6 +137,7 @@ while IFS=$'\t' read -r id preview <&3; do
   # when Neon answers anything but "there is none" (neonctl 9.6.3).
   auth=$(neon neon-auth status --project-id "$project" --branch "$id" --output json) \
     || { echo "Neon would not say whether the preview's branch $preview ($id) has Neon Auth; run this script again"; exit 1; }
+  # A branch made before Neon Auth was on has none, and is passed over (decisions S384).
   if grep -qF 'Neon Auth is not configured for this branch' <<<"$auth"; then
     echo "passed over the preview's branch $preview ($id): it has no Neon Auth, so nobody can sign in there, by a password or otherwise"
     continue

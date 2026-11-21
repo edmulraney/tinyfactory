@@ -11,7 +11,6 @@ repo() {
   printf '# The list.\n\n50 CLAUDE.md\n50 .claude/skills/build/SKILL.md\n' > factory/rule-files.txt
   git add --all
 }
-# append_line <file> <line>: appends the line to the file.
 append_line() { printf '%s\n' "$2" >> "$1"; }
 check() { run "$scripts/check-rule-files.sh" "$@"; }
 refuses() {

@@ -25,9 +25,7 @@ github() {
     *) echo "unexpected call: gh $*" >&2; exit 1 ;;
   esac'
 }
-# picture <design> <width>: the hash of the picture the sessions branch holds of that design.
 picture() { on_github show "sessions:$(folder_of)/$1-$2.png" | git hash-object --stdin; }
-# design <name> <html>: a file as Dara leaves it.
 design() { mkdir -p .design && printf '%s\n' "$2" > ".design/$1.html"; }
 plain='<!doctype html><html><head><title>Race card</title><style>/* a card */ a { color: inherit }</style></head>
 <body><a href="#">Add a race</a><img alt="" src="data:image/png;base64,iVBORw0KGgo="><p>5 km and/or 10 km</p></body></html>'

@@ -1,16 +1,7 @@
 #!/usr/bin/env bash
-# Creates a GitHub token that can do one thing, edit the account's project boards, and stores
-# it as the repo secret BOARD_TOKEN. The token is never printed or written to disk. The human
-# only approves a one-time code in the browser.
-# What it is for: letting the factory keep its own board set up. When a merged pull request
-# changes board.sh, factory/scripts/apply-setup.sh re-runs it with this token, with no session
-# open. start-waiting.sh reads the order of the Backlog column with it (decisions T335a). It is
-# not for moving cards: GitHub's own project automations do that.
-# Why a separate token: a workflow's own token cannot touch a personal project board, and the gh
-# login's token can also read and write every repo on the account. This one cannot see any repo,
-# so an agent that got hold of it could reach nothing beyond the boards (decisions U2).
-# Safe to re-run: skips when the secret exists (FORCE=1 replaces it).
-# Usage: board-token.sh [name]   (name defaults to the directory name)
+# Creates a GitHub token that can only edit the account's project boards, and stores it as the secret BOARD_TOKEN.
+# Usage: board-token.sh [name]   (name defaults to the directory name; run after board.sh)
+#        Safe to re-run: skips when the secret exists (FORCE=1 replaces it).
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -58,10 +49,13 @@ done
 # A browser signed in to a different GitHub account would hand back that account's token.
 who=$(GH_TOKEN="$token" gh api user --jq .login)
 [ "$who" = "$owner" ] || { echo "the code was approved as '$who', not '$owner'; sign in as $owner and re-run"; exit 1; }
+# The token must see no repo, so an agent that got hold of it reaches nothing beyond the boards (decisions U2).
 [ "$scopes" = project ] || { echo "expected a token with only 'project', got '$scopes'"; exit 1; }
 GH_TOKEN="$token" gh api graphql -f owner="$owner" -F number="$number" \
   -f query='query($owner: String!, $number: Int!) { user(login: $owner) { projectV2(number: $number) { id } } }' \
   --jq .data.user.projectV2.id >/dev/null || { echo "the new token cannot read board #$number"; exit 1; }
 
+# apply-setup.sh re-runs board.sh with this token, and start-waiting.sh reads the Backlog's order with it (decisions T335a).
+# Piped to gh, so the token is never printed or written to disk.
 printf %s "$token" | gh secret set BOARD_TOKEN -R "$repo"
 echo "board token ok: secret BOARD_TOKEN stored (permission: $scopes), board #$number"

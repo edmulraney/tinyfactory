@@ -81,7 +81,6 @@ expect_failure
 expect_output "Usage: needs-review.sh <base-branch> <head-sha>"
 expect_no_call "gh"
 
-# job <name>: the lines of that job in ci.yml.
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
 
 scenario "ci.yml asks it in the e2e job, about the commit the run began for, and passes the answer on"

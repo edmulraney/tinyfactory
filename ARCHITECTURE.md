@@ -37,7 +37,7 @@ So a change to a file in the manifest changes every project set up afterwards. W
 - **A script before an agent.** What a script or a check can decide, it decides. An agent is for judgement.
 - **One workflow for each event, one skill for each job.** A workflow runs an agent with one skill when its event arrives.
 - **A workflow never runs before it is reviewed.** It is changed in `factory/workflows/`, where GitHub runs nothing, and installed once its pull request has merged.
-- **Only the owner starts anything.** A workflow that runs an agent, holds a secret or writes to the repository acts for the repository's owner and for nobody else.
+- **Only the team starts anything.** A workflow that runs an agent, holds a secret or writes to the repository acts for an account with write access to the repository, for the factory's own two bots, and for nobody else.
 - **Every script has a test.** The test stands in for each outside command and proves each failure as well as the success.
 
 ## Domain language
@@ -54,9 +54,16 @@ So a change to a file in the manifest changes every project set up afterwards. W
 
 ## Reference feature
 
-A new project starts with one feature, the health endpoint, shaped as its own `ARCHITECTURE.md` says. These are its files as this repository keeps them, and `pnpm lint` fails when one names no file.
+A new project starts with one feature, a waitlist on its home page, shaped as its own `ARCHITECTURE.md` says. These are its files as this repository keeps them, and `pnpm lint` fails when one names no file.
 
+- **A page that only shows.** `.claude/skills/bootstrap/templates/apps/web/src/app/page.tsx`
+- **A component that shows a state.** `.claude/skills/bootstrap/templates/apps/web/src/app/_components/waitlist-form.tsx`
+- **A server action.** `.claude/skills/bootstrap/templates/apps/web/src/app/actions.ts`
+- **A module's door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.ts`
+- **The module's types.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/types.ts`
+- **A use case deciding a rule.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts`
+- **The file that owns a table.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts`, for the table `.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts` defines
+- **A migration.** `.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0000_waitlist.sql`
+- **A unit test through the door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts`
+- **An acceptance test.** `.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/0-join-waitlist.spec.ts`
 - **A route handler that only answers.** `.claude/skills/bootstrap/templates/apps/web/src/app/api/health/route.ts`
-- **A module's door, deciding a rule.** `.claude/skills/bootstrap/templates/apps/web/src/domain/health/index.ts`
-- **A unit test through the door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/health/index.test.ts`
-- **An end-to-end test.** `.claude/skills/bootstrap/templates/apps/web/e2e/smoke.spec.ts`

@@ -2,7 +2,6 @@
 # Tests for factory/scripts/long-fields.sh, which names what in a review's verdict is over a limit.
 . "$(dirname "$0")/helpers.sh"
 
-# A sentence of $1 words.
 words() { local n; for ((n = 1; n < $1; n++)); do printf 'word '; done; printf 'end.'; }
 expect_said() { [ "$out" = "$1" ] || fail "expected it to print: $1"; }
 
@@ -24,7 +23,6 @@ OUTPUT="{\"verdict\":\"pass\",\"findings\":[{\"file\":\"a.ts\",\"problem\":\"Wro
 expect_status 0
 expect_said 'finding 1'"'"'s `fix` is 57 words; assumption 1'"'"'s `assumes` is 41 words; assumption 1'"'"'s `if_wrong` is 43 words'
 
-# A verdict with $1 assumptions.
 assuming() { jq -nc --argjson n "$1" '{findings: [], assumptions: [range($n) | {assumes: "It holds.", if_wrong: "It breaks."}]}'; }
 
 scenario "a verdict with three assumptions is within the limit"

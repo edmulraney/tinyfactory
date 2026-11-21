@@ -162,9 +162,7 @@ both=$(sed -n "s/^both='\(.*\)'$/\1/p" "$scripts/checks-needed.sh")
 [ -n "$e2e" ] && [ "$e2e" = "apps/|packages/|$both" ] || fail "expected needs-e2e.sh to list apps/, packages/ and \"$both\", got \"$e2e\""
 grep -qxF 'app="^(apps/|packages/|\.github/actions/|$both)"' "$scripts/checks-needed.sh" || fail "checks-needed.sh no longer lists apps/, packages/, the shared actions and the root's three files as the app"
 
-# job <name>: the lines of that job in ci.yml.
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
-# condition <job> <step>: the `if:` of the step that runs this command.
 condition() { job "$1" | grep -B1 -xF -- "        run: $2" | sed -n 's/^      - if: //p'; }
 
 scenario "ci.yml asks it in checks, before any check it decides, and lint runs whatever it says"

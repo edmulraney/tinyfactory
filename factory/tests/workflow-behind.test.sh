@@ -15,7 +15,6 @@ a_run() {
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "the workflows"
   ran=$(git -C "$T/origin" rev-parse HEAD)
 }
-# on_main <file> <contents>: an install lands on main after the run began.
 on_main() {
   echo "$2" > "$T/origin/.github/workflows/$1"
   git -C "$T/origin" add . && git -C "$T/origin" commit --quiet -m "ci: install $1"

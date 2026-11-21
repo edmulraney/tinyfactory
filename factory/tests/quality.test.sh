@@ -23,7 +23,6 @@ github() {
     *) echo "unexpected call: gh $*" >&2; exit 1 ;;
   esac'
 }
-# write <file> <line>...: the file in the repo on GitHub holds exactly these lines.
 write() {
   local file="$T/origin/$1"
   shift
@@ -53,7 +52,6 @@ comments() {
   done
   jq -sc . <<<"$all" > "$T/comments/$pr"
 }
-# report [clone option]...: runs the script in a fresh clone of the repo.
 report() {
   rm -rf "$T/work/clone"
   git clone -q "$@" "file://$T/origin" "$T/work/clone" 2>/dev/null
@@ -61,7 +59,6 @@ report() {
   run "$scripts/quality.sh"
   cd "$T/work" || exit 1
 }
-# expect_row <pr> <rest>: the table holds the pull request's row, ending as given.
 expect_row() {
   grep -qxF "| #$1 feat: change $1 | $2 |" <<<"$out" || fail "expected the row: | #$1 feat: change $1 | $2 |"
 }

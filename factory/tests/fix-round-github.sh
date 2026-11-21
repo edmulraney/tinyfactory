@@ -74,7 +74,6 @@ checks_failed() {
       "workflow run "*) echo "created workflow_dispatch event" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
-  # Waiting for a log, or for GitHub to work out a conflict, takes no time here.
   stub sleep ':'
 }
 # Sentences check-inventory.sh prints when the workflows on main had not settled.

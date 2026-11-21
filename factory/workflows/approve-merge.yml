@@ -194,7 +194,6 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
           OWNER: ${{ github.repository_owner }}
         run: factory/scripts/start-fix-round.sh "$PR" "$OWNER"
-      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
       - name: Tell whether this job stopped at its time limit
         id: limit
         if: cancelled()
@@ -212,7 +211,6 @@ jobs:
           minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
-      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
       # None for a run an account that is not trusted started (decisions W563c).
       - name: Start a retro when this job failed
         if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))

@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 # Creates a Claude subscription token and stores it as the repo secret CLAUDE_CODE_OAUTH_TOKEN.
-# The token is never printed or written to disk. The human only approves in the browser.
-# Then runs the agent-check workflow to prove the token and model work in Actions.
-# Safe to re-run: skips making a token when the secret exists (FORCE=1 replaces it), and skips the
-# proof as well once agent-check has passed.
 # Usage: agent-token.sh [name]   (name defaults to the directory name)
+#        Safe to re-run: skips making a token when the secret exists (FORCE=1 replaces it), and skips the
+#        agent-check run that proves the token once that run has passed.
 set -uo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -39,6 +37,7 @@ while True:
         token = max(found, key=len)
 if not token:
     print("no token appeared; the login was not approved or the output format changed"); sys.exit(1)
+# Handed to gh on its input, so the token is never printed or written to disk.
 subprocess.run(["gh", "secret", "set", "CLAUDE_CODE_OAUTH_TOKEN", "-R", os.environ["REPO"]],
                input=token, check=True, stdout=subprocess.DEVNULL)
 print("secret CLAUDE_CODE_OAUTH_TOKEN stored (%d characters)" % len(token))

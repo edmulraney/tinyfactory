@@ -2,16 +2,13 @@
 # Tests for factory/scripts/events.sh, on stand-in workflows and the scripts that start them (decisions H293a).
 . "$(dirname "$0")/helpers.sh"
 
-# workflow <name> <line>...: factory/workflows/<name>.yml, holding these lines.
 workflow() {
   mkdir -p factory/workflows factory/scripts
   local name="$1"
   shift
   printf '%s\n' "$@" > "factory/workflows/$name.yml"
 }
-# row <name>: the row the script printed for that workflow.
 row() { grep -F "| \`$1.yml\` |" <<<"$out" || true; }
-# expect_row <name> <starts on> <what it does> <started by>
 expect_row() {
   [ "$(row "$1")" = "| \`$1.yml\` | $2 | $3 | $4 |" ] || fail "expected the row: | \`$1.yml\` | $2 | $3 | $4 |"
 }

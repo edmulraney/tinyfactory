@@ -23,7 +23,6 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# open <number> <who opened it> <draft> [label]...
 open() {
   local number="$1" login="$2" draft="$3"; shift 3
   jq --argjson n "$number" --arg login "$login" --argjson draft "$draft" \

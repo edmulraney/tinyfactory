@@ -34,20 +34,17 @@ a_pull_request() {
   git commit -q -am "feat: spell ten"
   passed=$(git rev-parse HEAD)
 }
-# on_main <message> <bash>: a commit on main that the given bash makes; back on the branch after.
 on_main() {
   git checkout -q main
   eval "$2"
   git add . && git commit -q -m "$1"
   git checkout -q feature
 }
-# verdict <reviewer> <commit> <json>: the verdict post-verdict.sh posts for that commit.
 verdict() {
   OUTPUT="$3" HEAD_SHA="$2" "$scripts/post-verdict.sh" "$1" 7 >/dev/null 2>&1 || true
 }
 pass='{"verdict":"pass","findings":[],"assumptions":[{"assumes":"GitHub accepts `queue: max`.","if_wrong":"Every merge stops."}]}'
 fail_json='{"findings":[{"file":"app.txt","line":10,"kind":"misbehaves","problem":"Wrong.","fix":"Right it."}],"assumptions":[]}'
-# carry [reviewer] [head] [main]
 carry() {
   before=$(jq length "$T/comments")
   run "$scripts/carry-review.sh" "${1:-$ryan}" 7 "${2:-$(git rev-parse HEAD)}" "${3:-main}"
@@ -58,7 +55,6 @@ expect_carried() {
   grep -qxF "carried=true" "$T/outputs" || fail "expected carried=true in the step's outputs"
   expect_call "gh pr comment 7 --body-file"
 }
-# expect_reviewed <why>
 expect_reviewed() {
   ! grep -q carried "$T/outputs" || fail "expected nothing about carried in the step's outputs"
   [ "$(jq length "$T/comments")" = "$before" ] || fail "expected no comment to be posted"

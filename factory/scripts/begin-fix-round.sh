@@ -42,7 +42,7 @@ limit=$("$script_dir/usage-limit.sh" wait "$pr" "a fix round") \
   || die "What failed on pull request #$pr could not be read, so no fix round was begun."
 requested=""
 if [ -n "$owner" ]; then
-  # The file is the engineer's evidence, and is not left without part of it.
+  # The file is deleted when the owner's review cannot be read: the engineer must not get half the evidence.
   requested=$("$script_dir/owner-review.sh" "$pr" "$owner" "$failures") \
     || { rm -f "$failures"; die "What $owner asked for on pull request #$pr could not be read, so no fix round was begun."; }
 fi

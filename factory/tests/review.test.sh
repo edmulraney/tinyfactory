@@ -90,7 +90,6 @@ expect_posted() {
 }
 expect_cut_short() { grep -qx 'cut-short=true' "$T/outputs" || fail "expected the job to be marked cut short, so that no fix round starts"; }
 expect_not_cut_short() { ! grep -q cut-short "$T/outputs" || fail "expected the job not to be marked cut short: that would keep the fix round from starting"; }
-# expect_saved <reviewer> <count>: that many of its transcripts saved, under its own name.
 expect_saved() {
   [ "$(grep -c "^$1: saved $1 session as pr-7/" <<<"$out")" = "$2" ] || fail "expected $2 of $1's transcripts saved, got: $out"
 }
@@ -461,7 +460,6 @@ expect_no_call "claude"
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
 permissions() { job "$1" | sed -n '/^    permissions:$/,/^    [a-z-]*:\( .*\)\{0,1\}$/p' | grep -E '^      [a-z-]+: ' | sed 's/ *#.*//' | tr -s ' ' | tr '\n' ';'; }
 carried="\${{ steps.carry-adam.outputs.carried != 'true' && 'adam' || '' }} \${{ steps.carry-ryan.outputs.carried != 'true' && 'ryan' || '' }}"
-# step_named <name>: that step of the review job; commands: what its `run: |` holds.
 step_named() { job review | awk -v name="      - name: $1" '$0 == name { on = 1; print; next } on && /^      (- |#)/ { exit } on'; }
 commands() { sed -n '/^        run: |$/,$p' <<<"$1" | sed -e 1d -e 's/^          //'; }
 unless_both_carried="        if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'"
@@ -559,7 +557,6 @@ asks=$(step_named "Ask for a person when the reviews were stopped at the time li
 grep -qxF "        if: cancelled() && steps.time-limit.outputs.reached == 'true'" <<<"$asks" || fail "expected a person to be asked only for a job that ran its whole limit"
 grep -qx '        id: time-limit' <<<"$told" || fail "expected the step to be the one that condition reads"
 reviews
-# As GitHub runs a step: the first command that fails stops it.
 run env PR=7 bash -eo pipefail -c "$(commands "$asks")"
 expect_status 0
 expect_posted "**Review not finished.** Run the cancelled job again in https://github.com/owner/repo/actions/runs/900: each reviewer whose verdict is not on this pull request then reviews it."

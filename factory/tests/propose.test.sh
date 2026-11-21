@@ -3,9 +3,7 @@
 . "$(dirname "$0")/helpers.sh"
 
 github() { stub gh 'case "$*" in "issue comment 12 --body-file "*) exit 0 ;; *) echo "unexpected call: gh $*" >&2; exit 1 ;; esac'; }
-# words <n>: a line of that many words.
 words() { yes word | head -n "$1" | tr '\n' ' '; echo; }
-# decisions <n>: the part of a proposal that asks the owner that many decisions.
 decisions() {
   echo "## Needs you"
   local i

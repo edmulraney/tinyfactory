@@ -94,14 +94,15 @@ The factory you get improves itself while it builds your product. After a run th
 
 - **An app:** Next.js with TypeScript, Tailwind and shadcn/ui, with Vitest and Playwright set up and an accessibility scan on every end-to-end test.
 - **Hosting and a database:** a Vercel project and Neon Postgres. Every pull request that changes the app gets a preview deployment with its own copy of the database.
+- **Database code and a first feature:** Drizzle, with migrations that run in the build, and a waitlist on the home page built from its page down to its table. The project's `ARCHITECTURE.md` names its files as the feature the engineer builds like.
 - **Sign-in:** Neon Auth switched on, for sign-in by an emailed link, unless you say the product has no accounts.
 - **A board and ticket templates:** a GitHub project with the columns Backlog, In progress and Deployed, and templates for Idea, Initiative, Bug, Tweak, Chore, Research and Factory tickets.
 
 ## What you need
 
-- **Accounts:** GitHub (a personal account), Vercel (the free Hobby plan is enough), and a Claude subscription, which the agents run on. The database is created through Vercel's marketplace, so you need no separate Neon account.
+- **Accounts:** GitHub (a personal account), Vercel (the free Hobby plan is enough), and a Claude subscription, which the agents run on. The database is created through Vercel's marketplace, so you need no separate Neon account. Setup accepts Neon's marketplace terms on your Vercel account when it creates the database, and prints their links.
 - **The Claude and Vercel GitHub Apps** installed on your GitHub account, with access to all repositories: <https://github.com/apps/claude> and <https://github.com/apps/vercel>. Where an app can see selected repositories only, setup stops and asks you to add the new one.
-- **On your machine:** macOS or Linux, Node 20 or later, pnpm, git, jq, python3, Claude Code, the GitHub CLI (`gh`) logged in with the `repo`, `workflow` and `project` scopes, and a Vercel login (`npx vercel login`).
+- **On your machine:** macOS or Linux, Node 22.18 or later, pnpm, git, jq, python3, Claude Code, the GitHub CLI (`gh`) logged in with the `repo`, `workflow` and `project` scopes, an SSH key on that GitHub account, and a Vercel login (`npx vercel login`).
 
 ## Getting started
 
@@ -129,7 +130,7 @@ To run the newest commit of this repository instead of the published package: `n
 The free tiers are the constraint the factory is designed around, so it is tuned to stretch them and keep you shipping without reaching a limit:
 
 - **GitHub Actions minutes:** it runs only the checks and tests a change can affect, runs both reviews in one job, and moves the board's cards with GitHub's own automations.
-- **Vercel deployments:** it builds no preview for a change that touches no app code.
+- **Vercel deployments:** it builds no preview for a change to the factory's own folders alone.
 - **Neon database branches:** it deletes a preview's database branch once its pull request is gone, keeps previews for a day, and builds five tickets at a time at most.
 
 That tuning is still going on, and heavy use can still reach a limit. A public repository has no limit on Actions minutes; setup creates a private one. `factory/free-tier.md` records each limit and every setting made to stretch it.
@@ -138,10 +139,6 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 
 - **Visual design has only just started.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan, and Dara shows a new screen before it is built. Nothing yet keeps taste in how a product feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
-- **No database code yet.** A project gets a Postgres database, and no ORM or migrations. Drizzle is planned.
-- **Ordering waiting tickets by dragging their cards is new.** It has not yet been seen working with tickets waiting; until it is, expect the ticket that has waited longest to start first.
-- **An agent holds the Claude token.** Every agent session needs it to run, so an agent that reads a hostile page could be talked into sending it out. [`SECURITY.md`](SECURITY.md) says what is protected and what is not.
-- **The factory's own tests need Linux.** They run on GitHub's runner, and many fail on a Mac's older bash, awk and git. Setup itself runs on a Mac.
 - **The factory is built in a private project and published from here.** Each change is made there, where a product exercises it, and brought here with its decision records.
 
 ## Where things are
@@ -156,7 +153,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 | What still needs a person | `factory/manual-steps.md` |
 | Who the factory acts for, and how to report a vulnerability | `SECURITY.md` |
 | Ticket and pull request templates | `.github/` |
-| What a new project starts with: its seed documents, and its app's lint and test setup | `.claude/skills/bootstrap/templates/` |
+| What a new project starts with: its seed documents, its first code, and its app's lint and test setup | `.claude/skills/bootstrap/templates/` |
 
 ## Licence
 

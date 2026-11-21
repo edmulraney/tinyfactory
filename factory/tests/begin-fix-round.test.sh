@@ -337,7 +337,6 @@ expect_no_call "--add-label needs-human"
 grep -qF "src/page.tsx: unused variable" "$T/failed.txt" || fail "expected what failed to be in the file as well as what the owner asked for"
 grep -qxF "===== the owner asked for changes =====" "$T/failed.txt" || fail "expected what the owner asked for to be in the file"
 
-# owner_round <login> <review>: a comment that starts with the marker of an owner's round that ran for that review.
 owner_round() { echo "{\"id\":4,\"user\":{\"login\":\"$1\"},\"body\":\"<!-- factory:owner-round $2 -->The owner's fix round: the engineer's session ran.\"}"; }
 
 scenario "no second owner's round for a request that has had one: a merge that landed while that round ran started this one"

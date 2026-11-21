@@ -39,7 +39,6 @@ github_repo() {
   stub pnpm 'if [ "$1" = lint ]; then . "$T/lint"; fi'
 }
 
-# The commit pull request <number> is at.
 head_of() { git --git-dir="$T/origin.git" rev-parse "refs/pull/$1/head"; }
 
 pull() {
@@ -65,7 +64,6 @@ test_group() {
   run "$scripts/test-group.sh" "$T/result.json" "${group[@]}"
 }
 
-# result_of <number>: what the test found of the pull request.
 result_of() { jq -r --argjson pr "$1" '.pulls[] | select(.number == $pr) | .result' "$T/result.json"; }
 expect_result() {
   [ "$(result_of "$1")" = "$2" ] || fail "expected pull request #$1 to be found $2, got: $(result_of "$1")"
@@ -79,7 +77,6 @@ merge_on_github() {
       && git push --quiet origin HEAD:main || { git reset --quiet --hard; exit 1; }
   )
 }
-# tree_on_github: the git tree main holds there.
 tree_on_github() { git --git-dir="$T/origin.git" rev-parse 'main^{tree}'; }
 
 queue_on_github() {

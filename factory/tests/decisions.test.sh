@@ -8,19 +8,15 @@ columns='| ID | Decision | Why | Rejected | Source |
 revisit='| ID | Idea | Parked because | Revisit when | Source |
 |---|---|---|---|---|'
 
-# record: a record, decisions.md, with the sections "T: Tickets", "A: Agents" and "R: To revisit".
 record() {
   printf '# Decisions\n\n%s\n\n## T: Tickets\n\n%s\n\n## A: Agents\n\n%s\n\n## R: To revisit\n\n%s\n' \
     "$header" "$columns" "$columns" "$revisit" > decisions.md
 }
-# rows <ticket> <rows>: that ticket's file in the record's folder, one table of these rows.
 rows() {
   mkdir -p decisions
   printf '%s\n%s\n' "$columns" "$2" > "decisions/$1.md"
 }
-# row <id> <source>: one row.
 row() { printf '| %s | Decision %s. | Why. | Other: no. | %s |' "$1" "$1" "$2"; }
-# ids: the IDs of the rows the script printed, in the order it printed them, on one line.
 ids() { awk -F'|' '/^\| [A-Z][0-9]/ { gsub(/ /, "", $2); printf "%s ", $2 }' <<<"$out"; }
 
 show() { run "$scripts/decisions.sh" decisions.md; }
@@ -127,7 +123,6 @@ show
 expect_status 1
 expect_output "decisions.md: there is no such decision record"
 
-# pick <ID or word>...: the rows of the record with those IDs, or that hold those words.
 pick() { run "$scripts/decisions.sh" decisions.md "$@"; }
 # chosen: a record whose rows cite each other and differ in what they say.
 chosen() {

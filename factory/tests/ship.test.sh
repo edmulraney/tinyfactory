@@ -715,7 +715,6 @@ expect_output "a fix round was started for pull request #8"
 expect_no_call "gh run rerun"
 expect_call "gh pr comment 7 --body Deployed:"
 
-# waits <number> <head>: it waits to merge at that commit, beside the group that ships.
 waits() {
   jq --argjson n "$1" --arg head "$2" '. + [{number: $n, headRefOid: $head, isDraft: false, reviews: []}]' "$T/queue.json" > "$T/queue.new"
   mv "$T/queue.new" "$T/queue.json"
@@ -982,10 +981,8 @@ a_group() {
   also_ships 9 14
   echo "{\"commit\":\"$nine_merged\"}" > "$T/health"
 }
-# The merge calls, in the order they were made.
 production_runs() { echo "{\"commit\":\"$1\"}" > "$T/health"; }
 merges() { grep -o '^gh pr merge [0-9]*' "$T/calls" | sed 's/.* //' | tr '\n' ' '; }
-# left_out <number> <result> <detail>: the test found the pull request so, and passed the others.
 left_out() {
   jq --argjson pr "$1" --arg result "$2" --arg detail "$3" \
     '(.pulls[] | select(.number == $pr)) |= . + {result: $result, detail: $detail}' "$T/result.json" > "$T/result.new"

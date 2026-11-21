@@ -159,7 +159,6 @@ case "${1:-}" in
     sessions="${2:-}" ;;
 esac
 
-# Decisions H221f.
 fetched=no
 if [ -z "$sessions" ]; then
   fetched=yes
@@ -184,7 +183,6 @@ merged=$(gh api "repos/{owner}/{repo}/pulls?state=closed&per_page=100" --paginat
   || die "Could not list the pull requests merged in $month, so what its tickets cost is not known."
 rows=""
 for pr in $(sort -n <<<"$merged"); do
-  # linked-issue.sh says for itself what it could not read.
   issue=$("$script_dir/linked-issue.sh" "$pr") || exit 1
   [ -n "$issue" ] || continue
   cost=$(cost_of "$pr" "$issue") || exit 1

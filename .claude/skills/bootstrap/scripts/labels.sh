@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
-# Creates or updates the labels the factory uses, and deletes the ones GitHub gives every new
-# repo, which nothing uses. Safe to re-run: --force updates a label that exists, and a default
-# label that is gone is not looked for again. Which labels, and why: decisions T85a to T85e, T33a, T218, T19a, T353a, M443b.
-# It is its own script, called by github.sh during setup, because it is a setup step the
-# factory can re-apply by itself: factory/scripts/apply-setup.sh runs it after a merged change,
-# with the workflow's own token. So it must need nothing but `issues: write` on the repo (which
-# is enough to delete a label too), and it takes the repo as an argument because a workflow's token cannot ask who the logged-in user is.
+# Creates or updates the labels the factory uses, and deletes the default labels GitHub gives every new repo.
 # Usage: labels.sh <owner/name>
+#        Safe to re-run. Needs only `issues: write` on the repo: apply-setup.sh runs it with the workflow's own token.
 set -euo pipefail
 
+# The repo is an argument, because a workflow's token cannot ask who the logged-in user is.
 repo="$1"
 
+# Which labels, and why: decisions T85a to T85e, T33a, T218, T19a, T353a, M443b.
 gh label create ready       -R "$repo" --force --color 0E8A16 --description "Approved for an agent to build"
 gh label create needs-human -R "$repo" --force --color D93F0B --description "Agents stopped; a human must decide"
 gh label create factory     -R "$repo" --force --color 5319E7 --description "A change to the factory itself; Fred builds it"

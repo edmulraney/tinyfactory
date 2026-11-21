@@ -11,7 +11,6 @@ job() { awk -v job="  $2:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 
 step() { job "$1" "$2" | awk -v first="      - name: ${3:-$name}" '$0 == first { on = 1; print; next } /^      (- |#)/ { on = 0 } on'; }
 commands() { sed -n '/^        run: |$/,$p' <<<"$1" | sed '1d; s/^          //'; }
 
-# fails <workflow> <job>: runs the step's commands as the failed job of run 900 would.
 fails() {
   run env GH_TOKEN=workflow-token GH_REPO=owner/myapp GITHUB_RUN_ID=900 bash -c "$(commands "$(step "$1" "$2")")"
 }
