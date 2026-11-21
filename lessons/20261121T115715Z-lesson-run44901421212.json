@@ -1,0 +1,76 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 44752298039,
+    "workflow": "start-waiting",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44752298039",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 565,
+      "issue": 563,
+      "title": "fix: act only for an account with write access",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.",
+            "if_wrong": "Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it."
+          }
+        ],
+        "ryan": [
+          {
+            "assumes": "GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.",
+            "if_wrong": "The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "start",
+        "step": "Start the tickets that wait for the place this pull request held",
+        "conclusion": "success"
+      },
+      {
+        "job": "start",
+        "step": "Stop unless the account that started this run may write to the repository",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first start-waiting run after pull request #565 did what the change claimed: the new step trusted `claude[bot]` and the later steps ran, so nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #565 added a step to start-waiting that runs `factory/scripts/trusted.sh` on the account that started the run, and made the step that starts waiting tickets run only when that step did not fail. In run 44752298039 the sender was `claude[bot]`, one of the factory's own two bots, and the new step succeeded. The step that runs refused jobs again then found none, and the step that starts waiting tickets ran and found no ticket waiting with `ready`. The run succeeded with no agent session and no cost. It showed only the trusted path: no run has yet shown the workflow refusing an account without write access. Neither reviewer's assumption (a token readable on the review runner, the author of a `commented` timeline event) concerns this workflow, so this run confirms neither.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44752298039",
+      "https://github.com/edmulraney/tinyfactory/pull/565"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded with 0 agent sessions, 0 turns and 0 dollars.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault, so no change would have saved any of the run's 0 dollars or 0 session minutes.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
