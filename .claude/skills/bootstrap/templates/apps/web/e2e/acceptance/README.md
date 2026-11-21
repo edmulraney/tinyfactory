@@ -13,7 +13,7 @@ test("AC1: a visitor sees the product name on the home page", async ({ page }) =
 Import from `../test`, not from `@playwright/test`: every test that opens a page then ends with an
 accessibility scan, and fails when the page scrolls sideways.
 
-Every test runs twice, at the two screens Myapp supports (`DESIGN.md`, "Supported screens"): the
+Every test runs twice, at the two screens the app supports (`DESIGN.md`, "Supported screens"): the
 `mobile` project is 375px wide and the `desktop` project 1280px (`playwright.config.ts`). So no test
 sets a width, and no ticket needs a criterion for one.
 

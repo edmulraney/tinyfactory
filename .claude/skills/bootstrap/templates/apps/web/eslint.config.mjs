@@ -55,7 +55,7 @@ const eslintConfig = defineConfig([
     besideTheModule,
   ),
   // A unit test has no database, so a module's test replaces the repository of each module its use
-  // cases call (architecture/decisions.md D625d).
+  // cases call.
   mayNotImport(
     ["src/domain/**/*.test.ts"],
     ["app", "components"],
