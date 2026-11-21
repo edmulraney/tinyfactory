@@ -1,0 +1,82 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 44901428100,
+    "workflow": "install-workflows",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44901428100",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 565,
+      "issue": 563,
+      "title": "fix: act only for an account with write access",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.",
+            "if_wrong": "Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it."
+          }
+        ],
+        "ryan": [
+          {
+            "assumes": "GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.",
+            "if_wrong": "The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "install",
+        "step": "Start a retro when this job failed",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "install",
+        "step": "Stop unless the account that started this run may write to the repository",
+        "conclusion": "success"
+      },
+      {
+        "job": "install",
+        "step": "Tell a person when the change was not installed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first install-workflows run after pull request #565 did what the change claimed: the new write-access step trusted `github-actions[bot]`, the workflow change of pull request #568 was installed, and nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #565 added to install-workflows a step that runs `factory/scripts/trusted.sh` on the account that started the run, and made \"Tell a person when the change was not installed\" and the retro step stay silent when that step fails. In run 44901428100, started by number for pull request #568, the step received `SENDER: github-actions[bot]` and passed in under 1 second; the check, the token and \"Commit the copies\" steps then succeeded. The two changed reporting steps were skipped because nothing failed, which is what they should do. The run took 14 seconds and no session. It did not exercise the refusal of an untrusted account, so that path remains proven only by the script's tests. Neither reviewer's assumption (the reviewers' reach to a token in `ci`, the timeline's `.user.login` in `flag-unfinished.sh`) concerns this workflow. The `log` the facts give for the new step is the end of the following step's script, not the step's own output; the run's log was read instead.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44901428100",
+      "https://github.com/edmulraney/tinyfactory/pull/565",
+      "https://github.com/edmulraney/tinyfactory/pull/568"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded in 14 seconds with no session and $0 of Claude usage.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
