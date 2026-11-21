@@ -92,7 +92,6 @@ for record in "$@"; do
       }
     }
 
-    # The record'"'"'s own file: the title, the header, and each section with its empty table.
     FILENAME == record && FNR == 1 {
       if ($0 !~ /^# [^ ]/) problem("the first line is the title, \"# ...\"")
       next
@@ -137,7 +136,6 @@ for record in "$@"; do
       next
     }
 
-    # A ticket'"'"'s file: tables of rows, and nothing else.
     !/^\|/ {
       problem("only tables of rows belong in a ticket'"'"'s file, and this is none of them: " substr($0, 1, 60))
       next

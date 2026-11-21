@@ -32,7 +32,6 @@ ticket() {
   [ -z "${3:-}" ] || second=",{\"name\":\"$3\"}"
   echo "{\"number\":$1,\"title\":\"Apply the review notes of week $2\",\"labels\":[{\"name\":\"factory\"}$second],\"user\":{\"login\":\"github-actions[bot]\",\"type\":\"Bot\"}}"
 }
-# opened_by <login> <type> <ticket>: the ticket, opened by that account.
 opened_by() { jq -c --arg login "$1" --arg type "$2" '.user = {login: $login, type: $type}' <<<"$3"; }
 pull() { echo "{\"number\":$1,\"headRefName\":\"feat/$2-apply-review-notes\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":$3}"; }
 keep() { run "$scripts/review-notes.sh" keep "Ryan (correctness)" 7 <<<"$notes"; }

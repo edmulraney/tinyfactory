@@ -63,7 +63,6 @@ expect_status 0
 expect_call "gh pr comment 7 --body <!-- factory:merge-queue added $head -->This pull request waits to merge at ${head:0:7}."
 expect_call "gh workflow run merge-group.yml"
 
-# A factory ticket's pull request: #12 is labelled so.
 factory_change() {
   echo '[{"name":"factory"},{"name":"in-progress"}]' > "$T/labels.json"
   change "$@"

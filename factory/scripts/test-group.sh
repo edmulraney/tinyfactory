@@ -75,7 +75,6 @@ failure() {
 }
 
 pulls="[]"
-# record <pr> <head> <result> [detail]
 record() {
   pulls=$(jq -c --argjson pr "$1" --arg head "$2" --arg result "$3" --arg detail "${4:-}" \
     '. + [{number: $pr, head: $head, result: $result} + (if $detail == "" then {} else {detail: $detail} end)]' <<<"$pulls")

@@ -39,14 +39,11 @@ github() {
       *) waiting_on_github "$@" || exit 1 ;;
     esac'
 }
-# opened_by <login>: the account that opened the ticket.
 opened_by() { jq -cn --arg login "$1" '{user: {login: $login}}' > "$T/ticket"; }
-# proposal: the ticket is a retro's proposal the owner accepted.
 proposal() { echo '{"labels":[{"name":"factory"},{"name":"proposal"},{"name":"retro"},{"name":"ready"}]}' > "$T/labels"; }
 # wait_with_ready <number>...: every open ticket labelled ready, the one being started among them.
 wait_with_ready() { printf '{"number":%s}\n' "$@" | jq -cs . > "$T/ready"; }
 in_progress() { printf '{"number":%s}\n' "$@" | jq -cs . > "$T/issues"; }
-# pull <number> <branch> [author] [label] [draft]: one open pull request, as gh prints it.
 pull() {
   jq -cn --argjson number "$1" --arg branch "$2" --arg author "${3:-app/claude}" --arg label "${4:-}" \
     --argjson draft "${5:-false}" \
@@ -54,7 +51,6 @@ pull() {
       labels: (if $label == "" then [] else [{name: $label}] end)}'
 }
 pulls_are() { printf '%s\n' "$@" | jq -cs . > "$T/pulls"; }
-# limit_holds <resets>: the hold usage-limit.sh keeps on the sessions branch, with that reset time.
 limit_holds() { echo "$1" > "$T/usage-limit"; }
 soon=$(( $(date +%s) + 3600 ))
 past=$(( $(date +%s) - 60 ))

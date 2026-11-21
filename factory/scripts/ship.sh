@@ -57,7 +57,6 @@ none_merged() {
 
 # not_finished <why>: stops the script as failed for a pull request a person merged, having said why.
 not_finished() {
-  # The first line says what a person must do (decisions A371a).
   local body
   body="Run the failed \`approve-merge\` run for this pull request again: what follows a merge is done then.
 
@@ -120,7 +119,7 @@ merge() {
       return 1
     fi
     [ -z "$commit" ] || break
-    # Three calls, a judgement (decisions M28).
+    # Three tries is a judgement, not a measurement (decisions M28).
     if [ "$tries" -ge 3 ]; then
       fault="GitHub failed or refused the merge of pull request #$pr three times, and \`$base\` holds no commit for it. Its last answer was: $(tail -n 1 <<<"$response")"
       return 1
@@ -155,7 +154,6 @@ merge() {
     # (decisions M435a). After a call of its own this script made the commit (decisions M27).
     if [ "$tries" -eq 0 ]; then
       if ! merged=$(retry gh pr view "$pr" --json state,mergedBy); then
-        # The first line says what a person must do (decisions A371a).
         body="Run the failed job of this run again: what follows a merge is done then, unless the merge button's run does it.
 
 \`$base\` already holds this pull request's commit, ${commit:0:7}, and nothing that follows a merge was done here: GitHub did not say who merged this pull request, so whether the merge button's run does it is not known.$(run_log)"
@@ -164,7 +162,6 @@ merge() {
         status=1
         return 1
       fi
-      # `app/github-actions` is how gh writes the workflows' own token, which this script merges with.
       if [ "$(jq -r .state <<<"$merged")" = MERGED ] && [ "$(jq -r '.mergedBy.login // "app/github-actions"' <<<"$merged")" != app/github-actions ]; then
         echo "a person merged pull request #$pr with GitHub's merge button, and \`ship.sh --merged\` does what follows a merge for it"
         return 1
@@ -205,21 +202,19 @@ Not merged: $why. It gets no fix round, because the factory did not open it."
   elif [ "$author" != app/claude ]; then
     body="$person"
   else
-    # The first line says what a person must do (decisions A371a), as stop-fix-rounds.sh says it.
     body="Submit a \"Request changes\" review saying what to change, or close this pull request: a review starts a fix round that is not one of the three, and its engineer is given what is shown below.
 
 Not merged: $why. It gets no fix round, because $person."
   fi
   body+=$'\n\n```\n'"$detail"$'\n```'
   echo "pull request #$pr: not merged: $why"
-  # Before the round is started, which reads it (collect-failures.sh).
+  # The comment is posted before the fix round starts, because the round reads it (collect-failures.sh).
   if ! retry "$script_dir/merge-queue.sh" remove "$pr" "$head" "$body"; then
     test_again "$((try + 1))" "pull request #$pr was left out, because $why, and could not be told so" "$pr:$head"
   elif [ -n "$person" ]; then
     retry gh pr edit "$pr" --add-label needs-human >/dev/null || { echo "needs-human could not be added to pull request #$pr" >&2; status=1; }
   # Asked again when it fails: a second round for one commit is refused when it begins (decisions M455k, A124g).
   elif ! retry "$script_dir/start-fix-round.sh" "$pr"; then
-    # The first line says what a person must do (decisions A371a).
     retry gh pr comment "$pr" --body "Start the \`fix\` workflow from the Actions tab, with this pull request's number, $pr: the fix round the comment before this one names could not be started.$(run_log)" >/dev/null \
       || echo "and pull request #$pr could not be told that its fix round was not started" >&2
     retry gh pr edit "$pr" --add-label needs-human >/dev/null || echo "and needs-human could not be added to pull request #$pr" >&2
@@ -423,7 +418,6 @@ fix_conflicting() {
   local list number state head rounds before tries=0 result=0 waiting=""
   # GitHub answers UNKNOWN for `mergeable` until some time after the merge, so it is asked a few times.
   while :; do
-    # `app/claude` is how gh writes the app that opens the factory's pull requests.
     list=$(gh pr list --state open --base "$base" --limit 100 --json number,mergeable,author,headRefOid \
       --jq '.[] | select(.author.login == "app/claude") | "\(.number) \(.mergeable) \(.headRefOid)"') || return 1
     tries=$((tries + 1))
@@ -517,7 +511,6 @@ for pr in $shipped; do
   fi
 
   # GitHub may still show as open a pull request an earlier call merged: it is left open for a person (decisions M29).
-  # The comment that flags it says first what a person must do (decisions A371a).
   if [ "$(of "$pr" called)" = no ]; then
     shown=$(retry gh pr view "$pr" --json state --jq .state) || shown=""
     if [ "$shown" != MERGED ]; then

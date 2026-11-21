@@ -7,7 +7,6 @@ model='--model ${{ vars.AGENT_MODEL || '\''claude-fable-5-2'\'' }}'
 # shellcheck disable=SC2016
 effort='--effort ${{ vars.AGENT_EFFORT || '\''medium'\'' }}'
 
-# lines: every line of the workflows that is no comment, as "<file>:<line>:<text>".
 lines() { grep -n -v '^[[:space:]]*#' "$root"/factory/workflows/*.yml | sed "s|^$root/||"; }
 # with_variables <model> <effort>: the lines that give an agent its model, as GitHub fills them in with the two
 # variables holding these values; an empty value is a variable that is not set.

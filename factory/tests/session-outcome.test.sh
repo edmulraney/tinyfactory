@@ -2,12 +2,10 @@
 # Tests for factory/scripts/session-outcome.sh, which reads how an agent's session ended from its saved result.
 . "$(dirname "$0")/helpers.sh"
 
-# session <result-json>: a saved session that began as c22ab626 and ended with this result.
 session() {
   printf '[{"type":"system","subtype":"init","session_id":"c22ab626"},{"type":"assistant"},%s]\n' "$1" > "$T/session.json"
 }
 
-# expect_lines <ended> <session> <cause> [resets] [answer]: exactly these five lines and nothing else.
 expect_lines() {
   local expected
   expected=$(printf 'ended=%s\nsession=%s\ncause=%s\nresets=%s\nanswer=%s' "$1" "$2" "$3" "${4:-}" "${5:-}")

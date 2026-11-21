@@ -26,7 +26,6 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# change_issue <jq>: the issue GitHub answers with, changed.
 change_issue() { jq -c "$1" "$T/issue" > "$T/issue.new" && mv "$T/issue.new" "$T/issue"; }
 # start [comment-id]: the comment that started the run, or none when the label did.
 start() {
@@ -39,7 +38,6 @@ expect_written() {
 expect_no_file() {
   [ ! -e "$T/work/.refine/idea.md" ] || fail "expected it to write no file for Peta"
 }
-# opened_by <login>: the account that opened the idea.
 opened_by() { change_issue ".user.login = \"$1\""; }
 expect_nothing_written() {
   expect_no_call "gh issue comment"

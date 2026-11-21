@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Lets CI reach Vercel preview deployments, which sit behind a Vercel login by default.
-# Generates the project's "Protection Bypass for Automation" secret (or reuses the existing one)
-# and stores it as the repo secret VERCEL_AUTOMATION_BYPASS_SECRET. The secret is never printed.
+# Lets CI reach Vercel's previews, which sit behind a Vercel login, by storing the project's bypass secret.
 # Usage: preview-access.sh [name]   (name defaults to the directory name)
+#        Stores the repo secret VERCEL_AUTOMATION_BYPASS_SECRET.
+#        Safe to re-run: reuses the bypass secret the Vercel project already has.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -20,9 +20,9 @@ else
 fi
 [ -n "$secret" ] || { echo "could not create the bypass secret"; exit 1; }
 
+# Piped to gh, so the secret is never printed.
 printf %s "$secret" | gh secret set VERCEL_AUTOMATION_BYPASS_SECRET -R "$owner/$name"
 
-# Prove it: the newest preview deployment must answer 200 with the header and not without it.
 url=$(vc api "/v6/deployments?projectId=$name&target=preview&state=READY&limit=1" --raw 2>/dev/null | jq -r '.deployments[0].url // empty')
 if [ -n "$url" ]; then
   with=$(curl -s -o /dev/null -w '%{http_code}' -H "x-vercel-protection-bypass: $secret" "https://$url")

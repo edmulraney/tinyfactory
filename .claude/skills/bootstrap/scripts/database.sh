@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
-# Creates a free Neon Postgres database through Vercel's marketplace and connects it to the
-# Vercel project, which sets DATABASE_URL (and friends) for production, preview and development.
-# Needs only the Vercel login: no Neon account or login. Safe to re-run.
-# It also gives every preview its own database branch. One setting it cannot change (one-day
-# previews): it prints the clicks and, on later runs, confirms they were made.
-# Note: this accepts Neon's marketplace terms on the Vercel team (links are printed).
+# Creates a free Neon Postgres database through Vercel's marketplace and connects it to the Vercel project.
 # Usage: database.sh [name]   (name defaults to the directory name)
+#        Safe to re-run. Needs only the Vercel login, and accepts Neon's marketplace terms for the Vercel team.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"

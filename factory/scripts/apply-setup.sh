@@ -53,7 +53,6 @@ needs_owner() {
 
 while IFS= read -r path; do
   script=$(basename "$path")
-  # A script the pull request deleted has nothing to apply.
   [ -f "$tree/$path" ] || continue
   case "$script" in
     board.sh)

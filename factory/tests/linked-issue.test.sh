@@ -2,7 +2,6 @@
 # Tests for linked-issue.sh: the number of the issue a pull request closes, or nothing.
 . "$(dirname "$0")/helpers.sh"
 
-# pull_request <json>: gh answers with this pull request.
 pull_request() {
   printf '%s\n' "$1" > "$T/pr.json"
   stub gh 'case "$*" in

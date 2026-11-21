@@ -8,7 +8,6 @@ set -euo pipefail
 only_over=false
 [ "${1:-}" != --over ] || only_over=true
 
-# Each rule file and its word budget (decisions H172b).
 list="factory/rule-files.txt"
 if [ ! -f "$list" ]; then
   echo "$list: there is no such file, so no rule file was checked"

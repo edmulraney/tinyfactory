@@ -343,7 +343,6 @@ expect_output "Neon refused to switch Magic Link on for the preview's branch pre
 grep -qxF "NEON_AUTH_COOKIE_SECRET production" "$T/vercel" || fail "expected the variables to be set"
 expect_no_output "sign-in ok"
 
-# three_previews: Neon lists production's branch and three previews' branches, the middle one made before auth was on.
 three_previews() {
   jq -nc '[{id: "br-main-1", name: "main", default: true}, {id: "br-preview-7", name: "preview/feat/7-first"},
     {id: "br-preview-8", name: "preview/feat/8-made-before-auth"}, {id: "br-preview-9", name: "preview/feat/9-last"}]

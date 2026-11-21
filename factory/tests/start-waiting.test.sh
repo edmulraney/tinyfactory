@@ -87,7 +87,6 @@ comments_are() {
   done
 }
 in_progress() { printf '{"number":%s}\n' "$@" | jq -cs . > "$T/issues"; }
-# pull <number> <branch> [draft]: one open pull request the factory opened, as gh prints it.
 pull() { echo "{\"number\":$1,\"headRefName\":\"$2\",\"author\":{\"login\":\"app/claude\"},\"labels\":[],\"isDraft\":${3:-false}}"; }
 pulls_are() { printf '%s\n' "$@" | jq -cs . > "$T/pulls"; }
 # start [issue]: with an issue, as start-build.sh asks for the ticket it is about to build.
@@ -111,7 +110,6 @@ card() {
 start_with_board() {
   run env GH_TOKEN=workflow-token BOARD_TOKEN=board-token GITHUB_REPOSITORY=owner/myapp "$scripts/start-waiting.sh" "$@"
 }
-# builds: the tickets whose builds were started, in order.
 builds() { sed -n 's/^gh workflow run implement.yml -f issue=//p' "$T/calls" | tr '\n' ' '; }
 
 scenario "with nothing waiting it asks GitHub one thing and starts nothing"
@@ -1034,7 +1032,6 @@ grep -B5 'run: factory/scripts/start-waiting.sh' "$workflow" | grep -qF "if: ste
   || fail "expected the start-waiting.sh step to run after a failed step"
 
 scenario "the token of each job that runs rerun-refused.sh may read why a job never started"
-# may_read_checks <workflow> <job>: the job's own permissions hold `checks: read`.
 may_read_checks() {
   awk -v job="  $2:" '$0 == job { inside = 1; next } inside && /^  [a-z-]+:$/ { inside = 0 } inside' "$root/factory/workflows/$1" \
     | grep -qE '^      checks: read( |$)' || fail "the $2 job of $1 may not read why a job never started"

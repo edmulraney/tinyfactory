@@ -6,7 +6,6 @@
 guide() {
   printf '# The factory\n\n## Mission\n\nProve it.\n\n## Where things are\n\nA lookup.\n\n| What | Where |\n|---|---|\n\n## Known gaps\n' > README.md
 }
-# entry <list> <name> <text>: that entry's file in the folder of its list.
 entry() {
   mkdir -p "README/$1"
   printf '%s\n' "$3" > "README/$1/$2.md"

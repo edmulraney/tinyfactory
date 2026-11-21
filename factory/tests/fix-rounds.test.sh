@@ -4,7 +4,6 @@
 
 marker='<!-- factory:fix-round -->'
 
-# comment <author> <text>: one comment, as GitHub's REST API lists it.
 comment() { jq -nc --arg login "$1" --arg body "$2" '{id: 1, user: {login: $login}, body: $body}'; }
 comments() {
   printf '%s\n' "$@" | jq -sc . > "$T/comments.json"

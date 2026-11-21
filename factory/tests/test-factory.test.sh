@@ -180,7 +180,6 @@ changed() {
   git commit -q --allow-empty -m "the change"
 }
 ran() { ls "$T/ran" | paste -sd ' ' -; }
-# expect_ran <names>: exactly the test files of these scripts ran, and all passed.
 expect_ran() {
   expect_status 0
   [ "$(ran)" = "$1" ] || fail "expected the test files of \"$1\" to run, and these ran: \"$(ran)\""

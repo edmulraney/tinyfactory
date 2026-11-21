@@ -165,7 +165,6 @@ queue=$(printf '%s\n' "$placed"; sort -k1,1n -k2,2n <<<"$since" | cut -d' ' -f3)
 # It fails when the ticket could not be told.
 tell() {
   local marker="<!-- factory:after $2 -->" told
-  # Decisions U563l.
   told=$(gh api "repos/{owner}/{repo}/issues/$1/comments?per_page=100" --paginate \
       --jq ".[] | select(.user.login == \"github-actions[bot]\" and ((.body // \"\") | startswith(\"$marker\"))) | .id") \
     || return 1

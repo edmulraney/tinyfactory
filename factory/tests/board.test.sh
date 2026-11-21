@@ -55,7 +55,6 @@ JSON
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# change '<jq>': changes the board GitHub holds.
 change() { jq "$1" "$T/board.json" > "$T/board.tmp" && mv "$T/board.tmp" "$T/board.json"; }
 
 scenario "changes nothing on a board that is already set up, and says where it is"
@@ -73,7 +72,7 @@ expect_output "all five automations are on"
 expect_output "board ok: https://github.com/users/owner/projects/4"
 expect_no_call "mutation"
 expect_no_call "template: projectV2("
-# Decisions U222.
+# A token that holds only `project` is refused `gh project` commands, so the script makes none (decisions U222).
 expect_no_call "gh project "
 
 scenario "renames In review to In progress with its id unchanged, and keeps the other columns' ids"

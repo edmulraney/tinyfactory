@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Creates the Vercel project and connects it to the GitHub repo, so pushes to main deploy to
-# production and pull requests get preview URLs. Safe to re-run.
+# Creates the Vercel project and connects it to the GitHub repo: main deploys to production, pull requests to previews.
 # Usage: vercel.sh [name]   (name defaults to the directory name)
+#        Safe to re-run: a project that exists is not made again.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"

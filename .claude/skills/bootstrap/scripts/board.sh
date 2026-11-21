@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
-# Creates the kanban board (a GitHub Project owned by the account), links it to the repo, sets
-# its Status columns and its views, and checks the automations that fill it. Safe to re-run.
-# The board shows the real issues, and GitHub's own project automations add and move them. No
-# workflow moves a card (decisions T4).
-# Runs in two places: during setup, with the owner's gh login (which needs the account-wide
-# `project` permission), and after a merged change to this script, from
-# factory/scripts/apply-setup.sh with the BOARD_TOKEN secret. That token can edit boards and
-# cannot see any repo, so nothing here may need repo access once the board is linked.
+# Creates the project's kanban board, links it to the repo, sets its columns and views, and checks its automations.
 # Usage: board.sh [name]   (name defaults to the directory name)
 #        FACTORY_BOARD_TEMPLATE_OWNER and FACTORY_BOARD_TEMPLATE_NUMBER name a board to copy, such as one whose
 #        automations are already on. With neither set, the board is built from nothing (decisions S283a).
+#        Safe to re-run. Runs at setup with the owner's gh login, which needs the account-wide `project` permission,
+#        and from apply-setup.sh with BOARD_TOKEN, which can see no repo: nothing but the link may need repo access.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -121,7 +116,6 @@ else
   echo "columns already set"
 fi
 
-# A new project opens as a table. Make its first view a kanban board with a column per status.
 first=$(jq -c '.views.nodes[0]' <<<"$board")
 if [ "$(jq -r .layout <<<"$first")" != BOARD_LAYOUT ]; then
   gh api graphql -f view="$(jq -r .id <<<"$first")" -f query='
@@ -141,7 +135,6 @@ if [ -z "$labels" ]; then
   echo "the board has no Labels field, so its cards cannot show labels" >&2
   exit 1
 elif jq -e --arg id "$labels" 'map(.id) | index($id) == null' <<<"$shown" >/dev/null; then
-  # GraphQL input, not JSON, as for the columns.
   ids=$(jq -r --arg id "$labels" 'map(.id) + [$id] | map(tojson) | join(", ")' <<<"$shown")
   gh api graphql -f view="$(jq -r .id <<<"$first")" -f query="
     mutation(\$view: ID!) {
@@ -181,7 +174,8 @@ Proposals|label:proposal is:open
 Proofs|label:proof is:open
 LIST
 
-# The automations that add the tickets and move them. GitHub's API can read whether each is on
+# GitHub's own automations add the tickets and move them, and no workflow moves a card (decisions T4).
+# GitHub's API can read whether each is on
 # but cannot switch one on or say what it is set to, so this is a step left for the human; the
 # script prints the clicks and confirms on its next run. A copied board lacks only the first.
 # GitHub fills in the first one's filter with a text that leaves most tickets out (decisions S563q).

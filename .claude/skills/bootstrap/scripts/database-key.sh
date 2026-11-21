@@ -1,15 +1,8 @@
 #!/usr/bin/env bash
-# Creates a Neon API key that can reach this project's database and nothing else, and stores it
-# as the repo secret NEON_API_KEY, with the Neon project id as the repo variable NEON_PROJECT_ID.
-# The key is never printed or written to disk. The human only approves a Neon sign-in in the
-# browser.
-# What it is for: one step in ci.yml deletes the database branch of every pull request whose git
-# branch is gone. Without it a branch is held until Vercel expires the preview a day later, and
-# a day's pull requests can use every branch Neon's free plan allows (factory/free-tier.md, entry 8).
-# Why Neon directly: Vercel creates the database but gives the project no Neon key, and has no
-# command or API for database branches. Neon's CLI login works for an account Vercel created.
-# Safe to re-run: skips when the secret and the variable exist (FORCE=1 replaces them).
+# Creates a Neon API key for this project's database alone, and stores it as the repo secret NEON_API_KEY.
 # Usage: database-key.sh [name]   (name defaults to the directory name; run after database.sh)
+#        Stores the Neon project id as the repo variable NEON_PROJECT_ID.
+#        Safe to re-run: skips when the secret and the variable exist (FORCE=1 replaces them).
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -77,11 +70,12 @@ withdraw() {
 trap withdraw EXIT
 [ -n "$key" ] || { echo "Neon returned no key"; exit 1; }
 
-# Prove the key does the one thing the workflow needs before storing it.
 branches=$(NEON_API_KEY="$key" neon branches list --project-id "$project" --output json | jq length) \
   || { echo "the new key cannot list the branches of project '$project'"; exit 1; }
 
 gh variable set NEON_PROJECT_ID -R "$repo" --body "$project"
+# ci.yml deletes the database branch of a pull request that is gone with this key (factory/free-tier.md, entry 8).
+# Piped to gh, so the key is never printed or written to disk.
 printf %s "$key" | gh secret set NEON_API_KEY -R "$repo"
 stored=1
 echo "database key ok: secret NEON_API_KEY stored (this project only), variable NEON_PROJECT_ID=$project, $branches database branches now"

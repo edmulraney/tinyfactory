@@ -29,7 +29,7 @@ apps/web/src/
       page.tsx         the page and nothing else
       actions.ts       server actions: read the session, call a use case
       _components/     this route's own components, one in each file
-  lib/                 helpers with no product knowledge, each a folder
+  lib/                 helpers with no product knowledge, each a folder: outbound/
   db/                  the database client, the schema and the migrations
 ```
 
@@ -54,12 +54,19 @@ A module of `src/domain` is a deep module (`TASTE.md`). These rules shape one.
 
 ## Reference feature
 
-The health endpoint is the example of a feature shaped by "Structure" and "Modules". Read each file below before building a feature, and shape the new one the same way. Each path is written from the repo root, and `pnpm lint` fails when one names no file. Once a feature reaches a table, this section names that feature's files in place of these, with the file that owns the table and its migration.
+The waitlist on the home page, from its page down to its table, is the example of a feature shaped by "Structure" and "Modules". Read each file below before building a feature, and shape the new one the same way. Each path is written from the repo root, and `pnpm lint` fails when one names no file. When the product no longer has a waitlist, this section names another feature's files in its place.
 
-- **A route handler that only answers.** `apps/web/src/app/api/health/route.ts` returns what the service answered. It decides nothing.
-- **A service deciding a rule.** `getHealth` in `apps/web/src/domain/health/index.ts` decides which commit the deployment reports. That file is the module's only door.
-- **A unit test.** `apps/web/src/domain/health/index.test.ts` tests each rule through the module's index.
-- **An end-to-end test.** `apps/web/e2e/smoke.spec.ts` asks the running app. `apps/web/e2e/acceptance/README.md` says how a ticket's acceptance tests are written.
+- **A page that only shows.** `apps/web/src/app/page.tsx` renders the heading and the form. It decides nothing.
+- **A component that shows a state.** `apps/web/src/app/_components/waitlist-form.tsx` shows what the use case answered, by its `status`. It takes from the module only a type.
+- **A server action.** `join` in `apps/web/src/app/actions.ts` hands what the browser posted to the use case unchecked.
+- **A module's door.** `apps/web/src/domain/waitlist/index.ts` exports the use case and the type of its answer, and nothing else.
+- **The module's types.** `apps/web/src/domain/waitlist/types.ts` names each answer the use case can give, told apart by `status`.
+- **A use case deciding a rule.** `joinWaitlist` in `apps/web/src/domain/waitlist/join.ts` decides what an email address is, and answers a database that cannot be reached as a value the page shows.
+- **The file that owns a table.** `apps/web/src/domain/waitlist/repository.ts` alone reads and writes `waitlist_entries`, which `apps/web/src/db/schema.ts` defines.
+- **A migration.** `apps/web/src/db/migrations/0000_waitlist.sql`, generated as "Database" says and committed with Drizzle's record of the schema.
+- **A unit test.** `apps/web/src/domain/waitlist/index.test.ts` tests each rule through the module's index, with its repository replaced, and with it failing.
+- **An acceptance test.** `apps/web/e2e/acceptance/0-join-waitlist.spec.ts` holds one test for each criterion and uses the page as a visitor does. `apps/web/e2e/acceptance/README.md` says how a ticket's acceptance tests are written.
+- **A route handler that only answers.** `apps/web/src/app/api/health/route.ts` returns what `getHealth` in `apps/web/src/domain/health/index.ts` answered.
 
 ## Environments
 
@@ -77,10 +84,28 @@ So a migration is always exercised on a preview's branch first, and reaches prod
 
 Every environment answers `GET /api/health` with `{ "status": "ok", "commit": … }`, never cached. `commit` is the git SHA the deployment was built from (`VERCEL_GIT_COMMIT_SHA`), or `"unknown"` where the platform provides none, such as a local run. Compare it with the merged commit to confirm a merge is live.
 
+## Database
+
+- **Where it is.** Vercel sets `DATABASE_URL` on every deployment: production's database, or the preview's own branch. A local run has none.
+- **Tools.** Drizzle ORM over Neon's serverless driver in its HTTP mode (`drizzle-orm/neon-http`). Every query goes through `db()` in `src/db/client.ts`; nothing else in the app reads `DATABASE_URL` to connect.
+- **The tables.** `src/db/schema.ts` defines them. `waitlist_entries` is the first: one row for each email address left on the home page, keyed by the address, with when it was left.
+- **Add or change a table.** Edit `src/db/schema.ts`, run `pnpm db:generate --name <what-changes>` in `apps/web`, and commit the migration it writes to `src/db/migrations`: the SQL and Drizzle's record of the schema beside it. A table's queries go in the `repository.ts` of the module that owns it.
+- **How a migration reaches a preview and production.** `pnpm build` runs `src/db/migrate.mts` before it builds the app. The script applies every migration the deployment's database has not had, in order. Vercel runs that build for every deployment, so a pull request's migration runs on its preview's own database branch, and on production's database when the merge to `main` builds. A migration that fails fails the build, and the deployment before it keeps serving. With no `DATABASE_URL`, as on a local run or in CI's build, the script runs nothing.
+- **A migration merged out of order fails the build.** Drizzle's migrator skips, without saying so, a migration dated before the newest one the database has had. The script then throws, naming it. Delete that migration's SQL, snapshot and journal entry, run `pnpm db:generate` again so that it is dated the newest, and merge that.
+- **A migration must suit the code already running.** Production's migration runs before the new deployment takes over. Add a table or a column in one pull request; remove or rename one only after no deployed code reads it.
+- **A migration is not one transaction.** The HTTP driver runs its statements one at a time, so one that fails partway leaves the statements before it applied. Put right by hand what the half-run left, then build again.
+- **Several statements that must succeed together** go in one `db().batch()`: `db().transaction()` is not available over HTTP.
+
+Why Drizzle, with migrations run in the build, and what was rejected: `factory/decisions.md` [S590b](factory/decisions/590.md).
+
+## Outside services
+
+Every request the app makes to an outside service goes through `outboundFetch` in `apps/web/src/lib/outbound`, so none can hang. The whole answer arrives within 5 seconds or the call throws an `OutboundError`; an answer with an error status is returned for the caller to read. The database is given the client (`src/db/client.ts`), because each query is one HTTPS request. Lint fails a `fetch` anywhere else in `src`.
+
 ## Domain language
 
 Use these names everywhere: code, tickets, UI copy. Add a row before introducing a new concept.
 
 | Term | Meaning | States | Relates to |
 |---|---|---|---|
-| _none yet_ | | | |
+| Waitlist entry | An email address a visitor left on the home page, to be told when the product opens | | |

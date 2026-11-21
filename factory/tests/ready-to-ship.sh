@@ -183,7 +183,6 @@ ready_to_ship() {
   stub sleep ':'
   stub date 'now=$(cat "$T/clock" 2>/dev/null || echo 1000); echo $((now + 400)) > "$T/clock"; echo "$now"'
 }
-# found <result> <pr>:<head>...
 found() {
   local result="$1"
   shift
@@ -211,7 +210,6 @@ tested_with_an_older_main() {
 # shellcheck disable=SC2016
 put_on_main='jq --arg sha "$merged" "[{sha: \$sha, commit: {message: \"feat: export forecast as CSV (#7)\n\nThe forecast exports as CSV.\"}}] + ." "$T/log.json" > "$T/log.new" && mv "$T/log.new" "$T/log.json"'
 on_main() { eval "$put_on_main"; }
-# comment <body> [login]: a comment on pull request #7, the factory's own unless another account is named.
 comment() {
   jq --arg body "$1" --arg login "${2:-github-actions[bot]}" '. + [{user: {login: $login}, body: $body}]' "$T/comments" > "$T/comments.new"
   mv "$T/comments.new" "$T/comments"
@@ -225,7 +223,6 @@ verdict() {
 }
 # shellcheck disable=SC2034
 round='{"id":2,"user":{"login":"github-actions[bot]"},"body":"<!-- factory:fix-round -->Fix round 1 of 3"}'
-# The record of measures as GitHub holds it, or nothing.
 recorded() { git --git-dir="$T/github/owner/myapp.git" show sessions:measures.jsonl 2>/dev/null; }
 # also_open <number> <who opened it> <mergeable>: its ci run is <number>00.
 also_open() {

@@ -20,7 +20,6 @@ github() {
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
-# pull <number> <branch> [author] [label] [draft]: one open pull request, as gh prints it.
 pull() {
   jq -cn --argjson number "$1" --arg branch "$2" --arg author "${3:-app/claude}" --arg label "${4:-}" \
     --argjson draft "${5:-false}" \
@@ -32,7 +31,6 @@ expect_lines() {
   [ "$out" = "$1" ] || fail "expected exactly:"$'\n'"$1"
 }
 
-# full <line>...: asks whether a further build may start beside these lines.
 full() { run "$scripts/in-flight.sh" full <<<"$(printf '%s\n' "$@")"; }
 
 scenario "with three tickets being built or checked a fourth build may start: it prints nothing, and asks GitHub nothing"

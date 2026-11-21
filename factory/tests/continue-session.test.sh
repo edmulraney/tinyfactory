@@ -316,7 +316,6 @@ expect_not_written "continue=true"
 expect_output "the agent returned its result"
 expect_nothing_saved
 
-# A fail whose one finding's fix is $1 words long.
 a_fail() { printf '{"verdict":"fail","findings":[{"file":"a.ts","problem":"Wrong.","fix":"%s"}],"assumptions":[]}' "$(printf 'word %.0s' $(seq "$1"))"; }
 
 scenario "a review whose verdict has a field over 40 words is continued, and told which field to shorten"

@@ -107,7 +107,7 @@ jobs:
           name: group-result
           path: ${{ runner.temp }}/group.json
           retention-days: 7
-          overwrite: true   # a run started again records the same name
+          overwrite: true
 
   merge:
     needs: [begin, test]
@@ -143,7 +143,6 @@ jobs:
           GROUP: ${{ needs.begin.outputs.group }}
           TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)
         run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '"$RUNNER_TEMP/group.json" $GROUP' || '--not-begun' }}
-      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).
       - name: Tell whether this job stopped at its time limit
         id: limit
         if: cancelled()
@@ -161,7 +160,6 @@ jobs:
           minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
-      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.
       - name: Start a retro when this job failed
         if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')
         env:

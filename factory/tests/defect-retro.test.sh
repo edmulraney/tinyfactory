@@ -37,13 +37,11 @@ github() {
   printf '#!/usr/bin/env bash\n[ "$1" != lesson ] || cp "$3" ".sessions/lessons/20261121T080000Z-lesson-run$GITHUB_RUN_ID.json"\n' > factory/scripts/save-session.sh
   chmod +x factory/scripts/save-session.sh
 }
-# labelled <run-id>: runs the step that gathers the facts as a run the label on ticket #574 started would.
 labelled() {
   : > "$T/output"
   run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_RUN_ID="$1" GITHUB_OUTPUT="$T/output" \
     DEFECT=574 PR="" RUN="" COMMENT="" bash -e -c "$(commands "$(step "Gather the run's facts")")"
 }
-# learnt <run-id>: runs the step that saves the lesson the session of that run returned.
 learnt() {
   run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_RUN_ID="$1" RUNNER_TEMP="$T/runner" KEY=issue-574 TRANSCRIPT="" \
     OUTPUT='{"summary":"Tickets #348 and #349 left a second race out of scope, and no step asked what a signed-in runner then sees.","cause":"ticket","repeats":[],"handling":[],"retry":"not-applicable","propose":true}' \

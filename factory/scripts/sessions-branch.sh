@@ -40,7 +40,6 @@ _sessions_attempt() {
     printf '{\n  "git": { "deploymentEnabled": false }\n}\n' > "$work/apps/web/vercel.json" || return 1
   fi
   git -C "$work" add -A || return 1
-  # Nothing to commit when the branch already holds exactly these files, which is the aim.
   if ! git -C "$work" diff --cached --quiet; then
     git -C "$work" commit --quiet -m "$message" || return 1
     git -C "$work" push --quiet origin HEAD:sessions 2>/dev/null || return 1

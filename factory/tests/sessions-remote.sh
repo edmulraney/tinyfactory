@@ -29,7 +29,6 @@ hold_is() {
   git -C "$T/seed" add -A && git -C "$T/seed" commit --quiet -m hold
   git -C "$T/seed" push --quiet "$T/remote.git" sessions
 }
-# the_hold: what the sessions branch holds of it, or nothing.
 the_hold() { on_github show sessions:usage-limit 2>/dev/null || true; }
 pushed_files() { on_github ls-tree -r --name-only sessions 2>/dev/null; }
 

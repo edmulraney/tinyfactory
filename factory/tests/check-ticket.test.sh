@@ -452,7 +452,6 @@ When a ticket gets the label `bug` or `escaped-defect`, the retro runs on it, on
 - The pull request states the cost and the minutes of that retro. It adds a way to start an agent, which is spend, so it waits for the owner.'
 name="Run a retro on each defect the owner meets in use"
 
-# draft <text under "## Change">: checks a factory ticket with that text, before it is filed.
 draft() {
   printf '## Change\n%s\n\n## How we will know it works\nLint fails on a stray file.\n' "$1" > draft.md
   run "$scripts/check-ticket.sh" --draft factory "$name" draft.md
@@ -588,7 +587,6 @@ The dashboard with a race and the message about the prediction.
 
 After #348'
 
-# states <type> <text under "## States">: checks that ticket with that section added, before it is filed.
 states() {
   printf '%s\n\n## States\n%s\n' "$keep_race" "$2" > draft.md
   run "$scripts/check-ticket.sh" --draft "$1" "$name" draft.md

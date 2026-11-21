@@ -20,7 +20,6 @@ $2
     *) echo "unexpected call: gh $*" >&2; exit 1 ;;
   esac'
 }
-# profile <name> <line>...: a file in product/research/ holding these lines.
 profile() {
   local file="product/research/$1"
   shift

@@ -102,7 +102,6 @@ comment_says "GH_TOKEN=workflow-token BOARD_TOKEN=unset"
 expect_no_call "needs-human"
 left_nothing_behind
 
-# failing_labels: the merged labels.sh fails with exit 3.
 failing_labels() {
   printf '#!/usr/bin/env bash\necho "could not create the label"\nexit 3\n' > "$T/src/owner-myapp-abcdef0/$setup/labels.sh"
   tar -czf "$T/tree.tgz" -C "$T/src" owner-myapp-abcdef0

@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
-# Checks every tool and login the bootstrap needs. Changes nothing.
-# Exits non-zero and lists the fix for each failure, so a human does them all in one pass.
+# Checks every tool and login the bootstrap needs, and changes nothing.
+# Usage: preflight.sh
+#        Exits non-zero having listed the fix for each failure, so a person makes them all in one pass.
 set -uo pipefail
 
 fail=0
 ok()  { echo "ok    $1"; }
 bad() { echo "FAIL  $1"; echo "      fix: $2"; fail=1; }
 
-command -v node >/dev/null && ok "node $(node -v)" || bad "node not found" "install Node.js 20+"
+# The app's build runs a TypeScript file with node (src/db/migrate.mts), which Node does unaided from 22.18,
+# from 23.6 within major 23, and in every later major.
+if ! command -v node >/dev/null; then
+  bad "node not found" "install Node.js 24"
+elif node -e 'const [major, minor] = process.versions.node.split(".").map(Number); process.exit(major >= 24 || (major === 23 && minor >= 6) || (major === 22 && minor >= 18) ? 0 : 1)'; then
+  ok "node $(node -v)"
+else
+  bad "node $(node -v) cannot run the build's migration step" "install Node.js 24"
+fi
 command -v pnpm >/dev/null && ok "pnpm $(pnpm -v)" || bad "pnpm not found" "npm install -g pnpm"
 command -v git  >/dev/null && ok "git"             || bad "git not found" "install git"
 command -v gh   >/dev/null && ok "gh"              || bad "gh not found" "https://cli.github.com"

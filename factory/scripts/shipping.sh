@@ -19,7 +19,6 @@ retry() {
 # the first and finds what is left (decisions M455j).
 start_merge_group() { retry gh workflow run merge-group.yml ${1:+-f try="$1"} >/dev/null; }
 
-# Where the log of this run is, for a comment: GitHub's own error is there.
 run_log() {
   [ -z "${GITHUB_RUN_ID:-}" ] || printf ' The log has what GitHub answered: %s/%s/actions/runs/%s' \
     "${GITHUB_SERVER_URL:-https://github.com}" "${GITHUB_REPOSITORY:-}" "$GITHUB_RUN_ID"

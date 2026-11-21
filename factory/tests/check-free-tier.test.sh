@@ -12,7 +12,6 @@ named() {
   printf '### #%s. Setting %s\n\n- **Set:** something.\n- **Numbers:** 9 became 10.\n%s\n' \
     "$1" "$1" "${2-- **Automated:** yes.}"
 }
-# part <name> <text>: that file in the log's folder.
 part() {
   mkdir -p free-tier
   printf '%s\n' "$2" > "free-tier/$1.md"

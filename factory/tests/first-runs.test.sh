@@ -23,7 +23,6 @@ github() {
     esac'
   stub sleep ':'
 }
-# comment <author> <text>: one comment, made at ten o'clock.
 comment() { jq -nc --arg login "$1" --arg body "$2" '{user: {login: $login}, created_at: "2026-11-16T10:00:00Z", body: $body}'; }
 # installed <file>...: the comment install-workflows.yml leaves.
 installed() { comment 'github-actions[bot]' "Installed in abc1234, the workflow changes this pull request merged:"$'\n\n'"<!-- factory:installed $* -->"; }

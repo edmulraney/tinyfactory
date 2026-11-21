@@ -455,7 +455,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: factory/scripts/start-fix-round.sh "$PR"
-      # This job's failure is the factory's own (decisions A20). Asked three times: GitHub may be what failed.
       - name: Start a retro when this job failed
         if: failure()
         env:

@@ -166,7 +166,6 @@ expect_status 0
 expect_call "gh issue edit 50 --add-label ready"
 expect_call "gh workflow run implement.yml -f issue=50"
 
-# waits: the proposal is filed without ready, and no build is started.
 waits() {
   file
   expect_status 0

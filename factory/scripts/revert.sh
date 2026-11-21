@@ -44,7 +44,6 @@ case "${1:-}" in
       [ "$by" = "$owner" ] || die "only the repo's owner, $owner, may take a ticket back, and $by asked for it"
     fi
 
-    # One read says whether the number is a pull request or a ticket, and which pull requests closed a ticket.
     query='query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) {
       issueOrPullRequest(number: $number) { __typename
         ... on PullRequest { number }

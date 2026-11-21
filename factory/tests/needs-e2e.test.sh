@@ -172,7 +172,6 @@ expect_status 0
 expect_output "changes app code"
 expect_call "gh api repos/owner/repo/pulls/7/files --paginate"
 
-# job <name>: the lines of that job in ci.yml.
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
 needs() { job "$1" | sed -n 's/^    needs: //p'; }
 

@@ -76,7 +76,6 @@ ship_it() {
   run "$scripts/ship.sh" "$T/result.json" $group
   cd "$T/work" || exit 1
 }
-# on_main <file>: the file as main holds it on GitHub.
 on_main() { git --git-dir="$T/origin.git" show "main:$1"; }
 merges() { grep -o '^gh pr merge [0-9]*' "$T/calls" | sed 's/.* //' | tr '\n' ' '; }
 # shellcheck disable=SC2016
@@ -101,7 +100,6 @@ expect_no_call "does not hold what was tested"
 for file in seven eight nine; do
   git --git-dir="$T/origin.git" cat-file -e "main:apps/web/$file.txt" 2>/dev/null || fail "expected main to hold apps/web/$file.txt"
 done
-# No pull request is tested with main a second time, or told that main moved.
 expect_no_call "has moved"
 expect_no_call "gh run rerun"
 for ticket in 12 13 14; do expect_call "gh issue edit $ticket --add-label deployed"; done
@@ -119,10 +117,8 @@ expect_calls 1 "pnpm lint"
 [ "$(jq -r .tree "$T/result.json")" = "$(tree_on_github)" ] || fail "expected main to hold the tree that was tested"
 expect_call "gh pr comment 8 --body <!-- factory:merge-queue removed $(head_of 8) -->Not merged: it does not fit \`main\` with the pull requests merged before it."
 expect_calls 1 "gh workflow run fix.yml -f pr=8"
-# Its fix round is given the files in conflict.
 run "$scripts/merge-queue.sh" removed 8 "$(head_of 8)"
 expect_output "apps/web/page.txt"
-# It waits no longer: the next group does not test it again as it is.
 begin
 [ -z "$group" ] || fail "expected nothing to wait to merge, got: $group"
 
@@ -315,7 +311,6 @@ begin
 test_it
 : > "$T/calls"
 approved 9
-# Its own run of the workflow is asked for, and waits its turn behind this one.
 expect_calls 1 "gh workflow run merge-group.yml"
 ship_it
 expect_status 0

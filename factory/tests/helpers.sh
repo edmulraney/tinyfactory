@@ -145,7 +145,6 @@ waiting_on_github() {
 }
 export -f waiting_on_github
 
-# run <command> [args]: sets $out (both streams) and $status.
 run() {
   status=0
   out=$("$@" 2>&1) || status=$?
@@ -188,7 +187,6 @@ expect_first_line() {
 expect_no_call() {
   [[ "$(cat "$T/calls")" != *"$1"* ]] || fail "expected no call like: $1"
 }
-# How many times something was called, by the first words of the call.
 calls() { grep -cF -- "$1" "$T/calls" || true; }
 expect_calls() {
   [ "$(calls "$2")" = "$1" ] || fail "expected $1 of the call, got $(calls "$2"): $2"

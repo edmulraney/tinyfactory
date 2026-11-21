@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
-# Creates a GitHub App for this project that can do one thing, write this repo's files including
-# its workflow files, installs it on this repo only, and stores its private key as the repo secret
-# WORKFLOW_APP_PRIVATE_KEY, with its client id and name as the repo variables
-# WORKFLOW_APP_CLIENT_ID and WORKFLOW_APP_SLUG. The key is never printed or written to disk. The
-# human only clicks twice in the browser: once to create the app, once to install it.
-# What it is for: install-workflows.yml copies a workflow change from factory/workflows/ into
-# .github/workflows/ once the owner has approved it. A workflow's own token cannot write a
-# workflow file, so that one step asks this app for a token, which lasts an hour.
-# Why an app and not a token of the owner's: decisions W5.
-# Where GitHub locks main with the ruleset github.sh sets (a public repo, or a paid plan), it also
-# puts the app on that ruleset's bypass list, or the installer's push would be refused (decisions S385c).
-# Safe to re-run: skips making an app when the secret and the variables exist (FORCE=1 makes a new
-# app; delete the old one at https://github.com/settings/apps), and still checks the bypass list.
+# Creates a GitHub App that can write this repo's files, workflows included, installs it here only and stores its key.
 # Usage: workflow-app.sh [name]   (name defaults to the directory name; run after github.sh)
+#        Stores the secret WORKFLOW_APP_PRIVATE_KEY and the variables WORKFLOW_APP_CLIENT_ID and WORKFLOW_APP_SLUG.
+#        Safe to re-run: skips making an app when all three exist, and still checks the ruleset's bypass list.
+#        FORCE=1 makes a new app; delete the old one at https://github.com/settings/apps.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -21,6 +12,7 @@ repo="$owner/$name"
 api="https://api.github.com"
 
 # pass_ruleset <slug>: puts the app on the bypass list of the ruleset on main, when there is one.
+# Where GitHub locks main with the ruleset github.sh sets, it would refuse the installer's push (decisions S385c).
 pass_ruleset() {
   local rulesets id app ruleset
   if ! rulesets=$(gh api "repos/$repo/rulesets" 2>&1); then
@@ -57,6 +49,7 @@ for tool in python3 openssl curl; do
   command -v "$tool" >/dev/null || { echo "$tool not found; it is needed to create the app"; exit 1; }
 done
 
+# install-workflows.yml writes workflow files with this app's token, which a workflow's own token cannot (decisions W5).
 # GitHub creates an app from a description posted by the browser of the person who will own it,
 # then sends that browser back with a one-time code. So a page on this machine posts the
 # description, and the same local server waits for the code. An app's name is unique across all
@@ -183,6 +176,7 @@ done
 
 gh variable set WORKFLOW_APP_CLIENT_ID -R "$repo" --body "$client_id"
 gh variable set WORKFLOW_APP_SLUG -R "$repo" --body "$slug"
+# Piped to gh, so the key is never printed or written to disk.
 printf '%s\n' "$pem" | gh secret set WORKFLOW_APP_PRIVATE_KEY -R "$repo"
 stored=1
 pass_ruleset "$slug"

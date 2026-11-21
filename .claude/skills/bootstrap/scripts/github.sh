@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Publishes the current directory as a repo under the logged-in GitHub account, and creates the
-# labels the factory uses (labels.sh). A repo it creates is private (decisions S3). Safe to
-# re-run: a repo that exists keeps the visibility it has (decisions S385b).
+# Publishes the current directory as a repo under the logged-in GitHub account, and creates the factory's labels.
 # Usage: github.sh [name]   (name defaults to the directory name)
+#        Safe to re-run: a repo that exists is not made again.
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -10,6 +9,7 @@ owner=$(gh api user --jq .login)
 repo="$owner/$name"
 
 git rev-parse --git-dir >/dev/null 2>&1 || git init -b main
+# A repo made here is private (decisions S3), and one that exists keeps the visibility it has (decisions S385b).
 gh repo view "$repo" >/dev/null 2>&1 || gh repo create "$repo" --private
 git remote get-url origin >/dev/null 2>&1 || git remote add origin "git@github.com:$repo.git"
 

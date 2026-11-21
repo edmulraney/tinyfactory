@@ -71,7 +71,6 @@ passes() {
   expect_status 0
   expect_output "pull request conventions ok"
 }
-# refuses <message>: the check fails, saying this, and does not also say all is well.
 refuses() {
   expect_status 1
   expect_output "$1"
@@ -730,7 +729,6 @@ passes
 expect_no_call "gh"
 
 
-# open_pr <description> <closing ticket numbers as JSON> <changed file>...
 open_pr() {
   jq -n --arg body "$1" --argjson closes "$2" '{body: $body, closingIssuesReferences: ($closes | map({number: .}))}' > "$T/pr.json"
   shift 2

@@ -60,7 +60,6 @@ expect_posted '2. **Breaks a rule:** `apps/web/src/b.ts`: Unused, against TASTE.
 expect_no_call "needs-human"
 ! grep -q cut-short "$T/outputs" || fail "expected a failed review not to be marked cut short"
 
-# The same list as it stands hidden at the end of the comment, for the scripts that read it.
 hidden() { grep -x -- '<!-- factory:assumptions .* -->' "$T/posted" | sed -e 's/^<!-- factory:assumptions //' -e 's/ -->$//'; }
 two_assumptions='[{"assumes":"GitHub accepts `queue: max` on a job.","if_wrong":"Every merge stops."},{"assumes":"`neon branches list` prints JSON with --output json.","if_wrong":"The step deletes nothing."}]'
 
@@ -239,7 +238,6 @@ for reviewer in "Ryan (correctness)" "Adam (architecture and taste)"; do
   done
 done
 
-# finding <kind>: one finding of that kind.
 finding() { echo "{\"file\":\"c.ts\",\"line\":3,\"kind\":\"$1\",\"problem\":\"Wrong.\",\"fix\":\"Right it.\"}"; }
 elsewhere='{"file":"d.ts","kind":"out-of-scope","problem":"The export beside it drops the header.","fix":"Write the header row."}'
 
@@ -365,7 +363,6 @@ OUTPUT='{"findings":[{"file":"a.ts","problem":"Wrong.","fix":"Right it."}]}' run
 expect_status 1
 grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
 
-# A sentence of $1 words.
 words() { local n; for ((n = 1; n < $1; n++)); do printf 'word '; done; printf 'end.'; }
 
 scenario "a field of 40 words is posted"
@@ -399,7 +396,6 @@ expect_posted "assumption 1's \`if_wrong\` is 57 words."
 expect_call "gh pr edit 7 --add-label needs-human"
 grep -qxF "cut-short=true" "$T/outputs" || fail "expected cut-short=true in the step's outputs"
 
-# A pass with $1 assumptions, numbered in the order given.
 assuming() { jq -nc --argjson n "$1" '{findings: [], assumptions: [range(1; $n + 1) | {assumes: "Claim \(.) holds.", if_wrong: "Cost \(.)."}]}'; }
 
 scenario "three assumptions are posted, in the order the reviewer gave them"

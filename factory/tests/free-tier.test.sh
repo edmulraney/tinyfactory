@@ -10,7 +10,6 @@ named() { printf '### #%s. Setting %s\n\n- **Set:** something.\n- **Automated:**
 log() {
   printf '# Staying on the free tier\n\nHow an entry is written.\n\n## The limits\n\n## Log\n\n## When to start paying\n' > free-tier.md
 }
-# part <name> <text>: that file in the log's folder.
 part() {
   mkdir -p free-tier
   printf '%s\n' "$2" > "free-tier/$1.md"
@@ -183,7 +182,6 @@ A table."
   git commit --quiet --message base
   git update-ref refs/remotes/origin/main HEAD
 }
-# merged: merges the branch `theirs` into `ours`, and expects nothing left to resolve.
 merged() {
   run git merge --no-edit theirs
   expect_status 0

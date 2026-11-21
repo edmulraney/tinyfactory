@@ -8,13 +8,11 @@ screens="hashFiles('.refine/screens.md') != ''"
 # shellcheck disable=SC2016
 idea='${{ env.ISSUE }}'
 
-# step <name>: the lines of that step of the workflow, without its comments.
 step() {
   awk -v name="      - name: $1" '
     /^      - / { inside = ($0 == name) }
     inside && !/^[[:space:]]*#/ { print }' "$workflow"
 }
-# tools <step>: each tool the step's session is allowed, one a line.
 tools() { step "$1" | sed -n 's/.*--allowedTools "\(.*\)"$/\1/p' | tr ',' '\n'; }
 
 scenario "Dara's session starts only when Peta left the screens to design, and so does the install of what renders them"

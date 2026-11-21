@@ -471,7 +471,6 @@ expect_failure
 expect_output "Could not read pull request #66 from GitHub"
 expect_no_output '"factory_failure"'
 
-# comment <body> [login]: a comment on pull request #72, the factory's own unless another account is named.
 comment() {
   jq --arg body "$1" --arg login "${2:-github-actions[bot]}" '. + [{user: {login: $login}, body: $body}]' "$T/comments" > "$T/comments.new" \
     && mv "$T/comments.new" "$T/comments"
@@ -994,7 +993,6 @@ expect_no_output '"ask"'
 a_defect() {
   echo '{"url":"https://github.example/owner/myapp/issues/574","state":"CLOSED","labels":[{"name":"bug"}],"closedByPullRequestsReferences":[{"number":577}]}' > "$T/ticket"
 }
-# a_lesson <name> <json>: a lesson an earlier retro saved.
 a_lesson() { echo "$2" > "$T/sessions/lessons/$1"; }
 
 scenario "a defect met in use: the ticket, the pull requests that closed it, and no earlier lesson"

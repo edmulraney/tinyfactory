@@ -140,7 +140,6 @@ tagged=$(tr -d '\r' <<<"$body" | awk '
         out = out substr(line, 1, i - 1); line = substr(line, i + 4); comment = 1
       }
     }
-    # What the line says once the marks of a quote or a list item are taken off the front.
     bare = out
     while (sub(/^ ? ? ?>/, "", bare) || sub(/^ ? ? ?([-*+]|[0-9]+[.)])[ \t]+/, "", bare)) ;
     if (match(bare, /^ ? ? ?(```+|~~~+)/)) {
@@ -194,7 +193,6 @@ if [ "$headings" != "$(printf '%s\n' "${sections[@]}")" ]; then
   closing='^([Cc]lose[sd]?|[Ff]ix(e[sd])?|[Rr]esolve[sd]?):?[[:space:]]+(([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([0-9]+|<[^>[:space:]]*>)|https?://[^[:space:]]+)\.?$'
   nothing='^([Nn]othing|[Nn]one|[Nn]o|N/A|n/a|-)?\.?$'
   no_tickets="A pull request finishes its ticket or is not ready (decisions P4): do what is left in this pull request, and say what only the owner can do in a sentence on the \"$needs\" line."
-  # labelled <label> <line>: one of the two lines that follow the paragraph.
   labelled() {
     local value="${2#"$1"}"
     value="${value#"${value%%[![:space:]]*}"}"

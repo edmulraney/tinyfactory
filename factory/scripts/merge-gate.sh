@@ -28,7 +28,6 @@ if grep -q '^factory/workflows/' <<<"$files" \
   behind=true
 fi
 
-# Read on a line of its own (decisions H7).
 reviews=$(retry gh pr view "$pr" --json reviews) \
   || not_merged "GitHub did not return this pull request's reviews, so whether the owner approved it or sent it back is not known"
 # The commit the owner's latest review approved, if it approves. The gate runs again for a commit already approved (decisions M23).
@@ -78,7 +77,6 @@ undoes_button_merge() {
       && [ "$(git ls-tree "$head" -- "$path")" = "$(git ls-tree "$commit^" -- "$path")" ] || return 1
   done <<<"$paths"
 }
-# What holds it, and the lines that show it.
 hold=""; shown=""
 if [ "$touches" = true ]; then
   factory=false

@@ -13,14 +13,12 @@ a_branch() {
   git commit -q -am "feat: spell ten"
   earlier=$(git rev-parse HEAD)
 }
-# on_main <bash>: a commit on main that the given bash makes; back on the branch after.
 on_main() {
   git checkout -q main
   eval "$1"
   git add . && git commit -q -m "main moves"
   git checkout -q feature
 }
-# same [earlier] [head] [main]
 same() { run "$scripts/only-merged-main.sh" "${1:-$earlier}" "${2:-$(git rev-parse HEAD)}" "${3:-main}"; }
 short() { git rev-parse --short=7 "${1:-HEAD}"; }
 
