@@ -123,6 +123,24 @@ expect_status 1
 expect_output "product/decisions/9.md:3: M9 is also a row in factory/decisions/setup.md"
 expect_no_output "citations ok"
 
+scenario "links a row of the architecture record, and refuses its ID in the product record too"
+repo
+mkdir -p architecture/decisions
+printf '%s\n' '| ID | Decision | Why | Rejected | Source |' '|---|---|---|---|---|' \
+  '| D8 | The forecast is not stored. | It serves D7. | Storing it: nothing reads it. | #8 |' > architecture/decisions/8.md
+echo 'Nothing is stored (D8).' > README.md
+check --fix
+expect_status 0
+[ "$(cat README.md)" = 'Nothing is stored ([D8](architecture/decisions/8.md)).' ] || fail "README.md was left as: $(cat README.md)"
+[ "$(sed -n 3p architecture/decisions/8.md)" = '| D8 | The forecast is not stored. | It serves [D7](../../product/decisions/7.md). | Storing it: nothing reads it. | #8 |' ] \
+  || fail "the row was left as: $(sed -n 3p architecture/decisions/8.md)"
+printf '%s\n' '| ID | Decision | Why | Rejected | Source |' '|---|---|---|---|---|' \
+  '| D8 | The forecast is a table. | It reads well. | A chart: none exists. | #8 |' > product/decisions/8.md
+check
+expect_status 1
+expect_output "product/decisions/8.md:3: D8 is also a row in architecture/decisions/8.md"
+expect_no_output "citations ok"
+
 scenario "keeps Windows line endings, and reads a file with them"
 repo
 printf 'No token (M9).\r\nNothing here.\r\n' > README.md

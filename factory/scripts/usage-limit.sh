@@ -10,15 +10,19 @@
 #                                                    writes held=true to GITHUB_OUTPUT, and kept=true once the run
 #                                                    has its place. With `failed` it then exits 1: only the failed
 #                                                    jobs of that run are run again.
+#        usage-limit.sh ended <execution-file> <number> <what>
+#                                                    after an agent's session: when its saved result says the usage
+#                                                    limit ended it, does `hold` with the reset time the result
+#                                                    gives, then `wait`; any other ending does nothing.
 #        usage-limit.sh resume [now]                 once the limit has reset, or at once with `now`: removes the
 #                                                    hold, runs each run that waited again and starts the tickets
 #                                                    that wait with `ready`. Prints nothing when no hold is recorded.
-#        Needs GH_TOKEN and GITHUB_REPOSITORY (contents: read; hold, wait and resume: contents write; wait: issues
-#        or pull-requests write; resume: actions write, and what start-waiting.sh needs).
+#        Needs GH_TOKEN and GITHUB_REPOSITORY (contents: read; hold, wait, ended and resume: contents write; wait
+#        and ended: issues or pull-requests write; resume: actions write, and what start-waiting.sh needs).
 #        A call that fails stops it with a message and exit 1.
 set -euo pipefail
 
-usage="Usage: usage-limit.sh held | hold <resets> | wait <number> <what> [failed] | resume [now]"
+usage="Usage: usage-limit.sh held | hold <resets> | wait <number> <what> [failed] | ended <execution-file> <number> <what> | resume [now]"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1" >&2; exit 1; }
 
@@ -109,6 +113,14 @@ The limit covers the whole account, so no agent starts before then. If the limit
       || die "The Claude usage limit holds every agent until $when, and #$number could not be told that $what starts after it."
     echo "the Claude usage limit holds every agent until $when: $what starts after it"
     [ -z "$rerun" ] || exit 1
+    ;;
+  ended)
+    [ -n "${4:-}" ] || die "$usage"
+    # Only a result that names the reset time is acted on: with none, nothing says when to start again (decisions A231b).
+    resets=$("$script_dir/session-outcome.sh" "${2:-}" | sed -n 's/^resets=//p')
+    [ -n "$resets" ] || exit 0
+    "$0" hold "$resets" >/dev/null || exit 1
+    exec "$0" wait "${3:-}" "$4"
     ;;
   resume)
     now="${2:-}"

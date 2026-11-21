@@ -5,9 +5,13 @@
 #        run-facts.sh --first-run <pr-number> <run-id> [sessions-dir]
 #        sessions-dir is a checkout of the sessions branch. Needs GH_TOKEN (actions: read to see jobs and logs).
 #        run-facts.sh --ask <run-id> <comment-link> <sessions-dir>
+#        run-facts.sh --defect <issue-number> <sessions-dir>
 #        --first-run adds `changed_steps`: each named step the pull request's diff adds a line to in that workflow, and what it did.
 #        --ask adds `ask`: the comment that asked @claude for help. It copies the transcript of the `claude` run that
 #        answered, an artifact of that run, into sessions-dir, where the facts list it.
+#        --defect gives a ticket for a defect met in use: `defect` holds its link, state and labels, `fixed_by`
+#        the pull requests that closed it, and `earlier_lesson` the lesson a retro of the defect saved, or null.
+#        Its words are read through thread.sh, so the facts hold none of them (decisions A574f).
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
@@ -183,6 +187,30 @@ if [ "${1:-}" = --ask ]; then
   # The folder names the ticket or pull request to the run's facts, which say for themselves what they could not read.
   of_run=$("$0" --run "$run" "$sessions") || { rm -f "$kept"; exit 1; }
   jq -n --argjson run "$of_run" --argjson ask "$ask" '$run + {ask: $ask}'
+  exit 0
+fi
+
+# A ticket for a defect the owner met in use, which no run names (decisions A574a).
+if [ "${1:-}" = --defect ]; then
+  usage="Usage: run-facts.sh --defect <issue-number> <sessions-dir>"
+  issue="${2:?$usage}"; sessions="${3:?$usage}"
+  [[ "$issue" =~ ^[0-9]+$ ]] || die "$issue is not the number of a ticket, so the defect was not read."
+  ticket=$(gh issue view "$issue" --json url,state,labels,closedByPullRequestsReferences) \
+    || die "Could not read ticket #$issue from GitHub, so the facts of the defect are not known."
+  # A defect is learnt from once (decisions A574b): the lesson an earlier retro saved says that one ran.
+  earlier=""
+  for file in "$sessions"/lessons/*.json; do
+    [ -f "$file" ] || continue
+    if jq -e --argjson issue "$issue" '.issue == $issue and (.facts.defect | type) == "object"' "$file" >/dev/null 2>&1; then
+      earlier=$(basename "$file")
+      break
+    fi
+  done
+  jq -n --argjson issue "$issue" --argjson ticket "$ticket" --arg earlier "$earlier" '
+    {pr: null, issue: $issue,
+     defect: {url: $ticket.url, state: $ticket.state, labels: [$ticket.labels[].name]},
+     fixed_by: [$ticket.closedByPullRequestsReferences[].number],
+     earlier_lesson: (if $earlier == "" then null else $earlier end)}'
   exit 0
 fi
 

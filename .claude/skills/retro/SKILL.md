@@ -1,6 +1,6 @@
 ---
 name: retro
-description: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, or both.
+description: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.
 ---
 
 # Retro
@@ -46,14 +46,16 @@ In place of steps 2 and 3, compare what the pull request in `changed_by` claimed
 
 The owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.
 
+## A defect met in use
+
+In place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.
+
 ## When to propose
 
-`propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:
+For every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:
 
-- **The run lost work or money, or stopped for a person:** `cost.kind` is not empty.
-- **The cause has been seen before:** step 4 lists a lesson.
-
-Every kind of retro is held to this bar (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)).
+- `cost.kind` is not empty;
+- step 4 lists a lesson.
 
 A proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.
 

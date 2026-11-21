@@ -4,7 +4,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 
 ## Approach
 
-- **The smallest standard route.** The scale is a startup idea being validated as fast as possible, without slop, and it guides the architecture. Take the smallest standard engineering solution that does the job at that scale; anything heavier is over-engineering. A general problem is solved once, where that solution puts it, not at each call site. Depart only for a reason that serves the business, the product or the user, such as testing a hypothesis before building the whole thing, and record it as a decision.
+- **The smallest standard route.** The scale is a startup idea being validated as fast as possible, without slop. Take the smallest standard engineering solution that does the job at that scale; anything heavier is over-engineering. A general problem is solved once, where that solution puts it, not at each call site. Depart only for a reason that serves the business, the product or the user, such as testing a hypothesis before building the whole thing, and record it as a decision.
 - **React to the event that changes the state.** Do not poll for it. A schedule is only for what has no event, such as time passing.
 
 ## Code
@@ -13,9 +13,9 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 - **No dead code.** No unused exports, commented-out code, speculative options, or "for later" hooks.
 - **Solve today's problem.** No abstraction until the second real use. Three similar lines beat a premature helper.
 - **Names carry the meaning.** Use the domain language in `ARCHITECTURE.md`. A comment explains why, never what.
-- **An identifier takes the standard engineering term.** Prose stays plain; a variable, function, output or file is named with the word an engineer would search for (`notified`, `failed`, `retry`), never a house word (`told`).
+- **A variable, function, output or file takes the standard engineering term:** the word an engineer would search for (`notified`, `failed`, `retry`), never a house word (`told`). Prose stays plain.
 - **Errors are handled where something can be done about them,** and nowhere else. Never swallow one silently.
-- **No comment that defends not doing something.** A comment explains why something surprising is there. If the simple thing was done, there is nothing to explain.
+- **No comment that defends not doing something.** If the simple thing was done, there is nothing to explain.
 - **A provider's number is read from the provider when it is needed, or not used.** A limit, balance, price or count that GitHub, Vercel, Neon or Anthropic holds is never copied into a script, variable or rule file; a record may keep a dated measurement, which no script reads.
 
 ## Tests
@@ -28,7 +28,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 ## Pull requests
 
 - **One ticket, one pull request, as small as the ticket allows.** Unrelated cleanups go in their own ticket.
-- **Docs move with the code.** The docs named in the ticket are updated in the same pull request.
+- **The docs named in the ticket are updated in the same pull request.**
 
 ## Documents
 
@@ -37,9 +37,9 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 
 ## Writing
 
-These rules apply to everything written: code comments, commit messages, tickets, pull request descriptions, comments on tickets and pull requests, decision rows and documents.
+These rules apply to everything written, code comments and commit messages included.
 
-- **Every written line earns its place.** A line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens. A fact that only some tasks need goes in the document those tasks read, not in a file every agent reads.
+- **A written line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens.** A fact that only some tasks need goes in the document those tasks read, not in a file every agent reads.
 - **Write for a reader who has read neither the ticket nor the code.**
 - **Say the thing itself.** Do not point at it.
 - **Name a thing by what it is, and keep that name.**

@@ -22,5 +22,10 @@ labels: bug
 <!-- Bad: "then its text is in the `destructive` colour." Good: "then I see a message that says the password is wrong." -->
 - **AC1:** Given …, when …, then …
 
+## States
+<!-- One row for each state a person can reach each screen this change touches in, such as signed out, signed in with nothing saved, signed in with a race. A state the scope leaves out gets its row too. A row says what the person sees and names the criterion that proves it, or says "unchanged". Write "No screen" if the change touches no screen. -->
+<!-- Example: - Dashboard, signed in with a race: I see the race and its date (AC1) -->
+<!-- Example: - Dashboard, signed in with no race: unchanged -->
+
 ## Docs to update
 <!-- Which docs change with this fix. Write "None" if none. -->

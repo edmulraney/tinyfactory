@@ -184,17 +184,6 @@ check
 refuses "factory/rule-files.txt:5: TASTE.md is not a file"
 expect_output 'factory/rule-files.txt:6: a line is "<words> <path>", and this is not: DESIGN.md'
 
-scenario "passes a project with no DESIGN.md, and still holds one that exists to its budget"
-repo
-append_line factory/rule-files.txt "5 DESIGN.md"
-check
-expect_status 0
-expect_output "rule files ok: 2 files"
-printf '# Design\n\nThe page is grey and cards are white.\n' > DESIGN.md
-git add --all
-check
-refuses "DESIGN.md: it holds 10 words and its budget is 5"
-
 scenario "passes a project with no SECURITY.md, and still holds one that exists to its budget"
 repo
 append_line factory/rule-files.txt "5 SECURITY.md"
@@ -205,6 +194,19 @@ printf '# Security\n\nThe factory acts only for the team here.\n' > SECURITY.md
 git add --all
 check
 refuses "SECURITY.md: it holds 10 words and its budget is 5"
+
+scenario "passes a project with no DESIGN.md, and still holds one that exists to its budget"
+repo
+append_line factory/rule-files.txt "5 DESIGN.md"
+check
+expect_status 0
+expect_output "rule files ok: 2 files"
+check --over
+expect_status 0
+printf '# Design\n\nA button holds one verb and no icon.\n' > DESIGN.md
+git add --all
+check
+refuses "DESIGN.md: it holds 10 words and its budget is 5"
 
 scenario "reports every problem in one run"
 repo

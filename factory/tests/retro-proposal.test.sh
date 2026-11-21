@@ -124,6 +124,21 @@ expect_status 0
 expect_output "Seen in the request for help https://github.com/o/r/issues/5#issuecomment-3, which the \`claude\` run https://github.com/o/r/actions/runs/99 answered."
 expect_no_output "failed"
 
+scenario "a defect met in use: the proposal names the defect's ticket"
+saved '.pr = null | .issue = 574 | .facts = {pr: null, issue: 574, defect: {title: "Let a runner keep more than one race"}, fixed_by: [577]}'
+run "$scripts/retro-proposal.sh" "$T/lesson.json"
+expect_status 0
+expect_output "Seen in the defect #574, which the owner met in use."
+expect_no_output "pull request #null"
+
+scenario "a defect met in use that no ticket has fixed yet: one ticket is figure enough to file"
+saved '.pr = null | .issue = 574 | .facts = {pr: null, issue: 574, defect: {title: "Let a runner keep more than one race"}, fixed_by: []}
+  | .lesson.cost = {amount: "1 ticket, #574, not yet built", minutes: 0, kind: ["stopped"]} | .lesson.saves = "1 ticket"'
+run "$scripts/retro-proposal.sh" "$T/lesson.json"
+expect_status 0
+expect_output "Seen in the defect #574, which the owner met in use."
+expect_no_output "pull request #null"
+
 scenario "a file that holds no lesson stops it, and is not taken for a lesson below the bar"
 printf 'not json\n' > "$T/lesson.json"
 run "$scripts/retro-proposal.sh" "$T/lesson.json"

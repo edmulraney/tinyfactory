@@ -117,7 +117,9 @@ done < <(each_job | grep -v '^ci ')
 
 scenario "no failed run starts two retros: the retro starts on no other workflow's end"
 ! grep -q 'workflow_run' "$workflows/retro.yml" || fail "expected retro.yml not to start when another workflow ends"
-[ "$(sed -n '/^on:$/,/^[a-z]/p' "$workflows/retro.yml" | grep -cE '^  [a-z_]+:')" = 1 ] || fail "expected retro.yml to start one way"
+# A label on a ticket names no run, so it adds no retro of one (decisions A574a).
+[ "$(sed -n '/^on:$/,/^[a-z]/p' "$workflows/retro.yml" | grep -oE '^  [a-z_]+:' | sort | tr -d ' \n')" = "issues:workflow_dispatch:" ] \
+  || fail "expected retro.yml to start when a job asks for it or a ticket is labelled, and in no other way"
 grep -qx '  workflow_dispatch:' "$workflows/retro.yml" || fail "expected retro.yml to start when a job asks for it"
 
 scenario "a failed retro starts no retro"

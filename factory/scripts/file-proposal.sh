@@ -49,7 +49,8 @@ held=$(jq -r '.lesson.held_by // 0 | if type == "number" then floor else 0 end' 
 if [ "$held" -gt 0 ]; then
   if jq -e --argjson n "$held" 'any(.[]; .number == $n)' "$tickets" >/dev/null 2>&1; then
     note=$(jq -r '
-      (if .facts.run then "the `\(.facts.workflow)` run \(.facts.url)" else "pull request #\(.pr)" end) as $seen
+      (if .facts.run then "the `\(.facts.workflow)` run \(.facts.url)"
+       elif .facts.defect then "the defect #\(.issue), which the owner met in use," else "pull request #\(.pr)" end) as $seen
       | "A retro of \($seen) proposes the change this ticket holds, and filed no ticket of its own.\n\n\(.lesson.summary)\n\n"
       + "What the fault cost: \(.lesson.cost.amount)\n\n\(.lesson.change.proposal)\n\n\(.lesson.evidence | map("- " + .) | join("\n"))"' "$lesson") \
       || die "The note for issue #$held could not be written, so nothing is said there and nothing is filed."

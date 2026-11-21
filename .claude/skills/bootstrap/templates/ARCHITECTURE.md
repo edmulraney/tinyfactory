@@ -5,29 +5,61 @@
 ## Principles
 
 - **One deployable.** A modular monolith: one Next.js app, one Postgres database. Split only when a measured problem demands it.
-- **Three layers, imports point down.** UI calls services; services call the database layer. Nothing reaches upward or skips a layer. ESLint enforces this (`apps/web/eslint.config.mjs`).
-- **Deep modules.** A module exposes a small interface and hides its complexity. Callers never need to know how it works inside.
+- **Five folders, each importing only some of the others.** "Structure" says which, and ESLint enforces it (`apps/web/eslint.config.mjs`).
+- **Deep modules.** A module exposes a small interface and hides its complexity. Callers never need to know how it works inside. "Modules" says how a module is one.
 - **Simple for today's scale.** No queues, caches, or abstractions for load or variation we don't have.
 
-## Layers
+## Structure
 
-```mermaid
-flowchart TD
-  Browser --> UI
-  subgraph App["apps/web (Next.js on Vercel)"]
-    UI["UI: src/app, src/components<br/>pages, route handlers, components"]
-    Server["Services: src/server<br/>business rules, one folder per domain"]
-    DB["Database layer: src/db<br/>schema, queries, migrations"]
-    UI --> Server --> DB
-  end
-  DB --> Postgres[("Postgres (Neon)")]
+```
+apps/web/src/
+  domain/              what the product knows and does. No React and no Next.js.
+    <module>/
+      index.ts         the module's door: its use cases and types, nothing else
+      types.ts         the module's entity, value objects, states and events
+      state.ts         pure state transitions, where the module has a process
+      <use-case>.ts    one use case in each file
+      repository.ts    the only code that reads or writes the module's tables
+      *.test.ts        tests of what the door promises
+  components/          the design system. No product knowledge.
+    ui/                shadcn's components, as shadcn ships them
+  app/                 the web screens
+    _components/       product components that two or more routes use, one in each file
+    <route>/
+      page.tsx         the page and nothing else
+      actions.ts       server actions: read the session, call a use case
+      _components/     this route's own components, one in each file
+  lib/                 helpers with no product knowledge, each a folder
+  db/                  the database client, the schema and the migrations
 ```
 
-| Layer | Folder | Owns | May import |
-|---|---|---|---|
-| UI | `src/app`, `src/components` | Rendering, input handling, HTTP shape. `src/components/ui` holds shadcn/ui's components as its CLI wrote them; product components are composed from those (see `DESIGN.md`) | Services |
-| Services | `src/server/<domain>` | Business rules and validation | Database layer |
-| Database | `src/db` | Schema, queries, migrations | Nothing above it |
+- **Which folder may import which.** `app` imports `domain`, `components` and `lib`. `domain` imports `lib` and `db`, and another module only through that module's `index.ts`. `components`, `lib` and `db` import nothing above them. A client component imports from a module only its `types.ts` and `state.ts`. No file sits loose in `src/` but what Next.js requires there.
+- **What a module is.** An entity: something the product stores, with an identity. A service: it works something out from entities and stores nothing. A source: it talks to an outside system and fills an entity.
+- **Types are the contract.** A module's `types.ts` defines what it works with, and every exported function takes and returns those named types: no object type written inline, and no `ReturnType` of another module's function. An answer that can be one of several cases says which with a `status` field. A module answers real values, such as seconds or a ratio; formatting one is the screen's work.
+- **Where state lives.** The highest of these that fits: the server, through a module; the address; one component; and a shared client store only when two unrelated components need state that lives nowhere above.
+- **A process is a state machine in `domain`:** a state type and a pure transition function in `state.ts`, unit-tested, and a component that shows the state and sends it events.
+- **Errors.** A failure the product expects is a value with a `status`. One it does not expect reaches the route's error boundary.
+- **The test for where a rule goes:** were the web screens replaced by a mobile app, no rule would be lost.
+
+## Modules
+
+A module of `src/domain` is a deep module (`TASTE.md`). These rules shape one.
+
+- **A module is one concept of the product.** Its `index.ts` is its only door, and its `repository.ts` alone reads and writes its tables. ESLint fails an import of any other file in its folder from outside it.
+- **A module that needs another's data asks that module's use case.** It never reads the other's tables or inner files, so a rule about that data is decided once.
+- **A business rule lives in a module.** A page or component only shows what a use case answered.
+- **A source of data, such as an outside service, and the data itself are two modules.** A second source then fills the same data, and no reader of the data changes.
+- **A module's `index.ts` is small and what is behind it is substantial.** A use case that only forwards calls is not written.
+- **A helper is shared at its second use, in one place.** Two copies drift apart, and a helper with one use is an abstraction nobody has needed.
+
+## Reference feature
+
+The health endpoint is the example of a feature shaped by "Structure" and "Modules". Read each file below before building a feature, and shape the new one the same way. Each path is written from the repo root, and `pnpm lint` fails when one names no file. Once a feature reaches a table, this section names that feature's files in place of these, with the file that owns the table and its migration.
+
+- **A route handler that only answers.** `apps/web/src/app/api/health/route.ts` returns what the service answered. It decides nothing.
+- **A service deciding a rule.** `getHealth` in `apps/web/src/domain/health/index.ts` decides which commit the deployment reports. That file is the module's only door.
+- **A unit test.** `apps/web/src/domain/health/index.test.ts` tests each rule through the module's index.
+- **An end-to-end test.** `apps/web/e2e/smoke.spec.ts` asks the running app. `apps/web/e2e/acceptance/README.md` says how a ticket's acceptance tests are written.
 
 ## Environments
 

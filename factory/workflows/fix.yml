@@ -149,13 +149,14 @@ jobs:
             --resume ${{ steps.cut2.outputs.session }}
             --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
-      # Every run of the action writes the same file, so this saves the last one.
+      # Every run of the action writes the same file, so only the last session that began names it: one the time
+      # limit killed names none, and its session file is saved, not the earlier result again (decisions A418b).
       - name: Save the session transcript
         if: always() && steps.round.outputs.go == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          "$RUNNER_TEMP/factory-scripts/save-session.sh" "${{ steps.round.outputs.role }}" "pr-$PR" "${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}"
+          "$RUNNER_TEMP/factory-scripts/save-session.sh" "${{ steps.round.outputs.role }}" "pr-$PR" "${{ steps.cut1.outputs.continue != 'true' && steps.agent.outputs.execution_file || steps.cut2.outputs.continue != 'true' && steps.resume1.outputs.execution_file || steps.resume2.outputs.execution_file }}"
       - name: Keep a second copy of the transcript on this run
         if: always() && steps.agent.outputs.execution_file != ''
         uses: actions/upload-artifact@v4

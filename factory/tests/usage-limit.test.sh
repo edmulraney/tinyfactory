@@ -208,6 +208,69 @@ limit wait 7 "a fix round"
 expect_status 1
 expect_output "GITHUB_RUN_ID names no run to run again then, so a fix round has no place."
 
+# limit_ended [resets]: the saved result of a session the usage limit ended, which names that reset time, or none.
+limit_ended() {
+  printf '[{"type":"rate_limit_event","rate_limit_info":{"status":"rejected","resetsAt":%s}},{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"api_error":"usage_limit_reached","session_id":"c22ab626"}]\n' "${1:-null}" > "$T/session.json"
+}
+
+scenario "ended: a session the usage limit ended records the reset time, keeps the run's place and tells its ticket"
+github sessions
+limit_ended "$ahead"
+limit ended "$T/session.json" 31 "Peta's run on this idea"
+expect_status 0
+expect_output "the Claude usage limit holds every agent until $ahead_in_words: Peta's run on this idea starts after it"
+expect_written "held=true"$'\n'"kept=true"
+expect_hold "$ahead"$'\n'"run 900"
+expect_posted "#31: Nothing to do: Peta's run on this idea starts after the Claude usage limit resets on $ahead_in_words."
+
+scenario "ended: a run with no ticket keeps its place and tells nobody"
+github sessions
+limit_ended "$ahead"
+limit ended "$T/session.json" "" "the retro"
+expect_status 0
+expect_written "held=true"$'\n'"kept=true"
+expect_hold "$ahead"$'\n'"run 900"
+expect_no_call "gh issue comment"
+
+scenario "ended: a session that ended any other way, left no result, or names no reset time holds nothing"
+github sessions
+echo '[{"type":"result","subtype":"success","is_error":false,"terminal_reason":"completed","session_id":"c22ab626"}]' > "$T/session.json"
+limit ended "$T/session.json" 31 "Peta's run on this idea"
+expect_status 0
+limit ended "$T/none.json" 31 "Peta's run on this idea"
+expect_status 0
+limit ended "" 31 "Peta's run on this idea"
+expect_status 0
+limit_ended
+limit ended "$T/session.json" 31 "Peta's run on this idea"
+expect_status 0
+expect_silent
+expect_written ""
+expect_hold ""
+expect_no_call "gh issue comment"
+
+scenario "ended: stops, marked nowhere as held, when the reset time cannot be written"
+github sessions
+limit_ended "$ahead"
+refuses_pushes
+limit ended "$T/session.json" 31 "Peta's run on this idea"
+expect_status 1
+expect_output "that could not be written to the sessions branch, so nothing holds the other agents until then."
+expect_written ""
+expect_no_call "gh issue comment"
+
+scenario "ended: stops when the ticket cannot be told, the hold kept, and when it is not told what ended"
+github sessions
+limit_ended "$ahead"
+echo "issue comment" > "$T/fail"
+limit ended "$T/session.json" 31 "Peta's run on this idea"
+expect_status 1
+expect_output "#31 could not be told that Peta's run on this idea starts after it."
+expect_hold "$ahead"$'\n'"run 900"
+limit ended "$T/session.json" 31
+expect_status 1
+expect_output "Usage: usage-limit.sh"
+
 scenario "resume: with no hold recorded it prints nothing, and by hand it says so"
 github sessions
 limit resume

@@ -26,6 +26,7 @@ github() {
           echo "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway" >&2; exit 1
         elif [ -f "$T/log-$id" ]; then cat "$T/log-$id"
         else echo "gh: Not Found (HTTP 404)" >&2; exit 1; fi ;;
+      "issue view 574 --json url,state,labels,closedByPullRequestsReferences") cat "$T/ticket" ;;
       "pr view 66 --json body "*) json "{\"body\":\"Closes #63\"}" "$@" ;;
       "pr view 72 --json body "*) json "{\"body\":\"Closes #57\"}" "$@" ;;
       "pr view 72 --json number,"*) json "$(cat "$T/pr")" "$@" ;;
@@ -988,6 +989,61 @@ expect_failure
 expect_output "Could not read the jobs of workflow run 900 from GitHub, so what failed is not known."
 expect_no_output '"ask"'
 [ -z "$(find "$T/sessions" -name '*-run900.json')" ] || fail "expected the copied transcript to be taken back"
+
+# Ticket #574, a defect the owner met in use, which pull request #577 closed.
+a_defect() {
+  echo '{"url":"https://github.example/owner/myapp/issues/574","state":"CLOSED","labels":[{"name":"bug"}],"closedByPullRequestsReferences":[{"number":577}]}' > "$T/ticket"
+}
+# a_lesson <name> <json>: a lesson an earlier retro saved.
+a_lesson() { echo "$2" > "$T/sessions/lessons/$1"; }
+
+scenario "a defect met in use: the ticket, the pull requests that closed it, and no earlier lesson"
+github; a_defect
+a_lesson 20261120T080000Z-lesson-run800.json '{"pr":null,"issue":574,"facts":{"run":800,"workflow":"implement"},"lesson":{}}'
+a_lesson 20261120T090000Z-lesson-run801.json '{"pr":null,"issue":12,"facts":{"defect":{"title":"Another"}},"lesson":{}}'
+: > "$T/sessions/lessons/20261120T100000Z-lesson-run802.json"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --defect 574 "$T/sessions"
+expect_status 0
+expect_fact .issue 574
+expect_fact .pr null
+expect_fact '.defect | keys | join(" ")' "labels state url"
+expect_fact .defect.url "https://github.example/owner/myapp/issues/574"
+expect_fact .defect.state CLOSED
+expect_fact '.defect.labels | join(" ")' bug
+expect_fact '.fixed_by | join(" ")' 577
+expect_fact .earlier_lesson null
+
+scenario "a defect met in use that a retro has looked at: names the lesson it saved"
+github; a_defect
+a_lesson 20261121T080000Z-lesson-run850.json '{"pr":null,"issue":574,"facts":{"issue":574,"defect":{"title":"Let a runner keep more than one race"}},"lesson":{}}'
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --defect 574 "$T/sessions"
+expect_status 0
+expect_fact .earlier_lesson 20261121T080000Z-lesson-run850.json
+
+scenario "a defect met in use with no pull request yet: none is listed"
+github; a_defect
+jq -c '.state = "OPEN" | .closedByPullRequestsReferences = []' "$T/ticket" > "$T/open" && mv "$T/open" "$T/ticket"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --defect 574 "$T/sessions"
+expect_status 0
+expect_fact '.fixed_by | length' 0
+expect_fact .defect.state OPEN
+
+scenario "a defect met in use: stops with a message, and prints no facts, when the ticket cannot be read"
+github; a_defect
+echo "issue view 574" > "$T/fail"
+run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --defect 574 "$T/sessions"
+expect_failure
+expect_output "Could not read ticket #574 from GitHub, so the facts of the defect are not known."
+expect_no_output '"defect"'
+
+scenario "a defect met in use: what is no ticket's number is refused before GitHub is asked"
+github; a_defect
+for number in "574; go=true" "#574" "five"; do
+  run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --defect "$number" "$T/sessions"
+  expect_failure
+  expect_output "is not the number of a ticket, so the defect was not read."
+done
+expect_no_call "gh"
 
 scenario "leaves nothing behind"
 github; a_build_cut_short

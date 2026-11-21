@@ -6,14 +6,20 @@
 #        found <result> <pr>:<head>...  what test-group.sh writes of pull requests it all found so, in $T/result.json;
 #                                       each still waits to merge
 
+# The scripts are run from a copy that has an apps folder beside it, as a project's have: needs-e2e.sh
+# looks for the app there, and the repository these tests run in may hold none.
+project="$_base/project"
+mkdir -p "$project/factory" "$project/apps"
+cp -R "$scripts" "$project/factory/scripts"
+scripts="$project/factory/scripts"
+
 head=5555555555555555555555555555555555555555
 merged=abcdef0123456789abcdef0123456789abcdef01
 main=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 older=0000000000000000000000000000000000000001
 
-# Pull request #7 closes #12, in a repo that holds an app; each scenario changes the one $T file it is about, which the gh stand-in below reads.
+# Pull request #7 closes #12; each scenario changes the one $T file it is about, which the gh stand-in below reads.
 ready_to_ship() {
-  mkdir -p apps
   printf 'Closes #12\n\nThe forecast exports as CSV.\n' > "$T/body"
   echo '[{"filename":"apps/web/src/app/page.tsx"}]' > "$T/files.json"
   # GitHub's one list of the pull request's comments: $T/rounds holds those a scenario sets whole, $T/comments those `comment` adds.
@@ -86,6 +92,13 @@ ready_to_ship() {
       "api repos/owner/myapp/pulls/"[89]"/files "* | "api repos/{owner}/{repo}/pulls/"[89]"/files "*) n=${2#*/pulls/}; json "$(cat "$T/files-${n%/files}.json" 2>/dev/null || cat "$T/files.json")" "$@" ;;
       "pr merge "[89]" "*) if [ -f "$T/merge" ]; then . "$T/merge"; fi ;;
       "issue edit 1"[34]" "* | "issue close 1"[34] | "issue comment 1"[34]" "*) ;;
+      # What close-idea.sh reads: $T/parent-<ticket> holds the number of the idea a ticket is a slice of, $T/idea.json
+      # that idea and $T/slices.json its slices; a ticket is a slice of no idea unless a scenario says so.
+      "api repos/{owner}/{repo}/issues/1"[234]" --jq .parent_issue_url"*)
+        n=${2##*/}; json "{\"parent_issue_url\":$(sed "s|.*|\"https://api.github.com/repos/owner/myapp/issues/&\"|" "$T/parent-$n" 2>/dev/null || echo null)}" "$@" ;;
+      "api repos/{owner}/{repo}/issues/5 --jq "*) json "$(cat "$T/idea.json")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/5/sub_issues?per_page=100 "*) json "$(cat "$T/slices.json")" "$@" ;;
+      "issue close 5") ;;
       # The git tree of a commit, for the comparison with what was tested: $T/trees/<commit> when a scenario wrote one.
       "api repos/{owner}/{repo}/commits/"*" --jq .commit.tree.sha") json "{\"commit\":{\"tree\":{\"sha\":\"$(cat "$T/trees/${2##*/}" 2>/dev/null || echo "no tree was given for ${2##*/}")\"}}}" "$@" ;;
       "pr view 7 --json author "*) json "{\"author\":{\"login\":\"$(cat "$T/author" 2>/dev/null || echo app/claude)\"}}" "$@" ;;

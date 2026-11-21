@@ -163,12 +163,11 @@ expect_output "Could not file the proposal for TASTE.md, over its word budget fo
 scenario "stops with a message, having filed nothing, when the list on main names a file main does not hold"
 github
 main_holds 700 716 TASTE.md
-# Not DESIGN.md: a project with no interface has none, and the list may still name it (decisions H501a).
-echo "600 GONE.md" >> "$T/main/repo/factory/rule-files.txt"
+echo "1100 factory/README.md" >> "$T/main/repo/factory/rule-files.txt"
 cut
 expect_status 1
 expect_output "The list of rule files on main could not be read, so no ticket was filed: "
-expect_output "factory/rule-files.txt:2: GONE.md is not a file"
+expect_output "factory/rule-files.txt:2: factory/README.md is not a file"
 expect_no_call "gh issue create"
 
 scenario "count prints how many such tickets each file had in the month, whatever their state"

@@ -353,29 +353,34 @@ scenario "refuses a record that is not there"
 run "$scripts/check-decisions.sh" missing.md
 refuses "missing.md: there is no such decision record"
 
-scenario "checks both records, each with its own folder, when none is named"
-mkdir -p factory product
+scenario "checks every record, each with its own folder, when none is named"
+mkdir -p factory product architecture
 record
 cp decisions.md factory/decisions.md
 mkdir factory/decisions
 printf '%s\n%s\n' "$columns" "$good" > factory/decisions/20.md
 run "$scripts/check-decisions.sh"
 refuses "product/decisions.md: there is no such decision record"
+expect_output "architecture/decisions.md: there is no such decision record"
+cp decisions.md architecture/decisions.md
+mkdir architecture/decisions
+printf '%s\n| T4 | Decision. | | Other: no. | #20 |\n' "$columns" > architecture/decisions/20.md
 cp decisions.md product/decisions.md
 mkdir product/decisions
 printf '%s\n| T4 | Decision. | Why. | | #20 |\n' "$columns" > product/decisions/20.md
 run "$scripts/check-decisions.sh"
 refuses "product/decisions/20.md:3: T4: Rejected is empty"
-rm -r product/decisions
+expect_output "architecture/decisions/20.md:3: T4: Why is empty"
+rm -r product/decisions architecture/decisions
 run "$scripts/check-decisions.sh"
 expect_status 0
-expect_output "decision records ok: 1 rows in 2 records"
+expect_output "decision records ok: 1 rows in 3 records"
 # The same ID in two records is no duplicate: each record has its own sections.
 mkdir product/decisions
 cp factory/decisions/20.md product/decisions/20.md
 run "$scripts/check-decisions.sh"
 expect_status 0
-expect_output "decision records ok: 2 rows in 2 records"
+expect_output "decision records ok: 2 rows in 3 records"
 
 # on_main <ticket> <rows>: a repository whose origin/main holds these rows, for new rows (decisions H105a, H105b).
 on_main() {
@@ -516,5 +521,6 @@ expect_output "origin/main could not be read, so new rows were not checked for t
 
 scenario "the repo's own records, and the seed for a new project, keep the format"
 cd "$root" || exit 1
-run "$scripts/check-decisions.sh" factory/decisions.md product/decisions.md .claude/skills/bootstrap/templates/product/decisions.md
+run "$scripts/check-decisions.sh" factory/decisions.md product/decisions.md architecture/decisions.md \
+  .claude/skills/bootstrap/templates/product/decisions.md .claude/skills/bootstrap/templates/architecture/decisions.md
 expect_status 0

@@ -48,6 +48,34 @@ expect_status 1
 expect_call "gh workflow run implement.yml -f issue=20"
 expect_call "- ticket #12 could not be closed"
 
+scenario "the idea whose last open slice the merged ticket was is closed"
+ready_to_ship
+echo 5 > "$T/parent-12"
+echo '{"number":5,"state":"open","labels":[{"name":"idea"}]}' > "$T/idea.json"
+echo '[{"number":11,"state":"closed"},{"number":12,"state":"open"}]' > "$T/slices.json"
+ship
+expect_status 0
+expect_call "gh issue close 5"
+
+scenario "the idea of the merged ticket stays open while another slice of it is open"
+ready_to_ship
+echo 5 > "$T/parent-12"
+echo '{"number":5,"state":"open","labels":[{"name":"idea"}]}' > "$T/idea.json"
+echo '[{"number":11,"state":"open"},{"number":12,"state":"closed"}]' > "$T/slices.json"
+ship
+expect_status 0
+expect_no_call "gh issue close 5"
+
+scenario "an idea that could not be closed is named on the pull request, and the waiting ticket is still started"
+ready_to_ship
+echo '[{"number":20}]' > "$T/ready.json"
+echo 5 > "$T/parent-12"
+echo "api repos/{owner}/{repo}/issues/5 " > "$T/fail"
+ship
+expect_status 1
+expect_call "gh workflow run implement.yml -f issue=20"
+expect_call "- whether ticket #12 was the last open slice of an idea is not known, so no idea was closed"
+
 scenario "a waiting ticket that comes after the merged ticket is started, though GitHub still lists that ticket as open"
 ready_to_ship
 echo '[{"number":20,"body":"After #12\n"}]' > "$T/ready.json"

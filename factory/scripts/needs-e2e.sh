@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Says whether a pull request's end-to-end tests need to run, as `run=true` or `run=false` alone on stdout.
-# Usage: needs-e2e.sh <pr-number>   (from the repo root; needs GH_TOKEN and GITHUB_REPOSITORY)
+# Usage: needs-e2e.sh <pr-number>   (needs GH_TOKEN and GITHUB_REPOSITORY)
 set -euo pipefail
 
 pr="${1:?Usage: needs-e2e.sh <pr-number>}"
@@ -11,8 +11,9 @@ max_files=3000
 
 emit() { echo "$2" >&2; echo "run=$1"; exit 0; }
 
-# A repo with no app has no end-to-end tests and no preview to wait for (decisions M501).
-[ -d apps ] || emit false "This repo has no app, so pull request #$pr has no end-to-end tests to run."
+# The folder is looked for beside the script, so the caller's folder changes nothing (decisions M501).
+[ -d "$(dirname "$0")/../../apps" ] \
+  || emit false "This repository holds no apps folder, so it has no end-to-end tests to run for pull request #$pr."
 
 # A read that fails runs the tests, and the exit is still 0 (decisions M75b).
 # A renamed file is listed under both its names: one moved out of the app changes the app too.

@@ -147,10 +147,10 @@ github() {
   stub gh 'case "$*" in "api repos/{owner}/{repo}/collaborators/"*) permission_on_github "$@" ;; *) echo "unexpected call: gh $*" >&2; exit 1 ;; esac'
 }
 
-scenario "the workflows anyone's event can start are the seven the factory holds, nine jobs in all"
-[ "$(each_job | cut -d' ' -f1 | sort -u | xargs)" = "approve-merge claude implement install-workflows refine revert start-waiting" ] \
-  || fail "expected the seven workflows, got: $(each_job | cut -d' ' -f1 | sort -u | xargs)"
-[ "$(each_job | grep -c .)" = 9 ] || fail "expected nine jobs, got $(each_job | grep -c .)"
+scenario "the workflows anyone's event can start are the nine the factory holds, eleven jobs in all"
+[ "$(each_job | cut -d' ' -f1 | sort -u | xargs)" = "approve-merge claude close-idea implement install-workflows refine retro revert start-waiting" ] \
+  || fail "expected the nine workflows, got: $(each_job | cut -d' ' -f1 | sort -u | xargs)"
+[ "$(each_job | grep -c .)" = 11 ] || fail "expected eleven jobs, got $(each_job | grep -c .)"
 
 while read -r workflow job; do
   scenario "the $job job of $workflow stops unless the account that started its run may write to the repo"

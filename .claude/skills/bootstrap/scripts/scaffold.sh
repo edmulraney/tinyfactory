@@ -20,9 +20,10 @@ install_factory_files() {
   [ "$factory_root" != "$PWD" ] || return 0
   while IFS= read -r path; do
     case "$path" in '' | '#'*) continue ;; esac
-    # The factory's repo holds no app, so a file the factory owns inside one is kept with the seeds.
+    # A file the factory owns inside the app comes from this repo where it holds the app, and from
+    # the seeds where it holds none, as the repo the factory is published from does (decisions S420h).
     from="$factory_root"
-    case "$path" in apps/*) from="$templates" ;; esac
+    case "$path" in apps/*) [ -e "$factory_root/$path" ] || from="$templates" ;; esac
     if [ ! -e "$from/$path" ]; then
       # A listed folder under factory/ may hold nothing yet, and git keeps no empty folder:
       # factory/free-tier before the first ticket adds an entry. A mistyped path there is still
@@ -94,7 +95,7 @@ if [ ! -f package.json ]; then
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
-    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh && pnpm -r lint",
+    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-reference-feature.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh && pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "factory/scripts/test-factory.sh && pnpm -r test",
     "test:e2e": "pnpm --filter web test:e2e"
@@ -123,6 +124,12 @@ design_foundation() {
   if [ ! -f apps/web/components.json ]; then
     (cd apps/web && pnpm dlx shadcn@latest init -d -y --no-monorepo --no-rtl \
       button input label card badge table </dev/null)
+  fi
+  # Each helper in src/lib is a folder (ARCHITECTURE.md, "Structure"). `@/lib/utils` names the
+  # folder's index as it named the file, so nothing that imports it changes.
+  if [ -f apps/web/src/lib/utils.ts ]; then
+    mkdir -p apps/web/src/lib/utils
+    mv apps/web/src/lib/utils.ts apps/web/src/lib/utils/index.ts
   fi
   grep -q -- '--color-\*: initial' "$css" && return 0
   python3 - "$css" apps/web/src/app/layout.tsx <<'PY'
@@ -153,6 +160,24 @@ css.write_text(text)
 PY
 }
 
+# A lint that passes shows no rule at work, so the rule that keeps a module behind its index.ts is
+# shown failing, on a page file that breaks it (decisions S570).
+prove_domain_import_rule() {
+  local probe=apps/web/src/app/import-past-index.tsx output status=0
+  printf 'import "@/domain/health/index.test";\n' > "$probe"
+  output=$(pnpm lint 2>&1) || status=$?
+  rm -f "$probe"
+  if [ "$status" -eq 0 ]; then
+    echo "scaffold: pnpm lint passed a component that imports @/domain/health/index.test, a file inside a module's folder other than its index.ts. apps/web/eslint.config.mjs must fail that import." >&2
+    exit 1
+  fi
+  if ! grep -qF 'Import a module through its index.ts' <<<"$output"; then
+    printf '%s\n' "$output" >&2
+    echo "scaffold: pnpm lint failed on a component that imports @/domain/health/index.test, but not with the message of the rule that keeps a module behind its index.ts. Its output is above." >&2
+    exit 1
+  fi
+}
+
 if [ "$fresh" = yes ]; then
   install_factory_files overwrite   # the factory's ESLint config replaces the generated one
   design_foundation
@@ -170,6 +195,7 @@ pnpm install
 git rev-parse --git-dir >/dev/null 2>&1 || git init -q -b main
 git rev-parse --quiet --verify HEAD >/dev/null 2>&1 || git add -A
 pnpm lint
+prove_domain_import_rule
 pnpm typecheck
 # The app's tests alone. `pnpm test` also runs the factory's own script tests, which take minutes
 # and prove the factory, not this project: they run where the factory is built.

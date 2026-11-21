@@ -2,10 +2,9 @@
 # Tests for factory/scripts/needs-e2e.sh: whether a pull request's end-to-end tests need to run.
 . "$(dirname "$0")/helpers.sh"
 
-# changes <path>...: the pull request changes these files, in a repo that holds an app. A path written old:new was renamed.
+# changes <path>...: the pull request changes these files. A path written old:new was renamed.
 changes() {
   export GITHUB_REPOSITORY=owner/repo
-  mkdir -p apps
   local path
   for path in "$@"; do
     case "$path" in
@@ -19,20 +18,15 @@ changes() {
   esac'
 }
 # Only what the script printed on stdout: what the workflow writes to the job's outputs.
+# The script is run from a copy that has an apps folder beside it: it looks for the app there, and
+# the repository these tests run in may hold none.
 decide() {
-  run "$scripts/needs-e2e.sh" 7
-  result=$("$scripts/needs-e2e.sh" 7 2>/dev/null) || true
+  mkdir -p "$T/repo/factory/scripts" "$T/repo/apps"
+  cp "$scripts/needs-e2e.sh" "$T/repo/factory/scripts/"
+  run "$T/repo/factory/scripts/needs-e2e.sh" 7
+  result=$("$T/repo/factory/scripts/needs-e2e.sh" 7 2>/dev/null) || true
 }
 expect_result() { [ "$result" = "$1" ] || fail "expected stdout to be exactly \"$1\", got \"$result\""; }
-
-scenario "skips in a repo with no app, whatever changed, and asks GitHub nothing"
-changes package.json apps/web/src/app/page.tsx
-rmdir apps
-decide
-expect_status 0
-expect_result "run=false"
-expect_output "This repo has no app"
-expect_no_call "gh "
 
 scenario "skips for a change to a factory script alone"
 changes factory/scripts/ship.sh
@@ -102,7 +96,6 @@ expect_status 0
 expect_result "run=false"
 
 scenario "runs when the changed files cannot be read, and says why"
-mkdir -p apps
 export GITHUB_REPOSITORY=owner/repo
 stub gh 'echo "gh: could not connect" >&2; exit 1'
 decide
@@ -111,7 +104,6 @@ expect_result "run=true"
 expect_output "Could not read the files pull request #7 changes"
 
 scenario "runs when the read fails part-way, whatever it had listed by then"
-mkdir -p apps
 export GITHUB_REPOSITORY=owner/repo
 stub gh 'echo factory/scripts/ship.sh; echo "gh: HTTP 502" >&2; exit 1'
 decide
@@ -143,6 +135,42 @@ run "$scripts/needs-e2e.sh"
 expect_failure
 expect_output "Usage: needs-e2e.sh <pr-number>"
 expect_no_call "gh"
+
+# no_app: a copy of the script in a repository that holds no apps folder, where a stand-in for gh refuses every call.
+no_app() {
+  mkdir -p "$T/repo/factory/scripts"
+  cp "$scripts/needs-e2e.sh" "$T/repo/factory/scripts/"
+  export GITHUB_REPOSITORY=owner/repo
+}
+decide_no_app() {
+  run "$1" 7
+  result=$("$1" 7 2>/dev/null) || true
+  expect_status 0
+  expect_result "run=false"
+  expect_output "This repository holds no apps folder"
+  expect_no_call "gh"
+}
+
+scenario "skips in a repository with no apps folder, and asks GitHub nothing"
+no_app
+cd "$T/repo" || exit 1
+decide_no_app factory/scripts/needs-e2e.sh
+
+scenario "skips there when called from another folder, also one that holds an apps folder"
+no_app
+mkdir -p "$T/work/apps/web"
+decide_no_app "$T/repo/factory/scripts/needs-e2e.sh"
+cd "$T/repo/factory" || exit 1
+decide_no_app scripts/needs-e2e.sh
+
+scenario "asks GitHub in a repository that holds an apps folder, called from one that holds none"
+no_app
+mkdir "$T/repo/apps"
+changes apps/web/src/app/page.tsx
+run "$T/repo/factory/scripts/needs-e2e.sh" 7
+expect_status 0
+expect_output "changes app code"
+expect_call "gh api repos/owner/repo/pulls/7/files --paginate"
 
 # job <name>: the lines of that job in ci.yml.
 job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
