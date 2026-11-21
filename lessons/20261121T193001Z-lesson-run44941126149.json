@@ -1,0 +1,87 @@
+{
+  "pr": 565,
+  "issue": 563,
+  "facts": {
+    "run": 44901406884,
+    "workflow": "retro",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44901406884",
+    "conclusion": "success",
+    "pr": 565,
+    "issue": 563,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.57,
+    "turns": 14,
+    "changed_by": {
+      "pr": 565,
+      "issue": 563,
+      "title": "fix: act only for an account with write access",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.",
+            "if_wrong": "Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it."
+          }
+        ],
+        "ryan": [
+          {
+            "assumes": "GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.",
+            "if_wrong": "The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson, second try",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson, third try",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "retro",
+        "step": "Rewrite a proposal the ticket template refuses",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first retro run after pull request #565 did what the change claimed: the session ran with the narrowed tool list, read the diff and the run with `gh pr diff` and `gh run view`, and saved its lesson; nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #565 changed one line in each of the four retro sessions of `factory/workflows/retro.yml`: the allowed tools lost `Bash(gh pr view:*)` and `Bash(gh issue view:*)` and gained `Bash(factory/scripts/thread.sh:*)`. Run 44901406884 was a retro of approve-merge run 44901340724. Its first session, \"Find the cause and write the lesson\", succeeded in 40 seconds and 14 turns for $0.57, and the lesson was saved. The second try, the third try and the rewrite were skipped, as they should be when the first session completes and proposes nothing. The session's three refused commands were compound commands or a redirect to `/tmp`, not a tool the change removed. The session never called `factory/scripts/thread.sh`, `gh pr view` or `gh issue view`, so this run shows neither that the new script is allowed nor that the removed commands are refused. Neither reviewer's assumption (the `review` job's token, the `commented` event's author in `flag-unfinished.sh`) concerns this workflow, so this run confirms neither.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44901406884",
+      "https://github.com/edmulraney/tinyfactory/pull/565",
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44901340724"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing: the changed step did what pull request #565 claimed.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded with one session of 40 seconds and $0.57, which bought the lesson it was for.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
