@@ -1,0 +1,18 @@
+# Files one ticket for the owner when the repository becomes public: what anyone can now read, and what is left to them.
+name: flag-public
+
+on: public
+
+jobs:
+  flag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write   # to look for the ticket and file it
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tell the owner what the public repository shows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/flag-public.sh
