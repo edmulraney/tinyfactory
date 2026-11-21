@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Files one ticket that tells the owner what a repository made public shows, and what is left to them.
 # Usage: flag-public.sh   (by flag-public.yml, when the repository becomes public)
-#        Needs GH_TOKEN (issues: write).
+#        Run from the repo root: a SECURITY.md there is not asked for again. Needs GH_TOKEN (issues: write).
 #        A call to GitHub that fails stops it with a message and exit 1.
 set -euo pipefail
 
-title="Add a security policy to the public repository"
+title="Protect the repository now that it is public"
 die() { echo "$1" >&2; exit 1; }
 
 # Only one the workflows' own token opened: on a public repository anyone can open a ticket with this title (decisions T567a).
@@ -18,8 +18,18 @@ if [ -n "$open" ]; then
   exit 0
 fi
 
+add="**Add a \`SECURITY.md\`** at the root of the repository. It tells a stranger whom the factory acts for and how to report a vulnerability. File a Factory ticket for it: its pull request waits for your approval."
+report="**Switch on private vulnerability reporting,** in the repository's settings, under Security. A report then reaches you without showing the fault to everyone."
+if [ -f SECURITY.md ]; then
+  first="Switch on private vulnerability reporting, then close this ticket: the factory cannot."
+  steps="1. $report"
+else
+  first="Add a \`SECURITY.md\` and switch on private vulnerability reporting, then close this ticket: the factory does neither."
+  steps="1. $add
+2. $report"
+fi
 # The first line says what a person must do (decisions A371a).
-body="Add a \`SECURITY.md\` and switch on private vulnerability reporting, then close this ticket: the factory does neither.
+body="$first
 
 This repository became public.
 
@@ -37,8 +47,7 @@ The factory acts only for an account with write access to this repository, and f
 
 ## What is left to you
 
-1. **Add a \`SECURITY.md\`** at the root of the repository. It tells a stranger whom the factory acts for and how to report a vulnerability. File a Factory ticket for it: its pull request waits for your approval.
-2. **Switch on private vulnerability reporting,** in the repository's settings, under Security. A report then reaches you without showing the fault to everyone."
+$steps"
 url=$(gh issue create --title "$title" --label needs-human --body "$body") \
   || die "The owner was not told that the repository is public: the ticket that says so could not be filed."
 echo "told the owner that the repository is public: $url"

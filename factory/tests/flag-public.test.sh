@@ -2,7 +2,7 @@
 # Tests for factory/scripts/flag-public.sh, which tells the owner in one ticket that the repository became public.
 . "$(dirname "$0")/helpers.sh"
 
-title="Add a security policy to the public repository"
+title="Protect the repository now that it is public"
 # $T/issues is what GitHub lists as open; $T/fail holds words of the call to fail.
 github() {
   echo '[]' > "$T/issues"
@@ -11,7 +11,7 @@ github() {
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
     case "$*" in
       "api repos/{owner}/{repo}/issues?state=open&per_page=100 --paginate --jq "*) json "$(cat "$T/issues")" "$@" ;;
-      "issue create --title Add a security policy to the public repository --label needs-human --body "*)
+      "issue create --title Protect the repository now that it is public --label needs-human --body "*)
         printf "%s\n" "$8" > "$T/body"; echo https://github.com/owner/repo/issues/50 ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -47,6 +47,16 @@ expect_part "What the factory still refuses" "decisions U563a"
 expect_part "What the factory still refuses" "starts no build, no agent and no merge"
 expect_part "What is left to you" '1. **Add a `SECURITY.md`**'
 expect_part "What is left to you" "2. **Switch on private vulnerability reporting,**"
+
+scenario "a repository that holds a SECURITY.md is asked only for private vulnerability reporting"
+github
+touch SECURITY.md
+run "$scripts/flag-public.sh"
+expect_status 0
+[ "$(sed -n 1p "$T/body")" = 'Switch on private vulnerability reporting, then close this ticket: the factory cannot.' ] \
+  || fail "expected the first line to ask only for private vulnerability reporting, got: $(sed -n 1p "$T/body")"
+expect_part "What is left to you" "1. **Switch on private vulnerability reporting,**"
+! grep -qF 'Add a `SECURITY.md`' "$T/body" || fail "expected no step that adds a SECURITY.md"
 
 scenario "a second time, the ticket is open: none is filed"
 github
