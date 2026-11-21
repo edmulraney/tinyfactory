@@ -1,0 +1,82 @@
+{
+  "pr": null,
+  "issue": 564,
+  "facts": {
+    "run": 44752034867,
+    "workflow": "implement",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44752034867",
+    "conclusion": "success",
+    "pr": null,
+    "issue": 564,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.65,
+    "turns": 10,
+    "changed_by": {
+      "pr": 565,
+      "issue": 563,
+      "title": "fix: act only for an account with write access",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.",
+            "if_wrong": "Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it."
+          }
+        ],
+        "ryan": [
+          {
+            "assumes": "GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.",
+            "if_wrong": "The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "implement",
+        "step": "Choose the engineer",
+        "conclusion": "success"
+      },
+      {
+        "job": "implement",
+        "step": "Start a retro when this job failed",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "implement",
+        "step": "Stop unless the account that started this run may write to the repository",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first run of the implement workflow after pull request #565 did what the change claimed: the new write-access check passed a build that github-actions[bot] started by number, and nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #565 added a step to the implement workflow that runs `factory/scripts/trusted.sh` on the account that started the run, gave Rosa `factory/scripts/thread.sh` among her tools, and made the retro step skip a run that an untrusted account started. In run 44752034867, started by number for ticket #564 by `github-actions[bot]`, the step \"Stop unless the account that started this run may write to the repository\" succeeded, and `start-build.sh` ran after it. \"Choose the engineer\" succeeded and chose Fred for the `factory` ticket. \"Start a retro when this job failed\" was skipped, as it should be for a job that did not fail. The run exercised only the trusted path: no untrusted account started it, so the refusal and the silent retro skip (decisions W563c) were not tested, and neither was Rosa's new tool. The two reviewers' assumptions (no token reachable by a reviewer's Read tool; the timeline's `commented` event author in `flag-unfinished.sh`) concern other workflows and scripts, and this run confirms neither. Fred's session lasted 69 seconds and cost 0.65 US dollars; it found ticket #564 already met, closed its draft pull request #566 and commented on the ticket, which is unrelated to the workflow change.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44752034867",
+      "https://github.com/edmulraney/tinyfactory/pull/565",
+      "https://github.com/edmulraney/tinyfactory/issues/564#issuecomment-7041851297"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the changed steps cost no fix round, no lost session and no stop; the run's one session of 69 seconds and 0.65 US dollars did its own work.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: no change is proposed.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
