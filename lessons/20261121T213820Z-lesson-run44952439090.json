@@ -1,0 +1,87 @@
+{
+  "pr": 565,
+  "issue": 563,
+  "facts": {
+    "run": 44941119423,
+    "workflow": "retro",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44941119423",
+    "conclusion": "success",
+    "pr": 565,
+    "issue": 563,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.77,
+    "turns": 9,
+    "changed_by": {
+      "pr": 586,
+      "issue": 584,
+      "title": "chore: bring the factory's files up to date",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "retro",
+        "step": "Gather the run's facts",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Keep the retro's place if the usage limit ended it",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Propose a change to the factory",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Save the lesson beside the transcripts",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Say on the run's ticket what the retro found",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Stop unless the account that started this run may write to the repository",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first retro run after pull request #586 did what the change claimed on the path it took: the write-access step trusted `github-actions[bot]`, the usage-limit step held nothing, and the lesson was saved and reported on pull request #565; nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #586 gave the retro workflow a start from a ticket labelled `bug`, moved `concurrency` onto the job, added the step \"Stop unless the account that started this run may write to the repository\" and the step \"Keep the retro's place if the usage limit ended it\", and made the save, propose and comment steps wait on `steps.limit.outputs.held != 'true'`. Run 44941119423 was started by number (`PR: 565`, `RUN: 44901428100`, `DEFECT` empty) to check the first install-workflows run after pull request #565. The write-access step ran `factory/scripts/trusted.sh` with `SENDER: github-actions[bot]` and passed. The one session completed in 42 seconds for $0.77 with no API retry, so the usage-limit step held nothing, and the three steps behind it ran: the lesson was saved as `lessons/20261121T192953Z-lesson-run44941119423.json`, no proposal was filed, and the reworded comment was posted on pull request #565. All 6 changed steps succeeded. The run did not exercise three things the pull request added: the start from a `bug` label and its `--defect` facts, the refusal of an account without write access, and the hold when the usage limit ends a retro. Those remain proven only by the scripts' tests. Neither reviewer of pull request #586 recorded an assumption.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44941119423",
+      "https://github.com/edmulraney/tinyfactory/pull/586",
+      "https://github.com/edmulraney/tinyfactory/pull/565#issuecomment-7068064261"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing: the changed steps did what pull request #586 claimed.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its one session of 42 seconds and $0.77 produced the lesson it was started for.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
