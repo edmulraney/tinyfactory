@@ -1,4 +1,4 @@
-# A retro: one agent finds the cause of a run's friction or failure, writes a lesson and may propose a change.
+# A retro: one agent finds the cause of a run's friction or failure, or of a defect met in use, and writes a lesson.
 name: retro
 
 on:
@@ -14,12 +14,12 @@ on:
       comment:
         description: With the id of the `claude` run that answered it, the link to a comment that asked for help
         required: false
-
-concurrency:
-  # Both numbers: one pull request can change several workflows, and a third retro cancels one waiting in its group.
-  group: retro-${{ inputs.pr || 'run' }}-${{ inputs.run }}
+  # A ticket labelled as a defect met in use starts this for the ticket (decisions A574a).
+  issues:
+    types: [labeled]
 
 env:
+  DEFECT: ${{ github.event.issue.number }}
   PR: ${{ inputs.pr }}
   RUN: ${{ inputs.run }}
   COMMENT: ${{ inputs.comment }}
@@ -29,6 +29,14 @@ env:
 
 jobs:
   retro:
+    # A job skipped here costs no minute, where a step would for every label on every ticket (decisions M443b).
+    # For the label, the event must say the owner added it (decisions W563b, A574e).
+    if: github.event_name == 'workflow_dispatch' || (github.event.label.name == 'bug' && github.event.sender.login == github.repository_owner)
+    concurrency:
+      # Both numbers: one pull request can change several workflows, and a third retro cancels one waiting in its group.
+      # A defect's retros run one at a time: the second must find the lesson of the first (decisions A574b).
+      # On the job, so a skipped run cancels none that waits.
+      group: retro-${{ github.event.issue.number && format('defect-{0}', github.event.issue.number) || inputs.pr || 'run' }}-${{ inputs.run }}
     # The owner's runner when they named one (decisions A426a).
     runs-on: ${{ vars.AGENT_RUNNER || 'ubuntu-latest' }}
     # Three tries of the agent, and the fifteen minutes between them (decisions A24).
@@ -45,6 +53,14 @@ jobs:
         if: vars.AGENT_RUNNER
         run: mkdir -p "$RUNNER_TEMP/home" && echo "HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+
+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).
+      - name: Stop unless the account that started this run may write to the repository
+        id: trusted
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENDER: ${{ github.event.sender.login }}
+        run: factory/scripts/trusted.sh "$SENDER"
 
       - name: Fetch the transcripts and earlier lessons
         env:
@@ -91,6 +107,12 @@ jobs:
               echo "subject=the failed workflow run $RUN"
               jq -r '"key=" + (if .issue then "issue-\(.issue)" elif .pr then "pr-\(.pr)" else "run-\(.run)" end)' .sessions/facts.json
             } >> "$GITHUB_OUTPUT"
+          elif [ -n "$DEFECT" ]; then
+            factory/scripts/run-facts.sh --defect "$DEFECT" .sessions > .sessions/facts.json
+            # A defect is learnt from once (decisions A574b).
+            go=$(jq -r '.earlier_lesson == null' .sessions/facts.json)
+            [ "$go" = true ] || echo "a retro has looked at ticket #$DEFECT: no retro"
+            { echo "go=$go"; echo "subject=ticket #$DEFECT, a defect the owner met in use"; echo "key=issue-$DEFECT"; } >> "$GITHUB_OUTPUT"
           else
             echo "Give a pull request number or a workflow run id."; exit 1
           fi
@@ -191,8 +213,17 @@ jobs:
             --allowedTools "Read,Glob,Grep,Bash(factory/scripts/thread.sh:*),Bash(gh pr diff:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
-      - name: Save the lesson beside the transcripts
+      # A retro the usage limit ended gave no lesson: it is run again after the reset (decisions A418a).
+      - name: Keep the retro's place if the usage limit ended it
+        id: limit
         if: steps.facts.outputs.go == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRANSCRIPT: ${{ steps.third.outputs.execution_file || steps.second.outputs.execution_file || steps.first.outputs.execution_file }}
+        run: factory/scripts/usage-limit.sh ended "$TRANSCRIPT" "" "the retro"
+
+      - name: Save the lesson beside the transcripts
+        if: steps.facts.outputs.go == 'true' && steps.limit.outputs.held != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           # Whichever try gave a lesson; one finished past the limit is read from the transcript (decisions A141).
@@ -211,7 +242,7 @@ jobs:
 
       - name: Propose a change to the factory
         id: propose
-        if: steps.facts.outputs.go == 'true'
+        if: steps.facts.outputs.go == 'true' && steps.limit.outputs.held != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TRANSCRIPT: ${{ steps.third.outputs.execution_file || steps.second.outputs.execution_file || steps.first.outputs.execution_file }}
@@ -257,9 +288,9 @@ jobs:
           echo "$message"
           echo "message=$message" >> "$GITHUB_OUTPUT"
 
-      # A failed run's owner looks on its ticket (decisions A25); a first run's, on its pull request (decisions A185a).
+      # A failed run's owner looks on its ticket (decisions A25), as a defect's does; a first run's, on its pull request (decisions A185a).
       - name: Say on the run's ticket what the retro found
-        if: steps.facts.outputs.go == 'true' && (env.PR == '' || env.RUN != '') && env.COMMENT == ''   # a request for help has its answer there already (decisions A446c)
+        if: steps.facts.outputs.go == 'true' && steps.limit.outputs.held != 'true' && (env.PR == '' || env.RUN != '') && env.COMMENT == ''   # a request for help has its answer there already (decisions A446c)
         env:
           GH_TOKEN: ${{ github.token }}
           PROPOSAL: ${{ steps.rewritten.outputs.message || steps.propose.outputs.message }}
@@ -268,8 +299,10 @@ jobs:
           ticket=$(jq -r '.facts.changed_by.pr // .issue // .pr // empty' "$lesson")
           [ -n "$ticket" ] || { echo "the run's ticket is not known, so there is nowhere to say it"; exit 0; }
           {
-            jq -r '(if .facts.changed_by then "the first run of `\(.facts.workflow)` since this pull request changed it" else "the failed `\(.facts.workflow)` run" end) as $run
-              | "A retro looked at \($run): \(.facts.url)\n\n\(.lesson.summary)\n"' "$lesson"
+            jq -r '(if .facts.defect then "how this defect reached use."
+                    elif .facts.changed_by then "the first run of `\(.facts.workflow)` since this pull request changed it: \(.facts.url)"
+                    else "the failed `\(.facts.workflow)` run: \(.facts.url)" end) as $seen
+              | "A retro looked at \($seen)\n\n\(.lesson.summary)\n"' "$lesson"
             echo "${PROPOSAL:-It proposes no change to the factory. The lesson is saved on the \`sessions\` branch.}"
           } | sed 's/@claude/claude/g' > "$RUNNER_TEMP/found.md"
           gh issue comment "$ticket" --body-file "$RUNNER_TEMP/found.md"

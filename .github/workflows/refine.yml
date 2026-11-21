@@ -1,4 +1,4 @@
-# Runs Peta on an idea: she proposes its slices, and files them as tickets once the repo's owner answers.
+# Runs Peta on an idea: she proposes its slices, Dara designs their screens, and Peta files them once the owner answers.
 name: refine
 
 on:
@@ -68,12 +68,13 @@ jobs:
           prompt: |
             You are Peta. Read .claude/skills/refine/SKILL.md and follow it for idea #${{ env.ISSUE }} in this repository.
             The idea, your earlier comments on it and the owner's answers are in .refine/idea.md. Write your own files in .refine/.
-          # She comments on and closes this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
+          # She comments on this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
           # The mode denies what the list does not cover: the action's own default lets a review pass it (decisions A353b, A353e).
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
-            --allowedTools "Read,Edit(.refine/**),Glob,Grep,Bash(factory/scripts/file-slice.sh ${{ env.ISSUE }}:*),Bash(gh issue comment ${{ env.ISSUE }} --body-file:*),Bash(gh issue close ${{ env.ISSUE }}:*)"
+            --allowedTools "Read,Edit(.refine/**),Glob,Grep,Bash(factory/scripts/file-slice.sh ${{ env.ISSUE }}:*),Bash(factory/scripts/propose.sh ${{ env.ISSUE }}:*)"
 
+      # Before Dara's session, which writes its result to the same file (decisions A418b).
       - name: Save the session transcript
         if: always() && steps.start.outputs.start == 'true'
         env:
@@ -81,13 +82,64 @@ jobs:
         run: |
           "$RUNNER_TEMP/factory-scripts/save-session.sh" peta "issue-$ISSUE" "${{ steps.agent.outputs.execution_file }}"
 
+      # A run the usage limit ended is run again after the reset, and the idea is told so (decisions A418a).
+      - name: Keep the run's place if the usage limit ended Peta's session
+        id: limit
+        if: always() && steps.start.outputs.start == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/usage-limit.sh" ended "${{ steps.agent.outputs.execution_file }}" "$ISSUE" "Peta's run on this idea"
+
+      # Peta writes the file only for a proposal with a slice that adds or changes a screen: no other run pays for Dara (decisions A571a).
+      # The runner's own Chrome draws them, so no browser is installed (decisions D571a).
+      - name: Install the packages that render Dara's designs
+        if: steps.start.outputs.start == 'true' && hashFiles('.refine/screens.md') != ''
+        uses: ./.github/actions/setup
+
+      - name: Dara designs the screens
+        id: dara
+        if: steps.start.outputs.start == 'true' && hashFiles('.refine/screens.md') != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # No background commands in a session with nobody in it (decisions A69f).
+          settings: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+          prompt: |
+            You are Dara. Read .claude/skills/design/SKILL.md and follow it for idea #${{ env.ISSUE }} in this repository.
+            The slices to design are in .refine/screens.md. Write your own files in .design/.
+          # She writes only in .design/, and her one command shows her designs on this idea alone (decisions A571b).
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
+            --allowedTools "Read,Edit(.design/**),Glob,Grep,Bash(factory/scripts/post-designs.sh ${{ env.ISSUE }})"
+
+      # A session can end well with every design refused, and the idea would hear nothing (decisions A571d).
+      - name: Fail the run if Dara showed no design
+        if: steps.dara.outcome == 'success'
+        run: |
+          [ -e .design/posted ] || { echo "Dara's session ended and showed no design on idea #$ISSUE."; exit 1; }
+
+      - name: Save Dara's session transcript
+        if: steps.trusted.outcome != 'failure' && always() && (steps.dara.outcome == 'success' || steps.dara.outcome == 'failure' || steps.dara.outcome == 'cancelled')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/save-session.sh" dara "issue-$ISSUE" "${{ steps.dara.outputs.execution_file }}"
+
       # The owner waits for a comment that will not come, so the idea says so (decisions A353d).
+      # `kept`, not `held`: a run whose place could not be kept is run again by nothing, so the idea is told it failed.
       # Nothing is written to it in a run an account that is not trusted started (decisions W563c).
       - name: Tell the idea that the run failed
-        if: steps.trusted.outcome != 'failure' && (failure() || cancelled())
+        if: steps.trusted.outcome != 'failure' && (failure() || cancelled()) && steps.limit.outputs.kept != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          DESIGNING: ${{ steps.agent.outcome == 'success' && hashFiles('.refine/screens.md') != '' }}
+        # Peta's proposal stands when what failed came after it, and the owner's word for the designs has Peta propose again (decisions A571d).
         run: |
-          gh issue comment "$ISSUE" --body "Peta's run on this idea failed: $RUN_URL. Comment on the idea to run her again."
+          if [ "$DESIGNING" = true ]; then
+            gh issue comment "$ISSUE" --body "Answer the proposal above as it stands, or comment \"design the screens\" to have them designed: Dara's run on this idea failed ($RUN_URL)."
+          else
+            gh issue comment "$ISSUE" --body "Peta's run on this idea failed: $RUN_URL. Comment on the idea to run her again."
+          fi
           gh issue edit "$ISSUE" --add-label needs-human
