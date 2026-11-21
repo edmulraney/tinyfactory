@@ -1,0 +1,1449 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-fable-5-2",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "f1fd08d3-9e1f-409a-bae0-ddf1fdb0fba3",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2543.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdHydS2rrRUBWaMzh7t",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LCJ5ieVrMuXk4313dPembq",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 26568,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 26568
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "32db4977-b338-433f-a85c-9e6a6266e00a",
+    "timestamp": "2026-11-21T19:29:16.646Z",
+    "request_id": "req_011ChGdHyUGKN2pBuaxcjj8e",
+    "wire_tool_inputs": {
+      "toolu_01LCJ5ieVrMuXk4313dPembq": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01LCJ5ieVrMuXk4313dPembq",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## A defect met in use\n50\t\n51\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n52\t\n53\t## When to propose\n54\t\n55\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n56\t\n57\t- `cost.kind` is not empty;\n58\t- step 4 lists a lesson.\n59\t\n60\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n61\t\n62\t## Output\n63\t\n64\tReturn the required structured format:\n65\t\n66\t- `summary`: one sentence a person can act on.\n67\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n68\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n69\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n70\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n71\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n72\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n73\t- `repeats`: the file names of step 4's lessons.\n74\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n75\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n76\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "6b48f1b1-ca10-4514-9af2-3d27a759141c",
+    "timestamp": "2026-11-21T19:29:16.679Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\nReturn the required structured format:\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 76,
+        "startLine": 1,
+        "totalLines": 76
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01LCJ5ieVrMuXk4313dPembq",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdHydS2rrRUBWaMzh7t",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ts1TPeHb9hvNrfb41gZ6ZF",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions && wc -c facts.json tickets.json; ls -la . lessons | head -80; head -c 6000 facts.json",
+            "description": "Show the facts file and list session files"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 26568,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 26568
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "e42a7f23-7d67-4772-9a5c-2d16a2f785e0",
+    "timestamp": "2026-11-21T19:29:18.299Z",
+    "request_id": "req_011ChGdHyUGKN2pBuaxcjj8e",
+    "wire_tool_inputs": {
+      "toolu_01Ts1TPeHb9hvNrfb41gZ6ZF": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions && wc -c facts.json tickets.json; ls -la . lessons | head -80; head -c 6000 facts.json",
+        "description": "Show the facts file and list session files"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.07,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        },
+        "seven_day_overage_included": {
+          "utilization": 0.14,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "276f1a91-22f3-48f9-bc0b-b5b94054c712",
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Ts1TPeHb9hvNrfb41gZ6ZF",
+          "type": "tool_result",
+          "content": "5543 facts.json\n   3 tickets.json\n5546 total\n.:\ntotal 56\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 .\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 21 19:28 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 21 19:28 apps\n-rw-r--r--  1 runner runner 5543 Nov 21 19:28 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 lessons\n-rw-r--r--  1 runner runner  653 Nov 21 19:28 measures.jsonl\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-586\n-rw-r--r--  1 runner runner    3 Nov 21 19:28 tickets.json\n\nlessons:\ntotal 32\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 .\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 ..\n-rw-r--r--  1 runner runner 3930 Nov 21 19:28 20261121T115710Z-lesson-run44901406884.json\n-rw-r--r--  1 runner runner 4228 Nov 21 19:28 20261121T115710Z-lesson-run44901415445.json\n-rw-r--r--  1 runner runner 3565 Nov 21 19:28 20261121T115715Z-lesson-run44901421212.json\n-rw-r--r--  1 runner runner 6124 Nov 21 19:28 20261121T115720Z-lesson-run44901411090.json\n{\n  \"run\": 44901428100,\n  \"workflow\": \"install-workflows\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/44901428100\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 565,\n    \"issue\": 563,\n    \"title\": \"fix: act only for an account with write access\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.\",\n          \"if_wrong\": \"Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it.\"\n        }\n      ],\n      \"ryan\": [\n        {\n          \"assumes\": \"GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.\",\n          \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n        }\n      ]\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"install\",\n      \"step\": \"Start a retro when this job failed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Stop unless the account that started this run may write to the repository\",\n      \"conclusion\": \"success\",\n      \"log\": \"    echo \\\"- $unapproved \\\\`factory/scripts/owner-decides.sh\\\\` on \\\\`$DEFAULT_BRANCH\\\\` is not the script this installer names (\\\\`${RULE:0:7}\\\\`), so nothing the owner approved says whether this change needs them.\\\" >> \\\"$refused\\\"\\n    exit 1\\n  fi\\n  git cat-file blob \\\"$RULE\\\" > \\\"$RUNNER_TEMP/owner-decides.sh\\\"\\n  # It is given the diff and nothing else: no token, and nothing of the environment.\\n  if ! theirs=$(git diff \\\"$base\\\" \\\"$head\\\" | env -i PATH=\\\"$PATH\\\" bash \\\"$RUNNER_TEMP/owner-decides.sh\\\" 2>&1) && ! undoes_button_merge; then\\n    {\\n      echo \\\"- $unapproved it changes what only they may decide:\\\"\\n      printf '\\\\n  ```\\\\n%s\\\\n  ```\\\\n' \\\"$(sed 's/^/  /' <<<\\\"$theirs\\\")\\\"\\n    } >> \\\"$refused\\\"\\n    exit 1\\n  fi\\nfi\\n\\n# main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.\\nmkdir -p .github/workflows\\nwhile IFS= read -r source; do\\n  [ -n \\\"$source\\\" ] || continue\\n  name=\\\"${source#factory/workflows/}\\\"\\n  installed=\\\".github/workflows/$name\\\"\\n  read_by_owner=$(blob \\\"$head\\\" \\\"$source\\\")\\n  at_merge=$(blob \\\"$merged\\\" \\\"$source\\\")\\n  if [ \\\"$(blob HEAD \\\"$installed\\\")\\\" = \\\"$read_by_owner\\\" ]; then\\n    echo \\\"$installed is already what was approved\\\"\\n  # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).\\n  elif [ \\\"$(blob HEAD \\\"$installed\\\")\\\" = \\\"$(blob HEAD \\\"$source\\\")\\\" ]; then\\n    echo \\\"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\\\"\\n  elif [[ \\\"$name\\\" == */* ]]; then\\n    echo \\\"- \\\\`$source\\\\` is in a folder. GitHub runs only the files directly in \\\\`.github/workflows/\\\\`.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$read_by_owner\\\" != absent ] && ! git ls-tree \\\"$head\\\" -- \\\"$source\\\" | grep -qE '^100(644|755) blob '; then\\n    echo \\\"- \\\\`$source\\\\` is not an ordinary file (a link, perhaps), so its diff does not show what would run.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" != \\\"$read_by_owner\\\" ] && ! applies_to_installed; then\\n    echo \\\"- \\\\`$source\\\\` on \\\\`$DEFAULT_BRANCH\\\\`, as this pull request's merge \\\\`${merged:0:7}\\\\` left it, is neither what commit \\\\`${head:0:7}\\\\` held nor \\\\`$installed\\\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" = \\\"$read_by_owner\\\" ] && [ \\\"$(blob HEAD \\\"$installed\\\")\\\" != \\\"$(blob \\\"$base\\\" \\\"$source\\\")\\\" ]; then\\n    echo \\\"- \\\\`$installed\\\\` is not what this pull request's diff of \\\\`$source\\\\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" = absent ]; then\\n    git rm --quiet \\\"$installed\\\"\\n    echo \\\"removed $installed\\\"\\n  else\\n    # From git, not the checked-out file: copying that would follow a link to bytes nobody approved.\\n    git update-index --add --cacheinfo \\\"100644,$at_merge,$installed\\\"\\n    echo \\\"installed $source as $installed\\\"\\n  fi\\ndone < <(git diff --no-renames --name-only \\\"$base\\\" \\\"$head\\\" -- factory/workflows)\\n\\n# All or nothing: a pull request's workflows are reviewed together.\\n[ ! -s \\\"$refused\\\" ] || exit 1\\nif git diff --cached --quiet; then\\n  echo \\\"pull request #$PR has no workflow change left to install\\\"\\nelse\\n  echo \\\"install=true\\\" >> \\\"$GITHUB_OUTPUT\\\"\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PR: 568\\n  DEFAULT_BRANCH: main\\n  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8\\n  CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270\\n  GH_TOKEN: ***\\n  OWNER: edmulraney\"\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Tell a person when the change was not installed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "ebbbc636-e5d3-408d-ba9a-59caefcd3499",
+    "timestamp": "2026-11-21T19:29:18.698Z",
+    "tool_use_result": {
+      "stdout": "5543 facts.json\n   3 tickets.json\n5546 total\n.:\ntotal 56\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 .\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 21 19:28 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 21 19:28 apps\n-rw-r--r--  1 runner runner 5543 Nov 21 19:28 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 lessons\n-rw-r--r--  1 runner runner  653 Nov 21 19:28 measures.jsonl\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 pr-586\n-rw-r--r--  1 runner runner    3 Nov 21 19:28 tickets.json\n\nlessons:\ntotal 32\ndrwxr-xr-x  2 runner runner 4096 Nov 21 19:28 .\ndrwxr-xr-x 10 runner runner 4096 Nov 21 19:28 ..\n-rw-r--r--  1 runner runner 3930 Nov 21 19:28 20261121T115710Z-lesson-run44901406884.json\n-rw-r--r--  1 runner runner 4228 Nov 21 19:28 20261121T115710Z-lesson-run44901415445.json\n-rw-r--r--  1 runner runner 3565 Nov 21 19:28 20261121T115715Z-lesson-run44901421212.json\n-rw-r--r--  1 runner runner 6124 Nov 21 19:28 20261121T115720Z-lesson-run44901411090.json\n{\n  \"run\": 44901428100,\n  \"workflow\": \"install-workflows\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/44901428100\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 565,\n    \"issue\": 563,\n    \"title\": \"fix: act only for an account with write access\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"With `persist-credentials: false` and no `GH_TOKEN` in the sessions' step, no file a reviewer's `Read` tool can reach on the runner holds the `review` job's token, which now writes to contents, pull requests and issues.\",\n          \"if_wrong\": \"Text in a pull request could have a reviewer send out a token that writes to the repository. Nothing would report it.\"\n        }\n      ],\n      \"ryan\": [\n        {\n          \"assumes\": \"GitHub's issue timeline gives a `commented` event the comment's author as `.user.login`, which `flag-unfinished.sh` now requires to be `github-actions[bot]`. I did not check this against GitHub; the tests use a stand-in.\",\n          \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n        }\n      ]\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"install\",\n      \"step\": \"Start a retro when this job failed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Stop unless the account that started this run may write to the repository\",\n      \"conclusion\": \"success\",\n      \"log\": \"    echo \\\"- $unapproved \\\\`factory/scripts/owner-decides.sh\\\\` on \\\\`$DEFAULT_BRANCH\\\\` is not the script this installer names (\\\\`${RULE:0:7}\\\\`), so nothing the owner approved says whether this change needs them.\\\" >> \\\"$refused\\\"\\n    exit 1\\n  fi\\n  git cat-file blob \\\"$RULE\\\" > \\\"$RUNNER_TEMP/owner-decides.sh\\\"\\n  # It is given the diff and nothing else: no token, and nothing of the environment.\\n  if ! theirs=$(git diff \\\"$base\\\" \\\"$head\\\" | env -i PATH=\\\"$PATH\\\" bash \\\"$RUNNER_TEMP/owner-decides.sh\\\" 2>&1) && ! undoes_button_merge; then\\n    {\\n      echo \\\"- $unapproved it changes what only they may decide:\\\"\\n      printf '\\\\n  ```\\\\n%s\\\\n  ```\\\\n' \\\"$(sed 's/^/  /' <<<\\\"$theirs\\\")\\\"\\n    } >> \\\"$refused\\\"\\n    exit 1\\n  fi\\nfi\\n\\n# main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.\\nmkdir -p .github/workflows\\nwhile IFS= read -r source; do\\n  [ -n \\\"$source\\\" ] || continue\\n  name=\\\"${source#factory/workflows/}\\\"\\n  installed=\\\".github/workflows/$name\\\"\\n  read_by_owner=$(blob \\\"$head\\\" \\\"$source\\\")\\n  at_merge=$(blob \\\"$merged\\\" \\\"$source\\\")\\n  if [ \\\"$(blob HEAD \\\"$installed\\\")\\\" = \\\"$read_by_owner\\\" ]; then\\n    echo \\\"$installed is already what was approved\\\"\\n  # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).\\n  elif [ \\\"$(blob HEAD \\\"$installed\\\")\\\" = \\\"$(blob HEAD \\\"$source\\\")\\\" ]; then\\n    echo \\\"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\\\"\\n  elif [[ \\\"$name\\\" == */* ]]; then\\n    echo \\\"- \\\\`$source\\\\` is in a folder. GitHub runs only the files directly in \\\\`.github/workflows/\\\\`.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$read_by_owner\\\" != absent ] && ! git ls-tree \\\"$head\\\" -- \\\"$source\\\" | grep -qE '^100(644|755) blob '; then\\n    echo \\\"- \\\\`$source\\\\` is not an ordinary file (a link, perhaps), so its diff does not show what would run.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" != \\\"$read_by_owner\\\" ] && ! applies_to_installed; then\\n    echo \\\"- \\\\`$source\\\\` on \\\\`$DEFAULT_BRANCH\\\\`, as this pull request's merge \\\\`${merged:0:7}\\\\` left it, is neither what commit \\\\`${head:0:7}\\\\` held nor \\\\`$installed\\\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" = \\\"$read_by_owner\\\" ] && [ \\\"$(blob HEAD \\\"$installed\\\")\\\" != \\\"$(blob \\\"$base\\\" \\\"$source\\\")\\\" ]; then\\n    echo \\\"- \\\\`$installed\\\\` is not what this pull request's diff of \\\\`$source\\\\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run.\\\" >> \\\"$refused\\\"\\n  elif [ \\\"$at_merge\\\" = absent ]; then\\n    git rm --quiet \\\"$installed\\\"\\n    echo \\\"removed $installed\\\"\\n  else\\n    # From git, not the checked-out file: copying that would follow a link to bytes nobody approved.\\n    git update-index --add --cacheinfo \\\"100644,$at_merge,$installed\\\"\\n    echo \\\"installed $source as $installed\\\"\\n  fi\\ndone < <(git diff --no-renames --name-only \\\"$base\\\" \\\"$head\\\" -- factory/workflows)\\n\\n# All or nothing: a pull request's workflows are reviewed together.\\n[ ! -s \\\"$refused\\\" ] || exit 1\\nif git diff --cached --quiet; then\\n  echo \\\"pull request #$PR has no workflow change left to install\\\"\\nelse\\n  echo \\\"install=true\\\" >> \\\"$GITHUB_OUTPUT\\\"\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PR: 568\\n  DEFAULT_BRANCH: main\\n  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8\\n  CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270\\n  GH_TOKEN: ***\\n  OWNER: edmulraney\"\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Tell a person when the change was not installed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Ts1TPeHb9hvNrfb41gZ6ZF",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "b265a1de-bb33-4c29-8f30-1ae345f29942"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 190,
+    "estimated_tokens_delta": 140,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "e969f9d0-4bf6-4c4b-abd4-6bae702ba364"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdJXue5tf6bXeb4ZhKC",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS7gUKEAgUGAI4AUIIdGhpbmtpbmcSDL2600aG3vQDDENnMBoMm7OasZ83LIZ+UbfiIjAwXNkIh5Qrj9VE4qzR6xPoLP1zx+9jHkWv4PEgjjSx3Nte6VqctrQZ/4aXhVYgcGkqiwXweOnWwz1Tw/KKTYmKE1J7jufSYGRJmTlZmgP9tNdYkAhdwR/YBW2TfczqscVPXZqIYTsxNl2pUpZxS1kKgks46dla3SVlYxFysycASS1Y96ltF9+CxirWUfxZFXzntqrhAqtD9aQcYY0n7YMuYPTdRwdwO7hxDEBP7207E+Z4X9rRSYRHZGqoEUcZb8VzinmyrkLdyRjQng0AoaIKKXkvk5byFbvAA7VQH9SiUGOqkCzfBn49gQPlAAhcQQ7kFBcJFOkbVwRiDmcikr4eshP7e2LVJIH1nHi6Z7dbW/xyg1092Fd4bUuUQYuUlPxIJg5Jf4OvGdkd/XYES9uFiJHTP/0QUoaIzN3zgEVhUngmSGz74JopRid0AOuuVO/+hUhKm6kwBOr0etj3yF5fvhaEYNPsitxOi7k853cSYS3vJ8WbA6075RKJSah7wHBAYKyQjquWSuhhpl3t8FPwmv/NeeEg0bpvSohd8/0UaYOugYgAarNbF1Z9cplyikjpSbKT8BXLkPEiaY5pG4r6+fVYZry0sBqiCUfVlZfBiAr46ehv5/7hUL/m7d/eiFfqmfHPYs6a+bpwGJL2B2Dgv9IsFeWVZc7ujS+l2xKj6YdHUdcZ3VuIvREMg3RPCW8aHMLtVyoX+4j7VVzgQvzKwP6Bl2kwI3mYgx8tERE+1+BwIS9e/C/2eQB2RUPH0Thp0CilCS5dolfyEavs+WkTzZlbLp3U/XXm1A0VRCmdJW6DsRYmI0ZGLrLv6hWktzwu+HMPz1Dz6JhQUs+tHonv84LHPjBbcsi0Q+U9flhqf1NzMCzT99ArtGo0hjZjKZP3zRLLR/pl7w4dDwqe0vNDKDtP8aaBQHtsAm7jCZ0YAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6109,
+        "cache_read_input_tokens": 26568,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 6109
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "f73f0c11-ba32-4fe9-81b7-b0f948fad12a",
+    "timestamp": "2026-11-21T19:29:20.528Z",
+    "request_id": "req_011ChGdJXjyUfSYHVpUxGPLe",
+    "thinking_duration_ms": 752,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdJXue5tf6bXeb4ZhKC",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0188PvV5QL7dchJgovvzrkg4",
+          "name": "Bash",
+          "input": {
+            "command": "cat tickets.json; for f in lessons/*.json; do echo \"== $f\"; python3 -I -c \"\nimport json,sys\nd=json.load(open(sys.argv[1]))\nfor k in ('summary','title','cause','detail','repeats','propose','held_by'): print(k,':',d.get(k))\nprint('change:',d.get('change'))\nprint('keys',list(d.keys()))\n\" $f; done; cd .. ; gh pr diff 565 -- 2>/dev/null | grep -n '^diff --git' ",
+            "description": "Read earlier lessons, tickets, and list files in PR 565's diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6109,
+        "cache_read_input_tokens": 26568,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 6109
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "445fa783-ac8c-4312-8050-a2c50d155522",
+    "timestamp": "2026-11-21T19:29:22.950Z",
+    "request_id": "req_011ChGdJXjyUfSYHVpUxGPLe",
+    "wire_tool_inputs": {
+      "toolu_0188PvV5QL7dchJgovvzrkg4": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions && cat tickets.json; for f in lessons/*.json; do echo \"== $f\"; python3 -I -c \"\nimport json,sys\nd=json.load(open(sys.argv[1]))\nfor k in ('summary','title','cause','detail','repeats','propose','held_by'): print(k,':',d.get(k))\nprint('change:',d.get('change'))\nprint('keys',list(d.keys()))\n\" $f; done; cd .. ; gh pr diff 565 -- 2>/dev/null | grep -n '^diff --git' ",
+        "description": "Read earlier lessons, tickets, and list files in PR 565's diff"
+      }
+    },
+    "wire_ingest_context": {
+      "toolu_0188PvV5QL7dchJgovvzrkg4": {
+        "cwd": "/home/runner/work/tinyfactory/tinyfactory/.sessions"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_0188PvV5QL7dchJgovvzrkg4",
+    "decision_reason_type": "other",
+    "decision_reason": "A variable in this command can't be checked before it runs",
+    "message": "A variable in this command can't be checked before it runs",
+    "uuid": "c2a644af-b15d-42c0-aa04-082c7afb2ba0",
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "A variable in this command can't be checked before it runs",
+          "is_error": true,
+          "tool_use_id": "toolu_0188PvV5QL7dchJgovvzrkg4"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "614a16d7-7cb5-4bbc-b45c-0d8f8e60c750",
+    "timestamp": "2026-11-21T19:29:22.967Z",
+    "tool_use_result": "Error: A variable in this command can't be checked before it runs",
+    "tool_result_meta": [
+      {
+        "id": "toolu_0188PvV5QL7dchJgovvzrkg4",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdJXue5tf6bXeb4ZhKC",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01GXBfvxknxw4HoDZYFhtzCb",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory && gh run view 44901428100 --json jobs,headSha,createdAt,updatedAt,event,displayTitle 2>&1 | head -c 3000; grep -n \"Stop unless\" -B6 -A30 factory/workflows/install-workflows.yml | head -120",
+            "description": "View the run's jobs and the changed step in the workflow source"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6109,
+        "cache_read_input_tokens": 26568,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 6109
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "477c1cf1-cf57-4067-8025-cee62ed47609",
+    "timestamp": "2026-11-21T19:29:24.477Z",
+    "request_id": "req_011ChGdJXjyUfSYHVpUxGPLe",
+    "wire_tool_inputs": {
+      "toolu_01GXBfvxknxw4HoDZYFhtzCb": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory && gh run view 44901428100 --json jobs,headSha,createdAt,updatedAt,event,displayTitle 2>&1 | head -c 3000; grep -n \"Stop unless\" -B6 -A30 factory/workflows/install-workflows.yml | head -120",
+        "description": "View the run's jobs and the changed step in the workflow source"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01GXBfvxknxw4HoDZYFhtzCb",
+          "type": "tool_result",
+          "content": "{\"createdAt\":\"2026-11-21T11:56:05Z\",\"displayTitle\":\"install-workflows\",\"event\":\"workflow_dispatch\",\"headSha\":\"37ca162addf1e7899f2aeb8942d63153f3df01bf\",\"jobs\":[{\"completedAt\":\"2026-11-21T11:56:19Z\",\"conclusion\":\"success\",\"databaseId\":136837957469,\"name\":\"install\",\"startedAt\":\"2026-11-21T11:56:08Z\",\"status\":\"completed\",\"steps\":[{\"completedAt\":\"2026-11-21T11:56:10Z\",\"conclusion\":\"success\",\"name\":\"Set up job\",\"number\":1,\"startedAt\":\"2026-11-21T11:56:09Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:11Z\",\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\",\"number\":2,\"startedAt\":\"2026-11-21T11:56:10Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:11Z\",\"conclusion\":\"success\",\"name\":\"Stop unless the account that started this run may write to the repository\",\"number\":3,\"startedAt\":\"2026-11-21T11:56:11Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:12Z\",\"conclusion\":\"success\",\"name\":\"Check that what would be installed was approved, or needs no approval\",\"number\":4,\"startedAt\":\"2026-11-21T11:56:11Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:13Z\",\"conclusion\":\"success\",\"name\":\"Get a short-lived token that may write workflow files\",\"number\":5,\"startedAt\":\"2026-11-21T11:56:12Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"success\",\"name\":\"Commit the copies\",\"number\":6,\"startedAt\":\"2026-11-21T11:56:13Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Tell a person when the change was not installed\",\"number\":7,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Start the installer for the pull request merged after this one\",\"number\":8,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\",\"number\":9,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\",\"number\":10,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Post Get a short-lived token that may write workflow files\",\"number\":19,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\",\"number\":20,\"startedAt\":\"2026-11-21T11:56:17Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Complete job\",\"number\":21,\"startedAt\":\"2026-11-21T11:56:17Z\",\"status\":\"completed\"}],\"url\":\"https://github.com/edmulraney/tinyfactory/actions/runs/44901428100/job/136837957469\"}],\"updatedAt\":\"2026-11-21T11:56:19Z\"}\n39-        with:\n40-          ref: ${{ github.event.repository.default_branch }}\n41-          fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n42-          persist-credentials: false   # the push below must use the app's token and no other\n43-\n44-      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n45:      - name: Stop unless the account that started this run may write to the repository\n46-        id: trusted\n47-        env:\n48-          GH_TOKEN: ${{ github.token }}\n49-          SENDER: ${{ github.event.sender.login }}\n50-        run: factory/scripts/trusted.sh \"$SENDER\"\n51-\n52-      # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n53-      - name: Check that what would be installed was approved, or needs no approval\n54-        id: check\n55-        env:\n56-          GH_TOKEN: ${{ github.token }}\n57-          OWNER: ${{ github.repository_owner }}\n58-        run: |\n59-          set -euo pipefail\n60-          refused=\"$RUNNER_TEMP/refused.md\"\n61-          : > \"$refused\"\n62-\n63-          view=$(gh pr view \"$PR\" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)\n64-          if [ \"$(jq -r .state <<<\"$view\")\" != MERGED ] || [ \"$(jq -r .baseRefName <<<\"$view\")\" != \"$DEFAULT_BRANCH\" ]; then\n65-            echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"\n66-            exit 0\n67-          fi\n68-          head=$(jq -r .headRefOid <<<\"$view\")\n69-\n70-          # The merged branch is deleted, but GitHub keeps the pull request's last commit here.\n71-          git fetch --quiet \"https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git\" \"refs/pull/$PR/head\"\n72-          [ \"$(git rev-parse FETCH_HEAD)\" = \"$head\" ]\n73-          # It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).\n74-          merged=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$view\")\n75-          git merge-base --is-ancestor \"$merged\" HEAD || {",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "a80cf204-5f9d-4003-80e0-61e72b785a93",
+    "timestamp": "2026-11-21T19:29:25.275Z",
+    "tool_use_result": {
+      "stdout": "{\"createdAt\":\"2026-11-21T11:56:05Z\",\"displayTitle\":\"install-workflows\",\"event\":\"workflow_dispatch\",\"headSha\":\"37ca162addf1e7899f2aeb8942d63153f3df01bf\",\"jobs\":[{\"completedAt\":\"2026-11-21T11:56:19Z\",\"conclusion\":\"success\",\"databaseId\":136837957469,\"name\":\"install\",\"startedAt\":\"2026-11-21T11:56:08Z\",\"status\":\"completed\",\"steps\":[{\"completedAt\":\"2026-11-21T11:56:10Z\",\"conclusion\":\"success\",\"name\":\"Set up job\",\"number\":1,\"startedAt\":\"2026-11-21T11:56:09Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:11Z\",\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\",\"number\":2,\"startedAt\":\"2026-11-21T11:56:10Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:11Z\",\"conclusion\":\"success\",\"name\":\"Stop unless the account that started this run may write to the repository\",\"number\":3,\"startedAt\":\"2026-11-21T11:56:11Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:12Z\",\"conclusion\":\"success\",\"name\":\"Check that what would be installed was approved, or needs no approval\",\"number\":4,\"startedAt\":\"2026-11-21T11:56:11Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:13Z\",\"conclusion\":\"success\",\"name\":\"Get a short-lived token that may write workflow files\",\"number\":5,\"startedAt\":\"2026-11-21T11:56:12Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"success\",\"name\":\"Commit the copies\",\"number\":6,\"startedAt\":\"2026-11-21T11:56:13Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Tell a person when the change was not installed\",\"number\":7,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Start the installer for the pull request merged after this one\",\"number\":8,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\",\"number\":9,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:16Z\",\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\",\"number\":10,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Post Get a short-lived token that may write workflow files\",\"number\":19,\"startedAt\":\"2026-11-21T11:56:16Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\",\"number\":20,\"startedAt\":\"2026-11-21T11:56:17Z\",\"status\":\"completed\"},{\"completedAt\":\"2026-11-21T11:56:17Z\",\"conclusion\":\"success\",\"name\":\"Complete job\",\"number\":21,\"startedAt\":\"2026-11-21T11:56:17Z\",\"status\":\"completed\"}],\"url\":\"https://github.com/edmulraney/tinyfactory/actions/runs/44901428100/job/136837957469\"}],\"updatedAt\":\"2026-11-21T11:56:19Z\"}\n39-        with:\n40-          ref: ${{ github.event.repository.default_branch }}\n41-          fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n42-          persist-credentials: false   # the push below must use the app's token and no other\n43-\n44-      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n45:      - name: Stop unless the account that started this run may write to the repository\n46-        id: trusted\n47-        env:\n48-          GH_TOKEN: ${{ github.token }}\n49-          SENDER: ${{ github.event.sender.login }}\n50-        run: factory/scripts/trusted.sh \"$SENDER\"\n51-\n52-      # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n53-      - name: Check that what would be installed was approved, or needs no approval\n54-        id: check\n55-        env:\n56-          GH_TOKEN: ${{ github.token }}\n57-          OWNER: ${{ github.repository_owner }}\n58-        run: |\n59-          set -euo pipefail\n60-          refused=\"$RUNNER_TEMP/refused.md\"\n61-          : > \"$refused\"\n62-\n63-          view=$(gh pr view \"$PR\" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)\n64-          if [ \"$(jq -r .state <<<\"$view\")\" != MERGED ] || [ \"$(jq -r .baseRefName <<<\"$view\")\" != \"$DEFAULT_BRANCH\" ]; then\n65-            echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"\n66-            exit 0\n67-          fi\n68-          head=$(jq -r .headRefOid <<<\"$view\")\n69-\n70-          # The merged branch is deleted, but GitHub keeps the pull request's last commit here.\n71-          git fetch --quiet \"https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git\" \"refs/pull/$PR/head\"\n72-          [ \"$(git rev-parse FETCH_HEAD)\" = \"$head\" ]\n73-          # It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).\n74-          merged=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$view\")\n75-          git merge-base --is-ancestor \"$merged\" HEAD || {",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01GXBfvxknxw4HoDZYFhtzCb",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "ed3b0051-eb18-45ea-b1d1-d6ccfd03cbeb"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 206,
+    "estimated_tokens_delta": 156,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "05c74977-b814-4112-93fc-7f6545acabe1"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdK1vsnWfFZktCWRA1g",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSrQYKEAgUGAI4AUIIdGhpbmtpbmcSDELIQAb6D5mdlvtDshoMPi8186h/fiFM2pBXIjD4rqJa2NJK9G2JMoXGJoC6wHWPjBd4JPz+WuvrbLzJRUgMBaEPJEc4w/D2557pFJoqygXHOc+4uMv+G2YxwHYZTJ54dSr6bqTYFnvdcFloQxxH0xsknX50N6HVpOjOn95aB6Tg9NvUHIMgYxpCjqa5dAcg9JgXwVY24Kj5eBT6VULxundN+Itx/ahCtAlS7EBNDxVtskcddO+be4AP6Cp7oQsQP3CWIZ3y+SFM+ChJ+A2+W2CNIeARLiXI6slr2FVbpKzLgZP0+/ixQe1rHMRCO0CjZiL2lcbtp7K1jTjKwrpQzkg9+URKnDuj+OFRc0vxFTGlr7TFN29EmlhFUNMWgnqQN2ieD1mblZ+L2wd7p6fT2PYGhHu8jJmoey9eGrCXxjmI3we5xqtmWuqocOmFvq8CMChQ5tdG3U1lgxNUhmH8lhVNgHVRWsp4QQrc/A4ZEKfxhJBGyUMWanBmepajk7QO594OlObiAr7jISoonIfsIW9gSZ0aDBvE00NlujUyh3D0EmDi/nmomZrCvjIJ4DGszxDXFUcthGPL2YNM8+9ZOnOzAzgUb/sU94F0c6k/h42f70+4ojGY4yH5D2Qv2PA6zM2eLoufYOpbtbRcCoPhl/UoouFFo6Oy4PJEQHZEUlfOnqYsgEp4Jh5wllnFb82cGOI5/xscrhB1RjfSZm5PGTF2iOcU6pTL+usIZenZ4MINfvoLgFynn8eNS+cDFQjC1Fo1ul/j++JZocwSaMQ3DCwivvF71rgIQLtkfAAGltXnl3KsIAKrB24W4uRA1OevXeSsY43BkFQyWR7daD76uVD2MZj8GUb53DAfdz4BDGtXsrErBrRzRci1K7SiVxcyL09vdrZQ0zkC1Q0LLx3xwglADAllGJqFqP1oAZu8BTiG9cSPLA8duqOkIF8RaS/Rx1R3mmEYwTvndQehyug8oZy7myX8e2pEyne/re+2FY0WqoZCapKIJN282yMwX2b0X2QAUggo2MIt3n5X9du3q3uiIg9B8uVKGKMYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2840,
+        "cache_read_input_tokens": 32677,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2840
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "ff119564-40a2-46cf-83c6-9cf5507e5e4d",
+    "timestamp": "2026-11-21T19:29:28.383Z",
+    "request_id": "req_011ChGdK1nh2zQQKa6T4vnGB",
+    "thinking_duration_ms": 1148,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdK1vsnWfFZktCWRA1g",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TczQ2gVfNcp9maBY7zKMYd",
+          "name": "Bash",
+          "input": {
+            "command": "gh run view 44901428100 --log 2>&1 | grep -n \"Stop unless\" | head -40; cat factory/scripts/trusted.sh; cat .sessions/tickets.json; ls .sessions/lessons .sessions/pr-565",
+            "description": "Fetch the changed step's real log and read the trust script"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2840,
+        "cache_read_input_tokens": 32677,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2840
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "fcf0f4a0-55a7-4839-808b-6c2aec1a1fb3",
+    "timestamp": "2026-11-21T19:29:29.530Z",
+    "request_id": "req_011ChGdK1nh2zQQKa6T4vnGB",
+    "wire_tool_inputs": {
+      "toolu_01TczQ2gVfNcp9maBY7zKMYd": {
+        "command": "gh run view 44901428100 --log 2>&1 | grep -n \"Stop unless\" | head -40; cat factory/scripts/trusted.sh; cat .sessions/tickets.json; ls .sessions/lessons .sessions/pr-565",
+        "description": "Fetch the changed step's real log and read the trust script"
+      }
+    }
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdK1vsnWfFZktCWRA1g",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TnmVbkRAzZvcEccJbMKsWP",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 565 | grep -n -A40 '^diff --git a/factory/workflows/install-workflows.yml'",
+            "description": "Show PR 565's change to the installer workflow"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2840,
+        "cache_read_input_tokens": 32677,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2840
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "d5cb3fc3-52ca-4e65-a6ad-ec9e2fff68ce",
+    "timestamp": "2026-11-21T19:29:30.186Z",
+    "request_id": "req_011ChGdK1nh2zQQKa6T4vnGB",
+    "wire_tool_inputs": {
+      "toolu_01TnmVbkRAzZvcEccJbMKsWP": {
+        "command": "gh pr diff 565 | grep -n -A40 '^diff --git a/factory/workflows/install-workflows.yml'",
+        "description": "Show PR 565's change to the installer workflow"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01TczQ2gVfNcp9maBY7zKMYd",
+          "type": "tool_result",
+          "content": "#!/usr/bin/env bash\n# Says whether the factory may act for an account: one that may write to the repository, or one of its own two bots.\n# Usage: trusted.sh <login>\n#        Exit 0: the account is trusted. Exit 1: it is not, as an empty login and one GitHub does not know are not.\n#        Exit 2, with a message: GitHub would not say. A caller takes that for \"no\" and stops.\n#        Needs GH_TOKEN, with any permissions, and GITHUB_REPOSITORY or a checkout gh can read.\nset -euo pipefail\n\nlogin=\"${1:-}\"\n\n# The factory's own two, by the full login GitHub's API gives, which no person's username can be (decisions U563a).\ncase \"$login\" in\n  'github-actions[bot]' | 'claude[bot]') exit 0 ;;\nesac\n\n# The login goes into an address, so one that could not be a person's username is asked about nowhere.\nif [[ ! \"$login\" =~ ^[A-Za-z0-9][A-Za-z0-9_-]*$ ]]; then\n  echo \"\\\"$login\\\" is not trusted: it is neither one of the factory's two bots nor a person's username.\" >&2\n  exit 1\nfi\n\nif ! answer=$(gh api \"repos/{owner}/{repo}/collaborators/$login/permission\" 2>&1); then\n  if [[ \"$answer\" == *\"HTTP 404\"* ]]; then\n    echo \"$login is not trusted: GitHub knows no such account on this repository.\" >&2\n    exit 1\n  fi\n  echo \"GitHub would not say whether $login may write to this repository, so nothing is done for that account: $answer\" >&2\n  exit 2\nfi\n\n# `permission` is the base role, so a custom role counts as the access it grants (decisions U563a).\nif ! permission=$(jq -r '.permission // \"\"' <<<\"$answer\" 2>/dev/null) || [ -z \"$permission\" ]; then\n  echo \"GitHub's answer names no permission for $login on this repository, so nothing is done for that account: $answer\" >&2\n  exit 2\nfi\ncase \"$permission\" in\n  admin | maintain | write) exit 0 ;;\nesac\necho \"$login is not trusted: its permission on this repository is \\\"$permission\\\", and the factory acts only for one that may write.\" >&2\nexit 1\n[]\n.sessions/lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n\n.sessions/pr-565:\n20261120T140555Z-adam-run44749322815.json\n20261120T140557Z-ryan-run44749322815.json\n20261121T115712Z-retro-run44901406884.json\n20261121T115717Z-retro-run44901421212.json\n20261121T115722Z-retro-run44901411090.json\n20261121T115726Z-retro-run44901415445.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "86c90f5b-e04d-4072-a4c6-41e98e1b65f1",
+    "timestamp": "2026-11-21T19:29:30.619Z",
+    "tool_use_result": {
+      "stdout": "#!/usr/bin/env bash\n# Says whether the factory may act for an account: one that may write to the repository, or one of its own two bots.\n# Usage: trusted.sh <login>\n#        Exit 0: the account is trusted. Exit 1: it is not, as an empty login and one GitHub does not know are not.\n#        Exit 2, with a message: GitHub would not say. A caller takes that for \"no\" and stops.\n#        Needs GH_TOKEN, with any permissions, and GITHUB_REPOSITORY or a checkout gh can read.\nset -euo pipefail\n\nlogin=\"${1:-}\"\n\n# The factory's own two, by the full login GitHub's API gives, which no person's username can be (decisions U563a).\ncase \"$login\" in\n  'github-actions[bot]' | 'claude[bot]') exit 0 ;;\nesac\n\n# The login goes into an address, so one that could not be a person's username is asked about nowhere.\nif [[ ! \"$login\" =~ ^[A-Za-z0-9][A-Za-z0-9_-]*$ ]]; then\n  echo \"\\\"$login\\\" is not trusted: it is neither one of the factory's two bots nor a person's username.\" >&2\n  exit 1\nfi\n\nif ! answer=$(gh api \"repos/{owner}/{repo}/collaborators/$login/permission\" 2>&1); then\n  if [[ \"$answer\" == *\"HTTP 404\"* ]]; then\n    echo \"$login is not trusted: GitHub knows no such account on this repository.\" >&2\n    exit 1\n  fi\n  echo \"GitHub would not say whether $login may write to this repository, so nothing is done for that account: $answer\" >&2\n  exit 2\nfi\n\n# `permission` is the base role, so a custom role counts as the access it grants (decisions U563a).\nif ! permission=$(jq -r '.permission // \"\"' <<<\"$answer\" 2>/dev/null) || [ -z \"$permission\" ]; then\n  echo \"GitHub's answer names no permission for $login on this repository, so nothing is done for that account: $answer\" >&2\n  exit 2\nfi\ncase \"$permission\" in\n  admin | maintain | write) exit 0 ;;\nesac\necho \"$login is not trusted: its permission on this repository is \\\"$permission\\\", and the factory acts only for one that may write.\" >&2\nexit 1\n[]\n.sessions/lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n\n.sessions/pr-565:\n20261120T140555Z-adam-run44749322815.json\n20261120T140557Z-ryan-run44749322815.json\n20261121T115712Z-retro-run44901406884.json\n20261121T115717Z-retro-run44901421212.json\n20261121T115722Z-retro-run44901411090.json\n20261121T115726Z-retro-run44901415445.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01TczQ2gVfNcp9maBY7zKMYd",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01TnmVbkRAzZvcEccJbMKsWP",
+          "type": "tool_result",
+          "content": "4924:diff --git a/factory/workflows/install-workflows.yml b/factory/workflows/install-workflows.yml\n4925-index 066c222..9170c65 100644\n4926---- a/factory/workflows/install-workflows.yml\n4927-+++ b/factory/workflows/install-workflows.yml\n4928-@@ -20,11 +20,12 @@ concurrency:\n4929- env:\n4930-   PR: ${{ inputs.pr || github.event.pull_request.number }}\n4931-   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}\n4932--  RULE: 67f268772e94f3552d7b308c5492370f417596c3   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n4933-+  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n4934-   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)\n4935- \n4936- jobs:\n4937-   install:\n4938-+    # Only an account that may write merges a pull request, or starts this by number (decisions W563b).\n4939-     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true\n4940-     runs-on: ubuntu-latest\n4941-     timeout-minutes: 5\n4942-@@ -40,6 +41,14 @@ jobs:\n4943-           fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n4944-           persist-credentials: false   # the push below must use the app's token and no other\n4945- \n4946-+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n4947-+      - name: Stop unless the account that started this run may write to the repository\n4948-+        id: trusted\n4949-+        env:\n4950-+          GH_TOKEN: ${{ github.token }}\n4951-+          SENDER: ${{ github.event.sender.login }}\n4952-+        run: factory/scripts/trusted.sh \"$SENDER\"\n4953-+\n4954-       # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n4955-       - name: Check that what would be installed was approved, or needs no approval\n4956-         id: check\n4957-@@ -235,8 +244,9 @@ jobs:\n4958-           } > \"$RUNNER_TEMP/installed.md\"\n4959-           gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/installed.md\"\n4960- \n4961-+      # Nothing is said in a run an account that is not trusted started (decisions W563c).\n4962-       - name: Tell a person when the change was not installed\n4963--        if: failure()\n4964-+        if: steps.trusted.outcome != 'failure' && failure()",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "2e196902-7543-45c5-8666-8ce6e1548d63",
+    "timestamp": "2026-11-21T19:29:31.290Z",
+    "tool_use_result": {
+      "stdout": "4924:diff --git a/factory/workflows/install-workflows.yml b/factory/workflows/install-workflows.yml\n4925-index 066c222..9170c65 100644\n4926---- a/factory/workflows/install-workflows.yml\n4927-+++ b/factory/workflows/install-workflows.yml\n4928-@@ -20,11 +20,12 @@ concurrency:\n4929- env:\n4930-   PR: ${{ inputs.pr || github.event.pull_request.number }}\n4931-   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}\n4932--  RULE: 67f268772e94f3552d7b308c5492370f417596c3   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n4933-+  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n4934-   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)\n4935- \n4936- jobs:\n4937-   install:\n4938-+    # Only an account that may write merges a pull request, or starts this by number (decisions W563b).\n4939-     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true\n4940-     runs-on: ubuntu-latest\n4941-     timeout-minutes: 5\n4942-@@ -40,6 +41,14 @@ jobs:\n4943-           fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n4944-           persist-credentials: false   # the push below must use the app's token and no other\n4945- \n4946-+      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n4947-+      - name: Stop unless the account that started this run may write to the repository\n4948-+        id: trusted\n4949-+        env:\n4950-+          GH_TOKEN: ${{ github.token }}\n4951-+          SENDER: ${{ github.event.sender.login }}\n4952-+        run: factory/scripts/trusted.sh \"$SENDER\"\n4953-+\n4954-       # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n4955-       - name: Check that what would be installed was approved, or needs no approval\n4956-         id: check\n4957-@@ -235,8 +244,9 @@ jobs:\n4958-           } > \"$RUNNER_TEMP/installed.md\"\n4959-           gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/installed.md\"\n4960- \n4961-+      # Nothing is said in a run an account that is not trusted started (decisions W563c).\n4962-       - name: Tell a person when the change was not installed\n4963--        if: failure()\n4964-+        if: steps.trusted.outcome != 'failure' && failure()",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01TnmVbkRAzZvcEccJbMKsWP",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "2fafb07d-370d-43c8-be8b-58b05e787ffc"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 100,
+    "estimated_tokens_delta": 50,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "3261155a-df12-413b-80cc-cf24aaad47eb"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 200,
+    "estimated_tokens_delta": 100,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "bab05eba-78c8-43dd-a703-3a3647a36b25"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 345,
+    "estimated_tokens_delta": 145,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "b4cfd7a7-2490-4b53-b46b-9a291b03fa46"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdKTeggRxApvPcmz4Yu",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS3QoKEAgUGAI4AUIIdGhpbmtpbmcSDCyEAphdpg+0id0v6xoMX3G3DRE/qoHUkmT0IjDr1dXTha1Za2t94gXbhT3EJx9HzGK4C1Jfg8Eks4gAq8lM9Ip2X+DcJTF6WG1mTPkq+glYsUK4/iXwVF+W+/RAPLbXMURqeX6ejwLfIvnCb2Q7CEUOe91Rjdzhl4a0a+S2Xe7GJQvXHAvSg7xwtTlSfY47QtSgVtL1OLIpVvrYF3JNo0q+6Cjh2wAUi87fXlr4jIMRrBCgdfL5RyGcazK/W1BFZhkoF2J4XDYRkvt+6ubVpKgYOH/PR6Pt1otroJsaDzvBP2JE22fVpe1GGyzuEd6Vi8vxtDE4z1o4yLtZrntrRMx4Iq2LPxMc9A2LtrUYJT5289c456jAnNLIVonRINwGIGchQgTZZmy0gfb0l9pX5OuuXF8niUzZMrG0xWU4m1sZ7tSHAlHQJa8uBeniIwRpVxPBEYs7qgmfwE9PgZlDI1NEC04W5Pc/NIEfSeH6EvIwTcVnyzGYjPoz9eJ+5TeWFLRiPl2JhXT222sVr1CLN2MtfM33FNsavH6u/zJo79utd/yTcgp9M02PhWSB6k2edoP5v3xEIBPifxGEZ9t0k0sme+AKiwrTXIJeFdzeMivAiQL6fPNqPqVDQXxdleo9ca3tkK32yhK/5oS3k5oWh3nQo0InBMtBoSvDNaPak6cOuZhINONRI57dBtgNmrJ0q6nkuEfafdwMht5aYnHOW2uIZ/xlJjROAu3QsBb/JM/UF3X3CEaDVZTvpTkvYk78bR2y7EVY1Rr1Vud4sEr0RV0upLVpF5sE7Ks7eDcDIoiFXR0krBKPNshzm+5VBW9aEfTrHxRWXpijkuDhj4xeVWfvf7XM112xtuyqfpRGqcdLgcbCYlsw1sA1447yrIQsNO2XGBIA0/E9OWYJljdszX20ZtTjiavaI+iLF27kxhrViNc1tfx76NOTtOUD+CcsJtChX0my1/pE5OVEbAZUVjrpvEs+ZP72WpAtarsYT+TN+yH/ResGm1KcPyS50OCD0xAROTgFozmLhfc+Bz5dXPiCV4QbpgDyog9NZHTiZwbXgqXx/Ar49Pk/XBUtMVwiPAl/JYP2JyTQ0Vn5hQIQkdaQRz6JCz3COF8GR15VtiDpMVH1D6sHM6dlJ3ApMDBcAQssUfFKIw8P9uXgMsg+ydq4hLyZ8Gn47899nqhD3Ij8GXjuBFbnN2HbbppI6NaHcAD6+GJKrK1LvX95Jp4RkPrrGooOGXqqF1tREKeTcv6osSfzAgZJ0zqgTchTCve9oFIxp1+Pbt+YrTCoFJCIY3py7qcLLEUBTUfExVQAoMf9ppmnZxlQ1XRFL+N64FtTaB2AMtXrdQlNAEtrZiQN+CGzOPV2hnucDio4MbspbM2YBucFdki9nD7ZoC2EtGVPx7UVajyiNmVv8OvfXPlPtknL57LZx4I2TB0ZhSyQrnmHaWISED8w6QbypRWd/JnZt2kZuab54d6MXA3EIpBAp9F41b06Rx4F7xPD/wX57ENV3fYq8wHD2oKGgr95x+Zf+ww5qPMDQEOjT4ao/5K3d2ZXKmFzzoRGdSltNkprUiR3ipMsZAH7D4wbgotfOqGOEHKIDWI5jWDN1XyyDz8/t0nX16YMnY+860fQnESlieIshUyQ97YWe0zkdT2sdLSTjtPexC1bgOden76mRnZQ6h+Cslc5Yzg+RkofrOW6P1s6+qrlUPtMWJbTn11lPABLHjvJJsAIMlCVALFOQFEH9704o8iEhm9gDIa9uDtYZWC3hISaKeUJjCN4g2mPF6cOnOLmuFPvizoOxhgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2452,
+        "cache_read_input_tokens": 35517,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2452
+        },
+        "output_tokens": 2,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "fcce388f-1369-434f-aa84-68eebca846f3",
+    "timestamp": "2026-11-21T19:29:36.907Z",
+    "request_id": "req_011ChGdKTV1vU7a5W7yTa9XW",
+    "thinking_duration_ms": 3419,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdKTeggRxApvPcmz4Yu",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Jv4oGWeB1giHS5ucNjhTUk",
+          "name": "Bash",
+          "input": {
+            "command": "cd .sessions/lessons && grep -o '\"summary\": *\"[^\"]*\"\\|\"cause\": *\"[^\"]*\"\\|\"repeats\": *\\[[^]]*\\]\\|\"propose\": *[a-z]*\\|\"workflow\": *\"[^\"]*\"' *.json; gh run view 44901428100 --log 2>&1 | grep -c . ; gh run view 44901428100 --log 2>&1 | grep -i \"trusted\\|SENDER\" | head",
+            "description": "Summarise earlier lessons and look for the trust step in the run log"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2452,
+        "cache_read_input_tokens": 35517,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2452
+        },
+        "output_tokens": 2,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "8ae24c4d-6532-4b21-934d-2febde28113e",
+    "timestamp": "2026-11-21T19:29:38.485Z",
+    "request_id": "req_011ChGdKTV1vU7a5W7yTa9XW",
+    "wire_tool_inputs": {
+      "toolu_01Jv4oGWeB1giHS5ucNjhTUk": {
+        "command": "cd .sessions/lessons && grep -o '\"summary\": *\"[^\"]*\"\\|\"cause\": *\"[^\"]*\"\\|\"repeats\": *\\[[^]]*\\]\\|\"propose\": *[a-z]*\\|\"workflow\": *\"[^\"]*\"' *.json; gh run view 44901428100 --log 2>&1 | grep -c . ; gh run view 44901428100 --log 2>&1 | grep -i \"trusted\\|SENDER\" | head",
+        "description": "Summarise earlier lessons and look for the trust step in the run log"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Jv4oGWeB1giHS5ucNjhTUk",
+          "type": "tool_result",
+          "content": "20261121T115710Z-lesson-run44901406884.json:\"workflow\": \"approve-merge\"\n20261121T115710Z-lesson-run44901406884.json:\"summary\": \"The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.\"\n20261121T115710Z-lesson-run44901406884.json:\"cause\": \"one-off\"\n20261121T115710Z-lesson-run44901406884.json:\"repeats\": []\n20261121T115710Z-lesson-run44901406884.json:\"propose\": false\n20261121T115710Z-lesson-run44901415445.json:\"workflow\": \"implement\"\n20261121T115710Z-lesson-run44901415445.json:\"summary\": \"The first run of the implement workflow after pull request #565 did what the change claimed: the new write-access check passed a build that github-actions[bot] started by number, and nothing needs changing.\"\n20261121T115710Z-lesson-run44901415445.json:\"cause\": \"one-off\"\n20261121T115710Z-lesson-run44901415445.json:\"repeats\": []\n20261121T115710Z-lesson-run44901415445.json:\"propose\": false\n20261121T115715Z-lesson-run44901421212.json:\"workflow\": \"start-waiting\"\n20261121T115715Z-lesson-run44901421212.json:\"summary\": \"The first start-waiting run after pull request #565 did what the change claimed: the new step trusted `claude[bot]` and the later steps ran, so nothing needs doing.\"\n20261121T115715Z-lesson-run44901421212.json:\"cause\": \"one-off\"\n20261121T115715Z-lesson-run44901421212.json:\"repeats\": []\n20261121T115715Z-lesson-run44901421212.json:\"propose\": false\n20261121T115720Z-lesson-run44901411090.json:\"workflow\": \"ci\"\n20261121T115720Z-lesson-run44901411090.json:\"summary\": \"The first `ci` run after pull request #565 did what the change claimed: the two reviewers ran with no GitHub token, the `review` job posted both verdicts itself, and nothing needs changing.\"\n20261121T115720Z-lesson-run44901411090.json:\"cause\": \"one-off\"\n20261121T115720Z-lesson-run44901411090.json:\"repeats\": []\n20261121T115720Z-lesson-run44901411090.json:\"propose\": false\n362\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7720647Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7722131Z ^[[36;1mfactory/scripts/trusted.sh \"$SENDER\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7776738Z   SENDER: github-actions[bot]",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "f214449f-3e3b-48f6-8f67-ad3e3dc3f5ed",
+    "timestamp": "2026-11-21T19:29:40.050Z",
+    "tool_use_result": {
+      "stdout": "20261121T115710Z-lesson-run44901406884.json:\"workflow\": \"approve-merge\"\n20261121T115710Z-lesson-run44901406884.json:\"summary\": \"The first approve-merge run after pull request #565 did what the change claimed: the new write-access step passed for the owner's approval and pull request #568 was set to wait to merge; nothing needs doing.\"\n20261121T115710Z-lesson-run44901406884.json:\"cause\": \"one-off\"\n20261121T115710Z-lesson-run44901406884.json:\"repeats\": []\n20261121T115710Z-lesson-run44901406884.json:\"propose\": false\n20261121T115710Z-lesson-run44901415445.json:\"workflow\": \"implement\"\n20261121T115710Z-lesson-run44901415445.json:\"summary\": \"The first run of the implement workflow after pull request #565 did what the change claimed: the new write-access check passed a build that github-actions[bot] started by number, and nothing needs changing.\"\n20261121T115710Z-lesson-run44901415445.json:\"cause\": \"one-off\"\n20261121T115710Z-lesson-run44901415445.json:\"repeats\": []\n20261121T115710Z-lesson-run44901415445.json:\"propose\": false\n20261121T115715Z-lesson-run44901421212.json:\"workflow\": \"start-waiting\"\n20261121T115715Z-lesson-run44901421212.json:\"summary\": \"The first start-waiting run after pull request #565 did what the change claimed: the new step trusted `claude[bot]` and the later steps ran, so nothing needs doing.\"\n20261121T115715Z-lesson-run44901421212.json:\"cause\": \"one-off\"\n20261121T115715Z-lesson-run44901421212.json:\"repeats\": []\n20261121T115715Z-lesson-run44901421212.json:\"propose\": false\n20261121T115720Z-lesson-run44901411090.json:\"workflow\": \"ci\"\n20261121T115720Z-lesson-run44901411090.json:\"summary\": \"The first `ci` run after pull request #565 did what the change claimed: the two reviewers ran with no GitHub token, the `review` job posted both verdicts itself, and nothing needs changing.\"\n20261121T115720Z-lesson-run44901411090.json:\"cause\": \"one-off\"\n20261121T115720Z-lesson-run44901411090.json:\"repeats\": []\n20261121T115720Z-lesson-run44901411090.json:\"propose\": false\n362\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7720647Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7722131Z ^[[36;1mfactory/scripts/trusted.sh \"$SENDER\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-21T11:56:11.7776738Z   SENDER: github-actions[bot]",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Jv4oGWeB1giHS5ucNjhTUk",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "0ae25eb8-079e-45dd-9358-a47de410046e"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 221,
+    "estimated_tokens_delta": 171,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "5ed4922c-e16e-4002-b1b3-8219dbd0b9cc"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdL76hUK3npsJWGKUSc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS6gYKEAgUGAI4AUIIdGhpbmtpbmcSDNKfEmyIInbHCDt/ORoMdsmYfhZ8EBxXHsAjIjBkN2KMSfv4x/J2O3zQVpMzzkCouBtkNey8gCkDoNW81Hy6OfoXEZ+HqkSzV14f7HMqhwYiJGsl6qSXsr+Q6wWUnbFjLG6VFcYJKCoZTNC6AL5jazdMLEmh5B17jhPLxstSD5oyc2+1X6EYdSrVa8bE9R5pcM3fY81SYfp1gIJVF9/Bx65akXPkpH10LindPSq2pC0BYi+ZaGJ+Q8PKhvw+XrC/Aw192y7/GBSWnecajvzW84jY1cyvuzFihNJXJDFccx2OooRmdHekf5jgk7wt9qS8X3qbfAfu/MCwbuWGEVXAt4TAggNSuAqAJ6owVsIjvcXW0vFnq6vrzuMKvHvfhPMb1COLNu/hokreMgmqMWkqYDgIrK6Ifi8njSnqv90T7PHkSTSf2bWVeTOP8KgzFps7RUJMDLQkNyaTUbZAXbZM/+CzMAf6MJ61JvrT6MN2EHVnFaBfgOVLVBUoEsNXiHBI/OUobyp2eXVnThDnW1XGsZkcfsvhz53jcbIGZhlOqSOZSshoPzSQ32HDtMwr2V3puwwJOCe1WRsNTbUupCwGV+7WPMOCt8WLx+sSIwp/TTqBuulBBQBv5BVirn6UV/1lHBAioqGOC9nxnfo1JBv0d+FJMhhtKTdLfeAK8kOgS1adUgop4XIHTgprL1PXHCcenOnBe1sCVDmT2W4CFUGXxJQcppreeTfZIbIfCH0oTrm9DxNaxXBmRKiqTZeD9oiN255FKslk2eXdL+PV8vuDZyFPs3bDsecefLhpiLSe3YFveEoegC7ai6+4V/zTq1dralf0y0A69a4KrArWQLwHSBKNg256kYVuii/PdGj/Jirjc+E6FRBIbslGMdeMUDEOxIKNftgMASGQqd4tmvoQWQMfEHPJG+/Q7o7DLIqemtDWcM+7f5rmwLGXYk8DHyQm7AY4cUn9SB+CPf99adXESHrY0yFHIWuHFLOnZJbMEw0v3f/JCPHsfFoePGdZDrs7e8exyBwlqanp/p6j2WPHkFvxG6yBSCB50mPTIVldEjBvH9HUcsxPHXGgUT81iUGtL/aiBPuafumfzequh4QLVB+zfeemJTZwdBRqC0j/yMNOF1bfQrHCGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1582,
+        "cache_read_input_tokens": 37969,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1582
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "9bf608a1-3c39-4429-a213-4958892c62aa",
+    "timestamp": "2026-11-21T19:29:46.281Z",
+    "request_id": "req_011ChGdL6x2q8tjp3nX1kgov",
+    "thinking_duration_ms": 1629,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-fable-5-2",
+      "id": "msg_011ChGdL76hUK3npsJWGKUSc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014yHzh3z7jx68GATrK78R6v",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first install-workflows run after pull request #565 did what the change claimed: the new write-access step trusted `github-actions[bot]`, the workflow change of pull request #568 was installed, and nothing needs doing.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #565 added to install-workflows a step that runs `factory/scripts/trusted.sh` on the account that started the run, and made \"Tell a person when the change was not installed\" and the retro step stay silent when that step fails. In run 44901428100, started by number for pull request #568, the step received `SENDER: github-actions[bot]` and passed in under 1 second; the check, the token and \"Commit the copies\" steps then succeeded. The two changed reporting steps were skipped because nothing failed, which is what they should do. The run took 14 seconds and no session. It did not exercise the refusal of an untrusted account, so that path remains proven only by the script's tests. Neither reviewer's assumption (the reviewers' reach to a token in `ci`, the timeline's `.user.login` in `flag-unfinished.sh`) concerns this workflow. The `log` the facts give for the new step is the end of the following step's script, not the step's own output; the run's log was read instead.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/44901428100",
+              "https://github.com/edmulraney/tinyfactory/pull/565",
+              "https://github.com/edmulraney/tinyfactory/pull/568"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+              "removes": "nothing"
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded in 14 seconds with no session and $0 of Claude usage.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: there was no fault to prevent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1582,
+        "cache_read_input_tokens": 37969,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1582
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "a6a52b85-30e4-4f27-b0d1-f2bb77f3ca6f",
+    "timestamp": "2026-11-21T19:29:53.111Z",
+    "request_id": "req_011ChGdL6x2q8tjp3nX1kgov",
+    "wire_tool_inputs": {
+      "toolu_014yHzh3z7jx68GATrK78R6v": {
+        "summary": "The first install-workflows run after pull request #565 did what the change claimed: the new write-access step trusted `github-actions[bot]`, the workflow change of pull request #568 was installed, and nothing needs doing.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #565 added to install-workflows a step that runs `factory/scripts/trusted.sh` on the account that started the run, and made \"Tell a person when the change was not installed\" and the retro step stay silent when that step fails. In run 44901428100, started by number for pull request #568, the step received `SENDER: github-actions[bot]` and passed in under 1 second; the check, the token and \"Commit the copies\" steps then succeeded. The two changed reporting steps were skipped because nothing failed, which is what they should do. The run took 14 seconds and no session. It did not exercise the refusal of an untrusted account, so that path remains proven only by the script's tests. Neither reviewer's assumption (the reviewers' reach to a token in `ci`, the timeline's `.user.login` in `flag-unfinished.sh`) concerns this workflow. The `log` the facts give for the new step is the end of the following step's script, not the step's own output; the run's log was read instead.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/44901428100",
+          "https://github.com/edmulraney/tinyfactory/pull/565",
+          "https://github.com/edmulraney/tinyfactory/pull/568"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+          "removes": "nothing"
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded in 14 seconds with no session and $0 of Claude usage.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: there was no fault to prevent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_014yHzh3z7jx68GATrK78R6v",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "uuid": "aa4924ba-5e2e-42b0-a3a6-fbe399a52d59",
+    "timestamp": "2026-11-21T19:29:53.118Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_014yHzh3z7jx68GATrK78R6v",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 38715,
+    "stop_reason": "tool_use",
+    "session_id": "ab5c3203-46bb-408e-ac18-cc76fa36ad63",
+    "total_cost_usd": 0.7650642000000001,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 39551,
+      "cache_read_input_tokens": 132731,
+      "output_tokens": 2637,
+      "output_tokens_details": {
+        "thinking_tokens": 493
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 39551,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 994,
+          "cache_read_input_tokens": 37969,
+          "cache_creation_input_tokens": 1582,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1582
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 10,
+        "outputTokens": 2637,
+        "cacheReadInputTokens": 132731,
+        "cacheCreationInputTokens": 39551,
+        "webSearchRequests": 0,
+        "costUSD": 0.7649222,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 493,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 39551,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_0188PvV5QL7dchJgovvzrkg4",
+        "tool_input": {
+          "command": "cat tickets.json; for f in lessons/*.json; do echo \"== $f\"; python3 -I -c \"\nimport json,sys\nd=json.load(open(sys.argv[1]))\nfor k in ('summary','title','cause','detail','repeats','propose','held_by'): print(k,':',d.get(k))\nprint('change:',d.get('change'))\nprint('keys',list(d.keys()))\n\" $f; done; cd .. ; gh pr diff 565 -- 2>/dev/null | grep -n '^diff --git' ",
+          "description": "Read earlier lessons, tickets, and list files in PR 565's diff"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 9,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first install-workflows run after pull request #565 did what the change claimed: the new write-access step trusted `github-actions[bot]`, the workflow change of pull request #568 was installed, and nothing needs doing.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #565 added to install-workflows a step that runs `factory/scripts/trusted.sh` on the account that started the run, and made \\\"Tell a person when the change was not installed\\\" and the retro step stay silent when that step fails. In run 44901428100, started by number for pull request #568, the step received `SENDER: github-actions[bot]` and passed in under 1 second; the check, the token and \\\"Commit the copies\\\" steps then succeeded. The two changed reporting steps were skipped because nothing failed, which is what they should do. The run took 14 seconds and no session. It did not exercise the refusal of an untrusted account, so that path remains proven only by the script's tests. Neither reviewer's assumption (the reviewers' reach to a token in `ci`, the timeline's `.user.login` in `flag-unfinished.sh`) concerns this workflow. The `log` the facts give for the new step is the end of the following step's script, not the step's own output; the run's log was read instead.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/44901428100\",\"https://github.com/edmulraney/tinyfactory/pull/565\",\"https://github.com/edmulraney/tinyfactory/pull/568\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"Nothing: the changed steps did what pull request #565 claimed.\",\"removes\":\"nothing\"},\"cost\":{\"amount\":\"Nothing: the run succeeded in 14 seconds with no session and $0 of Claude usage.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: there was no fault to prevent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first install-workflows run after pull request #565 did what the change claimed: the new write-access step trusted `github-actions[bot]`, the workflow change of pull request #568 was installed, and nothing needs doing.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #565 added to install-workflows a step that runs `factory/scripts/trusted.sh` on the account that started the run, and made \"Tell a person when the change was not installed\" and the retro step stay silent when that step fails. In run 44901428100, started by number for pull request #568, the step received `SENDER: github-actions[bot]` and passed in under 1 second; the check, the token and \"Commit the copies\" steps then succeeded. The two changed reporting steps were skipped because nothing failed, which is what they should do. The run took 14 seconds and no session. It did not exercise the refusal of an untrusted account, so that path remains proven only by the script's tests. Neither reviewer's assumption (the reviewers' reach to a token in `ci`, the timeline's `.user.login` in `flag-unfinished.sh`) concerns this workflow. The `log` the facts give for the new step is the end of the following step's script, not the step's own output; the run's log was read instead.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/44901428100",
+        "https://github.com/edmulraney/tinyfactory/pull/565",
+        "https://github.com/edmulraney/tinyfactory/pull/568"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "Nothing: the changed steps did what pull request #565 claimed.",
+        "removes": "nothing"
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded in 14 seconds with no session and $0 of Claude usage.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: there was no fault to prevent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 5649,
+    "type": "result",
+    "duration_ms": 42129,
+    "uuid": "2ab978a7-9628-4c84-a4c9-f9f9437e1683",
+    "ttft_stream_ms": 5072,
+    "time_to_request_ms": 165,
+    "first_content_frame_ms": 5072,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-fable-5-2": {
+        "inputTokens": 10,
+        "outputTokens": 2637,
+        "cacheReadInputTokens": 132731,
+        "cacheCreationInputTokens": 39551,
+        "webSearchRequests": 0,
+        "costUSD": 0.7649222,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 493,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 39551,
+        "canonicalModel": "claude-fable-5-2",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
