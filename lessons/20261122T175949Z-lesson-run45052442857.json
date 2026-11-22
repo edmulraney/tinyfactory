@@ -1,0 +1,64 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45028645411,
+    "workflow": "install-workflows",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45028645411",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 591,
+      "issue": 589,
+      "title": "chore: bring in the reference feature and the comment sweep",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.",
+            "if_wrong": "A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied."
+          },
+          {
+            "assumes": "Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.",
+            "if_wrong": "A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "Nothing needs doing: run 45028645411 succeeded but never reached the only line #591 changed in install-workflows.yml, and that line was a comment.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #591 made one change to factory/workflows/install-workflows.yml. It deleted the comment \"The first line says what a person must do (decisions A371a)\" from the step \"Start the installer for the pull request merged after this one\". In run 45028645411 the install job succeeded and committed the copies. That step was skipped because no later pull request was waiting, so changed_steps is empty and the run never reached the change. The change was a comment, so no run could show a difference in behaviour. Nothing failed and nothing was left wrong.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45028645411",
+      "https://github.com/edmulraney/tinyfactory/pull/591"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, cost_usd is $0 and no agent ran (0 turns).",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the fault cost $0 and 0 minutes, so a change would save nothing.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
