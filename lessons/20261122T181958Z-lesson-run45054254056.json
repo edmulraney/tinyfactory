@@ -1,0 +1,61 @@
+{
+  "pr": null,
+  "issue": 627,
+  "facts": {
+    "run": 45052415270,
+    "workflow": "implement",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+    "conclusion": "success",
+    "pr": null,
+    "issue": 627,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.89,
+    "turns": 22,
+    "changed_by": {
+      "pr": 586,
+      "issue": 584,
+      "title": "chore: bring the factory's files up to date",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "implement",
+        "step": "Save the session transcript",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first implement run after pull request #586 did what the change claimed on the path it took: with one uncut session, \"Save the session transcript\" saved Fred's transcript as issue-627/20261122T181129Z-fred-run45052415270.json; nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #586 changed which execution file the implement workflow's \"Save the session transcript\" step passes to `save-session.sh`. The old step took the result of the last resume, falling back to an earlier one. The new step takes the file of the last session that began: when the time limit kills a session, that session's file is saved, not the earlier result again (decisions A418b). In run 45052415270, Fred's one session for issue #627 completed in 733 seconds for $0.89 over 22 turns. `continue-session.sh` printed \"not continued: a pull request is ready for review for issue #627\", so no resume ran. The step chose the first session's file and printed \"saved fred session as issue-627/20261122T181129Z-fred-run45052415270.json\", and that transcript is present. The run never cut a session short or resumed one, so the branch the change exists for is still proven only by the scripts' tests. Neither reviewer of pull request #586 recorded an assumption. I read the step's diff from Adam's review transcript, because `gh` and `git` needed approval in this session.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+      "https://github.com/edmulraney/tinyfactory/pull/586"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing: the changed step did what pull request #586 claimed.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its one session of 733 seconds and $0.89 opened the pull request it was started for.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
