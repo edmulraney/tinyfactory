@@ -1,0 +1,74 @@
+{
+  "pr": 639,
+  "issue": 628,
+  "facts": {
+    "run": 45040967737,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45040967737",
+    "conclusion": "failure",
+    "pr": 639,
+    "issue": 628,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 3.17,
+    "turns": 54,
+    "changed_by": {
+      "pr": 625,
+      "issue": 604,
+      "title": "chore: bring in the factory changes of 22 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "e2e",
+        "step": "Count the people with an account in production's database",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "e2e",
+        "step": "Say that the end-to-end tests were skipped",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Adam reviews architecture and taste, and Ryan correctness, at the same time",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first ci run after #625 did what #625 changed: the count skipped with no Neon project, the review prompt said the count was unknown, and the skip comment gave needs-e2e.sh's reason. The run failed only because both reviewers failed PR #639, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #625 changed three things in ci.yml. First, the e2e job got a step that counts production accounts, run only when `vars.NEON_PROJECT_ID` is set and allowed to fail without failing the job. This repository has no Neon project, so the step was skipped as it should be. Second, Adam's prompt now states that count, or says it could not be read; the review step's environment shows the fallback sentence \"holds an account for a number of people that could not be read\". Third, the comment for skipped end-to-end tests now gives the reason needs-e2e.sh printed; it said \"This repository holds no apps folder…\". Adam and Ryan reviewed and posted verdicts. The run's `failure` comes from `review.sh verdicts` exiting 1 because both returned FAIL on #639, which is the designed outcome. No new code went wrong.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45040967737",
+      "https://github.com/edmulraney/tinyfactory/pull/625",
+      "https://github.com/edmulraney/tinyfactory/pull/639#issuecomment-7081681048",
+      "https://github.com/edmulraney/tinyfactory/pull/639#issuecomment-7081715862",
+      "https://github.com/edmulraney/tinyfactory/pull/639#issuecomment-7081716925"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing lost: the $3.17 and 253 seconds of review sessions produced the two FAIL verdicts that were wanted.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing, because no change is proposed.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
