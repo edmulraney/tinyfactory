@@ -1,15 +1,34 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { recordUsage } from "@/domain/usage";
+
 import { joinWaitlist } from "./index";
 import { insertEntry } from "./repository";
 
 vi.mock("./repository", () => ({ insertEntry: vi.fn() }));
+vi.mock("@/domain/usage", () => ({ recordUsage: vi.fn() }));
 
 describe("joinWaitlist", () => {
-  afterEach(() => vi.restoreAllMocks());
+  beforeEach(() => {
+    vi.mocked(insertEntry).mockResolvedValue(true);
+  });
 
-  it("saves the address in lower case and without the spaces around it", async () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.mocked(insertEntry).mockReset();
+    vi.mocked(recordUsage).mockReset();
+  });
+
+  it("saves the address in lower case and without the spaces around it, and records that a visitor joined without their address", async () => {
     expect(await joinWaitlist("  Ada@Example.COM ")).toEqual({ status: "joined" });
     expect(insertEntry).toHaveBeenCalledExactlyOnceWith("ada@example.com");
+    expect(recordUsage).toHaveBeenCalledExactlyOnceWith("waitlist joined");
+  });
+
+  it("answers an address already on the list like a new one, and records nothing", async () => {
+    vi.mocked(insertEntry).mockResolvedValue(false);
+    expect(await joinWaitlist("ada@example.com")).toEqual({ status: "joined" });
+    expect(recordUsage).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -21,9 +40,9 @@ describe("joinWaitlist", () => {
     ["a space inside", "ada lovelace@example.com"],
     ["more than 254 characters", `${"a".repeat(243)}@example.com`],
   ])("refuses %s and saves nothing", async (_, posted) => {
-    vi.mocked(insertEntry).mockClear();
     expect(await joinWaitlist(posted)).toEqual({ status: "invalid email" });
     expect(insertEntry).not.toHaveBeenCalled();
+    expect(recordUsage).not.toHaveBeenCalled();
   });
 
   it("answers unavailable when the database cannot be reached, and logs why", async () => {
@@ -31,5 +50,6 @@ describe("joinWaitlist", () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await joinWaitlist("ada@example.com")).toEqual({ status: "unavailable" });
     expect(log).toHaveBeenCalledOnce();
+    expect(recordUsage).not.toHaveBeenCalled();
   });
 });

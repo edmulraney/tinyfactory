@@ -828,7 +828,7 @@ expect_fact '.changed_steps[] | select(.step | startswith("Trust")) | .log | con
 scenario "the first run of a changed workflow: two changed steps of one job read its log once"
 github; a_first_run
 sed -i.bak 's/^-      - name: Run the unit tests$/+      - name: Run the unit tests/' "$T/diff" && rm "$T/diff.bak"
-sed -i.bak '9i\      - name: Run the unit tests' "$T/source-ci.yml" && rm "$T/source-ci.yml.bak"
+awk 'NR == 9 { print "      - name: Run the unit tests" } { print }' "$T/source-ci.yml" > "$T/source-ci.new" && mv "$T/source-ci.new" "$T/source-ci.yml"
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" --first-run 72 900 "$T/sessions"
 expect_fact '.changed_steps[] | select(.step == "Run the unit tests") | .log' "212 tests passed"
 [ "$(grep -c 'jobs/51/logs' "$T/calls")" = 1 ] || fail "expected one asking, got $(grep -c 'jobs/51/logs' "$T/calls")"

@@ -350,7 +350,7 @@ expect_status 0
 [ ! -s "$T/calls" ] || fail "expected no call to GitHub"
 grep -qx 'rewrite=true' "$T/outputs" || fail "expected the output rewrite=true"
 grep -qx 'session=abc-123' "$T/outputs" || fail "expected the output to name the session"
-[ "$(wc -l < "$T/outputs")" = 3 ] || fail "expected three outputs, each on one line"
+[ "$(wc -l < "$T/outputs" | tr -d ' ')" = 3 ] || fail "expected three outputs, each on one line"
 grep -q '^prompt=The proposal your lesson files was refused.*Section "## Change" is 13[0-9] words long, and the limit is 120.*`change.proposal`' "$T/outputs" \
   || fail "expected the prompt to say what was refused and which fields hold it"
 [ -z "$(GH_TOKEN=workflow-token "$scripts/file-proposal.sh" "$T/lesson.json" "$T/tickets.json" "$T/lessons" "$T/session.json" 2>/dev/null)" ] \

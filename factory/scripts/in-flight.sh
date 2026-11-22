@@ -70,7 +70,8 @@ if grep -q 'left unfinished)$' <<<"$list"; then
   ready=$(gh api "repos/{owner}/{repo}/issues?state=open&labels=ready&per_page=100" --paginate \
       --jq '.[] | select(.pull_request == null) | .number') \
     || die "The issues labelled ready could not be read from GitHub, so it is not known which unfinished draft holds a place."
-  list=$(awk -v ready="$ready" 'BEGIN { split(ready, numbers, "\n"); for (i in numbers) waits[numbers[i]] }
+  # The numbers reach awk through the environment (decisions H632a).
+  list=$(READY="$ready" awk 'BEGIN { split(ENVIRON["READY"], numbers, "\n"); for (i in numbers) waits[numbers[i]] }
     /left unfinished\)$/ && ($1 in waits) { sub(/\(/, "(waiting with ready; ") }
     { print }' <<<"$list")
 fi

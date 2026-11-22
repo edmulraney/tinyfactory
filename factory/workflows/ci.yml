@@ -211,7 +211,8 @@ jobs:
         env:
           BASE_URL: ${{ steps.preview.outputs.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: pnpm test:e2e
+        # Every test, four files at a time (decisions M640a, M640b).
+        run: pnpm test:e2e --workers=4
       - name: Upload screenshots and the test report
         id: proof
         if: always()
@@ -409,7 +410,8 @@ jobs:
             exit 1
           }
           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
-          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          # jq reads the time (decisions H632b).
+          minutes=$(jq -rn --arg started "$started" '(now - ($started | fromdate)) / 60 | floor + 1')
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
       # A cancelled job starts no fix round and lets nothing merge, and review.sh was stopped before it said why (decisions A541c).

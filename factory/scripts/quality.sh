@@ -30,7 +30,7 @@ merged=$(jq -rs 'sort_by(.mergedAt) | to_entries[]
 
 whole=()
 [ "$(git rev-parse --is-shallow-repository)" = false ] || whole=(--unshallow)
-git fetch --quiet "${whole[@]}" origin main \
+git fetch --quiet ${whole[@]+"${whole[@]}"} origin main \
   || die "Could not fetch the history of main, so no pull request's rework is known."
 
 commits=()

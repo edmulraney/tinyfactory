@@ -1,3 +1,5 @@
+import { recordUsage } from "@/domain/usage";
+
 import { insertEntry } from "./repository";
 import type { JoinResult } from "./types";
 
@@ -12,7 +14,8 @@ export async function joinWaitlist(email: unknown): Promise<JoinResult> {
   if (address.length > LONGEST_EMAIL || !EMAIL.test(address)) return { status: "invalid email" };
   try {
     // An address already on the list is answered like a new one, so the answer tells nobody who is on it.
-    await insertEntry(address);
+    // The event is recorded with no account (decisions S636b).
+    if (await insertEntry(address)) await recordUsage("waitlist joined");
     return { status: "joined" };
   } catch (cause) {
     // The visitor is told only that it was not saved; the log says why.

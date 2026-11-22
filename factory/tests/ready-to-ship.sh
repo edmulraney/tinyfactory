@@ -55,8 +55,10 @@ ready_to_ship() {
   git init --quiet --bare --initial-branch main "$T/github/owner/myapp.git"
   printf '[url "file://%s/github/"]\n  insteadOf = https://x-access-token:workflow-token@github.com/\n' "$T" > "$T/gitconfig"
   export GIT_CONFIG_GLOBAL="$T/gitconfig"
-  export merged head
-  stub gh '
+  export head
+  # Written into the stand-in: ship.sh has a function with a variable named `merged`, and a Mac's bash 3.2 then
+  # hides an exported variable of that name from each command the function runs.
+  stub gh "merged=$merged"'
     while IFS= read -r words; do
       case "$*" in "$words"*) echo "gh: failed: $*" >&2; exit 1 ;; esac
     done < "$T/fail"

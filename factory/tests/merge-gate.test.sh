@@ -742,8 +742,21 @@ merges_main() {
   owner_said APPROVED "$approved"
 }
 expect_asked_again() {
-  expect_held_as_owners "this rule: ${1:-factory/scripts/merge-gate.sh}"
-  expect_output "The owner approved ${approved:0:7} and is asked to approve ${head:0:7}: $2."
+  case "$1" in *": "*) expect_held_as_owners "$1" ;; *) expect_held_as_owners "this rule: $1" ;; esac
+  expect_call "The owner approved an older commit, \`${approved:0:7}\`, and that approval does not count for \`${head:0:7}\`: $2.
+
+Both reviews passed"
+}
+expect_waits_to_merge() {
+  expect_status 0
+  expect_call "gh pr comment 7 --body <!-- factory:merge-queue added $head -->"
+  expect_no_call "--add-label needs-human"
+}
+# What a fix round pushes: the commit that is checked out, with the owner's approval still of the older one.
+fix_round_pushed() {
+  git add -A && git commit --quiet --allow-empty -m "fix: what the reviewers found"
+  pushed
+  owner_said APPROVED "$approved"
 }
 
 scenario "a change the owner approved waits to merge, with no new approval, when the only commit since merges main"
@@ -768,38 +781,126 @@ gate
 expect_status 0
 expect_call "gh pr comment 7 --body <!-- factory:merge-queue added $head -->"
 
-scenario "asks for the approval again when a commit since it changes something else"
+scenario "an approval stands through a conflict fix round: a merge of main settled by hand in another file, then a commit that changes another"
 approved_change
+merges_main 'echo theirs > factory/scripts/ship.sh' 'echo both > factory/scripts/ship.sh'
 on_the_pull_request
 echo three > apps.txt
-pull_request_holds
-owner_said APPROVED "$approved"
+fix_round_pushed
 gate
-expect_asked_again factory/scripts/merge-gate.sh "${head:0:7}, pushed since ${approved:0:7}, is not a merge of main"
+expect_waits_to_merge
+expect_no_call "Both reviews passed"
+
+scenario "it stands for the product's bar too, when main changed the approved file far from the change"
+ready_to_ship
+mkdir -p apps/web && seq 1 20 > apps/web/eslint.config.mjs
+main_holds
+sed -i.bak 's/^10$/ten/' apps/web/eslint.config.mjs && rm apps/web/eslint.config.mjs.bak
+pull_request_holds
+approved=$head
+merges_main '{ echo heading; echo; cat apps/web/eslint.config.mjs; } > lint.new && mv lint.new apps/web/eslint.config.mjs; echo theirs > ARCHITECTURE.md' 'echo both > ARCHITECTURE.md'
+gate
+expect_waits_to_merge
+
+scenario "asks again, and says the approval was of an older commit, when a commit since changes something else the owner decides"
+approved_change
+on_the_pull_request
+echo stricter > TASTE.md
+fix_round_pushed
+gate
+expect_asked_again "the product's bar: TASTE.md
+this rule: factory/scripts/merge-gate.sh" "what only the owner decides does not read the same at ${head:0:7} as at ${approved:0:7}"
+
+scenario "asks again when a commit since changes the approved file once more, though the rule prints the same lines for both commits"
+approved_change
+on_the_pull_request
+echo three > factory/scripts/merge-gate.sh
+fix_round_pushed
+gate
+expect_asked_again factory/scripts/merge-gate.sh "what only the owner decides does not read the same at ${head:0:7} as at ${approved:0:7}"
+
+scenario "asks again when a commit since moves the approved change within its file, to a place with the same lines around it"
+ready_to_ship
+mkdir -p apps/web && printf '%s\n' a b c one a b c one a b c > apps/web/eslint.config.mjs
+main_holds
+printf '%s\n' a b c two a b c one a b c > apps/web/eslint.config.mjs
+pull_request_holds
+approved=$head
+on_the_pull_request
+printf '%s\n' a b c one a b c two a b c > apps/web/eslint.config.mjs
+fix_round_pushed
+gate
+expect_asked_again "the product's bar: apps/web/eslint.config.mjs" "what only the owner decides does not read the same at ${head:0:7} as at ${approved:0:7}"
 
 scenario "asks again when the merge of main resolved a conflict in a file that only the owner decides"
 approved_change
 merges_main 'echo three > factory/scripts/merge-gate.sh' 'echo two > factory/scripts/merge-gate.sh'
 gate
-expect_asked_again factory/scripts/merge-gate.sh "its change does not read the same at ${head:0:7} as at ${approved:0:7}"
+expect_asked_again factory/scripts/merge-gate.sh "what only the owner decides does not read the same at ${head:0:7} as at ${approved:0:7}"
 
-scenario "asks again when the merge commit also changes a line by hand"
+scenario "asks again when the approval followed the owner's \"Request changes\": it was of the whole change, which a commit since changed"
 approved_change
-merges_main '' 'echo smuggled > factory/scripts/ship.sh'
+on_the_pull_request
+echo three > apps.txt
+fix_round_pushed
+owner_said CHANGES_REQUESTED "$approved" APPROVED "$approved"
 gate
-expect_asked_again factory/scripts/merge-gate.sh "its change does not read the same at ${head:0:7} as at ${approved:0:7}"
+expect_asked_again factory/scripts/merge-gate.sh "${head:0:7}, pushed since ${approved:0:7}, is not a merge of main"
 
-scenario "asks again when the commit since merges a branch that is not main"
+scenario "an approval after a \"Request changes\" review the owner dismissed stands like any other"
 approved_change
 on_the_pull_request
-git checkout --quiet -b side main && git commit --quiet --allow-empty -m "chore: on the side"
+echo three > apps.txt
+fix_round_pushed
+owner_said DISMISSED "$approved" APPROVED "$approved"
+gate
+expect_waits_to_merge
+
+scenario "asks again when the approved commit is no longer in the pull request"
+approved_change
 on_the_pull_request
-git merge --quiet --no-ff --no-edit side >/dev/null
-git branch --quiet -D side
+git commit --quiet --amend -m "the change, written again"
 pushed
 owner_said APPROVED "$approved"
 gate
-expect_asked_again factory/scripts/merge-gate.sh "${head:0:7}, pushed since ${approved:0:7}, merges a commit that is not on main"
+expect_asked_again factory/scripts/merge-gate.sh "the earlier commit, ${approved:0:7}, is no longer in the repo"
+
+scenario "asks again for a workflow change after a commit that changes another file: the installer would not know the approval"
+old="    timeout-minutes: 20" new="    timeout-minutes: 360" approved_change factory/workflows/ci.yml
+installer ""
+git add -A && git commit --quiet -m "ci: the installer"
+on_the_pull_request
+echo three > apps.txt
+fix_round_pushed
+gate
+expect_asked_again "spend or limits: factory/workflows/ci.yml: timeout-minutes: 20
+spend or limits: factory/workflows/ci.yml: timeout-minutes: 360" "${head:0:7}, pushed since ${approved:0:7}, is not a merge of main"
+
+scenario "asks again for a workflow moved out of factory/workflows/ after a commit that changes another file: the installer would not know the approval"
+ready_to_ship
+echo '[{"name":"factory"},{"name":"in-progress"}]' > "$T/labels.json"
+installer ""
+echo "    timeout-minutes: 20" > factory/workflows/ci.yml
+main_holds
+mkdir -p factory/retired && mv factory/workflows/ci.yml factory/retired/ci.yml
+pull_request_holds
+approved=$head
+on_the_pull_request
+echo three > apps.txt
+fix_round_pushed
+gate
+expect_asked_again "secrets or permissions: factory/workflows/ci.yml" "${head:0:7}, pushed since ${approved:0:7}, is not a merge of main"
+
+scenario "does not ship, and says why, when git cannot read what the owner decides at the approved commit"
+approved_change
+on_the_pull_request
+echo three > apps.txt
+fix_round_pushed
+watch_git 99 "--literal-pathspecs diff"
+gate
+expect_failure
+expect_no_call "gh workflow run merge-group.yml"
+expect_call "Not merged: Git could not read what only the owner decides at ${approved:0:7} and at ${head:0:7}, so whether the approval of ${approved:0:7} still stands is not known."
 
 scenario "asks again when the owner sent it back after approving, though the only commit since merges main"
 approved_change

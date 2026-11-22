@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Creates the Vercel project and connects it to the GitHub repo: main deploys to production, pull requests to previews.
+# Switches on the project's Web Analytics.
 # Usage: vercel.sh [name]   (name defaults to the directory name)
 #        Safe to re-run: a project that exists is not made again.
 set -euo pipefail
@@ -32,6 +33,22 @@ NOTE
   echo "$created"
 fi
 
+# Web Analytics counts the visitors that the layout's Analytics component reports (decisions S644a).
+# Its switch takes the project's id, not its name (decisions S644b).
+if ! project=$(vc api "/v9/projects/$name" --raw 2>&1) || ! project_id=$(jq -er '.id' <<<"$project" 2>/dev/null); then
+  echo "$project" >&2
+  echo "vercel.sh: could not read the id of the Vercel project '$name' (GET /v9/projects/$name)." >&2
+  exit 1
+fi
+# The switch is not in Vercel's documentation, so a refusal is the owner's one click and setup carries on (decisions S644b).
+analytics=", Web Analytics on"
+if ! toggled=$(vc api "/web/insights/toggle?projectId=$project_id" -X POST --input - --raw <<<'{"value": true}' 2>&1) \
+  || [ "$(jq -r '.value' <<<"$toggled" 2>/dev/null)" != true ]; then
+  echo "$toggled" >&2
+  mark needs-owner "Vercel did not switch on Web Analytics: in Vercel's dashboard open the project '$name', choose Analytics and click Enable"
+  analytics=""
+fi
+
 # Workflows confirm a merge is live by asking production's health endpoint; tell them where it is.
 domain=$(vc api "/v9/projects/$name/domains" --raw 2>/dev/null | jq -r '.domains[0].name // empty')
 if [ -n "$domain" ]; then
@@ -40,4 +57,4 @@ if [ -n "$domain" ]; then
 fi
 
 echo
-mark done "vercel ok: project '$name' linked to $owner/$name (root apps/web)"
+mark done "vercel ok: project '$name' linked to $owner/$name (root apps/web)$analytics"

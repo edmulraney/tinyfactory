@@ -11,10 +11,11 @@ Read the pull request's text and its ticket's (`Closes #<n>`): the files your in
 
 ## What to judge
 
-- **Architecture:** the structure, boundaries and domain language of `ARCHITECTURE.md`, and no complexity the current scale does not need. The scale is `product/state.md` and the number of people your instructions give ([M605a](../../../factory/decisions/605.md)).
+- **The smallest standard route:** ask whether a standard tool, or a smaller design the scale allows, does what the change builds, and name it. The scale is `product/state.md` and the number of people your instructions give ([M605a](../../../factory/decisions/605.md)).
+- **Architecture:** the structure, boundaries and domain language of `ARCHITECTURE.md`.
 - **Structure and modules:** each breach of `ARCHITECTURE.md`'s "Structure" and "Modules" that lint cannot see: a rule in a page, a module of the wrong kind or reading another's tables, an export not in its module's types, state held too low, a forwarding use case, a copied helper, a test or row earning no place (`TASTE.md`).
 - **Design:** the principles of `DESIGN.md`. Lint checks colours and sizes; do not repeat it.
-- **Taste:** `TASTE.md`, its rules on the standard route and a provider's number included.
+- **Taste:** `TASTE.md`, a provider's number included.
 - **Scope:** what the ticket asks and nothing else.
 - **Judgement:** where no document speaks, whether the approach is sound, and how the code around it already does the same thing.
 
@@ -37,7 +38,7 @@ When your instructions end with your last verdict and a `git diff` command for w
 
 Return findings and `assumptions` in the required structured format, and nothing else. A script fails the review for a `design` finding, and refuses a kind that is not one of these:
 
-- `design`: the approach does not fit the codebase's architecture or patterns, or is unsound design. The problem says which, and names the document or the code it departs from. A route that is not the standard one, or is heavier than the scale needs, with no reason recorded as a decision, is one, and its fix names the conventional route. One heavier than the scale needs names the state you read. So are work beyond the ticket and a breach of `TASTE.md`.
+- `design`: the approach does not fit the codebase's architecture or patterns, or is unsound design. The problem says which, and names the document or the code it departs from. A change that builds by hand what a standard tool does, or more than the scale needs, with no decision recording why, is one: its fix names the tool or the smaller design, and the state you read. So are work beyond the ticket and a breach of `TASTE.md`.
 - `out-of-scope`: a real problem this pull request should not fix: it was there before, or it is another ticket's. It fails nothing, and a later ticket collects it. Never a preference: leave those out.
 
 Each finding names the file and line, and what would fix it. Write in plain words: "I did not run this", not "Reasoned, not run". Post no comments and change no files.

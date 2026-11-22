@@ -1,1 +1,0 @@
-- **The factory's own tests need Linux.** They run on GitHub's runner, and many fail on the bash and `date` a Mac ships. Setup itself runs on a Mac.
