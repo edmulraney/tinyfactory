@@ -37,7 +37,7 @@ const inlineObjectType = {
 };
 
 // A selector cannot tell a function imported from a module from one such as setTimeout, so this
-// rule reads where the function's name was declared (architecture/decisions.md D626c).
+// rule reads where the function's name was declared.
 const namedContract = {
   rules: {
     "no-return-type-of-module": {
