@@ -1,0 +1,65 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 44966619233,
+    "workflow": "approve-merge",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44966619233",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 591,
+      "issue": 589,
+      "title": "chore: bring in the reference feature and the comment sweep",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.",
+            "if_wrong": "A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied."
+          },
+          {
+            "assumes": "Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.",
+            "if_wrong": "A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first `approve-merge` run after pull request #591 did what the change claimed: the pull request removed only two comments from `approve-merge.yml`, the workflow still loaded and succeeded, and nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #591 changed two lines of `factory/workflows/approve-merge.yml`: it deleted the comment above the step \"Tell whether this job stopped at its time limit\" and the first comment line above the step \"Start a retro when this job failed\". It changed no step, condition or command, so the facts list no changed step. Run 44966619233, started by a `pull_request_target` event on pull request #594's branch `chore/593-readme-post-link`, loaded the installed workflow and concluded with success: the `ship` job passed in 34 seconds, including the step that does what follows a merge with GitHub's merge button, and the `send-back` and `test-main` jobs were skipped as written. The two steps beneath the removed comments were skipped because the job neither failed nor was cancelled; a removed comment gives them nothing new to prove. No agent ran, so the run cost $0. Adam's two assumptions on #591 concern the project template's Neon driver and Vercel's preview database, which no `approve-merge` run in this repository exercises, so this run neither confirms nor refutes them.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44966619233",
+      "https://github.com/edmulraney/tinyfactory/pull/591",
+      "https://github.com/edmulraney/tinyfactory/pull/594"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded in under 1 minute with no agent session and $0 of model cost.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
