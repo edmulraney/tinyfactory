@@ -219,7 +219,7 @@ if [ "$fresh" = yes ]; then
   design_foundation
   # vitest needs Node 22+ types; create-next-app pins @types/node to 20.
   # The Tailwind and shadcn lint plugins and the accessibility scanner are what enforce DESIGN.md.
-  # @shadcn/lint is at the version the factory's own app pins.
+  # @shadcn/lint at the version the copied eslint.config.mjs was tested with (decisions S649).
   pnpm --filter web add -D vitest @playwright/test "@types/node@^24" \
     eslint-plugin-better-tailwindcss "@shadcn/lint@0.2.5" @axe-core/playwright drizzle-kit
   pnpm --filter web add drizzle-orm @neondatabase/serverless @vercel/analytics server-only
