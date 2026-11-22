@@ -1,0 +1,62 @@
+{
+  "pr": null,
+  "issue": 627,
+  "facts": {
+    "run": 45052415270,
+    "workflow": "implement",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+    "conclusion": "success",
+    "pr": null,
+    "issue": 627,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.89,
+    "turns": 22,
+    "changed_by": {
+      "pr": 625,
+      "issue": 604,
+      "title": "chore: bring in the factory changes of 22 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "implement",
+        "step": "Keep the ticket's text, which names the skill files the engineer may write",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The changed step saved ticket 627's text as #625 intended, but nothing tested the skill-write hook that reads it, because Fred edited `.claude/skills/retro/SKILL.md` through `python3` in Bash and never called Edit or Write; the next build that writes a skill file through Edit will be the first real check.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #625 added an implement step that saves the ticket's text to `$RUNNER_TEMP/ticket-text.txt`. It also added a PermissionRequest hook on Edit and Write that runs `allow-skill-write.sh` on that file, so the engineer can write a skill file the ticket names. In run 45052415270 the step succeeded and Fred finished ticket 627 as pull request #651. Fred never called Edit or Write. The only change to the skill file was made by a `python3` heredoc in Bash. No permission request was made, the session recorded no permission denials, and the hook never ran. The step did what it claimed, but this run never reached the behaviour the step exists for.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+      "https://github.com/edmulraney/tinyfactory/pull/625",
+      "https://github.com/edmulraney/tinyfactory/pull/651"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "No fault cost anything; the run cost $0.89 over 733 seconds and its work merged as #651.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing; there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
