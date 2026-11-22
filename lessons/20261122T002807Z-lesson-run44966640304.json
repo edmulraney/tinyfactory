@@ -1,0 +1,65 @@
+{
+  "pr": 594,
+  "issue": 593,
+  "facts": {
+    "run": 44962683434,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/44962683434",
+    "conclusion": "success",
+    "pr": 594,
+    "issue": 593,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 1.03,
+    "turns": 15,
+    "changed_by": {
+      "pr": 591,
+      "issue": 589,
+      "title": "chore: bring in the reference feature and the comment sweep",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.",
+            "if_wrong": "A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied."
+          },
+          {
+            "assumes": "Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.",
+            "if_wrong": "A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first `ci` run after pull request #591 did what the change claimed: the pull request removed only a comment from `ci.yml`, the workflow still loaded and succeeded, and nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #591 changed one line of `factory/workflows/ci.yml`: it deleted the comment above the step \"Start a retro when this job failed\" in the `start-fix` job. It changed no step, condition or command there, so the facts list no changed step. Run 44962683434, on pull request #594, loaded the installed workflow and concluded with success: the `checks`, `e2e` and `review` jobs passed, and Adam and Ryan each completed (12 and 13 seconds, $0.52 and $0.51). The `merge` and `start-fix` jobs were skipped as written, so the step beneath the removed comment did not run; a removed comment gives it nothing new to prove. Adam's two assumptions on #591 concern the project template's Neon driver and Vercel's preview database, which no `ci` run in this repository exercises, so this run neither confirms nor refutes them.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/44962683434",
+      "https://github.com/edmulraney/tinyfactory/pull/591",
+      "https://github.com/edmulraney/tinyfactory/pull/594"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its two reviews cost $1.03 and 25 seconds of sessions as any review does.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
