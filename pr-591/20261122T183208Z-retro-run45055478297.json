@@ -1,0 +1,1480 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "2e19fca4-f1d6-4767-872f-cf038576b942",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2440.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgmdzRsGPiPHdVWzDn",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01GmMwYrkYYHPiKojjJ6p45m",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9480,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9480
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "4d0ec33b-1d64-4b72-b4fd-742b871f4271",
+    "timestamp": "2026-11-22T18:31:20.863Z",
+    "request_id": "req_011ChJSgmWYRsFYDY9Sjg1xv",
+    "wire_tool_inputs": {
+      "toolu_01GmMwYrkYYHPiKojjJ6p45m": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01GmMwYrkYYHPiKojjJ6p45m",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## A defect met in use\n50\t\n51\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n52\t\n53\t## When to propose\n54\t\n55\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n56\t\n57\t- `cost.kind` is not empty;\n58\t- step 4 lists a lesson.\n59\t\n60\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n61\t\n62\t## Output\n63\t\n64\t- `summary`: one sentence a person can act on.\n65\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n66\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n67\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n68\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n69\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n70\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n71\t- `repeats`: the file names of step 4's lessons.\n72\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n73\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n74\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "a3458025-4e21-4e6c-9101-0eeaf76f7088",
+    "timestamp": "2026-11-22T18:31:20.890Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 74,
+        "startLine": 1,
+        "totalLines": 74
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01GmMwYrkYYHPiKojjJ6p45m",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgmdzRsGPiPHdVWzDn",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014Xsd6ACgwarP8VwcBtFVLp",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json; echo; cat tickets.json | head -c 4000",
+            "description": "List session files and show facts and tickets"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9480,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9480
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "3f05a3b0-dab7-4894-a360-f8c2baafc114",
+    "timestamp": "2026-11-22T18:31:21.806Z",
+    "request_id": "req_011ChJSgmWYRsFYDY9Sjg1xv",
+    "wire_tool_inputs": {
+      "toolu_014Xsd6ACgwarP8VwcBtFVLp": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json; echo; cat tickets.json | head -c 4000",
+        "description": "List session files and show facts and tickets"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.54,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "69c32bbf-84a6-470b-9064-16b29c40b531",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_014Xsd6ACgwarP8VwcBtFVLp",
+          "type": "tool_result",
+          "content": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n{\n  \"run\": 45054178991,\n  \"workflow\": \"merge-group\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 591,\n    \"issue\": 589,\n    \"title\": \"chore: bring in the reference feature and the comment sweep\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.\",\n          \"if_wrong\": \"A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied.\"\n        },\n        {\n          \"assumes\": \"Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.\",\n          \"if_wrong\": \"A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": null,\n      \"step\": \"Keep the result\",\n      \"conclusion\": null,\n      \"log\": null\n    }\n  ]\n}\n\n[{\"labels\":[\"factory\"],\"number\":649,\"title\":\"Record why new projects pin the shadcn lint package\"},{\"labels\":[\"factory\"],\"number\":647,\"title\":\"Have Ryan fail personal data a change does not need\"},{\"labels\":[\"factory\"],\"number\":646,\"title\":\"Store no email address in a new project's usage events\"},{\"labels\":[\"factory\"],\"number\":645,\"title\":\"Have Adam ask whether a smaller standard way exists\"},{\"labels\":[\"factory\"],\"number\":644,\"title\":\"Switch on Vercel's analytics for a new project\"},{\"labels\":[\"factory\"],\"number\":643,\"title\":\"Remove the parsed metric format and its weekly verdict\"},{\"labels\":[\"factory\"],\"number\":641,\"title\":\"Fix the weekly measure's four faults found on review\"},{\"labels\":[\"factory\"],\"number\":640,\"title\":\"Keep the end-to-end job inside its time limit\"},{\"labels\":[\"factory\"],\"number\":638,\"title\":\"Fix a new project failing lint on a missing package\"},{\"labels\":[\"factory\"],\"number\":637,\"title\":\"Pin the checksum of the package manager\"},{\"labels\":[\"factory\"],\"number\":636,\"title\":\"Give a new project the recording of what users do\"},{\"labels\":[\"factory\"],\"number\":635,\"title\":\"Read usage counts with the database key\"},{\"labels\":[\"factory\"],\"number\":634,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"labels\":[\"factory\"],\"number\":633,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":632,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":631,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":630,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":629,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\"],\"number\":624,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":623,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":622,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":621,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":620,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":619,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":618,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":617,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":616,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":615,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":614,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":613,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":612,\"title\":\"Give each pull request a budget of minutes and cost\"},{\"labels\":[\"factory\"],\"number\":611,\"title\":\"Take the ready label on an idea as the owner's go\"},{\"labels\":[\"factory\"],\"number\":610,\"title\":\"Have Peta say whether an idea should be built\"},{\"labels\":[\"factory\"],\"number\":609,\"title\":\"Have Ryan fail a hand step that code could do\"},{\"labels\":[\"factory\"],\"number\":608,\"title\":\"Apply the review notes of week 47\"},{\"labels\":[\"factory\"],\"number\":607,\"title\":\"Post each criterion's screenshot at mobile and desktop width\"},{\"labels\":[\"factory\"],\"number\":606,\"title\":\"Have Peta map an idea's journey before she slices it\"},{\"labels\":[\"factory\"],\"number\":605,\"title\":\"Give Peta and Adam the product's current state to judge by\"},{\"labels\":[\"factory\"],\"number\":592,\"title\":\"Apply the review notes of week 47\"}]",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "e31e7c35-5819-4fef-98ca-c0195f737925",
+    "timestamp": "2026-11-22T18:31:22.189Z",
+    "tool_use_result": {
+      "stdout": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n{\n  \"run\": 45054178991,\n  \"workflow\": \"merge-group\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 591,\n    \"issue\": 589,\n    \"title\": \"chore: bring in the reference feature and the comment sweep\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.\",\n          \"if_wrong\": \"A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied.\"\n        },\n        {\n          \"assumes\": \"Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.\",\n          \"if_wrong\": \"A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": null,\n      \"step\": \"Keep the result\",\n      \"conclusion\": null,\n      \"log\": null\n    }\n  ]\n}\n\n[{\"labels\":[\"factory\"],\"number\":649,\"title\":\"Record why new projects pin the shadcn lint package\"},{\"labels\":[\"factory\"],\"number\":647,\"title\":\"Have Ryan fail personal data a change does not need\"},{\"labels\":[\"factory\"],\"number\":646,\"title\":\"Store no email address in a new project's usage events\"},{\"labels\":[\"factory\"],\"number\":645,\"title\":\"Have Adam ask whether a smaller standard way exists\"},{\"labels\":[\"factory\"],\"number\":644,\"title\":\"Switch on Vercel's analytics for a new project\"},{\"labels\":[\"factory\"],\"number\":643,\"title\":\"Remove the parsed metric format and its weekly verdict\"},{\"labels\":[\"factory\"],\"number\":641,\"title\":\"Fix the weekly measure's four faults found on review\"},{\"labels\":[\"factory\"],\"number\":640,\"title\":\"Keep the end-to-end job inside its time limit\"},{\"labels\":[\"factory\"],\"number\":638,\"title\":\"Fix a new project failing lint on a missing package\"},{\"labels\":[\"factory\"],\"number\":637,\"title\":\"Pin the checksum of the package manager\"},{\"labels\":[\"factory\"],\"number\":636,\"title\":\"Give a new project the recording of what users do\"},{\"labels\":[\"factory\"],\"number\":635,\"title\":\"Read usage counts with the database key\"},{\"labels\":[\"factory\"],\"number\":634,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"labels\":[\"factory\"],\"number\":633,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":632,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":631,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":630,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":629,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\"],\"number\":624,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":623,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":622,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":621,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":620,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":619,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":618,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":617,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":616,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":615,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":614,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":613,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":612,\"title\":\"Give each pull request a budget of minutes and cost\"},{\"labels\":[\"factory\"],\"number\":611,\"title\":\"Take the ready label on an idea as the owner's go\"},{\"labels\":[\"factory\"],\"number\":610,\"title\":\"Have Peta say whether an idea should be built\"},{\"labels\":[\"factory\"],\"number\":609,\"title\":\"Have Ryan fail a hand step that code could do\"},{\"labels\":[\"factory\"],\"number\":608,\"title\":\"Apply the review notes of week 47\"},{\"labels\":[\"factory\"],\"number\":607,\"title\":\"Post each criterion's screenshot at mobile and desktop width\"},{\"labels\":[\"factory\"],\"number\":606,\"title\":\"Have Peta map an idea's journey before she slices it\"},{\"labels\":[\"factory\"],\"number\":605,\"title\":\"Give Peta and Adam the product's current state to judge by\"},{\"labels\":[\"factory\"],\"number\":592,\"title\":\"Apply the review notes of week 47\"}]",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_014Xsd6ACgwarP8VwcBtFVLp",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShBNVVaVPxj81X76qi",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS/QUKEAgUGAI4AUIIdGhpbmtpbmcSDC6fS5YS+j1AjHyQmBoMNi+xMp3Z+gLyh7s2IjD4Fe7PB7ui4s68V02wZwNuPDAk/79zZiPwyGm4JV7wobK0Aqr4ZTnr0liDLItPY38qmgXNw8gJd4lfCD1UkS/C3MbfwpBD5rFfAv9nMYiwkU4DdzfCWr0H6CWg5KfY/1Jr2Vk/fzjStlE13EkjZx7lVNZ+yqRIxdu3qhCW4o2EOvlIEQd6GJLpDfjdh7uccThVvYOLhcQeVtAI6L8BFQ1f7+8UyfeSAEJhrHEgrdBt4CSHfSbiKdMWW58pI/I2+PTOBngSVnqh24TBxNR+Vn6+nIAzUnTtRkDzOOlIlCYjtYDf2meaH6iBoMjmfSc+NpicNNFG5gjCbsg9hK9Q3hQ5V0L5QXgwib2XR4CdNbmZwu6Lr3b3XQ1WzTGKef+guE2csk6hweqwiSRcVa13NR9xiMKEF+UWBSCwpzlRV95Pl6yxmiNLypK+tL9b/PQ+txHgU+3bRdaeRCfj1zrJJlDB1Zx44IZ+4FBcNdmvLaLcLAnfe5JLlyUZx4frGQewHEDN85xNfGH1SGMubUrRgYGhU/qejzwRCENzOvSeH7p+IeCmA5n3yLbzDuvtY2c2IUacyghT9nP29KeIbGf7SgvARRvbIpHFR8KTxjFMFmpbJ1iwTIvQ1Iwe6JpPT+XKzeyZSH5jmx82V0yJ2CRg+NFzpjM7Uw9GHKf99glStZqODXwOaWz2LzVoBPVKENbOufqPzf7ZIOIMoIxONLy2nMCA3Sy+iGtxYRnX/D0gWUTFdR2E81K/hMUvMVz91piuE1q+1LTXlZQuBNn3eGUyj8XaTfrgNuEAjG2AaTk16ekU37WOu5B80TnV7GBiSzD/JvLeKVGyyw0jg4sikXyNw+IJEnSd/RTcap9W8+XdhynajEf+XlQLMrssMJNBIIFMblkusUbthNj+tCGiKAkylWSsgj0m+23J+W7Nz82JBaIyXPwQSlvUA51L5imWseoYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5298,
+        "cache_read_input_tokens": 25223,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 5298
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "75a51f8c-e89a-4313-b9fa-0a2171e96f50",
+    "timestamp": "2026-11-22T18:31:24.545Z",
+    "request_id": "req_011ChJShBCq2v8mwyjWA1wzF",
+    "thinking_duration_ms": 451,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShBNVVaVPxj81X76qi",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_011e6Un6xMRqy25mXbFARVd9",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 --name-only | head -50; gh pr diff 591 | grep -n -A40 'merge-group.yml' | head -120",
+            "description": "Show PR 591 changed files and merge-group diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5298,
+        "cache_read_input_tokens": 25223,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 5298
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "959e58c4-ff79-438f-aed3-a4bd77bc602c",
+    "timestamp": "2026-11-22T18:31:25.179Z",
+    "request_id": "req_011ChJShBCq2v8mwyjWA1wzF",
+    "wire_tool_inputs": {
+      "toolu_011e6Un6xMRqy25mXbFARVd9": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 --name-only | head -50; gh pr diff 591 | grep -n -A40 'merge-group.yml' | head -120",
+        "description": "Show PR 591 changed files and merge-group diff"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_011e6Un6xMRqy25mXbFARVd9",
+          "type": "tool_result",
+          "content": ".claude/skills/bootstrap/SKILL.md\n.claude/skills/bootstrap/manifest.txt\n.claude/skills/bootstrap/scripts/agent-token.sh\n.claude/skills/bootstrap/scripts/board-token.sh\n.claude/skills/bootstrap/scripts/board.sh\n.claude/skills/bootstrap/scripts/bootstrap.sh\n.claude/skills/bootstrap/scripts/database-key.sh\n.claude/skills/bootstrap/scripts/database.sh\n.claude/skills/bootstrap/scripts/github.sh\n.claude/skills/bootstrap/scripts/labels.sh\n.claude/skills/bootstrap/scripts/preflight.sh\n.claude/skills/bootstrap/scripts/preview-access.sh\n.claude/skills/bootstrap/scripts/purpose.sh\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/scripts/workflow-app.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/apps/web/drizzle.config.ts\n.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/0-join-waitlist.spec.ts\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/apps/web/playwright.config.ts\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/waitlist-form.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/actions.ts\n.claude/skills/bootstrap/templates/apps/web/src/app/page.tsx\n.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrate.mts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrate.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0000_waitlist.sql\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0000_snapshot.json\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/types.ts\n.claude/skills/bootstrap/templates/apps/web/src/lib/outbound/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/lib/outbound/index.ts\n.claude/skills/bootstrap/templates/apps/web/vitest.config.ts\nARCHITECTURE.md\nREADME.md\nfactory/README/known-gaps/tests-need-linux.md\nfactory/decisions/590.md\nfactory/manual-steps.md\nfactory/scripts/apply-setup.sh\nfactory/scripts/begin-fix-round.sh\nfactory/scripts/button-merge.sh\nfactory/scripts/check-citations.sh\nfactory/scripts/check-decisions.sh\n1604: start_merge_group() { retry gh workflow run merge-group.yml ${1:+-f try=\"$1\"} >/dev/null; }\n1605- \n1606--# Where the log of this run is, for a comment: GitHub's own error is there.\n1607- run_log() {\n1608-   [ -z \"${GITHUB_RUN_ID:-}\" ] || printf ' The log has what GitHub answered: %s/%s/actions/runs/%s' \\\n1609-     \"${GITHUB_SERVER_URL:-https://github.com}\" \"${GITHUB_REPOSITORY:-}\" \"$GITHUB_RUN_ID\"\n1610-diff --git a/factory/scripts/start-build.sh b/factory/scripts/start-build.sh\n1611-index 31447c0..83a828e 100755\n1612---- a/factory/scripts/start-build.sh\n1613-+++ b/factory/scripts/start-build.sh\n1614-@@ -90,7 +90,6 @@ fi\n1615- limit=$(\"$script_dir/usage-limit.sh\" held) \\\n1616-   || die \"Issue #$issue was not started: whether the Claude usage limit holds every agent could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build.\"\n1617- if [ -n \"$limit\" ]; then\n1618--  # A ticket the waiting were started from was told when it was labelled (decisions T64c).\n1619-   if [ \"${GITHUB_EVENT_NAME:-}\" != workflow_dispatch ]; then\n1620-     gh issue comment \"$issue\" --body \"Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $limit. This ticket keeps the \\`ready\\` label, and its build starts after that. If the limit was lifted sooner, run \\`gh workflow run resume.yml\\`: everything that waits starts at once.\" >/dev/null \\\n1621-       || die \"Issue #$issue waits, because the Claude usage limit holds every agent until $limit, but it could not be told so. It keeps the ready label, and is started after the limit resets.\"\n1622-diff --git a/factory/scripts/start-waiting.sh b/factory/scripts/start-waiting.sh\n1623-index d849a19..fe3eb80 100755\n1624---- a/factory/scripts/start-waiting.sh\n1625-+++ b/factory/scripts/start-waiting.sh\n1626-@@ -165,7 +165,6 @@ queue=$(printf '%s\\n' \"$placed\"; sort -k1,1n -k2,2n <<<\"$since\" | cut -d' ' -f3)\n1627- # It fails when the ticket could not be told.\n1628- tell() {\n1629-   local marker=\"<!-- factory:after $2 -->\" told\n1630--  # Decisions U563l.\n1631-   told=$(gh api \"repos/{owner}/{repo}/issues/$1/comments?per_page=100\" --paginate \\\n1632-       --jq \".[] | select(.user.login == \\\"github-actions[bot]\\\" and ((.body // \\\"\\\") | startswith(\\\"$marker\\\"))) | .id\") \\\n1633-     || return 1\n1634-diff --git a/factory/scripts/test-group.sh b/factory/scripts/test-group.sh\n1635-index f117dce..1a9d683 100755\n1636---- a/factory/scripts/test-group.sh\n1637-+++ b/factory/scripts/test-group.sh\n1638-@@ -75,7 +75,6 @@ failure() {\n1639- }\n1640- \n1641- pulls=\"[]\"\n1642--# record <pr> <head> <result> [detail]\n1643- record() {\n1644-   pulls=$(jq -c --argjson pr \"$1\" --arg head \"$2\" --arg result \"$3\" --arg detail \"${4:-}\" \\\n--\n2219: expect_call \"gh workflow run merge-group.yml\"\n2220- \n2221--# A factory ticket's pull request: #12 is labelled so.\n2222- factory_change() {\n2223-   echo '[{\"name\":\"factory\"},{\"name\":\"in-progress\"}]' > \"$T/labels.json\"\n2224-   change \"$@\"\n2225-diff --git a/factory/tests/merge-group.test.sh b/factory/tests/merge-group.test.sh\n2226-index 88214ee..043d2df 100644\n2227---- a/factory/tests/merge-group.test.sh\n2228-+++ b/factory/tests/merge-group.test.sh\n2229-@@ -76,7 +76,6 @@ ship_it() {\n2230-   run \"$scripts/ship.sh\" \"$T/result.json\" $group\n2231-   cd \"$T/work\" || exit 1\n2232- }\n2233--# on_main <file>: the file as main holds it on GitHub.\n2234- on_main() { git --git-dir=\"$T/origin.git\" show \"main:$1\"; }\n2235- merges() { grep -o '^gh pr merge [0-9]*' \"$T/calls\" | sed 's/.* //' | tr '\\n' ' '; }\n2236- # shellcheck disable=SC2016\n2237-@@ -101,7 +100,6 @@ expect_no_call \"does not hold what was tested\"\n2238- for file in seven eight nine; do\n2239-   git --git-dir=\"$T/origin.git\" cat-file -e \"main:apps/web/$file.txt\" 2>/dev/null || fail \"expected main to hold apps/web/$file.txt\"\n2240- done\n2241--# No pull request is tested with main a second time, or told that main moved.\n2242- expect_no_call \"has moved\"\n2243- expect_no_call \"gh run rerun\"\n2244- for ticket in 12 13 14; do expect_call \"gh issue edit $ticket --add-label deployed\"; done\n2245-@@ -119,10 +117,8 @@ expect_calls 1 \"pnpm lint\"\n2246- [ \"$(jq -r .tree \"$T/result.json\")\" = \"$(tree_on_github)\" ] || fail \"expected main to hold the tree that was tested\"\n2247- expect_call \"gh pr comment 8 --body <!-- factory:merge-queue removed $(head_of 8) -->Not merged: it does not fit \\`main\\` with the pull requests merged before it.\"\n2248- expect_calls 1 \"gh workflow run fix.yml -f pr=8\"\n2249--# Its fix round is given the files in conflict.\n2250- run \"$scripts/merge-queue.sh\" removed 8 \"$(head_of 8)\"\n2251- expect_output \"apps/web/page.txt\"\n2252--# It waits no longer: the next group does not test it again as it is.\n2253- begin\n2254- [ -z \"$group\" ] || fail \"expected nothing to wait to merge, got: $group\"\n2255- \n2256-@@ -315,7 +311,6 @@ begin\n2257- test_it\n2258- : > \"$T/calls\"\n2259- approved 9\n--\n2261: expect_calls 1 \"gh workflow run merge-group.yml\"\n2262- ship_it\n2263- expect_status 0\n2264-diff --git a/factory/tests/needs-e2e.test.sh b/factory/tests/needs-e2e.test.sh\n2265-index 4f8642c..d76641d 100755\n2266---- a/factory/tests/needs-e2e.test.sh\n2267-+++ b/factory/tests/needs-e2e.test.sh\n2268-@@ -172,7 +172,6 @@ expect_status 0\n2269- expect_output \"changes app code\"\n2270- expect_call \"gh api repos/owner/repo/pulls/7/files --paginate\"\n2271- \n2272--# job <name>: the lines of that job in ci.yml.\n2273- job() { awk -v job=\"  $1:\" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' \"$root/factory/workflows/ci.yml\"; }\n2274- needs() { job \"$1\" | sed -n 's/^    needs: //p'; }\n2275- \n2276-diff --git a/factory/tests/needs-review.test.sh b/factory/tests/needs-review.test.sh\n2277-index a89d11f..26bda51 100755\n2278---- a/factory/tests/needs-review.test.sh\n2279-+++ b/factory/tests/needs-review.test.sh\n2280-@@ -81,7 +81,6 @@ expect_failure\n2281- expect_output \"Usage: needs-review.sh <base-branch> <head-sha>\"\n2282- expect_no_call \"gh\"\n2283- \n2284--# job <name>: the lines of that job in ci.yml.\n2285- job() { awk -v job=\"  $1:\" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' \"$root/factory/workflows/ci.yml\"; }\n2286- \n2287- scenario \"ci.yml asks it in the e2e job, about the commit the run began for, and passes the answer on\"\n2288-diff --git a/factory/tests/only-merged-main.test.sh b/factory/tests/only-merged-main.test.sh\n2289-index e469558..b81c70b 100644\n2290---- a/factory/tests/only-merged-main.test.sh\n2291-+++ b/factory/tests/only-merged-main.test.sh\n2292-@@ -13,14 +13,12 @@ a_branch() {\n2293-   git commit -q -am \"feat: spell ten\"\n2294-   earlier=$(git rev-parse HEAD)\n2295- }\n2296--# on_main <bash>: a commit on main that the given bash makes; back on the branch after.",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "19df0f7b-ac77-4c13-bc0c-fe8cebe0700e",
+    "timestamp": "2026-11-22T18:31:26.910Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/bootstrap/SKILL.md\n.claude/skills/bootstrap/manifest.txt\n.claude/skills/bootstrap/scripts/agent-token.sh\n.claude/skills/bootstrap/scripts/board-token.sh\n.claude/skills/bootstrap/scripts/board.sh\n.claude/skills/bootstrap/scripts/bootstrap.sh\n.claude/skills/bootstrap/scripts/database-key.sh\n.claude/skills/bootstrap/scripts/database.sh\n.claude/skills/bootstrap/scripts/github.sh\n.claude/skills/bootstrap/scripts/labels.sh\n.claude/skills/bootstrap/scripts/preflight.sh\n.claude/skills/bootstrap/scripts/preview-access.sh\n.claude/skills/bootstrap/scripts/purpose.sh\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/scripts/workflow-app.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/apps/web/drizzle.config.ts\n.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/0-join-waitlist.spec.ts\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/apps/web/playwright.config.ts\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/waitlist-form.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/actions.ts\n.claude/skills/bootstrap/templates/apps/web/src/app/page.tsx\n.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrate.mts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrate.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0000_waitlist.sql\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0000_snapshot.json\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/types.ts\n.claude/skills/bootstrap/templates/apps/web/src/lib/outbound/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/lib/outbound/index.ts\n.claude/skills/bootstrap/templates/apps/web/vitest.config.ts\nARCHITECTURE.md\nREADME.md\nfactory/README/known-gaps/tests-need-linux.md\nfactory/decisions/590.md\nfactory/manual-steps.md\nfactory/scripts/apply-setup.sh\nfactory/scripts/begin-fix-round.sh\nfactory/scripts/button-merge.sh\nfactory/scripts/check-citations.sh\nfactory/scripts/check-decisions.sh\n1604: start_merge_group() { retry gh workflow run merge-group.yml ${1:+-f try=\"$1\"} >/dev/null; }\n1605- \n1606--# Where the log of this run is, for a comment: GitHub's own error is there.\n1607- run_log() {\n1608-   [ -z \"${GITHUB_RUN_ID:-}\" ] || printf ' The log has what GitHub answered: %s/%s/actions/runs/%s' \\\n1609-     \"${GITHUB_SERVER_URL:-https://github.com}\" \"${GITHUB_REPOSITORY:-}\" \"$GITHUB_RUN_ID\"\n1610-diff --git a/factory/scripts/start-build.sh b/factory/scripts/start-build.sh\n1611-index 31447c0..83a828e 100755\n1612---- a/factory/scripts/start-build.sh\n1613-+++ b/factory/scripts/start-build.sh\n1614-@@ -90,7 +90,6 @@ fi\n1615- limit=$(\"$script_dir/usage-limit.sh\" held) \\\n1616-   || die \"Issue #$issue was not started: whether the Claude usage limit holds every agent could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build.\"\n1617- if [ -n \"$limit\" ]; then\n1618--  # A ticket the waiting were started from was told when it was labelled (decisions T64c).\n1619-   if [ \"${GITHUB_EVENT_NAME:-}\" != workflow_dispatch ]; then\n1620-     gh issue comment \"$issue\" --body \"Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $limit. This ticket keeps the \\`ready\\` label, and its build starts after that. If the limit was lifted sooner, run \\`gh workflow run resume.yml\\`: everything that waits starts at once.\" >/dev/null \\\n1621-       || die \"Issue #$issue waits, because the Claude usage limit holds every agent until $limit, but it could not be told so. It keeps the ready label, and is started after the limit resets.\"\n1622-diff --git a/factory/scripts/start-waiting.sh b/factory/scripts/start-waiting.sh\n1623-index d849a19..fe3eb80 100755\n1624---- a/factory/scripts/start-waiting.sh\n1625-+++ b/factory/scripts/start-waiting.sh\n1626-@@ -165,7 +165,6 @@ queue=$(printf '%s\\n' \"$placed\"; sort -k1,1n -k2,2n <<<\"$since\" | cut -d' ' -f3)\n1627- # It fails when the ticket could not be told.\n1628- tell() {\n1629-   local marker=\"<!-- factory:after $2 -->\" told\n1630--  # Decisions U563l.\n1631-   told=$(gh api \"repos/{owner}/{repo}/issues/$1/comments?per_page=100\" --paginate \\\n1632-       --jq \".[] | select(.user.login == \\\"github-actions[bot]\\\" and ((.body // \\\"\\\") | startswith(\\\"$marker\\\"))) | .id\") \\\n1633-     || return 1\n1634-diff --git a/factory/scripts/test-group.sh b/factory/scripts/test-group.sh\n1635-index f117dce..1a9d683 100755\n1636---- a/factory/scripts/test-group.sh\n1637-+++ b/factory/scripts/test-group.sh\n1638-@@ -75,7 +75,6 @@ failure() {\n1639- }\n1640- \n1641- pulls=\"[]\"\n1642--# record <pr> <head> <result> [detail]\n1643- record() {\n1644-   pulls=$(jq -c --argjson pr \"$1\" --arg head \"$2\" --arg result \"$3\" --arg detail \"${4:-}\" \\\n--\n2219: expect_call \"gh workflow run merge-group.yml\"\n2220- \n2221--# A factory ticket's pull request: #12 is labelled so.\n2222- factory_change() {\n2223-   echo '[{\"name\":\"factory\"},{\"name\":\"in-progress\"}]' > \"$T/labels.json\"\n2224-   change \"$@\"\n2225-diff --git a/factory/tests/merge-group.test.sh b/factory/tests/merge-group.test.sh\n2226-index 88214ee..043d2df 100644\n2227---- a/factory/tests/merge-group.test.sh\n2228-+++ b/factory/tests/merge-group.test.sh\n2229-@@ -76,7 +76,6 @@ ship_it() {\n2230-   run \"$scripts/ship.sh\" \"$T/result.json\" $group\n2231-   cd \"$T/work\" || exit 1\n2232- }\n2233--# on_main <file>: the file as main holds it on GitHub.\n2234- on_main() { git --git-dir=\"$T/origin.git\" show \"main:$1\"; }\n2235- merges() { grep -o '^gh pr merge [0-9]*' \"$T/calls\" | sed 's/.* //' | tr '\\n' ' '; }\n2236- # shellcheck disable=SC2016\n2237-@@ -101,7 +100,6 @@ expect_no_call \"does not hold what was tested\"\n2238- for file in seven eight nine; do\n2239-   git --git-dir=\"$T/origin.git\" cat-file -e \"main:apps/web/$file.txt\" 2>/dev/null || fail \"expected main to hold apps/web/$file.txt\"\n2240- done\n2241--# No pull request is tested with main a second time, or told that main moved.\n2242- expect_no_call \"has moved\"\n2243- expect_no_call \"gh run rerun\"\n2244- for ticket in 12 13 14; do expect_call \"gh issue edit $ticket --add-label deployed\"; done\n2245-@@ -119,10 +117,8 @@ expect_calls 1 \"pnpm lint\"\n2246- [ \"$(jq -r .tree \"$T/result.json\")\" = \"$(tree_on_github)\" ] || fail \"expected main to hold the tree that was tested\"\n2247- expect_call \"gh pr comment 8 --body <!-- factory:merge-queue removed $(head_of 8) -->Not merged: it does not fit \\`main\\` with the pull requests merged before it.\"\n2248- expect_calls 1 \"gh workflow run fix.yml -f pr=8\"\n2249--# Its fix round is given the files in conflict.\n2250- run \"$scripts/merge-queue.sh\" removed 8 \"$(head_of 8)\"\n2251- expect_output \"apps/web/page.txt\"\n2252--# It waits no longer: the next group does not test it again as it is.\n2253- begin\n2254- [ -z \"$group\" ] || fail \"expected nothing to wait to merge, got: $group\"\n2255- \n2256-@@ -315,7 +311,6 @@ begin\n2257- test_it\n2258- : > \"$T/calls\"\n2259- approved 9\n--\n2261: expect_calls 1 \"gh workflow run merge-group.yml\"\n2262- ship_it\n2263- expect_status 0\n2264-diff --git a/factory/tests/needs-e2e.test.sh b/factory/tests/needs-e2e.test.sh\n2265-index 4f8642c..d76641d 100755\n2266---- a/factory/tests/needs-e2e.test.sh\n2267-+++ b/factory/tests/needs-e2e.test.sh\n2268-@@ -172,7 +172,6 @@ expect_status 0\n2269- expect_output \"changes app code\"\n2270- expect_call \"gh api repos/owner/repo/pulls/7/files --paginate\"\n2271- \n2272--# job <name>: the lines of that job in ci.yml.\n2273- job() { awk -v job=\"  $1:\" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' \"$root/factory/workflows/ci.yml\"; }\n2274- needs() { job \"$1\" | sed -n 's/^    needs: //p'; }\n2275- \n2276-diff --git a/factory/tests/needs-review.test.sh b/factory/tests/needs-review.test.sh\n2277-index a89d11f..26bda51 100755\n2278---- a/factory/tests/needs-review.test.sh\n2279-+++ b/factory/tests/needs-review.test.sh\n2280-@@ -81,7 +81,6 @@ expect_failure\n2281- expect_output \"Usage: needs-review.sh <base-branch> <head-sha>\"\n2282- expect_no_call \"gh\"\n2283- \n2284--# job <name>: the lines of that job in ci.yml.\n2285- job() { awk -v job=\"  $1:\" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' \"$root/factory/workflows/ci.yml\"; }\n2286- \n2287- scenario \"ci.yml asks it in the e2e job, about the commit the run began for, and passes the answer on\"\n2288-diff --git a/factory/tests/only-merged-main.test.sh b/factory/tests/only-merged-main.test.sh\n2289-index e469558..b81c70b 100644\n2290---- a/factory/tests/only-merged-main.test.sh\n2291-+++ b/factory/tests/only-merged-main.test.sh\n2292-@@ -13,14 +13,12 @@ a_branch() {\n2293-   git commit -q -am \"feat: spell ten\"\n2294-   earlier=$(git rev-parse HEAD)\n2295- }\n2296--# on_main <bash>: a commit on main that the given bash makes; back on the branch after.",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_011e6Un6xMRqy25mXbFARVd9",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShXbQZLs1KaSE7wCho",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AbqUMrbZdApDZZKpAzHxFn",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 | awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+            "description": "Show merge-group workflow diff and run jobs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4863,
+        "cache_read_input_tokens": 30521,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4863
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "3d68f80b-8ee1-407e-941e-779791239b3d",
+    "timestamp": "2026-11-22T18:31:31.198Z",
+    "request_id": "req_011ChJShXRFii3K51AHhMFzn",
+    "wire_tool_inputs": {
+      "toolu_01AbqUMrbZdApDZZKpAzHxFn": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 | awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+        "description": "Show merge-group workflow diff and run jobs"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01AbqUMrbZdApDZZKpAzHxFn",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+    "uuid": "7ab9404a-49e6-41c4-89b4-b197d8b91f1c",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+          "is_error": true,
+          "tool_use_id": "toolu_01AbqUMrbZdApDZZKpAzHxFn"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "088ff048-e0c5-4448-8f1d-ad3fcea53ded",
+    "timestamp": "2026-11-22T18:31:31.209Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01AbqUMrbZdApDZZKpAzHxFn",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShqszma4kyJ7HPK9Ks",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01CtCVvRcxxrasiYMrpwy1Qz",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 > /tmp/pr591.diff; grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+            "description": "Save PR diff and list workflow files changed"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 364,
+        "cache_read_input_tokens": 35384,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 364
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "481b94d3-9df9-45af-ba8c-e61846d1841a",
+    "timestamp": "2026-11-22T18:31:48.619Z",
+    "request_id": "req_011ChJShqkJyp6xFRs7SqcCD",
+    "wire_tool_inputs": {
+      "toolu_01CtCVvRcxxrasiYMrpwy1Qz": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 > /tmp/pr591.diff; grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+        "description": "Save PR diff and list workflow files changed"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01CtCVvRcxxrasiYMrpwy1Qz",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 591, grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+    "uuid": "3db26fd3-f05f-4320-98c6-d32a9e988c8d",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 591, grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+          "is_error": true,
+          "tool_use_id": "toolu_01CtCVvRcxxrasiYMrpwy1Qz"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "e6ebd7d4-dbd4-42b0-a711-df5eaca6d618",
+    "timestamp": "2026-11-22T18:31:48.639Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: gh pr diff 591, grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01CtCVvRcxxrasiYMrpwy1Qz",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSj8WAEKB77R4RySHzr",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MmXrR6GL8288aMXR139JC2",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 591 --repo edmulraney/tinyfactory > /tmp/pr591.diff",
+            "description": "Save PR 591 diff to a temp file"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 227,
+        "cache_read_input_tokens": 35748,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 227
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "94c40ed8-fddc-44b3-b715-5b698f3a2d76",
+    "timestamp": "2026-11-22T18:31:52.815Z",
+    "request_id": "req_011ChJSj8Kzd5Nfza3A2ckCa",
+    "wire_tool_inputs": {
+      "toolu_01MmXrR6GL8288aMXR139JC2": {
+        "command": "gh pr diff 591 --repo edmulraney/tinyfactory > /tmp/pr591.diff",
+        "description": "Save PR 591 diff to a temp file"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01MmXrR6GL8288aMXR139JC2",
+    "message": "Output redirection to '/tmp/pr591.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+    "uuid": "e0d80c59-c013-42ec-a252-ef51345d7e67",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "Output redirection to '/tmp/pr591.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+          "is_error": true,
+          "tool_use_id": "toolu_01MmXrR6GL8288aMXR139JC2"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "bd0133ec-d08c-472a-ab17-f2d47caa6674",
+    "timestamp": "2026-11-22T18:31:52.827Z",
+    "tool_use_result": "Error: Output redirection to '/tmp/pr591.diff' needs approval. The path is outside the working directories for this session ('/home/runner/work/tinyfactory/tinyfactory'). Allowing runs the command as written.",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01MmXrR6GL8288aMXR139JC2",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSj8WAEKB77R4RySHzr",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012rLcoS67uxaQfRXjd7jYUx",
+          "name": "Bash",
+          "input": {
+            "command": "gh run view 45054178991 --repo edmulraney/tinyfactory --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+            "description": "Show the run's jobs and steps"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 227,
+        "cache_read_input_tokens": 35748,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 227
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "39039ae6-3f77-46cc-8605-4bd05a6a7d25",
+    "timestamp": "2026-11-22T18:31:53.558Z",
+    "request_id": "req_011ChJSj8Kzd5Nfza3A2ckCa",
+    "wire_tool_inputs": {
+      "toolu_012rLcoS67uxaQfRXjd7jYUx": {
+        "command": "gh run view 45054178991 --repo edmulraney/tinyfactory --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+        "description": "Show the run's jobs and steps"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_012rLcoS67uxaQfRXjd7jYUx",
+          "type": "tool_result",
+          "content": "{\"conclusion\":\"success\",\"name\":\"begin\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Which pull requests wait to merge, and do they need a test?\"},{\"conclusion\":\"success\",\"name\":\"Keep the result of a group that needs no test\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"success\",\"name\":\"merge\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Fetch what the test found\"},{\"conclusion\":\"success\",\"name\":\"Merge those that passed, and send back those that did not\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"skipped\",\"name\":\"test\",\"steps\":[]}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "01cc902c-597d-47db-b3ab-15c90fbd96dc",
+    "timestamp": "2026-11-22T18:31:54.497Z",
+    "tool_use_result": {
+      "stdout": "{\"conclusion\":\"success\",\"name\":\"begin\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Which pull requests wait to merge, and do they need a test?\"},{\"conclusion\":\"success\",\"name\":\"Keep the result of a group that needs no test\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"success\",\"name\":\"merge\",\"steps\":[{\"conclusion\":\"success\",\"name\":\"Set up job\"},{\"conclusion\":\"success\",\"name\":\"Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Fetch what the test found\"},{\"conclusion\":\"success\",\"name\":\"Merge those that passed, and send back those that did not\"},{\"conclusion\":\"skipped\",\"name\":\"Tell whether this job stopped at its time limit\"},{\"conclusion\":\"skipped\",\"name\":\"Start a retro when this job failed\"},{\"conclusion\":\"success\",\"name\":\"Post Run actions/checkout@v4\"},{\"conclusion\":\"success\",\"name\":\"Complete job\"}]}\n{\"conclusion\":\"skipped\",\"name\":\"test\",\"steps\":[]}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_012rLcoS67uxaQfRXjd7jYUx",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSjZXoZDAheSw1VqB5B",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSjAcKEAgUGAI4AUIIdGhpbmtpbmcSDHBLUbDktTOWRmE6cRoMNNP5pU+ezHGCSOFyIjDzuLnK7/ssQQDdJGngrNnoxGp/MTlTn7dNbPQ/037LqURAUfKqvvBrRrbOJ+alxE0qqQYn+3e8q1+uHCwNrzE0X4NpcGsYFceXpdBWRduScWZH9hKu4n+efRuiophMR3FyIemslzlY3VCzuf45ZShzRytunuxX5rEkLqlIn9hKq30Ks7T6tIbrybv5bnBrJojEeAZUdbnEeigaLLMo9O5lfj0Kulw2Axplvxb0gWLlIfm6P2SzYn/13f2hWcGSivSO9t/eZfdgiCro1uJ0ZIF3IV2bXLX6fDahlQ1KFttuOpBrgM2dykHm4F/WPZq7rU611ycLSjFAadO8Nz5jfzUtJrZz+yWPLcxwVohaUI5IKTJ/N/N1n8h53pj0PYI9lAo7V120XUNtPQ1Jp6fncXBoxYuNA+2hE2WqCqD9BLBLnQEs1IhVKxIbYtVT0zpqsxJ7cEwKRciaHlFOiwuncqbRNYz0wUfJ4nwFTmlkZZ8aObjKnzGmPs19hDpZ4d1/YVSuJXLqhHk0kevLccR+QnhoCIrflDNZPRFv7qvpLQL7Q4tsnuTllmMhcMK0jGaLahIbYTHg1MlbaBXFW85TogoNLnTzvOo6gVjkubERVjI26jFmcp13uD935eGycw+OupkCEwll9vRZSZPwqIMK9mc896qrYgWnvH945zNo/dSoEl+a9IPjEI00WWuJ4hX83DtwsxunWarDEuCqsags5zTfLk9N7DgM4SHo65eCoDimJQZZJMMDjb3Cx1jyNGB9n5/EgmhLpWEOrgS80E7s4f2V1wRlo+LMgZjAGnIzhpUQuIJsUBMeeIsM2OLPHjlyi9QhC73ABQqjnAkxaJNFG3qoTrGQ9QP5PuzGaBs2cWoWaAPV4XxHRJmEC+MUUrxNpbFjtc3hJj5UQp39I/xhP/54VeZR/DdYsgUZHXPOC6WJYVWG1nr1TlyOl0/YNtQUCxLvkx4CXFrruczWtUk0r/jcjiOIQ9v4HDJWN03ShlsTZ6vlNyYWbjGvRO6kLyGnHdDW4yueVcy4+PpaJFVUk0S5uJh2krn+X2xQ4SyuGtd9WBvLAxelMM4BZNtQl1E5Zij+A/xqCUd94TVXeErVbPBmCxnvcA9449QldwIhCOXB/7abjuEzvG6j+4bYdBgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 905,
+        "cache_read_input_tokens": 35975,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 905
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "6b0e3e4d-03bc-4382-bfee-c18d5d865a5b",
+    "timestamp": "2026-11-22T18:31:56.402Z",
+    "request_id": "req_011ChJSjZQ7hqZQWd4acArcc",
+    "thinking_duration_ms": 501,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSjZXoZDAheSw1VqB5B",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Checking what PR 591 changed in the merge-group workflow against the run's steps."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 905,
+        "cache_read_input_tokens": 35975,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 905
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "4aa876f6-af29-4416-8b70-9d787bfd1348",
+    "timestamp": "2026-11-22T18:31:56.403Z",
+    "request_id": "req_011ChJSjZQ7hqZQWd4acArcc"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSjZXoZDAheSw1VqB5B",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013Cmyw46xgemcN7E2Zzu6DC",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 591 --repo edmulraney/tinyfactory | grep -n -B3 -A30 'b/factory/workflows/merge-group.yml'",
+            "description": "Show PR 591's merge-group workflow diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 905,
+        "cache_read_input_tokens": 35975,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 905
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "94784822-6a38-4f9f-b1f1-d49d5872c010",
+    "timestamp": "2026-11-22T18:31:57.046Z",
+    "request_id": "req_011ChJSjZQ7hqZQWd4acArcc",
+    "wire_tool_inputs": {
+      "toolu_013Cmyw46xgemcN7E2Zzu6DC": {
+        "command": "gh pr diff 591 --repo edmulraney/tinyfactory | grep -n -B3 -A30 'b/factory/workflows/merge-group.yml'",
+        "description": "Show PR 591's merge-group workflow diff"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_013Cmyw46xgemcN7E2Zzu6DC",
+          "type": "tool_result",
+          "content": "2825-           {\n2826-             printf 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `%s`' \"$next\"\n2827-             [ -z \"$rest\" ] || printf ' and `then` to `%s`' \"$rest\"\n2828:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n2829-index f33c681..a19707c 100644\n2830---- a/factory/workflows/merge-group.yml\n2831:+++ b/factory/workflows/merge-group.yml\n2832-@@ -107,7 +107,7 @@ jobs:\n2833-           name: group-result\n2834-           path: ${{ runner.temp }}/group.json\n2835-           retention-days: 7\n2836--          overwrite: true   # a run started again records the same name\n2837-+          overwrite: true\n2838- \n2839-   merge:\n2840-     needs: [begin, test]\n2841-@@ -143,7 +143,6 @@ jobs:\n2842-           GROUP: ${{ needs.begin.outputs.group }}\n2843-           TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)\n2844-         run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '\"$RUNNER_TEMP/group.json\" $GROUP' || '--not-begun' }}\n2845--      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n2846-       - name: Tell whether this job stopped at its time limit\n2847-         id: limit\n2848-         if: cancelled()\n2849-@@ -161,7 +160,6 @@ jobs:\n2850-           minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n2851-           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n2852-           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n2853--      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n2854-       - name: Start a retro when this job failed\n2855-         if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n2856-         env:",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "57fddd48-d4d0-45d0-812c-f470f4b80687",
+    "timestamp": "2026-11-22T18:31:57.918Z",
+    "tool_use_result": {
+      "stdout": "2825-           {\n2826-             printf 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `%s`' \"$next\"\n2827-             [ -z \"$rest\" ] || printf ' and `then` to `%s`' \"$rest\"\n2828:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n2829-index f33c681..a19707c 100644\n2830---- a/factory/workflows/merge-group.yml\n2831:+++ b/factory/workflows/merge-group.yml\n2832-@@ -107,7 +107,7 @@ jobs:\n2833-           name: group-result\n2834-           path: ${{ runner.temp }}/group.json\n2835-           retention-days: 7\n2836--          overwrite: true   # a run started again records the same name\n2837-+          overwrite: true\n2838- \n2839-   merge:\n2840-     needs: [begin, test]\n2841-@@ -143,7 +143,6 @@ jobs:\n2842-           GROUP: ${{ needs.begin.outputs.group }}\n2843-           TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)\n2844-         run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '\"$RUNNER_TEMP/group.json\" $GROUP' || '--not-begun' }}\n2845--      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n2846-       - name: Tell whether this job stopped at its time limit\n2847-         id: limit\n2848-         if: cancelled()\n2849-@@ -161,7 +160,6 @@ jobs:\n2850-           minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n2851-           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n2852-           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n2853--      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n2854-       - name: Start a retro when this job failed\n2855-         if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n2856-         env:",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_013Cmyw46xgemcN7E2Zzu6DC",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "9ded8783-88ad-4c7d-b59c-7a2eaed2667d"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 273,
+    "estimated_tokens_delta": 223,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "ccf0748d-3767-4f50-bf46-b29d892e9e76"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSjp5AQ39tZnP8TZart",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSuQgKEAgUGAI4AUIIdGhpbmtpbmcSDLSIUGGgDcczdgJCYxoMK8MpDxIKE8BSG4X4IjCCAA5kgqxuB4XcF6Xt15SRfLaA0q51T1QP7UalOu2/aSgRltCS0dn+rtQ2HVMv+Y8q1gfJqC8cGO/a8UwyMe2cCA9Id084/N0IRwx6CJXtrXwKslaUClxztqtH/b+rBaixGGzUN3AtAKnYtCsts0jxCPaPbKRKDOCfJdtSGBBe7ztcLG7wUfCccGfEDrHnO5/nqTChjiGqM+uv65bS6XoJFzS9IFGlug1i9fWtQGGWL734Rdl6L+DBNX/6h2ZDTuqv5LAenV9221V4cRF2qvS8OGWNGmzXJJd+KshuqQ5ckQdUlUZIKiQgrSnn3k8DahNLdrxmuAuIYnoAUfNLASsmPbf5NChzEnb7a5vyJKqH7C7KWcnNkCBFVi4URI43HafqeezhuexOARZOPa6Tje6SvjUBxWwu6GLl3a/2xxg06noJIbQ56lvcPYOsrSUNTxwXmdtT2NcXGr8f3F1dWacZLWxecLAWuyOkIOckylRVXNFqOefBQl2YtyXVJSuBzn55Mka00nXqZTqrhEYSDK3fz4USv0cOeCQPc2rlA1HjHT88oOwwntefh/YZjA62ww3k98AmbAK8QWPqAtwjUIOj0h3AeUn02ksuwMZx036KoXPQEZ3N6vH2AyrIaoUuVPHvBMr7aFjjkAy1D/FqgvnqhktOFEyIUkUAMKOkFhLmA+pSl7P3dCBcQjFs9wi377uOhmS0qdWVav0wDSBrNC2RCHiPO9gZ6vlZGLW4n9Jrixm5oy+vdO4wbkj0/HXi6ZCePpU+S96VNpdp5IwGRmysTYtx+tbWYvshJPJWzz1o0KI6hukwZMRieChZg1lKdveb2gUsf2hw8QjW+B9IUu569xv1+qarGPWCWbd8qFVCjTde49a/fjih/+n7YeUwsiv/qlkv6oRy+32jubfOHPFhTRKFoSm3G8rtD70lnqBo+i5gTXRdgw9iV4TC6aWbvfopXvSm53btaS/+hXsU71uU97CCjgFbJ/T+3IUh6aTaSkxZ+EZZRt7qjT87ClQ2ZcdBAOqI7nfmGkik3QbBq6P6XPAVxe8j09JHHQ2EI7YjUCUeSW/38c2ivsVHjhX8iDORTpicPDmFlNuRUJ5z4Z3CcMax/lB3sVSlwcwoGTuh/aHTkYL/MrK80RMYOupE5rxf5aoAdSN+U7P+zGJA/UbQFIYvz9F6e9VlbnR25j9iY3ikqwFmDTSEY00cVcH7YZu/aCDOM9CN+biHrTbE8ud1thgvxqGOuF7dMJ2LYe0iADaW2jAZ89+S5m/DmmLPGkq6l6HF+x4A8rmhP7OjeqFWYAMleU8RDdYqjmAf2xFTOKrrhQXcU+VBufSysR3bWDbykXH/KF2N7V5HjZeYuAhaZvNFFcIt9KXEGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1058,
+        "cache_read_input_tokens": 36880,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1058
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "adbc10b0-9251-4b6f-8f26-54d519a81892",
+    "timestamp": "2026-11-22T18:32:00.236Z",
+    "request_id": "req_011ChJSjowEeZWsx7ey93rRx",
+    "thinking_duration_ms": 700,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSjp5AQ39tZnP8TZart",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017fJ91bvjB4MtJV3NWAgyLC",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "Nothing to act on: PR #591 only removed comments from merge-group.yml, and run 45054178991 never reached the changed \"Keep the result\" step, because its group needed no test and the test job was skipped.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "In `factory/workflows/merge-group.yml`, pull request #591 deleted three comments and changed no behaviour. It removed the trailing comment on `overwrite: true` in the test job's \"Keep the result\" upload step, and the comments above the time-limit step and the retro step in the merge job. Run 45054178991 was started by workflow_dispatch. Its begin job found that the group needed no test and kept the result itself, so the test job, which holds \"Keep the result\", was skipped. The merge job then succeeded. The changed step never ran, but the change was comment-only, so it carries no risk. Adam's assumptions about Neon and Vercel concern the project templates, not this workflow.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+              "https://github.com/edmulraney/tinyfactory/pull/591"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded and cost $0 in 0 agent turns.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: the run cost $0 and took 0 agent turns, so no change has anything to save.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1058,
+        "cache_read_input_tokens": 36880,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1058
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "68c961c4-286b-4c56-8e67-7d9b9406c606",
+    "timestamp": "2026-11-22T18:32:05.572Z",
+    "request_id": "req_011ChJSjowEeZWsx7ey93rRx",
+    "wire_tool_inputs": {
+      "toolu_017fJ91bvjB4MtJV3NWAgyLC": {
+        "summary": "Nothing to act on: PR #591 only removed comments from merge-group.yml, and run 45054178991 never reached the changed \"Keep the result\" step, because its group needed no test and the test job was skipped.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "In `factory/workflows/merge-group.yml`, pull request #591 deleted three comments and changed no behaviour. It removed the trailing comment on `overwrite: true` in the test job's \"Keep the result\" upload step, and the comments above the time-limit step and the retro step in the merge job. Run 45054178991 was started by workflow_dispatch. Its begin job found that the group needed no test and kept the result itself, so the test job, which holds \"Keep the result\", was skipped. The merge job then succeeded. The changed step never ran, but the change was comment-only, so it carries no risk. Adam's assumptions about Neon and Vercel concern the project templates, not this workflow.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+          "https://github.com/edmulraney/tinyfactory/pull/591"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded and cost $0 in 0 agent turns.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: the run cost $0 and took 0 agent turns, so no change has anything to save.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_017fJ91bvjB4MtJV3NWAgyLC",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "uuid": "13d9bd6f-ebcf-4da8-8537-601f393f3cd5",
+    "timestamp": "2026-11-22T18:32:05.579Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_017fJ91bvjB4MtJV3NWAgyLC",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 46515,
+    "stop_reason": "tool_use",
+    "session_id": "0ef0bcf8-8b63-4be3-9b3f-d6d337126cf8",
+    "total_cost_usd": 0.2636313,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 22195,
+      "cache_read_input_tokens": 215474,
+      "output_tokens": 2133,
+      "output_tokens_details": {
+        "thinking_tokens": 182
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 22195,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 863,
+          "cache_read_input_tokens": 36880,
+          "cache_creation_input_tokens": 1058,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1058
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 259,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0002605,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 240,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2133,
+        "cacheReadInputTokens": 215474,
+        "cacheCreationInputTokens": 22195,
+        "webSearchRequests": 0,
+        "costUSD": 0.2633708,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 182,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 22195,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01AbqUMrbZdApDZZKpAzHxFn",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 | awk '/^diff --git a\\/factory\\/workflows\\/merge-group.yml/{p=1;print;next} /^diff --git/{p=0} p'; gh run view 45054178991 --json jobs --jq '.jobs[]|{name,conclusion,steps:[.steps[]|{name,conclusion}]}'",
+          "description": "Show merge-group workflow diff and run jobs"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01CtCVvRcxxrasiYMrpwy1Qz",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 591 > /tmp/pr591.diff; grep -n '^diff --git a/factory/workflows' /tmp/pr591.diff",
+          "description": "Save PR diff and list workflow files changed"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01MmXrR6GL8288aMXR139JC2",
+        "tool_input": {
+          "command": "gh pr diff 591 --repo edmulraney/tinyfactory > /tmp/pr591.diff",
+          "description": "Save PR 591 diff to a temp file"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 10,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"Nothing to act on: PR #591 only removed comments from merge-group.yml, and run 45054178991 never reached the changed \\\"Keep the result\\\" step, because its group needed no test and the test job was skipped.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"In `factory/workflows/merge-group.yml`, pull request #591 deleted three comments and changed no behaviour. It removed the trailing comment on `overwrite: true` in the test job's \\\"Keep the result\\\" upload step, and the comments above the time-limit step and the retro step in the merge job. Run 45054178991 was started by workflow_dispatch. Its begin job found that the group needed no test and kept the result itself, so the test job, which holds \\\"Keep the result\\\", was skipped. The merge job then succeeded. The changed step never ran, but the change was comment-only, so it carries no risk. Adam's assumptions about Neon and Vercel concern the project templates, not this workflow.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\"https://github.com/edmulraney/tinyfactory/pull/591\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run succeeded and cost $0 in 0 agent turns.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: the run cost $0 and took 0 agent turns, so no change has anything to save.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "Nothing to act on: PR #591 only removed comments from merge-group.yml, and run 45054178991 never reached the changed \"Keep the result\" step, because its group needed no test and the test job was skipped.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "In `factory/workflows/merge-group.yml`, pull request #591 deleted three comments and changed no behaviour. It removed the trailing comment on `overwrite: true` in the test job's \"Keep the result\" upload step, and the comments above the time-limit step and the retro step in the merge job. Run 45054178991 was started by workflow_dispatch. Its begin job found that the group needed no test and kept the result itself, so the test job, which holds \"Keep the result\", was skipped. The merge job then succeeded. The changed step never ran, but the change was comment-only, so it carries no risk. Adam's assumptions about Neon and Vercel concern the project templates, not this workflow.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+        "https://github.com/edmulraney/tinyfactory/pull/591"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded and cost $0 in 0 agent turns.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: the run cost $0 and took 0 agent turns, so no change has anything to save.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 4377,
+    "type": "result",
+    "duration_ms": 49100,
+    "uuid": "f130407e-5586-4242-a0a8-7b0a1258734b",
+    "ttft_stream_ms": 3832,
+    "time_to_request_ms": 160,
+    "first_content_frame_ms": 3832,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 259,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0002605,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 240,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2133,
+        "cacheReadInputTokens": 215474,
+        "cacheCreationInputTokens": 22195,
+        "webSearchRequests": 0,
+        "costUSD": 0.2633708,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 182,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 22195,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
