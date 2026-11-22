@@ -1,0 +1,1365 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "7d7f232b-bde1-454a-829a-a9d7ebe54f66",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2466.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRh1kgrM4UbPYehnZQr",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_016M9NGwH67otnCf8nkL2ukA",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9481,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9481
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "5062ecb9-c2a0-4817-8b6c-a615b7a79ef3",
+    "timestamp": "2026-11-22T18:18:17.923Z",
+    "request_id": "req_011ChJRh1fE4DBwiNbHc52P2",
+    "wire_tool_inputs": {
+      "toolu_016M9NGwH67otnCf8nkL2ukA": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_016M9NGwH67otnCf8nkL2ukA",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## A defect met in use\n50\t\n51\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n52\t\n53\t## When to propose\n54\t\n55\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n56\t\n57\t- `cost.kind` is not empty;\n58\t- step 4 lists a lesson.\n59\t\n60\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n61\t\n62\t## Output\n63\t\n64\t- `summary`: one sentence a person can act on.\n65\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n66\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n67\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n68\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n69\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n70\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n71\t- `repeats`: the file names of step 4's lessons.\n72\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n73\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n74\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "d68d0d50-1f84-43d8-8b2b-97e157ac538d",
+    "timestamp": "2026-11-22T18:18:17.968Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 74,
+        "startLine": 1,
+        "totalLines": 74
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_016M9NGwH67otnCf8nkL2ukA",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRh1kgrM4UbPYehnZQr",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MEn9pp9fbzNd4iDhndxPaq",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -la; cat facts.json; ls lessons | head -50; head -c 3000 tickets.json",
+            "description": "Show facts, lessons and tickets"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9481,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9481
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "f5274bfd-2a56-4cc9-8d77-f72ddf66d566",
+    "timestamp": "2026-11-22T18:18:18.949Z",
+    "request_id": "req_011ChJRh1fE4DBwiNbHc52P2",
+    "wire_tool_inputs": {
+      "toolu_01MEn9pp9fbzNd4iDhndxPaq": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -la; cat facts.json; ls lessons | head -50; head -c 3000 tickets.json",
+        "description": "Show facts, lessons and tickets"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.54,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "5f300596-85cc-4969-9e22-85942b697af0",
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01MEn9pp9fbzNd4iDhndxPaq",
+          "type": "tool_result",
+          "content": "total 92\ndrwxr-xr-x 20 runner runner 4096 Nov 22 18:17 .\ndrwxr-xr-x 10 runner runner 4096 Nov 22 18:17 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 22 18:17 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 22 18:17 apps\n-rw-r--r--  1 runner runner 1937 Nov 22 18:17 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-626\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-627\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 lessons\n-rw-r--r--  1 runner runner 2909 Nov 22 18:17 measures.jsonl\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-586\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-588\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-591\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-594\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-603\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-625\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-639\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-648\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-651\n-rw-r--r--  1 runner runner 3784 Nov 22 18:17 tickets.json\n{\n  \"run\": 45053642995,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45053642995\",\n  \"conclusion\": \"success\",\n  \"pr\": 651,\n  \"issue\": 627,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-651/20261122T181244Z-adam-run45053642995.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.18141839999999998,\n      \"turns\": 13,\n      \"seconds\": 28,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-651/20261122T181248Z-ryan-run45053642995.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.2357128,\n      \"turns\": 15,\n      \"seconds\": 29,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.42,\n  \"turns\": 28,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"e2e\",\n      \"step\": \"Playwright against the preview\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"review\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n[{\"labels\":[\"factory\"],\"number\":649,\"title\":\"Record why new projects pin the shadcn lint package\"},{\"labels\":[\"factory\"],\"number\":647,\"title\":\"Have Ryan fail personal data a change does not need\"},{\"labels\":[\"factory\"],\"number\":646,\"title\":\"Store no email address in a new project's usage events\"},{\"labels\":[\"factory\"],\"number\":645,\"title\":\"Have Adam ask whether a smaller standard way exists\"},{\"labels\":[\"factory\"],\"number\":644,\"title\":\"Switch on Vercel's analytics for a new project\"},{\"labels\":[\"factory\"],\"number\":643,\"title\":\"Remove the parsed metric format and its weekly verdict\"},{\"labels\":[\"factory\"],\"number\":641,\"title\":\"Fix the weekly measure's four faults found on review\"},{\"labels\":[\"factory\"],\"number\":640,\"title\":\"Keep the end-to-end job inside its time limit\"},{\"labels\":[\"factory\"],\"number\":638,\"title\":\"Fix a new project failing lint on a missing package\"},{\"labels\":[\"factory\"],\"number\":637,\"title\":\"Pin the checksum of the package manager\"},{\"labels\":[\"factory\"],\"number\":636,\"title\":\"Give a new project the recording of what users do\"},{\"labels\":[\"factory\"],\"number\":635,\"title\":\"Read usage counts with the database key\"},{\"labels\":[\"factory\"],\"number\":634,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"labels\":[\"factory\"],\"number\":633,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":632,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":631,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":630,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":629,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\",\"in-progress\"],\"number\":626,\"title\":\"Cut `.claude/skills/refine/SKILL.md` to budget\"},{\"labels\":[\"factory\"],\"number\":624,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":623,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":622,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":621,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":620,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":619,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":618,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":617,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":616,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":615,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":614,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":613,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":612,\"title\":\"Give each pull request",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "9d01a01f-ff7c-4a55-9a75-e9e63d0dcd04",
+    "timestamp": "2026-11-22T18:18:19.333Z",
+    "tool_use_result": {
+      "stdout": "total 92\ndrwxr-xr-x 20 runner runner 4096 Nov 22 18:17 .\ndrwxr-xr-x 10 runner runner 4096 Nov 22 18:17 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 22 18:17 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 22 18:17 apps\n-rw-r--r--  1 runner runner 1937 Nov 22 18:17 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-626\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 issue-627\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 lessons\n-rw-r--r--  1 runner runner 2909 Nov 22 18:17 measures.jsonl\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-586\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-588\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-591\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-594\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-603\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-625\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-639\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-648\ndrwxr-xr-x  2 runner runner 4096 Nov 22 18:17 pr-651\n-rw-r--r--  1 runner runner 3784 Nov 22 18:17 tickets.json\n{\n  \"run\": 45053642995,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45053642995\",\n  \"conclusion\": \"success\",\n  \"pr\": 651,\n  \"issue\": 627,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-651/20261122T181244Z-adam-run45053642995.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.18141839999999998,\n      \"turns\": 13,\n      \"seconds\": 28,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-651/20261122T181248Z-ryan-run45053642995.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.2357128,\n      \"turns\": 15,\n      \"seconds\": 29,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.42,\n  \"turns\": 28,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"e2e\",\n      \"step\": \"Playwright against the preview\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"review\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n[{\"labels\":[\"factory\"],\"number\":649,\"title\":\"Record why new projects pin the shadcn lint package\"},{\"labels\":[\"factory\"],\"number\":647,\"title\":\"Have Ryan fail personal data a change does not need\"},{\"labels\":[\"factory\"],\"number\":646,\"title\":\"Store no email address in a new project's usage events\"},{\"labels\":[\"factory\"],\"number\":645,\"title\":\"Have Adam ask whether a smaller standard way exists\"},{\"labels\":[\"factory\"],\"number\":644,\"title\":\"Switch on Vercel's analytics for a new project\"},{\"labels\":[\"factory\"],\"number\":643,\"title\":\"Remove the parsed metric format and its weekly verdict\"},{\"labels\":[\"factory\"],\"number\":641,\"title\":\"Fix the weekly measure's four faults found on review\"},{\"labels\":[\"factory\"],\"number\":640,\"title\":\"Keep the end-to-end job inside its time limit\"},{\"labels\":[\"factory\"],\"number\":638,\"title\":\"Fix a new project failing lint on a missing package\"},{\"labels\":[\"factory\"],\"number\":637,\"title\":\"Pin the checksum of the package manager\"},{\"labels\":[\"factory\"],\"number\":636,\"title\":\"Give a new project the recording of what users do\"},{\"labels\":[\"factory\"],\"number\":635,\"title\":\"Read usage counts with the database key\"},{\"labels\":[\"factory\"],\"number\":634,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"labels\":[\"factory\"],\"number\":633,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":632,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":631,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":630,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":629,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\",\"in-progress\"],\"number\":626,\"title\":\"Cut `.claude/skills/refine/SKILL.md` to budget\"},{\"labels\":[\"factory\"],\"number\":624,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":623,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":622,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":621,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":620,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":619,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":618,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":617,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":616,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":615,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":614,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":613,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":612,\"title\":\"Give each pull request",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01MEn9pp9fbzNd4iDhndxPaq",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "a143524a-3ea0-43ea-8706-9d94a1904a4f"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 270,
+    "estimated_tokens_delta": 220,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "414ec8f3-49b5-4311-b766-09c11a39169a"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhUE8pmgVCLtBt3Eq3",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSrAgKEAgUGAI4AUIIdGhpbmtpbmcSDMzk5VnWtc5YEAl6KRoMxxZsGmTPZn42YJ8iIjCEpC8QT/raIrO3i2N29xekj4S1UjWsKnOuJANyjWOexmKBhNHjvlolGH4gwbERl4kqyQeBQKyLNu9lWPPS9vMs8pqtg62jTbDs4T4aQ7DZSzxohPIi0e6CDXtAsmQxopav/y9xvwHHnhAELbZUJOxyPtWo6k7Iw7LbooJfZ5C1LjfX924LuMdi9LSmwxCGfnQ06NmYhlcgMrmeDlxKKpz99dn0a3HgywE1HzcXFR9gttR2BEmchngQhDhUkxeiC6po45vvW5h512urHB3VzKLTYmz6Nge01UveSBWH78/dQcfbKVwvSE0l9TCPb2MFX2sCH5lP01kY/FsTpONw8ZUiGm3/C2VcxAaSFAh3jAChRu6UPAzOdZw46+nhznfMvA0QOGqmrTOMw2kR2yxg9cXX1Hh7kuffMVoZj06JUehpD8GvH0AfzIR4vVmTceL4mr6y0sB1FZ7vQx461R2TogFyugZ/p87ekb3TZudm1VNNSpqpoiSG+XnWhvwUXVRPen7FRX92EBqVlLfvTlGxFocjYCVjrr3r+J8whQ5449s5lA7Gc6TddkSkPKlXG6flocnUi1j1GmnRq3rHFmTNacYefZhZjHibSnSmxhzQuHvanxNf7yuyXU64teZwv7BnFWdsXqumyxhidpIjNq2mvAsdkKB8abTxLQT4EnPcOuD3b7OMf8puTa60LmATb3mG60uu9vJkFyODVURuO4kjQkntpmTnjKkETUvVrCKH0zMV0dxXcouFY3PPcgEvTBaN3pKmByuc9g8bYICPEgYFbwh46FyGJf/3UaYHUhsnZgsN7+jj1AdEckffp7s/tcSFTb7tHh5OMB+rlp1fQU3vuGQTisckXLKL8e21ZfIIevwb8vhtmyE9kveeRH3nXyTumCU644+yffB92pqkzMP11Mtbh0ZNIxPfqJpcRCqW7VBV4xFDtfUMJ0m2d4fo13En4Ki9QbOSgkLVGikiXg/xRQ50vtwfafTBHKI6XVyaUfmbXYNcNKVYaFLXIpErAvtSO9tLuqIpys+Eq9oOfaGc9/e2bZb8Q+qj6xo32EPj7BjHa5tw2fUWF6xKwAknno4eqUs9EBitQS48uBaYlkboh53P4pgC3UPJCWMe7MlHqsf1XJaC6V4t+lHmU57VXltCLS0jFBDi5w455E90XUlKuLiUvDTrujDGkm37DQyI9Fg8wLsooi9TtZfZU27TXkUy+X1gEyoGhdCVg8DXnj56rEDGHrJYpciThVQ9aY/sl1awv7belt7EOvIrgQrHjWeZKdo5AGnQBdn1LaZtH57R+JIwXBpox95Bb1XIbmdhaOFk3jqq3ZF+aiIfHDPwFRG1bflaEPPD/M2ilEhEh60YAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5931,
+        "cache_read_input_tokens": 25224,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 5931
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "0c34ec67-bbb0-4a0e-b9f8-5b0e0bb85c0c",
+    "timestamp": "2026-11-22T18:18:23.972Z",
+    "request_id": "req_011ChJRhU8wUZFggoH3RwAJp",
+    "thinking_duration_ms": 800,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhUE8pmgVCLtBt3Eq3",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WS3SDa5NZKnFSj9K41XtXq",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 2>&1 | grep -n \"^diff\\|Playwright against\\|time limit\" | head -30; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/ci/{p=1} /^diff --git/&&!/ci/{p=0} p' | head -120; ls .sessions/lessons | tail -4 | while read f; do cat .sessions/lessons/$f; echo; done | head -80",
+            "description": "Inspect PR 648 diff for ci workflow and recent lessons"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5931,
+        "cache_read_input_tokens": 25224,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 5931
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "2212c7a4-6fb3-4152-abb4-4b5a94646d5e",
+    "timestamp": "2026-11-22T18:18:26.045Z",
+    "request_id": "req_011ChJRhU8wUZFggoH3RwAJp",
+    "wire_tool_inputs": {
+      "toolu_01WS3SDa5NZKnFSj9K41XtXq": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 2>&1 | grep -n \"^diff\\|Playwright against\\|time limit\" | head -30; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/ci/{p=1} /^diff --git/&&!/ci/{p=0} p' | head -120; ls .sessions/lessons | tail -4 | while read f; do cat .sessions/lessons/$f; echo; done | head -80",
+        "description": "Inspect PR 648 diff for ci workflow and recent lessons"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01WS3SDa5NZKnFSj9K41XtXq",
+    "decision_reason_type": "other",
+    "decision_reason": "A variable in this command can't be checked before it runs",
+    "message": "A variable in this command can't be checked before it runs",
+    "uuid": "3300b53f-5b39-4557-900c-4d9b677ca136",
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "A variable in this command can't be checked before it runs",
+          "is_error": true,
+          "tool_use_id": "toolu_01WS3SDa5NZKnFSj9K41XtXq"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "9965e975-d193-4d6a-89c8-3b86c94d0bda",
+    "timestamp": "2026-11-22T18:18:26.065Z",
+    "tool_use_result": "Error: A variable in this command can't be checked before it runs",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01WS3SDa5NZKnFSj9K41XtXq",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhxxYFcyJgpnSoWKtc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0119wq1oBnvFw1Gw7G8hYhX4",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/d648.txt 2>&1; grep -n \"^diff --git\" /tmp/d648.txt",
+            "description": "Save PR 648 diff and list files"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 434,
+        "cache_read_input_tokens": 31155,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 434
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "38d3beb5-6666-4c92-a116-cbad192a9ac0",
+    "timestamp": "2026-11-22T18:18:29.455Z",
+    "request_id": "req_011ChJRhxrq2fRJW6sE2XmtZ",
+    "wire_tool_inputs": {
+      "toolu_0119wq1oBnvFw1Gw7G8hYhX4": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/d648.txt 2>&1; grep -n \"^diff --git\" /tmp/d648.txt",
+        "description": "Save PR 648 diff and list files"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_0119wq1oBnvFw1Gw7G8hYhX4",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git\" /tmp/d648.txt",
+    "uuid": "43a76afe-3a8d-457b-9bb6-396619aab3fc",
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git\" /tmp/d648.txt",
+          "is_error": true,
+          "tool_use_id": "toolu_0119wq1oBnvFw1Gw7G8hYhX4"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "23f6141f-5035-4ff0-8369-8a301d5ca981",
+    "timestamp": "2026-11-22T18:18:29.485Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git\" /tmp/d648.txt",
+    "tool_result_meta": [
+      {
+        "id": "toolu_0119wq1oBnvFw1Gw7G8hYhX4",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRiDcMLdFVLtt4gjg9Q",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017hGtWSyKKiVn8U88DQizRD",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 648 --repo edmulraney/tinyfactory",
+            "description": "Show PR 648 diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 211,
+        "cache_read_input_tokens": 31589,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 211
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "95e058a1-dbbc-44a3-a8d6-3e782ca45695",
+    "timestamp": "2026-11-22T18:18:31.335Z",
+    "request_id": "req_011ChJRiDWtK3mJL1usPrYVq",
+    "wire_tool_inputs": {
+      "toolu_017hGtWSyKKiVn8U88DQizRD": {
+        "command": "gh pr diff 648 --repo edmulraney/tinyfactory",
+        "description": "Show PR 648 diff"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_017hGtWSyKKiVn8U88DQizRD",
+          "type": "tool_result",
+          "content": "<persisted-output>\nOutput too large (132.1KB). Full output saved to: /home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt\n\nPreview (first 2KB):\ndiff --git a/.claude/skills/bootstrap/SKILL.md b/.claude/skills/bootstrap/SKILL.md\nindex 7f35ab9..bb54f84 100644\n--- a/.claude/skills/bootstrap/SKILL.md\n+++ b/.claude/skills/bootstrap/SKILL.md\n@@ -27,7 +27,7 @@ Run a script that waits for the human in the background, and pass on the code, U\n ## What belongs where\n \n - **`manifest.txt`** lists the files the factory owns, each by its place in a project; `scaffold.sh` copies them into new projects, those under `apps/` from `templates/` where this repo holds no app, and makes `.github/workflows/` from `factory/workflows/`.\n-- **`templates/`** holds the seeds each project edits afterwards (`CLAUDE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, the health service the factory's route calls, and the app's first code: the database folder and the waitlist on the home page, which `ARCHITECTURE.md` names as the reference feature). `PURPOSE.md` is not a seed.\n+- **`templates/`** holds the seeds each project edits afterwards (`CLAUDE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, the health service the factory's route calls, and the app's first code: the database folder, the `usage` module and the waitlist, which `ARCHITECTURE.md` names as the reference feature). `PURPOSE.md` is not a seed.\n - This skill sets a project up and repairs a broken setup. Any later change to the factory is a `factory` ticket. `factory/scripts/apply-setup.sh` applies a merged change to one of these scripts where the factory holds a credential that can; `factory/manual-steps.md` lists the scripts that wait for a session.\n - A change to how setup or the factory works gets a row in the ticket's file in `factory/decisions/`, in the same commit, as the header of `factory/decisions.md` says. A service setting changed for cost or quota gets an entry in the ticket's file in `factory/free-tier/`, as `factory/free-tier.md` says.\n...\n</persisted-output>",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "2f28609a-2d24-44e3-89f4-69c41cbd9d1e",
+    "timestamp": "2026-11-22T18:18:32.085Z",
+    "tool_use_result": {
+      "stdout": "diff --git a/.claude/skills/bootstrap/SKILL.md b/.claude/skills/bootstrap/SKILL.md\nindex 7f35ab9..bb54f84 100644\n--- a/.claude/skills/bootstrap/SKILL.md\n+++ b/.claude/skills/bootstrap/SKILL.md\n@@ -27,7 +27,7 @@ Run a script that waits for the human in the background, and pass on the code, U\n ## What belongs where\n \n - **`manifest.txt`** lists the files the factory owns, each by its place in a project; `scaffold.sh` copies them into new projects, those under `apps/` from `templates/` where this repo holds no app, and makes `.github/workflows/` from `factory/workflows/`.\n-- **`templates/`** holds the seeds each project edits afterwards (`CLAUDE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, the health service the factory's route calls, and the app's first code: the database folder and the waitlist on the home page, which `ARCHITECTURE.md` names as the reference feature). `PURPOSE.md` is not a seed.\n+- **`templates/`** holds the seeds each project edits afterwards (`CLAUDE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `TASTE.md`, the health service the factory's route calls, and the app's first code: the database folder, the `usage` module and the waitlist, which `ARCHITECTURE.md` names as the reference feature). `PURPOSE.md` is not a seed.\n - This skill sets a project up and repairs a broken setup. Any later change to the factory is a `factory` ticket. `factory/scripts/apply-setup.sh` applies a merged change to one of these scripts where the factory holds a credential that can; `factory/manual-steps.md` lists the scripts that wait for a session.\n - A change to how setup or the factory works gets a row in the ticket's file in `factory/decisions/`, in the same commit, as the header of `factory/decisions.md` says. A service setting changed for cost or quota gets an entry in the ticket's file in `factory/free-tier/`, as `factory/free-tier.md` says.\n - Anything done by hand during setup is a bug in the bootstrap: put it in a script or the manifest, and re-run `scaffold.sh` in an empty directory to check.\ndiff --git a/.claude/skills/bootstrap/scripts/scaffold.sh b/.claude/skills/bootstrap/scripts/scaffold.sh\nindex 1088230..07c984e 100755\n--- a/.claude/skills/bootstrap/scripts/scaffold.sh\n+++ b/.claude/skills/bootstrap/scripts/scaffold.sh\n@@ -82,8 +82,10 @@ if [ ! -d apps/web ]; then\n   # The starter page is replaced by the factory's seed page, which uses the design tokens.\n   rm -f apps/web/pnpm-workspace.yaml apps/web/README.md apps/web/src/app/page.tsx\n   # create-next-app titles every page \"Create Next App\", which a visitor reads in the tab and in a shared link.\n+  # Every page also renders Vercel's Analytics component, which reports each visit to the Web\n+  # Analytics that vercel.sh switches on (decisions S644a).\n   python3 - \"$name\" apps/web/src/app/layout.tsx <<'PY'\n-import json, pathlib, sys\n+import json, pathlib, re, sys\n name, layout = sys.argv[1], pathlib.Path(sys.argv[2])\n text = layout.read_text()\n for old, new in (\n@@ -92,7 +94,9 @@ for old, new in (\n ):\n     assert text.count(old) == 1, f\"create-next-app's `{old}` was not found in {layout}\"\n     text = text.replace(old, new)\n-layout.write_text(text)\n+text, found = re.subn(r\">\\s*\\{children\\}\\s*</body>\", \">\\n        {children}\\n        <Analytics />\\n      </body>\", text)\n+assert found == 1, f\"create-next-app's `{{children}}</body>` was not found in {layout}\"\n+layout.write_text('import { Analytics } from \"@vercel/analytics/next\";\\n' + text)\n PY\n \n   (\n@@ -110,11 +114,18 @@ fi\n if [ ! -f package.json ]; then\n   # Read the version before the redirect below creates an empty package.json, which pnpm chokes on.\n   pnpm_version=$(pnpm -v)\n+  # The field carries the checksum the registry holds for that version, so that Corepack refuses a\n+  # download that does not match (decisions S637).\n+  if ! integrity=$(npm view \"pnpm@$pnpm_version\" dist.integrity) || [[ \"$integrity\" != sha512-* ]]; then\n+    echo \"scaffold: could not read the sha512 checksum of pnpm@$pnpm_version from the npm registry (npm view pnpm@$pnpm_version dist.integrity). Check the network and run the scaffold again.\" >&2\n+    exit 1\n+  fi\n+  pnpm_checksum=$(python3 -c 'import base64, sys; print(base64.b64decode(sys.argv[1]).hex())' \"${integrity#sha512-}\")\n   cat > package.json <<JSON\n {\n   \"name\": \"$name\",\n   \"private\": true,\n-  \"packageManager\": \"pnpm@$pnpm_version\",\n+  \"packageManager\": \"pnpm@$pnpm_version+sha512.$pnpm_checksum\",\n   \"scripts\": {\n     \"dev\": \"pnpm --filter web dev\",\n     \"build\": \"pnpm -r build\",\n@@ -207,10 +218,11 @@ if [ \"$fresh\" = yes ]; then\n   install_factory_files overwrite   # the factory's ESLint config replaces the generated one\n   design_foundation\n   # vitest needs Node 22+ types; create-next-app pins @types/node to 20.\n-  # The Tailwind lint plugin and the accessibility scanner are what enforce DESIGN.md.\n+  # The Tailwind and shadcn lint plugins and the accessibility scanner are what enforce DESIGN.md.\n+  # @shadcn/lint at the version the copied eslint.config.mjs was tested with (decisions S649).\n   pnpm --filter web add -D vitest @playwright/test \"@types/node@^24\" \\\n-    eslint-plugin-better-tailwindcss @axe-core/playwright drizzle-kit\n-  pnpm --filter web add drizzle-orm @neondatabase/serverless\n+    eslint-plugin-better-tailwindcss \"@shadcn/lint@0.2.5\" @axe-core/playwright drizzle-kit\n+  pnpm --filter web add drizzle-orm @neondatabase/serverless @vercel/analytics server-only\n   rm \"$unfinished\"\n else\n   install_factory_files\ndiff --git a/.claude/skills/bootstrap/scripts/vercel.sh b/.claude/skills/bootstrap/scripts/vercel.sh\nindex 74ba36b..0c077f2 100755\n--- a/.claude/skills/bootstrap/scripts/vercel.sh\n+++ b/.claude/skills/bootstrap/scripts/vercel.sh\n@@ -1,5 +1,6 @@\n #!/usr/bin/env bash\n # Creates the Vercel project and connects it to the GitHub repo: main deploys to production, pull requests to previews.\n+# Switches on the project's Web Analytics.\n # Usage: vercel.sh [name]   (name defaults to the directory name)\n #        Safe to re-run: a project that exists is not made again.\n set -euo pipefail\n@@ -32,6 +33,22 @@ NOTE\n   echo \"$created\"\n fi\n \n+# Web Analytics counts the visitors that the layout's Analytics component reports (decisions S644a).\n+# Its switch takes the project's id, not its name (decisions S644b).\n+if ! project=$(vc api \"/v9/projects/$name\" --raw 2>&1) || ! project_id=$(jq -er '.id' <<<\"$project\" 2>/dev/null); then\n+  echo \"$project\" >&2\n+  echo \"vercel.sh: could not read the id of the Vercel project '$name' (GET /v9/projects/$name).\" >&2\n+  exit 1\n+fi\n+# The switch is not in Vercel's documentation, so a refusal is the owner's one click and setup carries on (decisions S644b).\n+analytics=\", Web Analytics on\"\n+if ! toggled=$(vc api \"/web/insights/toggle?projectId=$project_id\" -X POST --input - --raw <<<'{\"value\": true}' 2>&1) \\\n+  || [ \"$(jq -r '.value' <<<\"$toggled\" 2>/dev/null)\" != true ]; then\n+  echo \"$toggled\" >&2\n+  mark needs-owner \"Vercel did not switch on Web Analytics: in Vercel's dashboard open the project '$name', choose Analytics and click Enable\"\n+  analytics=\"\"\n+fi\n+\n # Workflows confirm a merge is live by asking production's health endpoint; tell them where it is.\n domain=$(vc api \"/v9/projects/$name/domains\" --raw 2>/dev/null | jq -r '.domains[0].name // empty')\n if [ -n \"$domain\" ]; then\n@@ -40,4 +57,4 @@ if [ -n \"$domain\" ]; then\n fi\n \n echo\n-mark done \"vercel ok: project '$name' linked to $owner/$name (root apps/web)\"\n+mark done \"vercel ok: project '$name' linked to $owner/$name (root apps/web)$analytics\"\ndiff --git a/.claude/skills/bootstrap/templates/ARCHITECTURE.md b/.claude/skills/bootstrap/templates/ARCHITECTURE.md\nindex 1fd518e..5cb9e44 100644\n--- a/.claude/skills/bootstrap/templates/ARCHITECTURE.md\n+++ b/.claude/skills/bootstrap/templates/ARCHITECTURE.md\n@@ -62,9 +62,10 @@ The waitlist on the home page, from its page down to its table, is the example o\n - **A module's door.** `apps/web/src/domain/waitlist/index.ts` exports the use case and the type of its answer, and nothing else.\n - **The module's types.** `apps/web/src/domain/waitlist/types.ts` names each answer the use case can give, told apart by `status`.\n - **A use case deciding a rule.** `joinWaitlist` in `apps/web/src/domain/waitlist/join.ts` decides what an email address is, and answers a database that cannot be reached as a value the page shows.\n+- **An event recorded where it happens.** The same use case calls `recordUsage` from `apps/web/src/domain/usage/index.ts` once an address is added, with the name `apps/web/src/domain/usage/types.ts` holds (\"Usage\").\n - **The file that owns a table.** `apps/web/src/domain/waitlist/repository.ts` alone reads and writes `waitlist_entries`, which `apps/web/src/db/schema.ts` defines.\n - **A migration.** `apps/web/src/db/migrations/0000_waitlist.sql`, generated as \"Database\" says and committed with Drizzle's record of the schema.\n-- **A unit test.** `apps/web/src/domain/waitlist/index.test.ts` tests each rule through the module's index, with its repository replaced, and with it failing.\n+- **A unit test.** `apps/web/src/domain/waitlist/index.test.ts` tests each rule through the module's index, with its repository replaced, and with it failing. It proves that the event is recorded for an address added, and not for one already on the list.\n - **An acceptance test.** `apps/web/e2e/acceptance/0-join-waitlist.spec.ts` holds one test for each criterion and uses the page as a visitor does. `apps/web/e2e/acceptance/README.md` says how a ticket's acceptance tests are written.\n - **A route handler that only answers.** `apps/web/src/app/api/health/route.ts` returns what `getHealth` in `apps/web/src/domain/health/index.ts` answered.\n \n@@ -87,8 +88,8 @@ Every environment answers `GET /api/health` with `{ \"status\": \"ok\", \"commit\": \n ## Database\n \n - **Where it is.** Vercel sets `DATABASE_URL` on every deployment: production's database, or the preview's own branch. A local run has none.\n-- **Tools.** Drizzle ORM over Neon's serverless driver in its HTTP mode (`drizzle-orm/neon-http`). Every query goes through `db()` in `src/db/client.ts`; nothing else in the app reads `DATABASE_URL` to connect.\n-- **The tables.** `src/db/schema.ts` defines them. `waitlist_entries` is the first: one row for each email address left on the home page, keyed by the address, with when it was left.\n+- **Tools.** Drizzle ORM over Neon's serverless driver in its HTTP mode (`drizzle-orm/neon-http`). Every query goes through `db()` in `src/db/client.ts`; nothing else in the app reads `DATABASE_URL` to connect. The client imports `server-only`, so `pnpm build` fails when code that runs in the browser imports it, or imports a module that queries the database.\n+- **The tables.** `src/db/schema.ts` defines them. `waitlist_entries` is the first: one row for each email address left on the home page, keyed by the address, with when it was left. `usage_events` is the `usage` module's (see Usage): one row each time a user does something the product counts, with the `event`'s name, `occurred_at`, the time the database wrote the row, and the `account_id` of the account that did it, which is empty when no account did. It has no key, because a user does the same thing many times and nothing names one row.\n - **Add or change a table.** Edit `src/db/schema.ts`, run `pnpm db:generate --name <what-changes>` in `apps/web`, and commit the migration it writes to `src/db/migrations`: the SQL and Drizzle's record of the schema beside it. A table's queries go in the `repository.ts` of the module that owns it.\n - **How a migration reaches a preview and production.** `pnpm build` runs `src/db/migrate.mts` before it builds the app. The script applies every migration the deployment's database has not had, in order. Vercel runs that build for every deployment, so a pull request's migration runs on its preview's own database branch, and on production's database when the merge to `main` builds. A migration that fails fails the build, and the deployment before it keeps serving. With no `DATABASE_URL`, as on a local run or in CI's build, the script runs nothing.\n - **A migration merged out of order fails the build.** Drizzle's migrator skips, without saying so, a migration dated before the newest one the database has had. The script then throws, naming it. Delete that migration's SQL, snapshot and journal entry, run `pnpm db:generate` again so that it is dated the newest, and merge that.\n@@ -102,6 +103,19 @@ Why Drizzle, with migrations run in the build, and what was rejected: `factory/d\n \n Every request the app makes to an outside service goes through `outboundFetch` in `apps/web/src/lib/outbound`, so none can hang. The whole answer arrives within 5 seconds or the call throws an `OutboundError`; an answer with an error status is returned for the caller to read. The database is given the client (`src/db/client.ts`), because each query is one HTTPS request. Lint fails a `fetch` anywhere else in `src`.\n \n+## Usage\n+\n+The product counts what its users do, in its own database, so that an initiative's success metric can be a number.\n+\n+\n+\n+- **The module.** `src/domain/usage` is an entity: a usage event is stored. With its `repository.ts`, it is the only code in the app that writes `usage_events` (see Database).\n+- **The events.** `UsageEvent` in `src/domain/usage/types.ts` holds each event's name. \"Waitlist joined\" is recorded by `joinWaitlist` for an address it adds, and not for one already on the list.\n+- **Add an event.** Add its name to `UsageEvent`, and one line where the feature happens, once it has happened: `await recordUsage(\"waitlist joined\");`, with the account's id as a second argument when there is one. A name is a type so that a misspelt one fails `pnpm typecheck`.\n+- **Who did it.** A product with accounts passes the account's id, so that the users who did an event can be counted as well as the times it happened. An event done with no account, such as joining the waitlist, is recorded with none, and the table holds nothing that names the visitor (`factory/decisions.md` [S636b](factory/decisions/636.md)).\n+- **Visitors.** Vercel's Web Analytics counts page views, visitors and where they came from, which the `Analytics` component in `src/app/layout.tsx` reports from every page. Its free plan records no custom events, so an event a feature records goes in `usage_events` (`factory/decisions.md` [S644a](factory/decisions/644.md)).\n+- **Recording never fails what the user did.** When the row cannot be written, `recordUsage` logs why and answers as it does when it can.\n+\n ## Domain language\n \n Use these names everywhere: code, tickets, UI copy. Add a row before introducing a new concept.\n@@ -109,3 +123,4 @@ Use these names everywhere: code, tickets, UI copy. Add a row before introducing\n | Term | Meaning | States | Relates to |\n |---|---|---|---|\n | Waitlist entry | An email address a visitor left on the home page, to be told when the product opens | | |\n+| Usage event | Something a user did that the product counts, with who did it and the time: waitlist joined | | Recorded for one account or for none, counted by week |\ndiff --git a/.claude/skills/bootstrap/templates/DESIGN.md b/.claude/skills/bootstrap/templates/DESIGN.md\nindex 5953ad9..45fe7f0 100644\n--- a/.claude/skills/bootstrap/templates/DESIGN.md\n+++ b/.claude/skills/bootstrap/templates/DESIGN.md\n@@ -6,8 +6,8 @@ How {{name}} looks and behaves.\n \n ## The system\n \n-- **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`.\n-- **Product components** are built from those and live under `src/app`: in the `_components` folder of the route that uses one, or of `app` itself when two or more routes share it (`ARCHITECTURE.md`, \"Structure\"). A pattern becomes a component at its second use.\n+- **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them: a class on one sets only its place and width. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`.\n+- **Product components** are built from those, in the `_components` folder `ARCHITECTURE.md` (\"Structure\") names. A pattern becomes a component at its second use.\n - **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.\n - **Colour is a closed set of named tokens**, defined in `src/app/globals.css`. Tailwind's default palette has been removed, so `bg-blue-500` does not exist.\n \n@@ -47,10 +47,4 @@ These need judgement. A reviewer checks them on every change to the interface.\n \n ## What checks what\n \n-| Rule | Checked by |\n-|---|---|\n-| A colour outside the tokens | Lint: `better-tailwindcss/no-unknown-classes` |\n-| A one-off value | Lint: `better-tailwindcss/no-restricted-classes` |\n-| Two classes that fight (`p-2 p-4`) | Lint: `better-tailwindcss/no-conflicting-classes` |\n-| Unreadable contrast, a control with no name, an image with no text | The accessibility scan every end-to-end test runs (`e2e/test.ts`) |\n-| A page that scrolls sideways | Every end-to-end test (`e2e/test.ts`) |\n+Lint refuses what breaks the system above, and `apps/web/eslint.config.mjs` says beside each rule what it refuses. Every end-to-end test (`e2e/test.ts`) fails a page that scrolls sideways or fails the accessibility scan.\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs b/.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\nindex 1c5f085..b64c25d 100644\n--- a/.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n+++ b/.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n@@ -1,6 +1,7 @@\n import { defineConfig, globalIgnores } from \"eslint/config\";\n import nextVitals from \"eslint-config-next/core-web-vitals\";\n import nextTs from \"eslint-config-next/typescript\";\n+import { plugin as shadcn } from \"@shadcn/lint\";\n import tailwind from \"eslint-plugin-better-tailwindcss\";\n \n const useTheIndex =\n@@ -127,32 +128,43 @@ const eslintConfig = defineConfig([\n   misplaced([\"src/domain/*\"], [], \"A file of src/domain belongs to a module: move it to src/domain/<module>.\"),\n   misplaced([\"src/lib/*\"], [], \"Each helper in src/lib is a folder: move this file to src/lib/<name>/index.ts.\"),\n   // DESIGN.md as a failing check. The theme in src/app/globals.css defines the only colours and\n-  // sizes that exist, so a class outside it (bg-blue-500) is an unknown class, and a one-off\n-  // value (w-[437px], text-[#333]) is refused outright.\n+  // sizes that exist, and a screen composes shadcn's components without restyling them.\n   {\n     files: [\"src/**/*.{ts,tsx}\"],\n-    plugins: { \"better-tailwindcss\": tailwind },\n+    plugins: { shadcn, \"better-tailwindcss\": tailwind },\n     settings: { \"better-tailwindcss\": { entryPoint: \"src/app/globals.css\" } },\n     rules: {\n-      \"better-tailwindcss/no-unknown-classes\": \"error\",\n-      \"better-tailwindcss/no-conflicting-classes\": \"error\",\n-      \"better-tailwindcss/no-restricted-classes\": [\n+      // Any class on a shadcn/ui component but its place and width, such as p-4 on a Button.\n+      \"shadcn/no-restyle\": [\n         \"error\",\n         {\n-          restrict: [\n-            {\n-              pattern: \"\\\\[([^\\\\[\\\\]]*?)\\\\](?!:)\",\n-              message: \"No one-off values. Use the scale and the tokens in DESIGN.md.\",\n-            },\n-          ],\n+          // Where a component sits and how wide it is belongs to the screen. Its colour, type,\n+          // spacing, shape, effects and motion are its own.\n+          allow: [\"layout\"],\n+          // DESIGN.md: a raised surface is white. shadcn ships the tooltip in the page's grey.\n+          contracts: [{ pattern: \"^ChartTooltipContent$\", allow: [\"layout\", \"bg-card\"] }],\n         },\n       ],\n+      // A colour outside the theme's tokens, such as bg-blue-500.\n+      \"shadcn/no-raw-colors\": \"error\",\n+      // A one-off value, such as w-[437px].\n+      \"shadcn/no-arbitrary-values\": \"error\",\n+      // An inline style. A value computed as the page runs is a custom property that a class\n+      // reads, such as w-(--share).\n+      \"shadcn/no-inline-styles\": \"error\",\n+      // A class Tailwind does not know, such as rounded-huge.\n+      \"shadcn/no-unknown-classes\": \"error\",\n+      // A class built from a variable, such as `m-${size}`, which Tailwind never generates.\n+      \"shadcn/require-static-classes\": \"error\",\n+      // Two classes that fight, such as p-2 p-4.\n+      \"better-tailwindcss/no-conflicting-classes\": \"error\",\n     },\n   },\n-  // shadcn's components are written by its CLI and use one-off values by design. Leave them as generated.\n+  // shadcn's components are written by its CLI, which uses one-off values and inline styles and\n+  // styles one component inside another. Leave them as generated.\n   {\n     files: [\"src/components/ui/**\"],\n-    rules: { \"better-tailwindcss/no-restricted-classes\": \"off\" },\n+    rules: { \"shadcn/no-restyle\": \"off\", \"shadcn/no-arbitrary-values\": \"off\", \"shadcn/no-inline-styles\": \"off\" },\n   },\n   // ARCHITECTURE.md, \"Outside services\": only the client may call fetch, so no request to an\n   // outside service can be made without its time limit.\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\nindex c86142e..4bcb129 100644\n--- a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n@@ -1,3 +1,5 @@\n+// A build fails when code that reaches the browser imports this file, so the database stays on the server.\n+import \"server-only\";\n import { neonConfig } from \"@neondatabase/serverless\";\n import { drizzle } from \"drizzle-orm/neon-http\";\n import { outboundFetch } from \"@/lib/outbound\";\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\nnew file mode 100644\nindex 0000000..ef9397b\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n@@ -0,0 +1,5 @@\n+CREATE TABLE \"usage_events\" (\n+\t\"account_id\" text,\n+\t\"event\" text NOT NULL,\n+\t\"occurred_at\" timestamp with time zone DEFAULT now() NOT NULL\n+);\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\nnew file mode 100644\nindex 0000000..f3e947c\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n@@ -0,0 +1,77 @@\n+{\n+  \"id\": \"16320abd-6e57-4c9c-b952-a0ca10240286\",\n+  \"prevId\": \"aee814c8-cc21-43af-9752-1d2f4fd3003e\",\n+  \"version\": \"7\",\n+  \"dialect\": \"postgresql\",\n+  \"tables\": {\n+    \"public.usage_events\": {\n+      \"name\": \"usage_events\",\n+      \"schema\": \"\",\n+      \"columns\": {\n+        \"account_id\": {\n+          \"name\": \"account_id\",\n+          \"type\": \"text\",\n+          \"primaryKey\": false,\n+          \"notNull\": false\n+        },\n+        \"event\": {\n+          \"name\": \"event\",\n+          \"type\": \"text\",\n+          \"primaryKey\": false,\n+          \"notNull\": true\n+        },\n+        \"occurred_at\": {\n+          \"name\": \"occurred_at\",\n+          \"type\": \"timestamp with time zone\",\n+          \"primaryKey\": false,\n+          \"notNull\": true,\n+          \"default\": \"now()\"\n+        }\n+      },\n+      \"indexes\": {},\n+      \"foreignKeys\": {},\n+      \"compositePrimaryKeys\": {},\n+      \"uniqueConstraints\": {},\n+      \"policies\": {},\n+      \"checkConstraints\": {},\n+      \"isRLSEnabled\": false\n+    },\n+    \"public.waitlist_entries\": {\n+      \"name\": \"waitlist_entries\",\n+      \"schema\": \"\",\n+      \"columns\": {\n+        \"email\": {\n+          \"name\": \"email\",\n+          \"type\": \"text\",\n+          \"primaryKey\": true,\n+          \"notNull\": true\n+        },\n+        \"joined_at\": {\n+          \"name\": \"joined_at\",\n+          \"type\": \"timestamp with time zone\",\n+          \"primaryKey\": false,\n+          \"notNull\": true,\n+          \"default\": \"now()\"\n+        }\n+      },\n+      \"indexes\": {},\n+      \"foreignKeys\": {},\n+      \"compositePrimaryKeys\": {},\n+      \"uniqueConstraints\": {},\n+      \"policies\": {},\n+      \"checkConstraints\": {},\n+      \"isRLSEnabled\": false\n+    }\n+  },\n+  \"enums\": {},\n+  \"schemas\": {},\n+  \"sequences\": {},\n+  \"roles\": {},\n+  \"policies\": {},\n+  \"views\": {},\n+  \"_meta\": {\n+    \"columns\": {},\n+    \"schemas\": {},\n+    \"tables\": {}\n+  }\n+}\n\\ No newline at end of file\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\nindex 409a5b8..216cea3 100644\n--- a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n@@ -8,6 +8,13 @@\n       \"when\": 1795292427765,\n       \"tag\": \"0000_waitlist\",\n       \"breakpoints\": true\n+    },\n+    {\n+      \"idx\": 1,\n+      \"version\": \"7\",\n+      \"when\": 1795355538131,\n+      \"tag\": \"0001_usage-events\",\n+      \"breakpoints\": true\n     }\n   ]\n }\n\\ No newline at end of file\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts b/.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\nindex e062c89..2dd0191 100644\n--- a/.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n@@ -5,3 +5,12 @@ export const waitlistEntries = pgTable(\"waitlist_entries\", {\n   email: text(\"email\").primaryKey(),\n   joinedAt: timestamp(\"joined_at\", { withTimezone: true }).defaultNow().notNull(),\n });\n+\n+// One row each time a user does something the product counts (ARCHITECTURE.md, \"Usage\"). It has no\n+// key: a user does the same thing many times, and nothing names one row. `account_id` is empty for\n+// an event recorded with no account.\n+export const usageEvents = pgTable(\"usage_events\", {\n+  accountId: text(\"account_id\"),\n+  event: text(\"event\").notNull(),\n+  occurredAt: timestamp(\"occurred_at\", { withTimezone: true }).defaultNow().notNull(),\n+});\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.test.ts b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.test.ts\nnew file mode 100644\nindex 0000000..f9d6337\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.test.ts\n@@ -0,0 +1,25 @@\n+import { afterEach, describe, expect, it, vi } from \"vitest\";\n+\n+import { recordUsage } from \"./index\";\n+import { insertUsageEvent } from \"./repository\";\n+\n+vi.mock(\"./repository\", () => ({ insertUsageEvent: vi.fn() }));\n+\n+describe(\"recordUsage\", () => {\n+  afterEach(() => {\n+    vi.restoreAllMocks();\n+    vi.mocked(insertUsageEvent).mockReset();\n+  });\n+\n+  it(\"keeps the event and the account that did it\", async () => {\n+    await recordUsage(\"waitlist joined\", \"account-1\");\n+    expect(insertUsageEvent).toHaveBeenCalledExactlyOnceWith(\"waitlist joined\", \"account-1\");\n+  });\n+\n+  it(\"does not fail what the user did when the database cannot be reached, and logs why\", async () => {\n+    const log = vi.spyOn(console, \"error\").mockImplementation(() => {});\n+    vi.mocked(insertUsageEvent).mockRejectedValue(new Error(\"connect ECONNREFUSED\"));\n+    await expect(recordUsage(\"waitlist joined\")).resolves.toBeUndefined();\n+    expect(log).toHaveBeenCalledOnce();\n+  });\n+});\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.ts b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.ts\nnew file mode 100644\nindex 0000000..5b7b381\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.ts\n@@ -0,0 +1,2 @@\n+export { recordUsage } from \"./record-usage\";\n+export type { UsageEvent } from \"./types\";\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/record-usage.ts b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/record-usage.ts\nnew file mode 100644\nindex 0000000..02dd5f6\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/record-usage.ts\n@@ -0,0 +1,15 @@\n+import { insertUsageEvent } from \"./repository\";\n+import type { UsageEvent } from \"./types\";\n+\n+/**\n+ * Records that `event` happened now. Call it where the event happens, once it has happened.\n+ * `accountId` is the id of the account that did it; leave it out for a visitor with no account.\n+ */\n+export async function recordUsage(event: UsageEvent, accountId?: string): Promise<void> {\n+  try {\n+    await insertUsageEvent(event, accountId);\n+  } catch (cause) {\n+    // What the user did has happened, and must not fail because counting it did.\n+    console.error(`The usage event \"${event}\" could not be recorded`, cause);\n+  }\n+}\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/repository.ts b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/repository.ts\nnew file mode 100644\nindex 0000000..c0310ab\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/repository.ts\n@@ -0,0 +1,8 @@\n+import { db } from \"@/db/client\";\n+import { usageEvents } from \"@/db/schema\";\n+\n+import type { UsageEvent } from \"./types\";\n+\n+export async function insertUsageEvent(event: UsageEvent, accountId?: string): Promise<void> {\n+  await db().insert(usageEvents).values({ event, accountId });\n+}\ndiff --git a/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/types.ts b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/types.ts\nnew file mode 100644\nindex 0000000..befbab3\n--- /dev/null\n+++ b/.claude/skills/bootstrap/templates/apps/web/src/domain/usage/types.ts\n@@ -0,0 +1,2 @@\n+/** Something a user does that the pro",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false,
+      "persistedOutputPath": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+      "persistedOutputSize": 135321
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_017hGtWSyKKiVn8U88DQizRD",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRiQi5rRsG6HdDzdJbi",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HJbexwoZV2tzFWAwpp2URq",
+          "name": "Grep",
+          "input": {
+            "pattern": "^diff --git a/factory/workflows|Playwright against the preview|Tell whether this job stopped",
+            "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+            "output_mode": "content"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 981,
+        "cache_read_input_tokens": 31800,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 981
+        },
+        "output_tokens": 21,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "b49ec57c-84f0-4feb-8e38-b442848ee0b9",
+    "timestamp": "2026-11-22T18:18:34.609Z",
+    "request_id": "req_011ChJRiQdsHykMvVrqtYjMD",
+    "wire_tool_inputs": {
+      "toolu_01HJbexwoZV2tzFWAwpp2URq": {
+        "pattern": "^diff --git a/factory/workflows|Playwright against the preview|Tell whether this job stopped",
+        "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+        "output_mode": "content"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01HJbexwoZV2tzFWAwpp2URq",
+          "type": "tool_result",
+          "content": "1205:+command=$(job e2e | sed -n '/^      - name: Playwright against the preview$/,/^      - /s/^        run: //p')\n1612:   local found; found=$(step \"$1\" \"$2\" \"Tell whether this job stopped at its time limit\")\n1723:diff --git a/factory/workflows/approve-merge.yml b/factory/workflows/approve-merge.yml\n1747:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n1771:diff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\n1785:diff --git a/factory/workflows/implement.yml b/factory/workflows/implement.yml\n1799:diff --git a/factory/workflows/install-workflows.yml b/factory/workflows/install-workflows.yml\n1813:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n1837:diff --git a/factory/workflows/probe-time-limit.yml b/factory/workflows/probe-time-limit.yml"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "3c3241ad-a965-4886-b438-cf8b4e491f9e",
+    "timestamp": "2026-11-22T18:18:34.641Z",
+    "tool_use_result": {
+      "mode": "content",
+      "numFiles": 0,
+      "filenames": [],
+      "content": "1205:+command=$(job e2e | sed -n '/^      - name: Playwright against the preview$/,/^      - /s/^        run: //p')\n1612:   local found; found=$(step \"$1\" \"$2\" \"Tell whether this job stopped at its time limit\")\n1723:diff --git a/factory/workflows/approve-merge.yml b/factory/workflows/approve-merge.yml\n1747:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n1771:diff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\n1785:diff --git a/factory/workflows/implement.yml b/factory/workflows/implement.yml\n1799:diff --git a/factory/workflows/install-workflows.yml b/factory/workflows/install-workflows.yml\n1813:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n1837:diff --git a/factory/workflows/probe-time-limit.yml b/factory/workflows/probe-time-limit.yml",
+      "numLines": 9,
+      "totalLines": 9
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01HJbexwoZV2tzFWAwpp2URq",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRibcgJCAfGiRnRSHfv",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AYBLpzfD5Zw8qXX3WCX8Uj",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+            "offset": 1747,
+            "limit": 25
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 602,
+        "cache_read_input_tokens": 32781,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 602
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "7c841b7c-3446-45f8-896f-b2073eb355c9",
+    "timestamp": "2026-11-22T18:18:37.043Z",
+    "request_id": "req_011ChJRibYDHWcDGg31MaWCP",
+    "wire_tool_inputs": {
+      "toolu_01AYBLpzfD5Zw8qXX3WCX8Uj": {
+        "file_path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+        "offset": 1747,
+        "limit": 25
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01AYBLpzfD5Zw8qXX3WCX8Uj",
+          "type": "tool_result",
+          "content": "1747\tdiff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n1748\tindex 92c798e..a4da0f2 100644\n1749\t--- a/factory/workflows/ci.yml\n1750\t+++ b/factory/workflows/ci.yml\n1751\t@@ -211,7 +211,8 @@ jobs:\n1752\t         env:\n1753\t           BASE_URL: ${{ steps.preview.outputs.url }}\n1754\t           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}\n1755\t-        run: pnpm test:e2e\n1756\t+        # Every test, four files at a time (decisions M640a, M640b).\n1757\t+        run: pnpm test:e2e --workers=4\n1758\t       - name: Upload screenshots and the test report\n1759\t         id: proof\n1760\t         if: always()\n1761\t@@ -409,7 +410,8 @@ jobs:\n1762\t             exit 1\n1763\t           }\n1764\t           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n1765\t-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n1766\t+          # jq reads the time (decisions H632b).\n1767\t+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n1768\t           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n1769\t           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n1770\t       # A cancelled job starts no fix round and lets nothing merge, and review.sh was stopped before it said why (decisions A541c).\n1771\tdiff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "b56d28c5-bde4-4145-bfc0-e51732500931",
+    "timestamp": "2026-11-22T18:18:37.061Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/33da298b-9adf-46aa-ab82-98bde8c4226e/tool-results/b69a3jenk.txt",
+        "content": "diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\nindex 92c798e..a4da0f2 100644\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml\n@@ -211,7 +211,8 @@ jobs:\n         env:\n           BASE_URL: ${{ steps.preview.outputs.url }}\n           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}\n-        run: pnpm test:e2e\n+        # Every test, four files at a time (decisions M640a, M640b).\n+        run: pnpm test:e2e --workers=4\n       - name: Upload screenshots and the test report\n         id: proof\n         if: always()\n@@ -409,7 +410,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A cancelled job starts no fix round and lets nothing merge, and review.sh was stopped before it said why (decisions A541c).\ndiff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml",
+        "numLines": 25,
+        "startLine": 1747,
+        "totalLines": 1864
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01AYBLpzfD5Zw8qXX3WCX8Uj",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "9c9a0bc1-d52d-4b2e-a92e-758dd15656f3"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 266,
+    "estimated_tokens_delta": 216,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "beb5f87f-c3f2-4027-940f-793582fa41ac"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRimxXUEARaDm18Y2XY",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSnQgKEAgUGAI4AUIIdGhpbmtpbmcSDOTFEWVjEmG8ujwuXhoML97CTE8QMZHkcbTdIjBMxaEfQZRI5jgcZCRkYXiKrd5CC6eNd1jTUHv+0b3dg6ASJ0VEMSHV9OEZLicYkDUqugduV/mXuG06qJ5pJyLlt2iemLFqqXsjVucxKuiL+i6kUXeSD6DaAWbJWILCjI9J03NJZ3e1y2q9Fc7P3eWr6cRo6V9skJO5Hj5ecmWaX4i3jOROoqlafAAnNg/FSmCtk0/E7kCWmEI0D1pRkfaXGTbkgbS9UOVDawpNeO8wDVaGRe15i1DHeB6ZNrPDTuiBP95D7CXyodGeLV39p/yD0leYRFVAgabPO94yaGQUxjsDSb7UYzJt/bFZnspcUEmG9FZbJcWI22AftO6MPn2+7QgBAMf3kfzPsHGCebPllR9mou8wVwFR1VFwJNuyaD7j+GjG910DXNeHhrEPHiUpcopqRFIWl/IM1SD6InP+bXtukTvWnjK2SlFjUaUtktF+s2IaZ88j7UQQUm01HrMCiP76BgUDDMPihTGht7TN9JD75Q/HVSrNFs5Zxlw6sQsPXgxhcoPIBCTfEnSroGUA6R/1rdH7A1SfX/s3ZreF6Sj7W7QAMBYSYhOy9lB/zNyotm8IrybmRiDvB/UGrWY5bUu6Lqwt6X5xjxkhfl1qyJ35OunIyFKNyTPCWihMB4+F9YTZSxFdxFnqR6coaMnzyCTqyjLnfrVCO3IRRlBZZZEt5+RCXCjtd5nLREwcxTgwLJHBH+O2JmtrkazWDaCnYAQCJpQutRgeaZLUsxgKWtFxhmVjjc81IsLEQ2FUB2V1HIsHY7v9KhB/jNsyMT7mm4pukJQ0zl26SUefSRHl+ovxkMeCSvQjyup3sMJlYUph2OWiOr9z9R3ZqpE1P84TyYBtdv+R9mGMFSCmNtnYMaWXiv+CcLXze/R21BE/7rfTwsVDJ6DcUfdcOjMAiCczvGMY5Aqz4Pl5hp4o8gzPISAwANkAbsSwABibTtbgyjSrTojtnyiaEBPF0AfHXXBq/xZEyF/G8mSPUGoTDVk78DuJRXcI3XCAmlSw8hZjVik5TcqR4excPSiCArei3jRQWQUA2PWAQosV6Mx4sEYugfwRmoCgHfUOfYtiyjT220XrFcG4IGoLox6p6w+VT/o4PFw/llwXj/tJAZJslyGx6/w2Qa0J/sVotMx0WKfzKIG10wSGB5yWeVKV/L2A6Nbr28mmOkykTJ1w6PG6OmOZaefPkbdtqoD59LFZhPXboIpZslEK8OeKsW2bmZEm6Ou37GK2CQ5ty22wq4lqddI2eaQS/wQ8euW9AMCaL9sFLUAN9WsdVa9Du183KxnVFQKlQjt8P5e2befY4Sl8+YFNdhyzAKC4BMbNKfHYAwYYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 865,
+        "cache_read_input_tokens": 33383,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 865
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "e7ac99f2-9977-4261-a9d0-278cd9a16718",
+    "timestamp": "2026-11-22T18:18:42.057Z",
+    "request_id": "req_011ChJRimspRfAzmHokhsLVv",
+    "thinking_duration_ms": 868,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRimxXUEARaDm18Y2XY",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Both changed steps were skipped, so this run never reached the change. I'm recording that now."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 865,
+        "cache_read_input_tokens": 33383,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 865
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "606689a7-771b-435b-8b5d-c8f493d27d48",
+    "timestamp": "2026-11-22T18:18:42.060Z",
+    "request_id": "req_011ChJRimspRfAzmHokhsLVv"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRimxXUEARaDm18Y2XY",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_016p9DGmNFy4vfqnyPJWRDZU",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "CI run 45053642995 on pull request #651 never reached either step that pull request #648 changed, so whether those changes work is still unproven; nothing needs doing until a later run reaches them.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #648 changed two steps in factory/workflows/ci.yml. It ran the end-to-end step \"Playwright against the preview\" as `pnpm test:e2e --workers=4`. It also made \"Tell whether this job stopped at its time limit\" work out the minutes with jq instead of `date -d`. Run 45053642995 checked pull request #651, which only changes a document, and it succeeded. Both changed steps were skipped. The e2e job does not run here because this repository has no app. The time-limit step runs only when the review job fails or is cancelled, and this one passed. A later run that reaches these steps will show whether the changes work.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45053642995",
+              "https://github.com/edmulraney/tinyfactory/pull/648",
+              "https://github.com/edmulraney/tinyfactory/pull/651"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded, and its two reviewer sessions spent $0.42 in 28 turns on their normal review of #651.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: no fault was found to prevent, so there is no saving to give against the $0.42 the run spent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 865,
+        "cache_read_input_tokens": 33383,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 865
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "117de3a5-1928-447d-a8ff-18119bc43fc2",
+    "timestamp": "2026-11-22T18:18:48.102Z",
+    "request_id": "req_011ChJRimspRfAzmHokhsLVv",
+    "wire_tool_inputs": {
+      "toolu_016p9DGmNFy4vfqnyPJWRDZU": {
+        "summary": "CI run 45053642995 on pull request #651 never reached either step that pull request #648 changed, so whether those changes work is still unproven; nothing needs doing until a later run reaches them.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #648 changed two steps in factory/workflows/ci.yml. It ran the end-to-end step \"Playwright against the preview\" as `pnpm test:e2e --workers=4`. It also made \"Tell whether this job stopped at its time limit\" work out the minutes with jq instead of `date -d`. Run 45053642995 checked pull request #651, which only changes a document, and it succeeded. Both changed steps were skipped. The e2e job does not run here because this repository has no app. The time-limit step runs only when the review job fails or is cancelled, and this one passed. A later run that reaches these steps will show whether the changes work.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45053642995",
+          "https://github.com/edmulraney/tinyfactory/pull/648",
+          "https://github.com/edmulraney/tinyfactory/pull/651"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded, and its two reviewer sessions spent $0.42 in 28 turns on their normal review of #651.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: no fault was found to prevent, so there is no saving to give against the $0.42 the run spent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_016p9DGmNFy4vfqnyPJWRDZU",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "uuid": "0b3b299d-190a-4b46-8eb3-5a7e970c476c",
+    "timestamp": "2026-11-22T18:18:48.108Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_016p9DGmNFy4vfqnyPJWRDZU",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 35924,
+    "stop_reason": "tool_use",
+    "session_id": "33da298b-9adf-46aa-ab82-98bde8c4226e",
+    "total_cost_usd": 0.232132,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 18505,
+      "cache_read_input_tokens": 201675,
+      "output_tokens": 2171,
+      "output_tokens_details": {
+        "thinking_tokens": 244
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 18505,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 923,
+          "cache_read_input_tokens": 33383,
+          "cache_creation_input_tokens": 865,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 865
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 300,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000281,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 280,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2171,
+        "cacheReadInputTokens": 201675,
+        "cacheCreationInputTokens": 18505,
+        "webSearchRequests": 0,
+        "costUSD": 0.23185100000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 244,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18505,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01WS3SDa5NZKnFSj9K41XtXq",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 2>&1 | grep -n \"^diff\\|Playwright against\\|time limit\" | head -30; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/ci/{p=1} /^diff --git/&&!/ci/{p=0} p' | head -120; ls .sessions/lessons | tail -4 | while read f; do cat .sessions/lessons/$f; echo; done | head -80",
+          "description": "Inspect PR 648 diff for ci workflow and recent lessons"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_0119wq1oBnvFw1Gw7G8hYhX4",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/d648.txt 2>&1; grep -n \"^diff --git\" /tmp/d648.txt",
+          "description": "Save PR 648 diff and list files"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 9,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"CI run 45053642995 on pull request #651 never reached either step that pull request #648 changed, so whether those changes work is still unproven; nothing needs doing until a later run reaches them.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #648 changed two steps in factory/workflows/ci.yml. It ran the end-to-end step \\\"Playwright against the preview\\\" as `pnpm test:e2e --workers=4`. It also made \\\"Tell whether this job stopped at its time limit\\\" work out the minutes with jq instead of `date -d`. Run 45053642995 checked pull request #651, which only changes a document, and it succeeded. Both changed steps were skipped. The e2e job does not run here because this repository has no app. The time-limit step runs only when the review job fails or is cancelled, and this one passed. A later run that reaches these steps will show whether the changes work.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45053642995\",\"https://github.com/edmulraney/tinyfactory/pull/648\",\"https://github.com/edmulraney/tinyfactory/pull/651\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run succeeded, and its two reviewer sessions spent $0.42 in 28 turns on their normal review of #651.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: no fault was found to prevent, so there is no saving to give against the $0.42 the run spent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "CI run 45053642995 on pull request #651 never reached either step that pull request #648 changed, so whether those changes work is still unproven; nothing needs doing until a later run reaches them.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #648 changed two steps in factory/workflows/ci.yml. It ran the end-to-end step \"Playwright against the preview\" as `pnpm test:e2e --workers=4`. It also made \"Tell whether this job stopped at its time limit\" work out the minutes with jq instead of `date -d`. Run 45053642995 checked pull request #651, which only changes a document, and it succeeded. Both changed steps were skipped. The e2e job does not run here because this repository has no app. The time-limit step runs only when the review job fails or is cancelled, and this one passed. A later run that reaches these steps will show whether the changes work.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45053642995",
+        "https://github.com/edmulraney/tinyfactory/pull/648",
+        "https://github.com/edmulraney/tinyfactory/pull/651"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded, and its two reviewer sessions spent $0.42 in 28 turns on their normal review of #651.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: no fault was found to prevent, so there is no saving to give against the $0.42 the run spent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 4938,
+    "type": "result",
+    "duration_ms": 35132,
+    "uuid": "517391f2-064a-4628-a9ba-877df92b943c",
+    "ttft_stream_ms": 4385,
+    "time_to_request_ms": 160,
+    "first_content_frame_ms": 4385,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 300,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000281,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 280,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 2171,
+        "cacheReadInputTokens": 201675,
+        "cacheCreationInputTokens": 18505,
+        "webSearchRequests": 0,
+        "costUSD": 0.23185100000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 244,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18505,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
