@@ -23,7 +23,7 @@ Find the cause of the run's friction and write it down. Fix nothing and change n
    - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;
    - `told-nobody`: it stopped without a comment or label that tells a person what happened.
 4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.
-5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:
+5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:
    1. for `process`, removing or loosening what caused it;
    2. a script, lint rule or check that fails earlier;
    3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;
@@ -60,8 +60,6 @@ For every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisio
 A proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.
 
 ## Output
-
-Return the required structured format:
 
 - `summary`: one sentence a person can act on.
 - `title`: the change, not what went wrong. Empty when `change.kind` is `none`.
