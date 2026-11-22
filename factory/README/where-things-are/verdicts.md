@@ -1,0 +1,1 @@
+| Whether each shipped initiative's hypothesis held | `product/verdicts/<ticket>.md`, which `factory/scripts/measure-initiatives.sh` writes each Monday from what production counted ([M631a](../../decisions/631.md), [M631e](../../decisions/631.md)) |

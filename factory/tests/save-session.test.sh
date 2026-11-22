@@ -124,9 +124,9 @@ sessions_remote sessions
 session_file -work-repo new '{"session":"new"}'
 session_file -work-other old '{"session":"old"}'
 session_file -work-repo older '{"session":"older"}'
-touch -d '2026-11-20 05:00' "$T/home/.claude/projects/-work-other/old.jsonl"
-touch -d '2026-11-20 04:00' "$T/home/.claude/projects/-work-repo/older.jsonl"
-touch -d '2026-11-20 06:00' "$T/home/.claude/projects/-work-repo/new.jsonl"
+touch -t 202611200500 "$T/home/.claude/projects/-work-other/old.jsonl"
+touch -t 202611200400 "$T/home/.claude/projects/-work-repo/older.jsonl"
+touch -t 202611200600 "$T/home/.claude/projects/-work-repo/new.jsonl"
 save esme issue-12 ""
 expect_status 0
 file=$(saved issue-12 esme) || fail "expected the session file saved, found: $(pushed_files)"

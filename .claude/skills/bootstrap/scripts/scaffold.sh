@@ -110,11 +110,18 @@ fi
 if [ ! -f package.json ]; then
   # Read the version before the redirect below creates an empty package.json, which pnpm chokes on.
   pnpm_version=$(pnpm -v)
+  # The field carries the checksum the registry holds for that version, so that Corepack refuses a
+  # download that does not match (decisions S637).
+  if ! integrity=$(npm view "pnpm@$pnpm_version" dist.integrity) || [[ "$integrity" != sha512-* ]]; then
+    echo "scaffold: could not read the sha512 checksum of pnpm@$pnpm_version from the npm registry (npm view pnpm@$pnpm_version dist.integrity). Check the network and run the scaffold again." >&2
+    exit 1
+  fi
+  pnpm_checksum=$(python3 -c 'import base64, sys; print(base64.b64decode(sys.argv[1]).hex())' "${integrity#sha512-}")
   cat > package.json <<JSON
 {
   "name": "$name",
   "private": true,
-  "packageManager": "pnpm@$pnpm_version",
+  "packageManager": "pnpm@$pnpm_version+sha512.$pnpm_checksum",
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
@@ -207,9 +214,10 @@ if [ "$fresh" = yes ]; then
   install_factory_files overwrite   # the factory's ESLint config replaces the generated one
   design_foundation
   # vitest needs Node 22+ types; create-next-app pins @types/node to 20.
-  # The Tailwind lint plugin and the accessibility scanner are what enforce DESIGN.md.
+  # The Tailwind and shadcn lint plugins and the accessibility scanner are what enforce DESIGN.md.
+  # @shadcn/lint is at the version the factory's own app pins.
   pnpm --filter web add -D vitest @playwright/test "@types/node@^24" \
-    eslint-plugin-better-tailwindcss @axe-core/playwright drizzle-kit
+    eslint-plugin-better-tailwindcss "@shadcn/lint@0.2.5" @axe-core/playwright drizzle-kit
   pnpm --filter web add drizzle-orm @neondatabase/serverless
   rm "$unfinished"
 else

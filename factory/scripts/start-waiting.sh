@@ -41,7 +41,7 @@ if [ -n "$mine" ] && ! cut -f1 <<<"$listed" | cut -d' ' -f1 | grep -qxF "$mine";
     || die "No waiting ticket was started: the body of issue #$mine could not be read from GitHub."
   listed="${listed:+$listed$'\n'}$its"
 fi
-titles=$(sed -E 's/^([0-9]+)[^\t]*/\1/' <<<"$listed")
+titles=$(sed -E $'s/^([0-9]+)[^\t]*/\\1/' <<<"$listed")
 listed=$(cut -f1 <<<"$listed")
 ready=$(cut -d' ' -f1 <<<"$listed")
 [ -n "$ready" ] || none "no ticket waits with ready: nothing was started"
@@ -53,8 +53,8 @@ limit=$("$script_dir/usage-limit.sh" held) \
 
 in_flight=$("$script_dir/in-flight.sh") \
   || die "No waiting ticket was started: what is in flight could not be read from GitHub."
-# A ticket ship.sh has just merged holds no place (decisions T359a).
-[ -z "$closed" ] || in_flight=$(awk -v closed="$closed" 'BEGIN { split(closed, list, "\n"); for (i in list) merged[list[i]] } !($1 in merged)' <<<"$in_flight")
+# A ticket ship.sh has just merged holds no place (decisions T359a); awk reads them from the environment (H632a).
+[ -z "$closed" ] || in_flight=$(CLOSED="$closed" awk 'BEGIN { split(ENVIRON["CLOSED"], list, "\n"); for (i in list) merged[list[i]] } !($1 in merged)' <<<"$in_flight")
 # A draft left unfinished is built again from its ticket (decisions T64h); start-build.sh answers any other in flight.
 held=$(sed -n '/left unfinished)$/!s/ .*//p' <<<"$in_flight")
 waiting=$(grep -vxF -e "$held" <<<"$ready" || true)
@@ -132,11 +132,12 @@ backlog() {
 }
 
 # A Backlog card places the waiting ticket that alone has its title, when no other Backlog card has that title
-# (decisions T523); the rest follow, longest with ready first (decisions T335c).
+# (decisions T523); the rest follow, longest with ready first (decisions T335c). awk reads the waiting tickets
+# from the environment (decisions H632a).
 placed=""
 if order=$(backlog); then
-  placed=$(awk -v waiting="$waiting" '
-    BEGIN { n = split(waiting, list, "\n"); for (i = 1; i <= n; i++) waits[list[i]] }
+  placed=$(WAITING="$waiting" awk '
+    BEGIN { n = split(ENVIRON["WAITING"], list, "\n"); for (i = 1; i <= n; i++) waits[list[i]] }
     FILENAME == ARGV[1] { if ($1 in waits) { title = substr($0, length($1) + 2); tickets[title]++; number[title] = $1 }; next }
     { cards[$0]++; card[++last] = $0 }
     END { for (i = 1; i <= last; i++) if (cards[card[i]] == 1 && tickets[card[i]] == 1) print number[card[i]] }

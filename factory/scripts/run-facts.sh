@@ -103,12 +103,13 @@ if [ "${1:-}" = --first-run ]; then
     inside && /^ / { line++ }' <<<"$diff")
   # A step is known by its name, so each added line is placed in the step that holds it: its name, a line of
   # its `run:`, its `if:` (decisions A334). GitHub keeps the pull request's last commit at refs/pull/<n>/head.
+  # The line numbers reach awk through the environment (decisions H632a).
   names=""
   if [ "$(grep -c . <<<"$added")" -gt 1 ]; then
     file=$(sed -n 1p <<<"$added")
     source=$(gh api "repos/{owner}/{repo}/contents/$file?ref=refs/pull/$pr/head" -H "Accept: application/vnd.github.raw+json") \
       || die "Could not read $file as pull request #$pr left it, so which steps it changed is not known."
-    names=$(awk -v added="$(sed 1d <<<"$added")" '
+    names=$(ADDED="$(sed 1d <<<"$added")" awk '
       { sub(/\r$/, "") }
       /^[ \t]*steps:[ \t]*$/ { indent = -1; step = 0; next }
       /^[ \t]*(#|$)/ { next }
@@ -126,7 +127,7 @@ if [ "${1:-}" = --first-run ]; then
         }
       }
       END {
-        count = split(added, lines, "\n")
+        count = split(ENVIRON["ADDED"], lines, "\n")
         for (i = 1; i <= count; i++) if ((lines[i] in in_step) && name[in_step[lines[i]]] != "") print name[in_step[lines[i]]]
       }' <<<"$source")
   fi

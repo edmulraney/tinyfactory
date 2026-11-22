@@ -123,6 +123,18 @@ if $states && [ -n "$rows" ] && ! [[ "$rows" =~ ^[[:space:]]*[Nn]o\ screen\.?[[:
     done
   done <<<"$rows"
 fi
+# An initiative's metric is three lines a script can read; one opened before the rule is not asked (decisions T630a, T630b, T630c).
+metric_began="2026-11-23T00:00:00Z"
+metric=$(section "Success metric")
+if [ "${found[0]}" = initiative ] && [ -n "$metric" ] && [[ -z "$created" || ! "$created" < "$metric_began" ]]; then
+  metric_problem() { echo "- \"## Success metric\" names no $1. Write the line \"$2\"."; problems=1; }
+  grep -qE '^- Event: [^[:space:]]' <<<"$metric" \
+    || metric_problem "event" "- Event: <an event the product records>"
+  grep -qE '^- Number: at least [0-9]+ (runners?|times?) in a week\.?[[:space:]]*$' <<<"$metric" \
+    || metric_problem "number a script can read" "- Number: at least <n> runners in a week\" or \"- Number: at least <n> times in a week"
+  grep -qE '^- Date: [0-9]{4}-[0-9]{2}-[0-9]{2}[[:space:]]*$' <<<"$metric" \
+    || metric_problem "date to look" "- Date: <YYYY-MM-DD>"
+fi
 # A ticket check-research.sh would refuse after the build is refused here before it (decisions T33g).
 if [[ " ${required[*]} " == *" Checks "* ]] && [ -n "$(section "Checks")" ]; then
   checks=$(section "Checks" | grep -E '^- ' || true)

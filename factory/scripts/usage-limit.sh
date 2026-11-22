@@ -145,7 +145,7 @@ The limit covers the whole account, so no agent starts before then. If the limit
       # Asked once: a call that failed may still have started it (decisions M26).
       only=()
       [ "$kind" != failed ] || only=(--failed)
-      if gh run rerun "$run" "${only[@]}" >/dev/null </dev/null; then
+      if gh run rerun "$run" ${only[@]+"${only[@]}"} >/dev/null </dev/null; then
         echo "running again: run $run"
       else
         echo "Run $run waited for the Claude usage limit, and GitHub did not run it again: start what it was for by hand." >&2

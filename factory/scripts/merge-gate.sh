@@ -14,10 +14,11 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 # A run that a ci.yml from before M373 started checks out main's last commit alone, so the rest is fetched too.
 whole=()
 [ "$(git rev-parse --is-shallow-repository)" = false ] || whole=(--unshallow)
-retry git fetch --quiet "${whole[@]}" origin "refs/pull/$pr/head" \
+retry git fetch --quiet ${whole[@]+"${whole[@]}"} origin "refs/pull/$pr/head" \
   || not_merged "GitHub did not return this pull request's commits, so what it changes is not known"
 # Read on a line of its own (decisions H7).
-base=$(git merge-base HEAD "$head") && files=$(git diff --name-only "$base" "$head") \
+# A moved file is listed at the path it left too: to the installer, a workflow moved away is a workflow change.
+base=$(git merge-base HEAD "$head") && files=$(git diff --no-renames --name-only "$base" "$head") \
   || not_merged "Git could not list the files this pull request changes, so whether it needs a person is not known"
 # Any end of protected-paths.sh but a clean "none" is a change to the factory's files (decisions M2).
 if protected=$("$script_dir/protected-paths.sh" <<<"$files"); then touches=false; else touches=true; fi
@@ -34,12 +35,14 @@ reviews=$(retry gh pr view "$pr" --json reviews) \
 approved=$(jq -r --arg owner "$owner" \
   '[.reviews[] | select(.author.login == $owner)] | last | select(.state == "APPROVED") | .commit.oid // ""' <<<"$reviews")
 # An approval stands over commits that only merge main (decisions M456a), unless an older installer runs (M456b).
+# stale: why an approval of an older commit does not stand, for the owner who is asked again.
+stale=""
 if [ -n "$approved" ] && [ "$approved" != "$head" ] && [ "$behind" = false ]; then
   status=0
   why=$("$script_dir/only-merged-main.sh" "$approved" "$head" HEAD 2>&1) || status=$?
   case "$status" in
     0) approved="$head" ;;
-    1) echo "The owner approved ${approved:0:7} and is asked to approve ${head:0:7}: $why." ;;
+    1) stale="$why" ;;
     *) echo "$why" >&2
        not_merged "Git could not compare this pull request's change with the one the owner approved at ${approved:0:7}, so whether that approval still stands is not known" ;;
   esac
@@ -77,6 +80,27 @@ undoes_button_merge() {
       && [ "$(git ls-tree "$head" -- "$path")" = "$(git ls-tree "$commit^" -- "$path")" ] || return 1
   done <<<"$paths"
 }
+# owner_part <commit> <other commit>: what the pull request changes at <commit> that only the owner decides: each file
+# the rule holds, with the lines owner-decides.sh prints for it, and the file itself, or its change read as a
+# reviewer's is where main changed the file between the two commits' bases (decisions M629a, A160b).
+owner_part() {
+  local from other names path change lines
+  from=$(git merge-base HEAD "$1") && other=$(git merge-base HEAD "$2") \
+    && names=$(git diff --no-renames --name-only "$from" "$1") || return 1
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    change=$(git --literal-pathspecs diff --no-color --no-ext-diff --no-textconv --no-renames --binary --unified=3 "$from" "$1" -- "$path") \
+      || return 1
+    if ! lines=$("$script_dir/owner-decides.sh" <<<"$change" 2>&1); then
+      printf '%s\n' "$lines"
+      if [ "$(git --literal-pathspecs ls-tree "$from" -- "$path")" = "$(git --literal-pathspecs ls-tree "$other" -- "$path")" ]; then
+        git --literal-pathspecs ls-tree "$1" -- "$path" || return 1
+      else
+        sed -E -e '/^index [0-9a-f]+\.\.[0-9a-f]+( [0-7]+)?$/d' -e 's/^@@ -[0-9,]+ \+[0-9,]+ @@.*$/@@/' <<<"$change"
+      fi
+    fi
+  done <<<"$names"
+}
 hold=""; shown=""
 if [ "$touches" = true ]; then
   factory=false
@@ -90,7 +114,20 @@ if [ -z "$hold" ]; then
   diff=$(git diff "$base" "$head") \
     || not_merged "Git could not read this pull request's diff, so whether it changes what only the owner may decide is not known"
   # Any end of owner-decides.sh but a clean "nothing" holds the pull request (decisions M272a).
-  if ! shown=$("$script_dir/owner-decides.sh" <<<"$diff" 2>&1) && ! undoes_button_merge; then
+  status=0
+  shown=$("$script_dir/owner-decides.sh" <<<"$diff" 2>&1) || status=$?
+  if [ "$status" -ne 0 ] && ! undoes_button_merge; then
+    # An approval of an older commit stands when the owner's part reads the same at both (decisions M629a): never
+    # one that followed "Request changes", which covers every file, nor one of a workflow change (decisions M629b).
+    if [ "$status" -eq 1 ] && git cat-file -e "$approved^{commit}" 2>/dev/null && ! grep -q '^factory/workflows/' <<<"$files" \
+        && [ "$(jq -r --arg owner "$owner" 'any(.reviews[]; .author.login == $owner and .state == "CHANGES_REQUESTED")' <<<"$reviews")" = false ]; then
+      was=$(owner_part "$approved" "$head") && now=$(owner_part "$head" "$approved") \
+        || not_merged "Git could not read what only the owner decides at ${approved:0:7} and at ${head:0:7}, so whether the approval of ${approved:0:7} still stands is not known"
+      if [ "$was" = "$now" ]; then
+        exec "$script_dir/merge-queue.sh" add "$pr" "$head"
+      fi
+      stale="what only the owner decides does not read the same at ${head:0:7} as at ${approved:0:7}"
+    fi
     hold="changes what only the repo owner may decide"
   elif [ "$behind" = true ]; then
     hold="changes a workflow while the installer that runs is not yet the one \`main\` holds, and that one may refuse a change nobody approved"
@@ -118,7 +155,10 @@ assumptions=$(jq -rs '
 [ -z "$assumptions" ] || assumptions="**Before you approve, what the reviewers could not check:**"$'\n\n'"$assumptions"$'\n\n'
 # The first line says what a person must do (decisions A371a).
 if [ -n "$hold" ]; then
-  body=$(printf 'Approve this pull request: it merges as soon as the repo owner approves.\n\n%sBoth reviews passed, but this pull request %s:\n\n```\n%s\n```\n' "$assumptions" "$hold" "$shown")
+  # The request says an approval was of an older commit (decisions M629a).
+  older=""
+  [ -z "$approved" ] || older="The owner approved an older commit, \`${approved:0:7}\`, and that approval does not count for \`${head:0:7}\`${stale:+: $stale}."$'\n\n'
+  body=$(printf 'Approve this pull request: it merges as soon as the repo owner approves.\n\n%s%sBoth reviews passed, but this pull request %s:\n\n```\n%s\n```\n' "$older" "$assumptions" "$hold" "$shown")
 else
   body="Approve this pull request, or submit a \"Request changes\" review: an approval merges it, and a review sends it back to its engineer.
 

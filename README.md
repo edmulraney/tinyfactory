@@ -47,7 +47,7 @@ The factory aims at customer outcomes and business impact, not feature output. E
 
 - **`PURPOSE.md`** says who the product is for and what it will not do. Setup writes it from an interview with you.
 - **`product/`** holds research, signals and product decisions. Give the `intake` skill the notes of a user interview, and it writes a summary, adds the evidence to the signals, and files a ticket only where the evidence justifies building now.
-- **A feature ticket** states the problem, a hypothesis and a success metric, with acceptance criteria that say what a user sees or does.
+- **A feature ticket** states the problem, a hypothesis and a success metric that names an event the product records and a number to reach, with acceptance criteria that say what a user sees or does. Each week after it ships, the factory reads the counts and says on the ticket whether the hypothesis held.
 - **The board** shows where every ticket is.
 
 Every agent starts from the purpose and from its ticket, so the engineer acts as a product engineer who knows why a change matters.
@@ -94,6 +94,7 @@ The factory you get improves itself while it builds your product. After a run th
 
 - **An app:** Next.js with TypeScript, Tailwind and shadcn/ui, with Vitest and Playwright set up and an accessibility scan on every end-to-end test.
 - **Hosting and a database:** a Vercel project and Neon Postgres. Every pull request that changes the app gets a preview deployment with its own copy of the database.
+- **A record of what users do:** a `usage` module and table, and the first feature records its event, so an initiative can name a number the product can count.
 - **Database code and a first feature:** Drizzle, with migrations that run in the build, and a waitlist on the home page built from its page down to its table. The project's `ARCHITECTURE.md` names its files as the feature the engineer builds like.
 - **Sign-in:** Neon Auth switched on, for sign-in by an emailed link, unless you say the product has no accounts.
 - **A board and ticket templates:** a GitHub project with the columns Backlog, In progress and Deployed, and templates for Idea, Initiative, Bug, Tweak, Chore, Research and Factory tickets.
@@ -137,6 +138,7 @@ That tuning is still going on, and heavy use can still reach a limit. A public r
 
 ## Known gaps
 
+- **A preview holds a copy of production's data.** Each pull request's preview database is a branch of production's, so once real people sign up, their data is copied where agents run tests.
 - **Visual design has only just started.** A project starts with `DESIGN.md`, a fixed grey-scale theme and an accessibility scan, and Dara shows a new screen before it is built. Nothing yet keeps taste in how a product feels and moves.
 - **A personal GitHub account only.** In an organisation your approvals would not count as the owner's, and Vercel's free plan refuses to deploy a private repository that an organisation owns.
 - **The factory is built in a private project and published from here.** Each change is made there, where a product exercises it, and brought here with its decision records.

@@ -588,7 +588,7 @@ run "$T/aside/check-ticket.sh" --draft factory "$name" draft.md
 expect_status 2
 expect_output "Could not read the factory's labels"
 
-# The body of #349 as it was filed. It put a runner who signs in with a race already saved out of scope, and that gap shipped (#574).
+# The body of #349 as it was filed, but for its metric, which is written as a draft is now asked to write it. It put a runner who signs in with a race already saved out of scope, and that gap shipped (#574).
 name="Keep a runner's race when they sign in"
 keep_race='## Problem
 
@@ -600,7 +600,9 @@ We believe that signing in straight after choosing a race, with Google or an ema
 
 ## Success metric
 
-The owner chooses a race, signs in, and sees the same race on his dashboard from a second browser. We look when this merges.
+- Event: race added
+- Number: at least 1 runner in a week
+- Date: 2026-11-30
 
 ## Scope
 
@@ -709,3 +711,85 @@ states initiative 'No screen
 expect_status 1
 expect_output 'The line "No screen" under "## States" is not a row.'
 expect_output 'names no criterion and does not say "unchanged"'
+
+# metric <lines>: a draft of the initiative with those lines under "Success metric", and its states.
+metric() {
+  replace_first "$keep_race" "$complete" "$1"
+  printf '%s\n\n## States\nNo screen\n' "$replaced" > draft.md
+  run "$scripts/check-ticket.sh" --draft initiative "$name" draft.md
+}
+complete="- Event: race added
+- Number: at least 1 runner in a week
+- Date: 2026-11-30"
+free_text="The owner chooses a race, signs in, and sees the same race on his dashboard from a second browser. We look when this merges."
+
+scenario "passes an initiative whose metric names the event, the number and the date"
+for number in "at least 5 runners in a week" "at least 1 runner in a week" "at least 20 times in a week."; do
+  metric "- Event: race added
+- Number: $number
+- Date: 2026-12-20"
+  expect_status 0
+  [ -z "$out" ] || fail "expected it to print nothing for the number \"$number\""
+done
+
+scenario "refuses a metric that lacks the event, the number or the date, and names only what is missing"
+metric "- Number: at least 5 runners in a week
+- Date: 2026-12-20"
+expect_status 1
+expect_output '"## Success metric" names no event. Write the line "- Event: <an event the product records>".'
+[ "$(wc -l <<<"$out")" -eq 1 ] || fail "expected the event to be its only problem"
+metric "- Event: race added
+- Date: 2026-12-20"
+expect_status 1
+expect_output '"## Success metric" names no number a script can read. Write the line "- Number: at least <n> runners in a week" or "- Number: at least <n> times in a week".'
+[ "$(wc -l <<<"$out")" -eq 1 ] || fail "expected the number to be its only problem"
+metric "- Event: race added
+- Number: at least 5 runners in a week"
+expect_status 1
+expect_output '"## Success metric" names no date to look. Write the line "- Date: <YYYY-MM-DD>".'
+[ "$(wc -l <<<"$out")" -eq 1 ] || fail "expected the date to be its only problem"
+
+scenario "refuses a metric in free text, and a number or a date no script can read"
+metric "$free_text"
+expect_status 1
+expect_output 'names no event.'
+expect_output 'names no number a script can read.'
+expect_output 'names no date to look.'
+metric "- Event: race added
+- Number: most runners add a race
+- Date: when this merges"
+expect_status 1
+expect_no_output 'names no event.'
+expect_output 'names no number a script can read.'
+expect_output 'names no date to look.'
+
+scenario "refuses the template's own metric section as empty, and shows each line in an example"
+metric "$(awk '/^## Success metric$/ {on = 1; next} /^## / {on = 0} on' "$root/.github/ISSUE_TEMPLATE/initiative.md")"
+expect_status 1
+expect_output 'Section "## Success metric" is missing or empty.'
+expect_no_output 'names no'
+for line in "Event: race added" "Number: at least 5 runners in a week" "Date: 2026-12-20"; do
+  grep -qxF "<!-- Example: - $line -->" "$root/.github/ISSUE_TEMPLATE/initiative.md" || fail "expected the template to show the line \"- $line\""
+done
+
+scenario "asks no such metric of an initiative opened before the rule, and asks it of one opened after"
+replace_first "$keep_race" "$complete" "$free_text"
+with_free_text=$replaced
+opened="2026-11-22T23:59:59Z"
+ticket initiative "$with_free_text
+
+## States
+No screen"
+run "$scripts/check-ticket.sh" 12
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+opened="2026-11-23T00:00:00Z"
+ticket initiative "$with_free_text
+
+## States
+No screen"
+run "$scripts/check-ticket.sh" 12
+expect_status 1
+expect_output 'names no event.'
+expect_output 'names no number a script can read.'
+expect_output 'names no date to look.'

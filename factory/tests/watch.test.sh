@@ -33,8 +33,10 @@ github() {
           || cat "$T/runs")" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/workflows/"*"/runs -f branch="*" -f status=success -f per_page=1 "*)
         workflow=${4#*/workflows/}
-        json "$(jq -c --arg workflow "${workflow%/runs}" --arg branch "${6#branch=}" "{workflow_runs: map(select(
-          .conclusion == \"success\" and .workflowName == \$workflow and .headBranch == \$branch) | {id: .databaseId, run_started_at: (.startedAt // (.databaseId | todate))}) | sort_by(-.id) | .[:1]}" "$T/runs")" "$@" ;;
+        # Read on a line of its own: inside a quoted word, bash 3.2 on a Mac splits the filter at the comma in its braces.
+        passed=$(jq -c --arg workflow "${workflow%/runs}" --arg branch "${6#branch=}" "{workflow_runs: map(select(
+          .conclusion == \"success\" and .workflowName == \$workflow and .headBranch == \$branch) | {id: .databaseId, run_started_at: (.startedAt // (.databaseId | todate))}) | sort_by(-.id) | .[:1]}" "$T/runs")
+        json "$passed" "$@" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub sleep '
