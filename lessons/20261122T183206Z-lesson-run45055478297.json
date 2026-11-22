@@ -1,0 +1,70 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45054178991,
+    "workflow": "merge-group",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 591,
+      "issue": 589,
+      "title": "chore: bring in the reference feature and the comment sweep",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Neon's HTTP driver sends every query through `neonConfig.fetchFunction`, which `src/db/client.ts` sets to `outboundFetch`. I read this from memory of the driver's source, not from the installed version.",
+            "if_wrong": "A query to a database that never answers would hang the page with no 5-second limit, and nothing would report that the limit is not applied."
+          },
+          {
+            "assumes": "Vercel's Neon integration gives a preview's build the `DATABASE_URL` of that preview's own database branch, as the seed `ARCHITECTURE.md` says. I could not confirm this from Vercel's or Neon's documentation here.",
+            "if_wrong": "A pull request's build would run `src/db/migrate.mts` against production's database, so an unreviewed migration changes production's tables before anyone merges, and no check reports it."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": null,
+        "step": "Keep the result",
+        "conclusion": null
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "Nothing to act on: PR #591 only removed comments from merge-group.yml, and run 45054178991 never reached the changed \"Keep the result\" step, because its group needed no test and the test job was skipped.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "In `factory/workflows/merge-group.yml`, pull request #591 deleted three comments and changed no behaviour. It removed the trailing comment on `overwrite: true` in the test job's \"Keep the result\" upload step, and the comments above the time-limit step and the retro step in the merge job. Run 45054178991 was started by workflow_dispatch. Its begin job found that the group needed no test and kept the result itself, so the test job, which holds \"Keep the result\", was skipped. The merge job then succeeded. The changed step never ran, but the change was comment-only, so it carries no risk. Adam's assumptions about Neon and Vercel concern the project templates, not this workflow.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+      "https://github.com/edmulraney/tinyfactory/pull/591"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded and cost $0 in 0 agent turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run cost $0 and took 0 agent turns, so no change has anything to save.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
