@@ -1,0 +1,71 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45054178991,
+    "workflow": "merge-group",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 648,
+      "issue": 642,
+      "title": "chore: bring in the setup and review changes of 22 November",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.",
+            "if_wrong": "Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "begin",
+        "step": "Tell whether this job stopped at its time limit",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "merge",
+        "step": "Tell whether this job stopped at its time limit",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The run never reached what pull request #648 changed in merge-group: both jobs succeeded, so the time-limit steps, which run only when a job is cancelled, were skipped, and the jq time arithmetic is still unchecked in a real run.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #648 replaced the `date -d` arithmetic in the \"Tell whether this job stopped at its time limit\" step of the begin and merge jobs with `jq ... fromdate`. That step runs only under `if: cancelled()`. Run 45054178991 was a workflow_dispatch run that ended in success, so GitHub skipped the step in both jobs and nothing ran the new line. Nothing went wrong and there is nothing to fix. The change will first be tested when a merge-group job is cancelled.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+      "https://github.com/edmulraney/tinyfactory/pull/648"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded and cost $0 across 0 agent turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing to save: the run cost $0 and lost no work.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
