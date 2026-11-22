@@ -43,7 +43,8 @@ jobs:
           fi
           cat started.log
           [ -d started ]
-          grep -qF "== preflight ==" started.log
+          # The first step's heading, as bootstrap.sh prints it: its number of the steps there are, then its name.
+          grep -qE '^\[1/[0-9]+\] preflight$' started.log
       - name: Scaffold a project from the package in an empty directory
         run: |
           git config --global user.name scaffold-check

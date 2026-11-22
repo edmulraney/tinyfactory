@@ -1,4 +1,4 @@
-# Each Friday, starts the build of the ticket that holds the week's review notes.
+# Each Friday, starts the build of the ticket that holds the week's review notes, and writes the delivery numbers.
 name: review-notes
 
 on:
@@ -21,3 +21,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: factory/scripts/review-notes.sh start
+
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write       # to write metrics.md on the sessions branch
+      issues: read          # to read when each ticket was labelled, and the tickets labelled bug
+      pull-requests: read   # to list the merged pull requests
+    steps:
+      - uses: actions/checkout@v4
+      - name: Write the page of the factory's delivery numbers by week
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/metrics.sh

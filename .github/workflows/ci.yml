@@ -139,7 +139,32 @@ jobs:
     outputs:
       run: ${{ steps.needed.outputs.run }}   # `false` when no app code changed (decisions M75a)
       review: ${{ steps.reviewable.outputs.review }}   # `false` for a build's empty first commit alone (decisions A266a)
+      users: ${{ steps.users.outputs.count }}   # the accounts in production's database, or nothing when they could not be counted
     steps:
+      # Before any checkout and in no script, as the steps of `checks` that hold the key (decisions M15). Adam judges
+      # scale by the number. Here and not in `review`, which may run on the owner's machine (decisions M605a).
+      - name: Count the people with an account in production's database
+        id: users
+        if: vars.NEON_PROJECT_ID != ''
+        # A count that could not be read is said to be unknown, and must not fail the job.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
+          # One fetch a line so a failed request stops the step. Production's branch is Neon's default one.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
+          branch=$(jq -er '.branches[] | select(.default) | .id' <<<"$branches")
+          databases=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches/$branch/databases")
+          database=$(jq -er '.databases[0] | "database_name=\(.name | @uri)&role_name=\(.owner_name | @uri)"' <<<"$databases")
+          connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$branch&$database")
+          uri=$(jq -er .uri <<<"$connection")
+          echo "::add-mask::$uri"
+          # Neon Auth keeps each account as a row of `neon_auth.user`.
+          count=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c 'select count(*) from neon_auth."user"')
+          [[ "$count" =~ ^[0-9]+$ ]]
+          echo "count=$count" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           # The commit Vercel built the preview from, not GitHub's merge with main (decisions M442).
@@ -165,7 +190,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: gh pr comment "$PR" --body "End-to-end tests were skipped for $HEAD_SHA. This pull request changes no app code, so the app in its preview is the app on main (factory/scripts/needs-e2e.sh decides)."
+          REASON: ${{ steps.needed.outputs.reason }}   # the sentence needs-e2e.sh printed (decisions M608)
+        run: gh pr comment "$PR" --body "End-to-end tests were skipped for $HEAD_SHA. $REASON factory/scripts/needs-e2e.sh decides this."
       - uses: ./.github/actions/setup
         if: steps.needed.outputs.run != 'false'
         with:
@@ -334,8 +360,11 @@ jobs:
           # A review's format: findings of that reviewer's kinds, and no prose (decisions A169a, A182a, A256a, A55a, A55b, A55d, A224a).
           ADAM_SCHEMA: '{"type":"object","properties":{"findings":{"type":"array","description":"Each field is 40 words at most.","items":{"type":"object","properties":{"file":{"type":"string"},"line":{"type":"integer"},"kind":{"type":"string","enum":["design","out-of-scope"]},"problem":{"type":"string"},"fix":{"type":"string"}},"required":["file","kind","problem","fix"]}},"assumptions":{"type":"array","description":"Three at most, the costliest failure first. Each field is 40 words at most.","items":{"type":"object","properties":{"assumes":{"type":"string"},"if_wrong":{"type":"string"}},"required":["assumes","if_wrong"]}}},"required":["findings","assumptions"]}'
           RYAN_SCHEMA: '{"type":"object","properties":{"findings":{"type":"array","description":"Each field is 40 words at most.","items":{"type":"object","properties":{"file":{"type":"string"},"line":{"type":"integer"},"kind":{"type":"string","enum":["bug","out-of-scope"]},"problem":{"type":"string"},"fix":{"type":"string"}},"required":["file","kind","problem","fix"]}},"assumptions":{"type":"array","description":"Three at most, the costliest failure first. Each field is 40 words at most.","items":{"type":"object","properties":{"assumes":{"type":"string"},"if_wrong":{"type":"string"}},"required":["assumes","if_wrong"]}}},"required":["findings","assumptions"]}'
+          # `format`, so that a count of 0 is never taken for no count.
           ADAM_PROMPT: |
             You are Adam. Read .claude/skills/review-architecture/SKILL.md and follow it to review pull request #${{ github.event.pull_request.number }} in this repository.
+
+            Production's database, counted as this run started, holds an account for ${{ needs.e2e.outputs.users != '' && format('{0} people', needs.e2e.outputs.users) || 'a number of people that could not be read' }}.
 
             ${{ steps.scope-adam.outputs.brief }}
           RYAN_PROMPT: |
