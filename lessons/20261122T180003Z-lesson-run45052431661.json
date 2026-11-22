@@ -1,0 +1,56 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45052383234,
+    "workflow": "install-workflows",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45052383234",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 625,
+      "issue": 604,
+      "title": "chore: bring in the factory changes of 22 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "Nothing needs doing: the first installer run after #625 used the new pin and installed #648's workflow changes without a refusal.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #625 changed only one line in install-workflows.yml. It repinned the RULE env value to 91dcb38, the new git id of factory/scripts/owner-decides.sh, which #625 also changed. No step changed, so changed_steps is empty. Run 45052383234 installed the workflows of #648. Every step logged RULE as 91dcb38, which matches the id of owner-decides.sh on main. The approval check refused nothing and installed seven workflows. \"Commit the copies\" committed aaac028 and commented on #648. The step that tells a person about a refusal was skipped. So the change did what it claimed.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45052383234",
+      "https://github.com/edmulraney/tinyfactory/pull/625",
+      "https://github.com/edmulraney/tinyfactory/pull/648#issuecomment-7083246055"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded and cost $0 over 0 agent turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault, and the run cost $0.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
