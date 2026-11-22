@@ -32,6 +32,9 @@ ready_to_ship() {
   mkdir -p "$T/on-main/repo/factory"
   echo "50 TASTE.md" > "$T/on-main/repo/factory/rule-files.txt"
   echo "What good means." > "$T/on-main/repo/TASTE.md"
+  # What ticket-cost.sh judges the ticket against, once a scenario gives ticket #12 a type in $T/events-12.json.
+  echo '[{"event":"labeled","label":{"name":"ready"},"created_at":"2026-11-16T08:30:00Z"}]' > "$T/events-12.json"
+  printf '# The budgets.\n\ntweak 60 12\n' > "$project/factory/budget.txt"
   echo "$main" > "$T/main"
   echo '[{"databaseId":900,"status":"completed","conclusion":"success"}]' > "$T/runs/$head"
   # What button-merge.sh reads: the commit of main the checks of the run passed with (decisions M19).
@@ -110,7 +113,7 @@ ready_to_ship() {
       "api --method GET repos/{owner}/{repo}/actions/runs -f branch=feat/12-export-forecast-csv "*) json "{\"workflow_runs\":[{\"id\":900}]}" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs/900/jobs -f filter=all "*)
         json "{\"jobs\":[{\"run_id\":900,\"conclusion\":\"success\",\"started_at\":\"2026-11-16T08:40:00Z\",\"completed_at\":\"2026-11-16T08:43:30Z\",\"runner_id\":1000000001}]}" "$@" ;;
-      "api repos/{owner}/{repo}/issues/12/events?per_page=100 "*) json "[{\"event\":\"labeled\",\"label\":{\"name\":\"ready\"},\"created_at\":\"2026-11-16T08:30:00Z\"}]" "$@" ;;
+      "api repos/{owner}/{repo}/issues/12/events?per_page=100 "*) json "$(cat "$T/events-12.json")" "$@" ;;
       "api repos/{owner}/{repo}/issues/7/events?per_page=100 "*) json "[]" "$@" ;;
       # What start-waiting.sh reads: $T/ready.json holds the tickets that wait with ready, and nothing else is in flight.
       "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github ;;

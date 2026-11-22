@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The one writer of the `sessions` branch (decisions A98), sourced by save-session.sh, post-screenshots.sh, measures.sh.
+# The one writer of the `sessions` branch (decisions A98), sourced by each script that writes a file there.
 # Usage: . sessions-branch.sh; push_to_sessions <commit-message> <command> [args]
 #        Needs GH_TOKEN (contents: write) and GITHUB_REPOSITORY.
 

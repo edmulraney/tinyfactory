@@ -140,6 +140,23 @@ expect_not_written "continue=true"
 expect_output "stopped on purpose"
 expect_nothing_saved
 
+scenario "an engineer who left the ticket to wait for the ticket it needs is not continued"
+ended completed
+echo '{"labels":[{"name":"ready"}]}' > "$T/labels.json"
+run "$scripts/continue-session.sh" build "$T/session.json" 120 fred 12
+expect_status 0
+expect_written "continue=false"
+expect_not_written "continue=true"
+expect_output "left issue #12 to wait for the ticket it needs"
+expect_nothing_saved
+
+scenario "a build whose ticket holds ready beside in-progress is continued: nobody left it to wait"
+ended completed
+echo '{"labels":[{"name":"ready"},{"name":"in-progress"}]}' > "$T/labels.json"
+run "$scripts/continue-session.sh" build "$T/session.json" 120 fred 12
+expect_status 0
+expect_written "continue=true"
+
 scenario "a build that ran out of turns is not continued"
 ended out-of-turns
 run "$scripts/continue-session.sh" build "$T/session.json" 120 fred 12

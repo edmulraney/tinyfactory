@@ -3,6 +3,9 @@
 # Usage: ticket-cost.sh <pr-number> [sessions-dir]          four lines, for a comment on the ticket
 #        ticket-cost.sh --json <pr-number> [sessions-dir]   every figure as one line of JSON, which measures.sh records
 #        ticket-cost.sh --comment                           the four lines, for the line of JSON given on stdin
+#        ticket-cost.sh --over-budget                       for that line: "Claude usage" or "Actions minutes" for each
+#                                                           budget the ticket went over, and nothing for one within both
+#        The usage and the minutes are given beside the budget factory/budget.txt holds for the ticket's type.
 #        ticket-cost.sh --month <yyyy-mm> [sessions-dir]    a table of the tickets whose pull request merged that month (UTC)
 #        sessions-dir is a checkout of the sessions branch; without one each ticket's two folders are downloaded, and deleted at the end.
 #        Needs GH_TOKEN (contents, pull-requests, issues and actions: read).
@@ -10,7 +13,7 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1" >&2; exit 1; }
-usage="Usage: ticket-cost.sh <pr-number> [sessions-dir] | --json <pr-number> [sessions-dir] | --comment | --month <yyyy-mm> [sessions-dir]"
+usage="Usage: ticket-cost.sh <pr-number> [sessions-dir] | --json <pr-number> [sessions-dir] | --comment | --over-budget | --month <yyyy-mm> [sessions-dir]"
 
 # tree <sha or branch> <type>: the SHA and path of each entry of that type. A listing GitHub cut short is a failure.
 tree() {
@@ -34,10 +37,22 @@ fetch() {
   done <<<"$files"
 }
 
+# budgets: each budget of factory/budget.txt as "<type>\t<minutes>\t<dollars>". A line of another shape is a failure.
+budgets() {
+  awk '
+    /^#/ || NF == 0 { next }
+    NF != 3 || $2 !~ /^[0-9]+$/ || $3 !~ /^[0-9]+(\.[0-9]+)?$/ {
+      print "factory/budget.txt:" NR ": a line is \"<type> <minutes> <dollars>\", and this is not: " $0 > "/dev/stderr"
+      bad = 1; next
+    }
+    { print $1 "\t" $2 "\t" $3 }
+    END { exit bad }' "$script_dir/../budget.txt"
+}
+
 # cost_of <pr> [issue]: one pull request's figures as JSON, from run-facts.sh and GitHub (decisions H221a).
 #   issue is the ticket it closes, when the caller has read it.
 cost_of() {
-  local pr="$1" issue="${2:-}" facts branch listed named run more jobs="" events="" labels
+  local pr="$1" issue="${2:-}" facts branch listed named run more jobs="" events="" labels budgets=""
   if [ "$fetched" = yes ]; then
     # linked-issue.sh says for itself what it could not read, and so does run-facts.sh.
     [ -n "$issue" ] || issue=$("$script_dir/linked-issue.sh" "$pr") || exit 1
@@ -63,18 +78,19 @@ cost_of() {
   done
 
   # A stop can be flagged on the ticket, its pull request or both (decisions H246d).
+  # Every label, as the ticket's type is the one of its labels that has a budget (decisions H612a).
   # shellcheck disable=SC2016
-  labels='.[] | select((.event == "labeled" or .event == "unlabeled") and (.label.name == "ready" or .label.name == "needs-human"))
-    | [$on, .event, .label.name, .created_at] | @tsv'
+  labels='.[] | select(.event == "labeled" or .event == "unlabeled") | [$on, .event, .label.name, .created_at] | @tsv'
   if [ -n "$issue" ]; then
     events=$(gh api "repos/{owner}/{repo}/issues/$issue/events?per_page=100" --paginate --jq "\"ticket\" as \$on | $labels") \
       || die "Could not read the events of ticket #$issue, so when it was made \`ready\` is not known."
     more=$(gh api "repos/{owner}/{repo}/issues/$pr/events?per_page=100" --paginate --jq "\"pr\" as \$on | $labels") \
       || die "Could not read the events of pull request #$pr, so how often it stopped for a person is not known."
     events+=$'\n'"$more"
+    budgets=$(budgets) || die "Could not read factory/budget.txt, so the budget of ticket #$issue is not known."
   fi
 
-  jq -cn --argjson facts "$facts" --arg events "$events" --arg jobs "$jobs" '
+  jq -cn --argjson facts "$facts" --arg events "$events" --arg jobs "$jobs" --arg budgets "$budgets" '
     def at: sub("\\.[0-9]+Z$"; "Z") | fromdate;
     # Each second from $from to $to goes to one kind: the first of build, fix and review running then (decisions H246c).
     def split($from; $to):
@@ -89,6 +105,11 @@ cost_of() {
     # Decisions H221d.
     | ($labels | map(select(.on == "ticket" and .event == "labeled" and .label == "ready") | .at) | min) as $ready
     | ($facts.merged_at | at) as $merged
+    # The labels the ticket holds, and the budget of the one that has one: a ticket has one type (decisions H612a).
+    | ($labels | map(select(.on == "ticket")) | sort_by(.at)
+        | reduce .[] as $e ([]; if $e.event == "labeled" then . + [$e.label] | unique else . - [$e.label] end)) as $held
+    | [$budgets | split("\n")[] | select(. != "") | split("\t") | select(.[0] as $type | $held | index($type))
+       | {type: .[0], minutes: (.[1] | tonumber), cost_usd: (.[2] | tonumber)}] as $budget
     # Unreadable, or ended with no result: run-facts.sh gives neither a cost.
     | ($facts.agents | map(select(.cost_usd != null))) as $read
     # A whole minute for each job, and one still running counted to now (decisions H221b).
@@ -107,6 +128,7 @@ cost_of() {
       minutes: ($billed | map(.minutes) | add // 0),
       runs: ($billed | map(.run) | unique | length),
       fix_rounds: $facts.fix_rounds, owner_rounds: $facts.owner_rounds,
+      budget: (if ($budget | length) == 1 then $budget[0] else null end),
       seconds: (if $ready == null then null else $merged - $ready end),
       split: (if $ready == null then null else $billed | map(select(.kind != null)) | split($ready; $merged) end),
       # The label put on the ticket or the pull request while it was on neither (decisions H246d).
@@ -122,8 +144,15 @@ cost_of() {
 # shellcheck disable=SC2016
 words='
   def plural(word): "\(.) \(word)" + (if . == 1 then "" else "s" end);
-  def dollars: (.cost_usd * 100 | round) as $cents
+  def usd: (. * 100 | round) as $cents
     | "$\($cents / 100 | floor).\($cents % 100 | tostring | if length < 2 then "0" + . else . end)";
+  def dollars: .cost_usd | usd;
+  # A line of figures recorded before budgets began holds none.
+  def over_cost: .budget != null and .cost_usd > .budget.cost_usd;
+  def over_minutes: .budget != null and .minutes > .budget.minutes;
+  def budget($over; amount): if .budget == null then ""
+    elif $over then "; over the budget of \(.budget | amount) for a `\(.budget.type)` ticket"
+    else "; the budget for a `\(.budget.type)` ticket is \(.budget | amount)" end;
   def unread: if .unread == 0 then ""
     else "; \(.unread | plural("more transcript")) gave no cost" end;
   def models: if (.models | length) == 0 then "not known" else .models | join(", ") end;
@@ -136,8 +165,8 @@ words='
 # Decisions H246h.
 lines() {
   jq -r "$words"'
-    "- **Claude usage:** \(dollars) at API prices, in \(.sessions | plural("session")) on \(models)\(unread)",
-    "- **Actions minutes:** \(.minutes), in \(.runs | plural("run"))",
+    "- **Claude usage:** \(dollars) at API prices, in \(.sessions | plural("session")) on \(models)\(unread)\(budget(over_cost; dollars))",
+    "- **Actions minutes:** \(.minutes), in \(.runs | plural("run"))\(budget(over_minutes; "\(.minutes) minutes"))",
     "- **Fix rounds:** \(rounds)",
     "- **Ready to merged:** \(took)"'
 }
@@ -152,6 +181,14 @@ case "${1:-}" in
     sessions="${3:-}" ;;
   --comment)
     lines 2>/dev/null | grep . || die "The figures on stdin are not a line ticket-cost.sh --json printed, so there is nothing to say of them."
+    exit 0 ;;
+  --over-budget)
+    over=$(jq -r "$words"'
+      select((.cost_usd | type) == "number" and (.minutes | type) == "number")
+      | "ok", (if over_cost then "Claude usage" else empty end), (if over_minutes then "Actions minutes" else empty end)' 2>/dev/null) \
+      && [ -n "$over" ] \
+      || die "The figures on stdin are not a line ticket-cost.sh --json printed, so whether they are over a budget is not known."
+    sed 1d <<<"$over"
     exit 0 ;;
   "" | -*) die "$usage" ;;
   *)

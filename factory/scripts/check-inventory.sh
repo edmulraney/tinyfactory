@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fails on a document nobody owns, and on an installed workflow that differs from its source.
+# Fails on a document nobody owns, a copied app file that names this project, and a workflow unlike its source.
 # Usage: check-inventory.sh   (from the repo root)
 set -euo pipefail
 
@@ -39,6 +39,37 @@ done <<<"$documents"
 if [ -n "$strays" ]; then
   printf 'These files have no owner. Delete them, or list them in %s/manifest.txt:\n%s' "$bootstrap" "$strays"
   exit 1
+fi
+
+# A file copied into every project names no project and cites no record that starts empty (decisions H614).
+app_paths=()
+while IFS= read -r path; do
+  case "$path" in apps/*) app_paths+=("$path") ;; esac
+done <<<"$owned"
+copied=()
+if [ "${#app_paths[@]}" -gt 0 ]; then
+  app_files=$(git ls-files -- "${app_paths[@]}") || unlisted "files the manifest lists under apps/"
+  while IFS= read -r file; do
+    [ ! -f "$file" ] || copied+=("$file")
+  done <<<"$app_files"
+fi
+if [ "${#copied[@]}" -gt 0 ]; then
+  if ! project=$(jq -er '.name | strings | select(. != "")' package.json 2>&1); then
+    echo "check-inventory.sh could not read the project's name from the root package.json, so the files copied into every project were not checked: $project"
+    exit 1
+  fi
+  unread() {
+    echo "check-inventory.sh could not search the files the manifest lists under apps/, so they were not checked."
+    exit 1
+  }
+  named=$(grep -H -n -o -i -w -F -e "$project" -- "${copied[@]}") || [ $? -eq 1 ] || unread
+  cited=$(grep -H -n -o -E '(product|architecture)/decisions(\.md|/)' -- "${copied[@]}") || [ $? -eq 1 ] || unread
+  if [ -n "$named$cited" ]; then
+    echo "These files are copied into every new project, which has another name and no product or architecture decision. Reword each line, shown as file:line:word:"
+    [ -z "$named" ] || printf '%s\n' "$named"
+    [ -z "$cited" ] || printf '%s\n' "$cited"
+    exit 1
+  fi
 fi
 
 # A source edited while its installed copy is left alone is a change waiting for the owner (decisions W7).
@@ -168,4 +199,4 @@ if [ -n "$differing" ]; then
     exit 1
   fi
 fi
-echo "inventory ok: every factory file and root document is accounted for, and every installed workflow matches its source or waits to be installed"
+echo "inventory ok: every factory file and root document is accounted for, no copied app file names this project, and every installed workflow matches its source or waits to be installed"

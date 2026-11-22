@@ -3,6 +3,7 @@
 # Usage: board-token.sh [name]   (name defaults to the directory name; run after board.sh)
 #        Safe to re-run: skips when the secret exists (FORCE=1 replaces it).
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -14,7 +15,7 @@ number=$(gh project list --owner "$owner" --format json \
 [ -n "$number" ] || { echo "no board called '$name'; run board.sh first"; exit 1; }
 
 if [ "${FORCE:-}" != 1 ] && gh secret list -R "$repo" --json name --jq '.[].name' | grep -qx BOARD_TOKEN; then
-  echo "board token ok: secret BOARD_TOKEN already set (FORCE=1 to replace it)"
+  mark done "board token ok: secret BOARD_TOKEN already set (FORCE=1 to replace it)"
   exit 0
 fi
 
@@ -25,9 +26,12 @@ url=$(jq -r .verification_uri <<<"$start")
 device=$(jq -r .device_code <<<"$start")
 interval=$(jq -r .interval <<<"$start")
 
-echo "approve in the browser: $url"
-echo "one-time code: $code"
-echo "(sign in as $owner; the request is for 'project' only: read and write project boards, no repo access)"
+owner_block <<NOTE
+Approve the board's token in the browser, signed in as $owner: open the link and enter the one-time code.
+$url
+$code
+The request is for 'project' only: read and write project boards, no repo access.
+NOTE
 (open "$url" || xdg-open "$url") >/dev/null 2>&1 || true
 
 token=""
@@ -58,4 +62,4 @@ GH_TOKEN="$token" gh api graphql -f owner="$owner" -F number="$number" \
 # apply-setup.sh re-runs board.sh with this token, and start-waiting.sh reads the Backlog's order with it (decisions T335a).
 # Piped to gh, so the token is never printed or written to disk.
 printf %s "$token" | gh secret set BOARD_TOKEN -R "$repo"
-echo "board token ok: secret BOARD_TOKEN stored (permission: $scopes), board #$number"
+mark done "board token ok: secret BOARD_TOKEN stored (permission: $scopes), board #$number"

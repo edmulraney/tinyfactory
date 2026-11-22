@@ -219,7 +219,7 @@ while read -r workflow job; do
   found=$(condition "$workflow" "$job")
   [[ "$found" == *"($associated"*") || $bots"*"))"* ]] \
     || fail "expected the job's condition to need the ticket's author to be the owner, a member, a collaborator or one of the two bots, got: $found"
-  [[ "$found" != *"github.event.sender.login"* ]] || fail "expected no account but the ticket's author to stand in for it, got: $found"
+  [[ "$found" != *"|| github.event.sender.login"* ]] || fail "expected no account but the ticket's author to stand in for it, got: $found"
 done < <(printf '%s\n' "claude claude" "refine refine")
 
 # The script each runs answers the owner on the ticket, which a skipped job cannot.
@@ -231,9 +231,9 @@ found=$(condition refine refine)
   || fail "expected the author's test to stand before both events, got: $found"
 [[ "$found" == *"github.event.comment.user.login == github.repository_owner"* ]] || fail "expected a comment to start Peta only when the owner wrote it"
 
-scenario "implement.yml needs the label to be on a trusted account's ticket or added by the owner, and nothing for a start by number"
-[[ "$(condition implement implement)" == "if: >- github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' && ($associated) || $bots) || $owner_asked))" ]] \
-  || fail "expected the label to need the ticket's author or the owner, got: $(condition implement implement)"
+scenario "implement.yml needs the label to be on a trusted account's ticket or added by the owner and on no idea, and nothing for a start by number"
+[[ "$(condition implement implement)" == "if: >- github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' && !contains(github.event.issue.labels.*.name, 'idea') && ($associated) || $bots) || $owner_asked))" ]] \
+  || fail "expected the label to need the ticket's author or the owner, and to start no build on an idea, got: $(condition implement implement)"
 
 scenario "revert.yml needs the label to be on a trusted account's ticket or added by the owner"
 [[ "$(condition revert revert)" == "if: >- github.event.label.name == 'revert' && ($associated) || $bots) || $owner_asked)" ]] \

@@ -3,6 +3,7 @@
 # Usage: vercel.sh [name]   (name defaults to the directory name)
 #        Safe to re-run: a project that exists is not made again.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -18,12 +19,12 @@ else
     # Vercel reaches a repository through its GitHub App, which an account may have installed on
     # selected repositories only. A repository made a moment ago is then one it cannot see.
     if grep -qF "couldn't be found" <<<"$created"; then
-      cat >&2 <<NOTE
-
-Vercel cannot see the repository $owner/$name: its GitHub App is installed on selected repositories only.
-   open     https://github.com/apps/vercel/installations/new
+      owner_block >&2 <<NOTE
+Let Vercel see the repository $owner/$name: its GitHub App is installed on selected repositories only.
+https://github.com/apps/vercel/installations/new
    choose   your account, then "All repositories" (or add $name to the selected ones)
-then run the same command again. The Claude app needs the same: https://github.com/apps/claude
+Then run the same command again. The Claude app needs the same:
+https://github.com/apps/claude
 NOTE
     fi
     exit 1
@@ -39,4 +40,4 @@ if [ -n "$domain" ]; then
 fi
 
 echo
-echo "vercel ok: project '$name' linked to $owner/$name (root apps/web)"
+mark done "vercel ok: project '$name' linked to $owner/$name (root apps/web)"

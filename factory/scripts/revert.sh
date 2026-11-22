@@ -112,6 +112,12 @@ None but what the revert puts back."
     ticket=${url##*/}
     [[ "$ticket" =~ ^[0-9]+$ ]] \
       || stop "Not started: GitHub did not say which ticket it filed to take back pull request #$pr. Find it, take the \`ready\` label off it and add it again."
+    # Two runs at once both find none filed (decisions T620). A look that fails says so, and the build is started.
+    first=$("$script_dir/close-duplicate.sh" "$ticket" "$titled$pr" "$button_titled$pr") || first=""
+    if [ -n "$first" ]; then
+      [ "$how" = start ] || { echo "ticket #$first already takes back pull request #$pr; ticket #$ticket, filed at the same time, was closed"; exit 0; }
+      stop "Not started: ticket #$first already takes back pull request #$pr, so ticket #$ticket, filed at the same time, was closed."
+    fi
     # Started by number: a label added with a workflow's own token starts no build (decisions A241c).
     if ! gh workflow run implement.yml -f issue="$ticket" >/dev/null; then
       retry gh issue close "$ticket" --reason "not planned" >/dev/null \

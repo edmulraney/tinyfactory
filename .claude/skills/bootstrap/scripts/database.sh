@@ -5,6 +5,7 @@
 #        Neon's marketplace terms and accepts them for the Vercel team only once a person at the terminal
 #        agrees; with no terminal it stops there (decisions S601).
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 vc() { npx --yes vercel@latest "$@"; }
@@ -25,15 +26,21 @@ else
   terms=$(vc api /v2/integrations/integration/neon --raw 2>/dev/null | tail -1 \
     | jq -er '"Neon terms of service: \(.eulaDocUri // empty)", "Neon privacy policy: \(.privacyDocUri // empty)"') \
     || { echo "could not read the links to Neon's terms from Vercel, so no database was created"; exit 1; }
-  echo "creating the database accepts these terms for your Vercel team:"
-  echo "Vercel marketplace addendum: https://vercel.com/legal/integration-marketplace-end-users-addendum"
-  echo "$terms"
+  terms="Vercel marketplace addendum: https://vercel.com/legal/integration-marketplace-end-users-addendum"$'\n'"$terms"
   if [ ! -t 0 ]; then
-    echo "database not created: nobody is at a terminal to agree to these terms. Read them, then run this in a terminal:"
+    echo "database not created: nobody is at a terminal to agree to these terms"
     # The script acts on the directory it runs in, and the person starts in another.
-    printf '   cd %q && %q %q\n' "$PWD" "$(cd "$(dirname "$0")" && pwd)/$(basename "$0")" "$name"
+    owner_block <<NOTE
+Read these terms, then run the command under them in a terminal: creating the database accepts them for your Vercel team.
+$terms
+$(printf '   cd %q && %q %q' "$PWD" "$(cd "$(dirname "$0")" && pwd)/$(basename "$0")" "$name")
+NOTE
     exit 1
   fi
+  owner_block <<NOTE
+Read these terms: creating the database accepts these terms for your Vercel team.
+$terms
+NOTE
   read -r -p "Do you agree to them? [y/N] " answer
   case "$answer" in
     y|Y|yes|Yes) ;;
@@ -53,7 +60,7 @@ fi
 vc api "/v9/projects/$name/env" --raw 2>/dev/null \
   | jq -e '[.envs[].key] | index("DATABASE_URL")' >/dev/null \
   || { echo "DATABASE_URL is not set on the Vercel project"; exit 1; }
-echo "database ok: DATABASE_URL set on Vercel project '$name'"
+echo "DATABASE_URL is set on the Vercel project '$name'"
 
 resource=$(vc integration resource inspect "$name" --json 2>/dev/null | jq -c '.resource // {}')
 store=$(jq -r '.id // empty' <<<"$resource")
@@ -91,19 +98,19 @@ keep=$(vc api "/v9/projects/$name" --raw 2>/dev/null | tail -1 \
   | jq -r '.deploymentExpiration | [.expirationDays, .expirationDaysCanceled, .expirationDaysErrored] | map(. // 30) | max')
 
 if [ "${keep:-30}" -le 1 ]; then
-  echo "previews are kept for one day"
+  mark done "database ok: '$name' is connected, and previews are kept for one day"
 else
-  cat <<NOTE
-
-one browser step is left, because Vercel's API rejects this setting (now: up to ${keep:-30} days):
-   open     $settings
+  owner_block <<NOTE
+Keep previews for one day, in the browser: Vercel's API rejects this setting (now: up to ${keep:-30} days).
+$settings
    find     Deployment Retention Policy
    set      Canceled Deployments → 1 day
             Errored Deployments → 1 day          (a failed preview holds a database branch too)
             Pre-Production Deployments → 1 day
             Production Deployments → leave at 30 days, so production can be rolled back
    click    Save
-it keeps the project inside Neon's free plan: see factory/free-tier/entry-1.md.
+It keeps the project inside Neon's free plan: see factory/free-tier/entry-1.md.
 NOTE
   if [ "$created" = yes ]; then (open "$settings" || xdg-open "$settings") >/dev/null 2>&1 || true; fi
+  mark needs-owner "database: the retention of previews is left for you to set at $settings"
 fi

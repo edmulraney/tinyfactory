@@ -6,6 +6,7 @@ commit=abcdef0123456789abcdef0123456789abcdef01
 
 # Pull request #7 closed ticket #12 and merged as $commit. The next ticket GitHub files is #30, kept in $T/ticket.json.
 # $T/fail holds one line per gh call, by its first words, that should fail; $T/flaky one that fails once.
+# $T/since.json holds the open tickets another run filed after this one looked for an earlier take-back.
 shipped() {
   echo '{"__typename":"Issue","closedByPullRequestsReferences":{"nodes":[{"number":7,"merged":true,"mergedAt":"2026-11-16T09:00:00Z"}]}}' > "$T/what.json"
   echo "{\"state\":\"MERGED\",\"mergeCommit\":{\"oid\":\"$commit\"},\"mergedAt\":\"2026-11-16T09:00:00Z\",\"title\":\"feat: export forecast as CSV\"}" > "$T/view.json"
@@ -13,6 +14,7 @@ shipped() {
   echo '[{"filename":"apps/web/page.txt"}]' > "$T/files.json"
   echo '[{"number":12,"title":"Export forecast as CSV","state":"closed","state_reason":"completed"}]' > "$T/issues.json"
   echo '{"title":"Take back pull request #7"}' > "$T/ticket.json"
+  echo '[]' > "$T/since.json"
   : > "$T/fail"
   : > "$T/flaky"
   stub gh '
@@ -33,6 +35,9 @@ shipped() {
       "issue create --title "*)
         jq -n --arg title "$4" --arg label "$6" --arg ready "$8" --arg body "${10}" "{title: \$title, body: \$body, labels: [{name: \$label}, {name: \$ready}], createdAt: \"2026-11-18T09:00:00Z\"}" > "$T/ticket.json"
         cat "$T/url" 2>/dev/null || echo "https://github.com/owner/myapp/issues/30" ;;
+      "api repos/{owner}/{repo}/issues?state=open&sort=created&direction=desc&per_page=100")
+        jq -c --slurpfile filed "$T/ticket.json" ". + [{number: 30, title: \$filed[0].title, user: {login: \"github-actions[bot]\"}}]" "$T/since.json" ;;
+      "issue edit 30 --remove-label ready" | "issue close 30 --reason duplicate --comment "*) ;;
       "issue view 30 --json title,body,labels,createdAt") cat "$T/ticket.json" ;;
       "issue view 30 --json title "* | "issue view 30 --json body "*) json "$(cat "$T/ticket.json")" "$@" ;;
       "workflow run implement.yml -f issue=30" | "issue close 30 --reason not planned") ;;
@@ -175,6 +180,26 @@ start 12
 expect_status 1
 expect_output "Not started: ticket #29 already takes back pull request #7."
 expect_nothing_changed
+
+scenario "another run filed the take-back at the same time: the later ticket is closed, no build of it is started, and the ticket is told"
+shipped
+echo '[{"number":29,"title":"Take back pull request #7","user":{"login":"github-actions[bot]"}}]' > "$T/since.json"
+start 12
+expect_status 1
+expect_calls 1 "gh issue create"
+expect_calls 1 "gh issue close 30 --reason duplicate"
+expect_no_call "gh workflow run"
+expect_calls 1 "gh issue comment 12 --body Not started: ticket #29 already takes back pull request #7, so ticket #30, filed at the same time, was closed."
+expect_calls 1 "gh issue edit 12 --remove-label revert"
+
+scenario "whether another run filed the take-back too cannot be read: it says so, and the build is started"
+shipped
+echo "api repos/{owner}/{repo}/issues?state=open&sort=created" > "$T/fail"
+start 12
+expect_status 0
+expect_output "Whether another run filed the same ticket as #30 could not be read from GitHub, so #30 stays open."
+expect_call "gh workflow run implement.yml -f issue=30"
+expect_no_call "gh issue close"
 
 scenario "stops when the pull request was already taken back"
 shipped
@@ -416,6 +441,16 @@ for title in "Take back the button merge of pull request #7" "Take back pull req
   expect_no_call "gh issue create"
   expect_no_call "gh workflow run"
 done
+
+scenario "a merge with the button is taken back once when the owner's take-back is filed at the same time: the later is closed"
+shipped
+echo '{"__typename":"PullRequest","number":7}' > "$T/what.json"
+echo '[{"number":29,"title":"Take back pull request #7","user":{"login":"github-actions[bot]"}}]' > "$T/since.json"
+button
+expect_status 0
+expect_calls 1 "gh issue close 30 --reason duplicate"
+expect_output "ticket #29 already takes back pull request #7; ticket #30, filed at the same time, was closed"
+expect_no_call "gh workflow run"
 
 scenario "the owner cannot start a second take-back of a merge the factory is taking back"
 shipped

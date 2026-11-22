@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shows on a pull request, in a comment, the screenshot each of its ticket's acceptance tests took (decisions P19, P98).
+# Shows on a pull request, in a comment, each acceptance criterion's page at each width (decisions P19, P98, P607).
 # Usage: post-screenshots.sh <pr-number> <head-sha> <dir>
 #        <dir> is the end-to-end job's artifact: test-results/results.json (Playwright's JSON report) and screenshots.
 #        Needs GH_TOKEN (contents: write, pull-requests: write) and GITHUB_REPOSITORY.
@@ -21,11 +21,14 @@ fi
 screenshots=$(jq -c --arg issue "$issue" '
   [ .. | objects | select(has("specs")) | .specs[]
     | select(.file | startswith("acceptance/\($issue)-"))
-    | .title as $title | .tests[]
-    | select(any(.annotations[]?; .type == "opened-a-page"))
-    | (.results | last | .attachments // [] | map(select(.name == "screenshot" and .contentType == "image/png")) | last) as $shot
-    | select($shot != null)
-    | {title: $title, path: $shot.path} ]' "$report") \
+    | .title as $title
+    # A test holds one entry for each Playwright project, which is one width (decisions P607).
+    | [ .tests[]
+        | select(any(.annotations[]?; .type == "opened-a-page"))
+        | (.results | last | .attachments // [] | map(select(.name == "screenshot" and .contentType == "image/png")) | last) as $shot
+        | select($shot != null)
+        | {title: $title, width: .projectName, path: $shot.path} ]
+    | to_entries[] | .value + {first: (.key == 0)} ]' "$report") \
   || { echo "Could not read the test report at $report." >&2; exit 1; }
 count=$(jq length <<<"$screenshots")
 if [ "$count" -eq 0 ]; then
@@ -40,7 +43,9 @@ trap 'rm -rf "$tmp"' EXIT
 mkdir "$tmp/shots"
 folder="pr-$pr/screenshots/$head"
 # No marker starts the comment: nothing looks for an earlier one (decisions P98).
-echo "Screenshots from the acceptance tests of #$issue, at commit ${head:0:7}. Each is the page as its test left it." > "$tmp/comment.md"
+echo "Screenshots from the acceptance tests of #$issue, at commit ${head:0:7}. Each is the page as its test left it, at each width the tests run at." > "$tmp/comment.md"
+# as_text <text>: a title or a width is shown as text, never read as Markdown; and a stray mention would start an agent run.
+as_text() { printf '%s' "$1" | sed -e 's/[][\\`*_<>]/\\&/g' -e 's/@claude/claude/g'; }
 for ((i = 0; i < count; i++)); do
   title=$(jq -r ".[$i].title" <<<"$screenshots")
   path=$(jq -r ".[$i].path" <<<"$screenshots")
@@ -53,14 +58,18 @@ for ((i = 0; i < count; i++)); do
   [ -f "$dir/test-results/$rel" ] && [ ! -L "$dir/test-results/$rel" ] \
     || { echo "The screenshot of \"$title\" is not in $dir: test-results/$rel" >&2; exit 1; }
   cp "$dir/test-results/$rel" "$tmp/shots/$((i + 1)).png"
-  # A title is shown as text, never read as Markdown; and a stray mention would start an agent run.
-  caption=$(printf '%s' "$title" | sed -e 's/[][\\`*_<>]/\\&/g' -e 's/@claude/claude/g')
+  caption=$(as_text "$title")
+  width=$(as_text "$(jq -r ".[$i].width" <<<"$screenshots")")
   {
+    if [ "$(jq -r ".[$i].first" <<<"$screenshots")" = true ]; then
+      echo
+      echo "**$caption**"
+    fi
     echo
-    echo "**$caption**"
+    echo "At $width width:"
     echo
     # The address that renders for a reader of a private repo (decisions P23).
-    echo "![$caption](${GITHUB_SERVER_URL:-https://github.com}/$GITHUB_REPOSITORY/blob/sessions/$folder/$((i + 1)).png?raw=true)"
+    echo "![$caption, at $width width](${GITHUB_SERVER_URL:-https://github.com}/$GITHUB_REPOSITORY/blob/sessions/$folder/$((i + 1)).png?raw=true)"
   } >> "$tmp/comment.md"
 done
 

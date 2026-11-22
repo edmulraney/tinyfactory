@@ -31,9 +31,9 @@ none() { echo "$1"; [ -z "$mine" ] || exit 3; exit 0; }
 # A ticket's number, the number of each ticket a line of its body says it comes after (decisions T339a), then a tab
 # and its title, which is all of the ticket that its card shows BOARD_TOKEN (decisions T523).
 after='"\(.number)" + ([(.body // "") | split("\n")[] | capture("^After #(?<n>[0-9]+)\\s*$").n | " " + .] | join("")) + "\t" + .title'
-# Listed: a search would miss a label seconds old.
+# Listed: a search would miss a label seconds old. On an idea the label starts Peta, and no build (decisions A611b).
 listed=$(gh api "repos/{owner}/{repo}/issues?state=open&labels=ready&per_page=100" --paginate \
-    --jq ".[] | select(.pull_request == null) | $after") \
+    --jq ".[] | select(.pull_request == null and (any(.labels[]?; .name == \"idea\") | not)) | $after") \
   || die "No waiting ticket was started: the tickets labelled ready could not be read from GitHub."
 # The caller's ticket carries ready, as start-build.sh has read, whether or not the list holds it yet.
 if [ -n "$mine" ] && ! cut -f1 <<<"$listed" | cut -d' ' -f1 | grep -qxF "$mine"; then

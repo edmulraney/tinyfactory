@@ -1,1 +1,1 @@
-| What a ticket cost | A comment on it when it merges; `factory/scripts/ticket-cost.sh --month 2026-11` prints a month's ([M221a](../../decisions/221.md)) |
+| What a ticket cost | A comment on it when it merges, beside the budget `factory/budget.txt` holds for its type ([M612](../../decisions/612.md)); `factory/scripts/ticket-cost.sh --month 2026-11` prints a month's ([M221a](../../decisions/221.md)) |

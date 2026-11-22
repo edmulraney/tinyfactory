@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Prints each merged pull request of a product ticket, in merge order, with its fix rounds and rework (decisions H573a).
-# Usage: quality.sh   (in a clone whose `origin` is the repo on GitHub; the history of `main` is fetched)
+# Usage: quality.sh          (in a clone whose `origin` is the repo on GitHub; the history of `main` is fetched)
+#        quality.sh --json   a line of JSON for each such pull request, which metrics.sh reads: its number, the lines it
+#                            added, and how many of them were reworked, null while no pull request has merged since
 #        Rework is the share of the lines a pull request added that the next ten merged pull requests changed or deleted.
 #        Needs GH_TOKEN (pull-requests, issues and contents: read).
 set -euo pipefail
 
 die() { echo "$1" >&2; exit 1; }
+json=no
+[ "${1:-}" != --json ] || json=yes
 
 query='query($owner: String!, $name: String!, $endCursor: String) { repository(owner: $owner, name: $name) {
   pullRequests(states: MERGED, baseRefName: "main", first: 100, after: $endCursor) {
@@ -22,7 +26,7 @@ merged=$(jq -rs 'sort_by(.mergedAt) | to_entries[]
        ($tickets != [] and all($tickets[]; index("factory") == null and index("research") == null)),
        (.value.title | gsub("[|\t\r\n]"; " "))] | @tsv' <<<"$merged") \
   || die "The merged pull requests could not be read as GitHub returned them, so no pull request's fix rounds or rework are known."
-[ -n "$merged" ] || { echo "No pull request has merged."; exit 0; }
+[ -n "$merged" ] || { [ "$json" = yes ] || echo "No pull request has merged."; exit 0; }
 
 whole=()
 [ "$(git rev-parse --is-shallow-repository)" = false ] || whole=(--unshallow)
@@ -51,10 +55,29 @@ own_lines() {
   echo "$lines"
 }
 
-echo "| Pull request | Fix rounds | Failed by | Rework |"
-echo "|---|---|---|---|"
+[ "$json" = yes ] || printf '%s\n' "| Pull request | Fix rounds | Failed by | Rework |" "|---|---|---|---|"
 while IFS=$'\t' read -r at pr commit product title; do
   [ "$product" = true ] || continue
+  later=$((${#commits[@]} - 1 - at)); [ "$later" -le 10 ] || later=10
+  added=$(own_lines "$commit" "$commit")
+  reworked=null
+  if [ "$later" -gt 0 ]; then
+    kept=$(own_lines "$commit" "${commits[$((at + later))]}")
+    reworked=$((added - kept))
+  fi
+  if [ "$json" = yes ]; then
+    echo "{\"pr\":$pr,\"added\":$added,\"reworked\":$reworked}"
+    continue
+  fi
+  if [ "$added" -eq 0 ]; then
+    rework="it added no line"
+  elif [ "$later" -eq 0 ]; then
+    rework="not known: no pull request has merged since"
+  else
+    rework="$((reworked * 100 / added))% of $added added line"; [ "$added" -eq 1 ] || rework+=s
+    [ "$later" -eq 10 ] || rework+=", after $later of the ten pull requests"
+  fi
+
   # Only the factory's own account records a round or posts a verdict; REST names it in full (decisions A28).
   comments=$(gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --paginate \
       --jq '.[] | select(.user.login == "github-actions[bot]") | {body: (.body // "")}') \
@@ -68,17 +91,5 @@ while IFS=$'\t' read -r at pr commit product title; do
         else . end)
     | "\(.rounds | length)\t\(.rounds | to_entries | map("round \(.key + 1): \(.value)") | join("; "))"' <<<"$comments") \
     || die "The comments of pull request #$pr could not be read as GitHub returned them, so its fix rounds are not known."
-
-  later=$((${#commits[@]} - 1 - at)); [ "$later" -le 10 ] || later=10
-  added=$(own_lines "$commit" "$commit")
-  if [ "$added" -eq 0 ]; then
-    rework="it added no line"
-  elif [ "$later" -eq 0 ]; then
-    rework="not known: no pull request has merged since"
-  else
-    kept=$(own_lines "$commit" "${commits[$((at + later))]}")
-    rework="$(((added - kept) * 100 / added))% of $added added line"; [ "$added" -eq 1 ] || rework+=s
-    [ "$later" -eq 10 ] || rework+=", after $later of the ten pull requests"
-  fi
   printf '| #%s %s | %s | %s | %s |\n' "$pr" "$title" "${rounds%%$'\t'*}" "${rounds#*$'\t'}" "$rework"
 done <<<"$merged"

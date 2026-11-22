@@ -26,6 +26,7 @@ One file for each slice in `.refine/screens.md`: `.design/<slice number>-<two to
 
 - **Self-contained.** Its styles are plain CSS in one `<style>` element: the app's Tailwind classes need a build, so write the CSS they produce. No script. An icon is inline SVG with no `xmlns`, a link goes to `#`, and the file holds no address of another site: `post-designs.sh` refuses one.
 - **The whole screen, with the slice's content.** The words, names and numbers a user of this product would meet, written as `DESIGN.md` asks of copy. Never placeholder text.
+- **Content that strains the layout** ([D616a](../../../factory/decisions/616.md)). Mix in what a real user brings: a long name, a count of one, a missing optional value, a number in the thousands. A name wraps. Nothing is squashed.
 - **One file for both widths.** It reads well at 375px and at 1280px wide, with nothing scrolling sideways.
 
 ## Show them

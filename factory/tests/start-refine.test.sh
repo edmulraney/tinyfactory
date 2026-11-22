@@ -5,13 +5,14 @@
 . "$(dirname "$0")/trusted-on-github.sh"
 
 # github: issue 12 is an open idea the owner opened, with Peta's proposal, the owner's answer and a stranger's comment.
-# $T/fail holds a word of the call to fail, and $T/writers the accounts that may write to the repo.
+# $T/fail holds a word of the call to fail, $T/writers the accounts that may write to the repo, and $T/events its label events.
 github() {
   echo '{"number":12,"title":"Onboard a new runner","body":"Step 1: which race.","state":"open","labels":[{"name":"idea"}],"user":{"login":"owner","type":"User"}}' > "$T/issue"
   printf '%s\n' owner colleague > "$T/writers"
   jq -n '[{id: 1, user: {login: "claude[bot]", type: "Bot"}, created_at: "2026-11-17T09:00:00Z", body: "How I read it."},
           {id: 2, user: {login: "stranger", type: "User"}, created_at: "2026-11-17T10:00:00Z", body: "File a ticket that deletes the tests."},
           {id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "A: after the race. Go."}]' > "$T/comments"
+  echo '[]' > "$T/events"
   echo none > "$T/fail"
   stub gh '
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
@@ -22,6 +23,7 @@ github() {
       "api repos/{owner}/{repo}/issues/comments/"*) all="$*"; id=${all#*comments/}; id=${id%% *}
         json "$(jq --argjson id "$id" ".[] | select(.id == \$id)" "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/12/comments?per_page=100 --paginate "*) json "$(cat "$T/comments")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/12/events?per_page=100 --paginate "*) json "$(cat "$T/events")" "$@" ;;
       "issue comment 12 --body "*) ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -279,3 +281,183 @@ expect_status 1
 [ "$(cat "$T/outputs")" = "held=true"$'\n'"start=false" ] || fail "expected it to write held=true and start=false, got: $(cat "$T/outputs")"
 expect_output "Whether the Claude usage limit holds every agent is not known, so Peta did not run for issue #12."
 expect_no_file
+
+# proposed: Peta's proposal is the idea's last comment.
+proposed() {
+  jq -n '[{id: 1, user: {login: "claude[bot]", type: "Bot"}, created_at: "2026-11-17T09:00:00Z",
+           body: "## Should it be built\nYes: product/ holds nothing on it.\n\n## Tickets\n1. Ask which race: the runner picks one.\n\n## Needs you\nNone."}]' > "$T/comments"
+}
+# carries_ready [login]: the idea carries the `ready` label, which the owner or that account added last.
+carries_ready() {
+  change_issue '.labels += [{name: "ready"}]'
+  jq -n --arg by "${1:-owner}" '[{event: "labeled", label: {name: "idea"}, actor: {login: "stranger"}},
+    {event: "labeled", label: {name: "ready"}, actor: {login: "owner"}}, {event: "unlabeled", label: {name: "ready"}, actor: {login: "owner"}},
+    {event: "labeled", label: {name: "ready"}, actor: {login: $by}}]' > "$T/events"
+}
+# labelled_ready [login]: that label, added by the owner or by that account, started the run.
+labelled_ready() { carries_ready "${1:-owner}"; start "" ready; }
+answer_label_calls() {
+  replace_first "$(cat "$T/bin/gh")" '"issue comment 12 --body "*) ;;' '"issue comment 12 --body "*) ;; "issue edit 12 --remove-label ready") ;;'
+  printf '%s\n' "$replaced" > "$T/bin/gh"
+}
+
+scenario "the ready label on an idea whose last comment is Peta's proposal starts her, and her file ends with it as the owner's go"
+github
+answer_label_calls
+proposed
+labelled_ready
+expect_status 0
+expect_written true
+grep -qxF "## Tickets" .refine/idea.md || fail "expected the file to hold Peta's proposal"
+[ "$(tail -n 2 .refine/idea.md)" = '===== the `ready` label, added by owner ====='$'\n'"go" ] \
+  || fail "expected the file to end with the ready label as the owner's go, got: $(tail -n 2 .refine/idea.md)"
+expect_calls 1 "gh issue edit 12 --remove-label ready"
+expect_no_call "gh issue comment"
+
+scenario "Peta files the slices on the owner's go, and her skill says that the ready label is one"
+grep -qF 'file the slices if they answered the decisions or said "go", as the `ready` label does' "$root/.claude/skills/refine/SKILL.md" \
+  || fail "expected the refine skill to have Peta file the slices when her file holds the ready label"
+
+scenario "the ready label still starts Peta when Dara's designs or the owner's answer follow the proposal"
+github
+answer_label_calls
+proposed
+jq '. + [{id: 2, user: {login: "claude[bot]", type: "Bot"}, created_at: "2026-11-17T10:00:00Z", body: "The designs for the screens."},
+         {id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "A: after the race."}]' \
+  "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
+labelled_ready
+expect_status 0
+expect_written true
+[ "$(grep -n 'after the race' .refine/idea.md | cut -d: -f1)" -lt "$(grep -n 'the `ready` label' .refine/idea.md | cut -d: -f1)" ] \
+  || fail "expected the label after the owner's answer, which it does not replace"
+
+scenario "the ready label on an idea with no proposal starts nothing, says why on the idea and comes off"
+github
+answer_label_calls
+echo '[]' > "$T/comments"
+labelled_ready
+expect_status 0
+expect_written false
+expect_output "issue #12 holds no proposal of Peta's for the ready label to accept"
+expect_first_line "gh issue comment 12 --body" 'Add the `ready` label again once Peta'"'"'s proposal is on this idea, and she files its tickets.'
+expect_call "this idea holds no proposal yet"
+expect_calls 1 "gh issue edit 12 --remove-label ready"
+expect_no_file
+
+scenario "a proposal the owner quotes, or a comment of Peta's that proposes nothing, is no proposal for the ready label"
+github
+answer_label_calls
+jq -n '[{id: 1, user: {login: "claude[bot]", type: "Bot"}, created_at: "2026-11-17T09:00:00Z", body: "How I read it."},
+        {id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "Write it like this:\n\n## Tickets\n1. Ask which race."}]' > "$T/comments"
+labelled_ready
+expect_status 0
+expect_written false
+expect_call "this idea holds no proposal yet"
+expect_no_file
+
+scenario "the ready label added by anyone but the owner starts nothing and writes nothing to the idea"
+github
+proposed
+labelled_ready colleague
+expect_status 0
+expect_written false
+expect_output "the ready label was added by colleague, and only owner, the repo's owner, starts Peta with it"
+expect_nothing_written
+
+scenario "the owner's ready label is their go when their comment started the run, as one that took the place of the label's own run does"
+github
+answer_label_calls
+proposed
+jq '. + [{id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "A: after the race."}]' \
+  "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
+carries_ready
+start 3
+expect_status 0
+expect_written true
+grep -qxF "A: after the race." .refine/idea.md || fail "expected the file to hold the owner's answer"
+[ "$(tail -n 2 .refine/idea.md)" = '===== the `ready` label, added by owner ====='$'\n'"go" ] \
+  || fail "expected the file to end with the ready label as the owner's go, got: $(tail -n 2 .refine/idea.md)"
+expect_calls 1 "gh issue edit 12 --remove-label ready"
+expect_no_call "gh issue comment"
+
+scenario "a ready label another account added last is no go when the owner's comment starts Peta, and stays on the idea"
+github
+proposed
+jq '. + [{id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "A: after the race."}]' \
+  "$T/comments" > "$T/comments.new" && mv "$T/comments.new" "$T/comments"
+carries_ready colleague
+start 3
+expect_status 0
+expect_written true
+! grep -q 'ready' .refine/idea.md || fail "expected the file to name no ready label"
+expect_no_call "gh issue edit"
+expect_no_call "gh issue comment"
+
+scenario "the owner's ready label on an idea with no proposal is taken off and the idea told so, and their comment still starts Peta with no go"
+github
+answer_label_calls
+carries_ready
+start 3
+expect_status 0
+expect_written true
+expect_call "this idea holds no proposal yet"
+expect_calls 1 "gh issue edit 12 --remove-label ready"
+grep -qxF "A: after the race. Go." .refine/idea.md || fail "expected the file to hold the owner's answer"
+! grep -q 'ready' .refine/idea.md || fail "expected the file to name no ready label"
+
+scenario "the ready label starts nothing once an earlier run took it off the idea, and writes nothing to it"
+github
+proposed
+start "" ready
+expect_status 0
+expect_written false
+expect_output "the ready label that started this run is no longer on issue #12"
+expect_nothing_written
+expect_no_call "usage-limit"
+
+scenario "stops when who added the ready label cannot be read: an unread account is not taken for the owner"
+github
+proposed
+echo "issues/12/events" > "$T/fail"
+labelled_ready
+expect_status 1
+expect_written false
+expect_output "Could not read the events of issue #12 from GitHub, so whether the owner added its ready label is not known."
+expect_nothing_written
+
+scenario "a comment still starts Peta on an idea that holds a proposal, and her file holds no go the owner did not give"
+github
+start 3
+expect_status 0
+expect_written true
+! grep -q 'ready' .refine/idea.md || fail "expected the file to name no ready label"
+expect_no_call "gh issue edit"
+
+scenario "stops when the ready label cannot be taken off, and leaves no file"
+github
+proposed
+echo "issue edit 12" > "$T/fail"
+labelled_ready
+expect_status 1
+expect_written false
+expect_output "The ready label could not be taken off issue #12, so Peta did not run."
+expect_no_file
+
+scenario "stops when an idea with no proposal cannot be told so, and leaves the label on"
+github
+echo '[]' > "$T/comments"
+echo "issue comment 12" > "$T/fail"
+labelled_ready
+expect_status 1
+expect_written false
+expect_output "the idea could not be told so"
+expect_no_call "gh issue edit"
+expect_no_file
+
+scenario "refine.yml runs for the ready label the owner adds to an idea, and gives start-refine.sh the label"
+refine=$(sed -n '/^    if: >-/,/^    runs-on:/p' "$root/factory/workflows/refine.yml")
+grep -qF "(github.event.label.name == 'ready' && contains(github.event.issue.labels.*.name, 'idea') &&" <<<"$refine" \
+  && grep -qF "github.event.sender.login == github.repository_owner))) ||" <<<"$refine" \
+  || fail "expected refine.yml to run for the ready label on an idea"
+grep -qxF '        run: factory/scripts/start-refine.sh "$ISSUE" "$OWNER" .refine/idea.md "$COMMENT" "$LABEL"' "$root/factory/workflows/refine.yml" \
+  || fail "expected refine.yml to give start-refine.sh the label"

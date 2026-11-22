@@ -4,6 +4,7 @@
 #        Stores the repo secret VERCEL_AUTOMATION_BYPASS_SECRET.
 #        Safe to re-run: reuses the bypass secret the Vercel project already has.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -30,4 +31,4 @@ if [ -n "$url" ]; then
   echo "preview check: with secret HTTP $with, without HTTP $without"
   [ "$with" = 200 ] || { echo "bypass secret did not open the preview"; exit 1; }
 fi
-echo "preview access ok: secret VERCEL_AUTOMATION_BYPASS_SECRET stored"
+mark done "preview access ok: secret VERCEL_AUTOMATION_BYPASS_SECRET stored"

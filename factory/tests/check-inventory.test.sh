@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for check-inventory.sh: unowned files, and a workflow behind its install (decisions H106, W102a, W134a, W134b).
+# Tests for check-inventory.sh: unowned files, a copied file naming its project, a workflow behind its install.
 . "$(dirname "$0")/helpers.sh"
 
 # $T/installer holds the install, ready to be pushed.
@@ -104,6 +104,85 @@ expect_no_output "README.md"
 expect_no_output "LEARNINGS.md"
 expect_no_output "SECURITY.md"
 expect_no_output "docs/guide.md"
+expect_no_output "inventory ok"
+
+# A project named Myapp, whose manifest lists one file and one folder under apps/.
+copied_app_files() {
+  all_owned
+  printf 'apps/web/playwright.config.ts\napps/web/src/lib/outbound\n' >> .claude/skills/bootstrap/manifest.txt
+  echo '{"name": "myapp"}' > package.json
+  mkdir -p apps/web/src/lib/outbound apps/web/src/app
+  printf '// Runs the end-to-end tests.\nexport default {};\n' > apps/web/playwright.config.ts
+  echo 'export const send = () => {};' > apps/web/src/lib/outbound/index.ts
+  # The project's own code, which the manifest does not list.
+  echo '// Myapp forecasts a portfolio (architecture/decisions.md D7).' > apps/web/src/app/page.tsx
+  git add . && git commit -q -m "an app"
+}
+copied="These files are copied into every new project"
+
+scenario "passes copied app files that name no project, while a file the manifest does not list names it and cites a decision"
+copied_app_files
+# A word that only starts with the name is another word.
+echo '// Myappnegro and myappcarlo.ts are not this project.' >> apps/web/playwright.config.ts
+run "$scripts/check-inventory.sh"
+expect_status 0
+expect_output "inventory ok"
+expect_no_output "$copied"
+expect_no_output "page.tsx"
+
+scenario "fails a listed app file with the project's name in a comment, in any case, and names the file, the line and the word"
+copied_app_files
+echo '// The two screens Myapp supports.' >> apps/web/playwright.config.ts
+run "$scripts/check-inventory.sh"
+expect_status 1
+expect_output "$copied"
+expect_output "apps/web/playwright.config.ts:3:Myapp"
+expect_no_output "outbound"
+expect_no_output "page.tsx"
+expect_no_output "inventory ok"
+
+scenario "fails a file in a listed folder that cites an architecture decision or a product decision, and names each line"
+copied_app_files
+echo '// Retries once (architecture/decisions.md D626c).' >> apps/web/src/lib/outbound/index.ts
+echo '// No queue (product/decisions/12.md).' >> apps/web/src/lib/outbound/index.ts
+# Every project holds the factory's record.
+echo '// A header is one line (factory/decisions.md H176a).' >> apps/web/src/lib/outbound/index.ts
+run "$scripts/check-inventory.sh"
+expect_status 1
+expect_output "$copied"
+expect_output "apps/web/src/lib/outbound/index.ts:2:architecture/decisions.md"
+expect_output "apps/web/src/lib/outbound/index.ts:3:product/decisions/"
+expect_no_output "index.ts:4"
+expect_no_output "playwright.config.ts"
+expect_no_output "page.tsx"
+expect_no_output "inventory ok"
+
+scenario "stops with a message when the root package.json gives no name: that is not a project no file names"
+copied_app_files
+echo '{"private": true}' > package.json
+echo '// The two screens Myapp supports.' >> apps/web/playwright.config.ts
+run "$scripts/check-inventory.sh"
+expect_status 1
+expect_output "could not read the project's name from the root package.json"
+expect_output "were not checked"
+expect_no_output "inventory ok"
+
+scenario "stops with a message when the listed app files cannot be listed"
+copied_app_files
+git=$(command -v git)
+stub git 'case "$*" in "ls-files -- apps/"*) exit 1 ;; esac; exec "'"$git"'" "$@"'
+run "$scripts/check-inventory.sh"
+expect_status 1
+expect_output "could not list the files the manifest lists under apps/ with git ls-files, so nothing was checked"
+expect_no_output "inventory ok"
+
+scenario "stops with a message when the listed app files cannot be searched"
+copied_app_files
+grep=$(command -v grep)
+stub grep 'case "$1" in -H) exit 2 ;; esac; exec "'"$grep"'" "$@"'
+run "$scripts/check-inventory.sh"
+expect_status 1
+expect_output "could not search the files the manifest lists under apps/, so they were not checked"
 expect_no_output "inventory ok"
 
 scenario "passes an installed workflow that matches its source without reading main"

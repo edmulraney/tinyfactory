@@ -331,6 +331,35 @@ expect_posted "**Ryan (correctness): PASS**"
 [ "$(grep -c 'PASS' "$T/posted")" = 1 ] || fail "expected one verdict"
 expect_no_output "saved adam session"
 
+# This git also answers what stale-documents.sh asks, which the stand-in of `reviews` leaves empty.
+reads_history='rev-parse|worktree|config|merge-base|diff|ls-tree|grep|show|cat-file'
+scenario "each reviewer is told where the lines of documents that name what the pull request changes are, and the file holds them"
+reviews; says ryan 1 pass
+"$real_git" checkout --quiet feat/7-change
+printf '%s\n' "Run \`script.sh\` first." "Then run another-script.sh." > guide.md
+"$real_git" add . && "$real_git" commit --quiet -m "a guide"
+HEAD_SHA=$("$real_git" rev-parse HEAD); head=$HEAD_SHA
+"$real_git" checkout --quiet main
+stub git 'case "$1" in '"$reads_history"') exec "$real_git" "$@" ;; esac
+  case "$*" in *"diff --cached --quiet") exit 1 ;; esac; exit 0'
+review ryan
+expect_status 0
+expect_call "$T/runner/stale-documents.txt holds each line of a document that names a file, label or command the pull request changes or removes, as that commit has the line. It is empty when no line does."
+[ "$(cat "$T/runner/stale-documents.txt")" = "guide.md:1: Run \`script.sh\` first." ] \
+  || fail "expected the one line that names the changed script, got: $(cat "$T/runner/stale-documents.txt")"
+expect_posted "**Ryan (correctness): PASS**"
+
+scenario "the lines of documents cannot be listed: the file says why, the step says it too, and the review still runs"
+reviews; says ryan 1 pass
+stub git 'case "$1" in rev-parse|worktree|config) exec "$real_git" "$@" ;; merge-base) exit 1 ;; esac
+  case "$*" in *"diff --cached --quiet") exit 1 ;; esac; exit 0'
+review ryan
+expect_status 0
+why="stale-documents.sh: HEAD and $head share no commit in this checkout, so the documents that name what changed are not listed."
+expect_output "$why"
+[ "$(cat "$T/runner/stale-documents.txt")" = "$why" ] || fail "expected the file to say why it holds no list, got: $(cat "$T/runner/stale-documents.txt")"
+expect_posted "**Ryan (correctness): PASS**"
+
 scenario "the pull request's commit is not in the checkout: no session starts, each review is said to be unfinished, and no fix round starts"
 reviews
 head=0123456789012345678901234567890123456789

@@ -6,6 +6,7 @@
 #        Safe to re-run. Runs at setup with the owner's gh login, which needs the account-wide `project` permission,
 #        and from apply-setup.sh with BOARD_TOKEN, which can see no repo: nothing but the link may need repo access.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -194,15 +195,15 @@ LIST
 
 if [ -z "$off" ]; then
   echo "all five automations are on"
+  mark done "board ok: $url"
 else
-  cat <<NOTE
-
-one browser step is left, because GitHub's API cannot switch a board's automations on:
-   open     $url/workflows
+  off=${off%$'\n'}
+  owner_block <<NOTE
+Switch on the board's automations in the browser: GitHub's API cannot.
+$url/workflows
 $off
-they are what put each ticket on the board and move it; without them the board stays empty.
+They are what put each ticket on the board and move it; without them the board stays empty.
 NOTE
   (open "$url/workflows" || xdg-open "$url/workflows") >/dev/null 2>&1 || true
+  mark needs-owner "board: its automations are left for you to switch on at $url/workflows"
 fi
-
-echo "board ok: $url"

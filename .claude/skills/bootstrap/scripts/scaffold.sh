@@ -10,6 +10,7 @@ set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
 here="$(cd "$(dirname "$0")" && pwd)"
+. "$here/present.sh"
 templates="$here/../templates"
 manifest="$here/../manifest.txt"
 factory_root="$(cd "$here/../../../.." && pwd)"   # the repo this skill lives in is the factory's source
@@ -227,4 +228,4 @@ pnpm typecheck
 # and prove the factory, not this project: they run where the factory is built.
 pnpm -r test
 pnpm build
-echo "scaffold ok: $name"
+mark done "scaffold ok: $name"

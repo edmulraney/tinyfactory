@@ -5,18 +5,19 @@
 #        Does nothing for a product whose PURPOSE.md says it has no accounts.
 #        Safe to re-run: a branch that has auth, a variable Vercel lists and settings already so are left alone.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 vc() { npx --yes vercel@latest "$@"; }
 neon() { npx --yes neonctl@latest "$@"; }
 
 if [ ! -f PURPOSE.md ]; then
-  echo "sign-in skipped: there is no PURPOSE.md, so nobody has said whether people sign in. Run the purpose skill, then this script again."
+  mark needs-owner "sign-in skipped: there is no PURPOSE.md, so nobody has said whether people sign in. Run the purpose skill, then this script again."
   exit 0
 fi
 # A product has accounts unless its PURPOSE.md says not, and keeps them in the database it already has (decisions S287a).
 if grep -qF -- '- **Have accounts.**' PURPOSE.md; then
-  echo "sign-in skipped: PURPOSE.md says the product has no accounts"
+  mark done "sign-in skipped: PURPOSE.md says the product has no accounts"
   exit 0
 fi
 
@@ -33,7 +34,7 @@ project=$(gh variable get NEON_PROJECT_ID -R "$owner/$name") \
 
 # As database-key.sh does: `me` is the one command that never starts the sign-in itself.
 if ! neon me >/dev/null 2>&1; then
-  echo "approve the Neon sign-in in the browser (sign in the way the Vercel account does)"
+  owner_block <<<"approve the Neon sign-in in the browser (sign in the way the Vercel account does)"
   neon auth
 fi
 branches=$(neon branches list --project-id "$project" --output json) \
@@ -44,14 +45,13 @@ branch=$(jq -r '[.[] | select(.default)][0].id // empty' <<<"$branches")
 # The CLI sends POST /projects/{id}/branches/{id}/auth with {"auth_provider":"better_auth"}, and
 # for a branch that already has auth (409) reads what is there instead (neonctl 9.6.0).
 if ! auth=$(neon neon-auth enable --project-id "$project" --branch "$branch" --output json); then
-  cat <<NOTE
-
-Neon would not switch sign-in on for this database. One browser step instead:
-   open     https://console.neon.tech/app/projects/$project/branches/$branch
-            (or, from Vercel: Storage → $name → Open in Neon → Branches → the default branch)
+  owner_block <<NOTE
+Switch sign-in on in the browser: Neon would not switch sign-in on for this database.
+https://console.neon.tech/app/projects/$project/branches/$branch
+   (or, from Vercel: Storage → $name → Open in Neon → Branches → the default branch)
    find     Auth
    click    Enable Auth
-then run this script again: it confirms the click and sets the variables.
+Then run this script again: it confirms the click and sets the variables.
 NOTE
   exit 1
 fi
@@ -144,4 +144,4 @@ while IFS=$'\t' read -r id preview <&3; do
   fi
   by_link_only "$id" "the preview's branch $preview"
 done 3< <(jq -r '.[] | select(.name // "" | startswith("preview/")) | [.id, .name] | @tsv' <<<"$branches")
-echo "sign-in ok: Neon Auth on, by emailed link and no password, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name'"
+mark done "sign-in ok: Neon Auth on, by emailed link and no password, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name'"

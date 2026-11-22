@@ -5,6 +5,7 @@
 # A path under apps/ is copied from this repo where it holds the app, and from templates/ where it
 # holds none, over whatever a generator wrote there.
 # A file listed under apps/ imports nothing but a package, a listed file or a seed (decisions S309).
+# It names no project and cites no product or architecture decision; check-inventory.sh fails one that does (decisions H614).
 # .github/workflows is not listed: scaffold.sh makes it from factory/workflows.
 .gitattributes
 .claude/skills
@@ -26,6 +27,7 @@ factory/decisions.md
 factory/decisions
 factory/manual-steps.md
 factory/rule-files.txt
+factory/budget.txt
 apps/web/eslint.config.mjs
 apps/web/vitest.config.ts
 apps/web/playwright.config.ts

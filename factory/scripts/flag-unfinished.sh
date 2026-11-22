@@ -40,12 +40,20 @@ case "$kind" in
       done <<<"$ready"
       exit 0
     fi
-    flagged=$(gh issue view "$number" --json labels --jq '[.labels[].name] | index("needs-human") != null') \
+    labels=$(gh issue view "$number" --json labels --jq '[.labels[].name] | join(" ")') \
       || die "Issue #$number could not be read from GitHub, so it is not known whether the engineer stopped on purpose."
-    if [ "$flagged" = true ]; then
-      gh issue edit "$number" --remove-label in-progress >/dev/null \
-        || die "Could not take in-progress off issue #$number."
-      echo "the engineer stopped on purpose and flagged issue #$number"
+    stopped=""
+    case " $labels " in
+      *" needs-human "*)
+        gh issue edit "$number" --remove-label in-progress >/dev/null \
+          || die "Could not take in-progress off issue #$number."
+        stopped="flagged issue #$number" ;;
+      *" in-progress "*) ;;
+      # start-build.sh took ready off, so only wait-for-ticket.sh leaves it without in-progress (decisions T622a).
+      *" ready "*) stopped="left issue #$number to wait for the ticket it needs" ;;
+    esac
+    if [ -n "$stopped" ]; then
+      echo "the engineer stopped on purpose and $stopped"
       # The place it gave back goes to a ticket that waits (decisions T297a).
       "$script_dir/start-waiting.sh" \
         || die "Issue #$number gave its place back, and the tickets that wait with ready were not all started; each is started when a place next frees."

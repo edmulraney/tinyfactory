@@ -23,9 +23,14 @@ case "$kind" in
     opened=$(gh pr list --state open --json headRefName,isDraft --jq "[.[] | select(.isDraft | not) | select(.headRefName | test(\"^[a-z]+/$number-\"))] | length") \
       || skip "the pull requests could not be read from GitHub, so it is not known whether one is ready for review" 1
     [ "$opened" -eq 0 ] || skip "a pull request is ready for review for issue #$number"
-    flagged=$(gh issue view "$number" --json labels --jq '[.labels[].name] | index("needs-human") != null') \
+    labels=$(gh issue view "$number" --json labels --jq '[.labels[].name] | join(" ")') \
       || skip "issue #$number could not be read from GitHub, so it is not known whether the engineer stopped on purpose" 1
-    [ "$flagged" != true ] || skip "the engineer stopped on purpose and flagged issue #$number"
+    case " $labels " in
+      *" needs-human "*) skip "the engineer stopped on purpose and flagged issue #$number" ;;
+      *" in-progress "*) ;;
+      # As flag-unfinished.sh reads it: only wait-for-ticket.sh leaves ready without in-progress (decisions T622a).
+      *" ready "*) skip "the engineer stopped on purpose and left issue #$number to wait for the ticket it needs" ;;
+    esac
     missing="No pull request is ready for review for issue #$number."
     finish="Do not end your turn until the pull request is marked ready for review, or until you have added the needs-human label and said on the issue why it cannot be, in a comment whose first line is what a person must do, or \"Nothing to do\", then what the factory does next and when."
     ;;

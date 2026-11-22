@@ -245,6 +245,44 @@ run "$scripts/check-ticket.sh" 12
 expect_status 1
 expect_output "No numbered acceptance criteria"
 
+scenario "refuses a criterion that gives a width in pixels, and says every test already runs at both widths"
+printf '%s\n' "## Change
+Fit the dashboard to a phone.
+
+## Acceptance criteria
+- **AC1:** Given I have a race, when I open my dashboard on a screen 375px wide, then I read all of it.
+- **AC2:** Given I have a race, when I open my dashboard, then I see the race.
+- **AC3:** Given I have a race, when my screen is 1280 pixels wide, then I see the chart beside it.
+- **AC4:** Given I have a race, when I open my dashboard on a 375-pixel-wide screen, then I see the race first.
+
+## States
+No screen
+
+## Docs to update
+None." > draft.md
+run "$scripts/check-ticket.sh" --draft tweak "$name" draft.md
+expect_status 1
+expect_output 'The criterion "- **AC1:** Given I have a race, when I open my dashboard on a screen 375px wide, then I read all of it." gives a size in pixels.'
+expect_output "Every end-to-end test already runs at both supported widths, mobile and desktop"
+expect_output '- **AC3:**'
+expect_output '- **AC4:**'
+[ "$(wc -l <<<"$out")" -eq 3 ] || fail "expected the three criteria that give a size to be its only problems, found: $out"
+
+scenario "passes a criterion that holds a number or the letters px with no size in pixels"
+printf '%s\n' "## Change
+Fit the dashboard to a phone.
+
+## Acceptance criteria
+- **AC1:** Given I ran 375 km, when I open my dashboard on a phone, then I see 12 weeks of runs as a .gpx file.
+
+## States
+No screen
+
+## Docs to update
+None." > draft.md
+run "$scripts/check-ticket.sh" --draft tweak "$name" draft.md
+expect_status 0
+
 scenario "refuses a factory ticket with no way to know it works"
 ticket factory "## Change
 Add a check."

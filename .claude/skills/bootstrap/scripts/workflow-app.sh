@@ -5,6 +5,7 @@
 #        Safe to re-run: skips making an app when all three exist, and still checks the ruleset's bypass list.
 #        FORCE=1 makes a new app; delete the old one at https://github.com/settings/apps.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -42,7 +43,7 @@ if [ "${FORCE:-}" != 1 ] && grep -qx WORKFLOW_APP_PRIVATE_KEY <<<"$secrets" \
   && grep -qx WORKFLOW_APP_CLIENT_ID <<<"$variables" && grep -qx WORKFLOW_APP_SLUG <<<"$variables"; then
   slug=$(gh variable get WORKFLOW_APP_SLUG -R "$repo") || { echo "cannot read the variable WORKFLOW_APP_SLUG of $repo; re-run"; exit 1; }
   pass_ruleset "$slug"
-  echo "workflow app ok: secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG already set (FORCE=1 to replace them)"
+  mark done "workflow app ok: secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG already set (FORCE=1 to replace them)"
   exit 0
 fi
 for tool in python3 openssl curl; do
@@ -61,7 +62,8 @@ manifest=$(jq -cn --arg name "$(cut -c1-34 <<<"$name-workflows")" --arg url "htt
   default_permissions: {contents: "write", workflows: "write"},
   default_events: []
 }')
-code=$(MANIFEST="$manifest" python3 -u -c '
+block=$(printf '%s\n' "Create the app in the browser: open the link and click Create GitHub App." "{start}" | owner_block)
+code=$(MANIFEST="$manifest" BLOCK="$block" python3 -u -c '
 import html, http.server, json, os, secrets, sys, time, urllib.parse, webbrowser
 state = secrets.token_hex(16)
 result = {}
@@ -86,7 +88,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.page(404, "Not found.")
 server = http.server.HTTPServer(("127.0.0.1", 0), Handler)
 start = "http://127.0.0.1:%d/" % server.server_port
-print("approve in the browser: %s\n   click    Create GitHub App" % start, file=sys.stderr, flush=True)
+print(os.environ["BLOCK"].replace("{start}", start), file=sys.stderr, flush=True)
 try: webbrowser.open(start)
 except Exception: pass
 deadline = time.time() + 600               # nobody clicked in 10 minutes
@@ -128,8 +130,9 @@ pass() {
 as_app() { curl -sS -H "Authorization: Bearer $(pass)" -H 'Accept: application/vnd.github+json' "$@"; }
 
 url="https://github.com/apps/$slug/installations/new"
-cat <<STEPS
-install the app in the browser: $url
+owner_block <<STEPS
+Install the app on $repo alone, in the browser.
+$url
    choose   Only select repositories
    select   $repo
    click    Install
@@ -164,8 +167,10 @@ while [ "$(date +%s)" -lt "$deadline" ]; do
       break
     elif [ -z "$warned" ]; then
       warned=1
-      echo "the app is installed on more than $repo; change it to 'Only select repositories' with only $repo:"
-      echo "   open     https://github.com/settings/installations/$id"
+      owner_block <<STEPS
+Change the app to 'Only select repositories' with only $repo: it is installed on more.
+https://github.com/settings/installations/$id
+STEPS
     fi
   fi
   perl -e 'select(undef, undef, undef, 5)'
@@ -180,4 +185,4 @@ gh variable set WORKFLOW_APP_SLUG -R "$repo" --body "$slug"
 printf '%s\n' "$pem" | gh secret set WORKFLOW_APP_PRIVATE_KEY -R "$repo"
 stored=1
 pass_ruleset "$slug"
-echo "workflow app ok: '$slug' is installed on $repo only and may write contents and workflows; secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG stored"
+mark done "workflow app ok: '$slug' is installed on $repo only and may write contents and workflows; secret WORKFLOW_APP_PRIVATE_KEY and variables WORKFLOW_APP_CLIENT_ID, WORKFLOW_APP_SLUG stored"

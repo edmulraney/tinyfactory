@@ -12,17 +12,21 @@ github() {
   specs=""
 }
 
-# took <file> <title> <page|blank> <name> [more results]: a test in the report, whose screenshot is <name>.png.
+# took <file> <title> <page|blank> <name> [more results]: a test in the report, run at mobile and at desktop width as
+# playwright.config.ts runs every test; its screenshots are <name>-mobile and <name>-desktop.
 took() {
-  local marks='[]'
+  local marks='[]' width
   [ "$3" = page ] && marks='[{"type":"opened-a-page"}]'
-  mkdir -p "$T/artifact/test-results/$4"
-  printf '%s' "$4" > "$T/artifact/test-results/$4/test-finished-1.png"
+  for width in mobile desktop; do
+    mkdir -p "$T/artifact/test-results/$4-$width"
+    printf '%s' "$4 at $width" > "$T/artifact/test-results/$4-$width/test-finished-1.png"
+  done
   specs+=$(jq -nc --arg file "$1" --arg title "$2" --argjson marks "$marks" --argjson earlier "${5:-[]}" \
-    --arg path "/home/runner/work/repo/repo/apps/web/test-results/$4/test-finished-1.png" \
-    '{title: $title, file: $file, tests: [{annotations: $marks, results: ($earlier + [{status: "passed", attachments: [
-       {name: "trace", contentType: "application/zip", path: "/x/test-results/trace.zip"},
-       {name: "screenshot", contentType: "image/png", path: $path}]}])}]}')$'\n'
+    --arg path "/home/runner/work/repo/repo/apps/web/test-results/$4" \
+    '{title: $title, file: $file, tests: [("mobile", "desktop") as $width | {projectName: $width, annotations: $marks,
+       results: ($earlier + [{status: "passed", attachments: [
+         {name: "trace", contentType: "application/zip", path: "/x/test-results/trace.zip"},
+         {name: "screenshot", contentType: "image/png", path: "\($path)-\($width)/test-finished-1.png"}]}])}]}')$'\n'
 }
 report() {
   jq -sc '{suites: [{title: "all", specs: [], suites: (group_by(.file) | map({title: .[0].file, file: .[0].file, specs: .}))}]}' \
@@ -45,7 +49,7 @@ expect_nothing_pushed() {
   [ -z "$(pushed_files | grep screenshots)" ] || fail "expected no screenshot on the sessions branch, found: $(pushed_files)"
 }
 
-scenario "shows one image for each of the ticket's tests that opened a page, captioned with its title"
+scenario "shows, in one comment, each criterion whose test opened a page once, with its page at mobile and at desktop width, labelled"
 github sessions
 closes "Closes #12"
 took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the heading" page first
@@ -57,16 +61,42 @@ took smoke.spec.ts "the home page loads" page smoke
 report
 post
 expect_status 0
-expect_output "Posted 2 screenshot(s) from the acceptance tests of #12 on pull request #7."
+expect_output "Posted 4 screenshot(s) from the acceptance tests of #12 on pull request #7."
+expect_calls 1 "gh pr comment"
 expect_comment "acceptance tests of #12, at commit abc1234."
-expect_comment "**AC1: an unknown path shows the heading**"
-expect_comment "![AC1: an unknown path shows the heading](https://github.com/owner/repo/blob/sessions/$folder/1.png?raw=true)"
-expect_comment "![AC3: the link leads home](https://github.com/owner/repo/blob/sessions/$folder/2.png?raw=true)"
-[ "$(grep -c '^!\[' "$T/comment.md")" = 2 ] || fail "expected exactly two images in the comment"
-[ "$(on_github show "sessions:$folder/1.png")" = first ] || fail "expected 1.png to be the first test's screenshot"
-[ "$(on_github show "sessions:$folder/2.png")" = third ] || fail "expected 2.png to be the third test's screenshot"
-[ "$(pushed_files | grep -c screenshots)" = 2 ] || fail "expected exactly two screenshots pushed, found: $(pushed_files)"
+# The comment from its first criterion on, a line each, so that what stands under what can be compared.
+address="https://github.com/owner/repo/blob/sessions/$folder"
+[ "$(sed -n '/^\*\*/,$p' "$T/comment.md" | grep -v '^$')" = "**AC1: an unknown path shows the heading**
+At mobile width:
+![AC1: an unknown path shows the heading, at mobile width]($address/1.png?raw=true)
+At desktop width:
+![AC1: an unknown path shows the heading, at desktop width]($address/2.png?raw=true)
+**AC3: the link leads home**
+At mobile width:
+![AC3: the link leads home, at mobile width]($address/3.png?raw=true)
+At desktop width:
+![AC3: the link leads home, at desktop width]($address/4.png?raw=true)" ] \
+  || fail "expected each criterion once, with its page at mobile and at desktop width under it, found: $(cat "$T/comment.md")"
+[ "$(on_github show "sessions:$folder/1.png")" = "first at mobile" ] || fail "expected 1.png to be the first test's page at mobile width"
+[ "$(on_github show "sessions:$folder/2.png")" = "first at desktop" ] || fail "expected 2.png to be the first test's page at desktop width"
+[ "$(on_github show "sessions:$folder/3.png")" = "third at mobile" ] || fail "expected 3.png to be the third test's page at mobile width"
+[ "$(on_github show "sessions:$folder/4.png")" = "third at desktop" ] || fail "expected 4.png to be the third test's page at desktop width"
+[ "$(pushed_files | grep -c screenshots)" = 4 ] || fail "expected exactly four screenshots pushed, found: $(pushed_files)"
 expect_nothing_left
+
+scenario "a criterion whose test opened a page at one width alone shows that width, labelled"
+github sessions
+closes "Closes #12"
+took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the heading" page first
+report
+jq '(.. | objects | select(.projectName? == "mobile") | .annotations) = []' \
+  "$T/artifact/test-results/results.json" > "$T/changed.json" && mv "$T/changed.json" "$T/artifact/test-results/results.json"
+post
+expect_status 0
+expect_comment "**AC1: an unknown path shows the heading**"
+expect_comment "![AC1: an unknown path shows the heading, at desktop width](https://github.com/owner/repo/blob/sessions/$folder/1.png?raw=true)"
+grep -q "mobile" "$T/comment.md" && fail "expected no mobile picture of a test that opened no page at mobile width"
+[ "$(on_github show "sessions:$folder/1.png")" = "first at desktop" ] || fail "expected 1.png to be the page at desktop width"
 
 scenario "adds to the sessions branch and touches nothing else: the transcripts stay, and main is as it was"
 github sessions
@@ -88,7 +118,7 @@ took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the headin
 report
 post
 expect_status 0
-[ "$(on_github show "sessions:$folder/1.png")" = first ] || fail "expected the screenshot on a new sessions branch"
+[ "$(on_github show "sessions:$folder/1.png")" = "first at mobile" ] || fail "expected the screenshot on a new sessions branch"
 on_github show sessions:apps/web/vercel.json | grep -q '"deploymentEnabled": false' || fail "expected vercel.json to turn deployments off"
 
 scenario "a test that was retried shows its last try"
@@ -99,7 +129,7 @@ took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the headin
 report
 post
 expect_status 0
-[ "$(on_github show "sessions:$folder/1.png")" = last-try ] || fail "expected the last try's screenshot"
+[ "$(on_github show "sessions:$folder/1.png")" = "last-try at mobile" ] || fail "expected the last try's screenshot"
 
 scenario "run again for the same commit, it replaces the images and leaves none the new comment does not show"
 github sessions
@@ -114,8 +144,9 @@ report
 rm -f "$T/comment.md"
 post
 expect_status 0
-[ "$(pushed_files | grep screenshots)" = "$folder/1.png" ] || fail "expected only 1.png, found: $(pushed_files)"
-expect_comment "$folder/1.png"
+[ "$(pushed_files | grep screenshots)" = "$folder/1.png
+$folder/2.png" ] || fail "expected only 1.png and 2.png, found: $(pushed_files)"
+expect_comment "$folder/2.png"
 
 scenario "run again with the same images, it pushes nothing new and still posts the comment"
 github sessions
@@ -130,13 +161,16 @@ expect_status 0
 [ "$(on_github rev-parse sessions)" = "$tip" ] || fail "expected no new commit on the sessions branch"
 expect_comment "$folder/1.png"
 
-scenario "a title is shown as text: no Markdown of its own, and no mention that would start an agent"
+scenario "a title and a width are shown as text: no Markdown of their own, and no mention that would start an agent"
 github sessions
 closes "Closes #12"
 took acceptance/12-not-found-page.spec.ts 'AC1: [x](http://evil) shows *bold* `code` <b> and @claude' page first
 report
+jq '(.. | objects | select(.projectName? == "desktop") | .projectName) = "[y](http://evil) @claude"' \
+  "$T/artifact/test-results/results.json" > "$T/changed.json" && mv "$T/changed.json" "$T/artifact/test-results/results.json"
 post
 expect_status 0
+expect_comment 'At \[y\](http://evil) claude width:'
 expect_comment '**AC1: \[x\](http://evil) shows \*bold\* \`code\` \<b\> and claude**'
 grep -q '@claude' "$T/comment.md" && fail "expected no @claude in the comment"
 
@@ -199,7 +233,7 @@ github sessions
 closes "Closes #12"
 took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the heading" page first
 report
-rm "$T/artifact/test-results/first/test-finished-1.png"
+rm "$T/artifact/test-results/first-desktop/test-finished-1.png"
 post
 expect_status 1
 expect_output 'The screenshot of "AC1: an unknown path shows the heading" is not in'
@@ -239,7 +273,7 @@ closes "Closes #12"
 took acceptance/12-not-found-page.spec.ts "AC1: an unknown path shows the heading" page first
 report
 echo secret > "$T/secret"
-ln -sf "$T/secret" "$T/artifact/test-results/first/test-finished-1.png"
+ln -sf "$T/secret" "$T/artifact/test-results/first-desktop/test-finished-1.png"
 post
 expect_status 1
 expect_nothing_pushed
@@ -253,7 +287,7 @@ refuses_pushes 1
 post
 expect_status 0
 expect_call "sleep"
-[ "$(on_github show "sessions:$folder/1.png")" = first ] || fail "expected the screenshot on the branch after the second try"
+[ "$(on_github show "sessions:$folder/1.png")" = "first at mobile" ] || fail "expected the screenshot on the branch after the second try"
 expect_comment "$folder/1.png"
 expect_nothing_left
 

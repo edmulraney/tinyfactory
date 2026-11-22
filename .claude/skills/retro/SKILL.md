@@ -16,7 +16,7 @@ Find the cause of the run's friction and write it down. Fix nothing and change n
 
 ## Steps
 
-1. **Read the facts** for where the friction was.
+1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.
 2. **Find the cause, not the symptom.** "The type check failed" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).
 3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:
    - `lost-work`: finished work was thrown away, such as a session's changes never pushed;

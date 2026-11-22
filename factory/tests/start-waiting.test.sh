@@ -120,6 +120,15 @@ expect_status 0
 expect_output "no ticket waits with ready: nothing was started"
 [ "$(wc -l < "$T/calls")" -eq 1 ] || fail "expected one call to GitHub"
 
+scenario "an idea that carries ready is Peta's to start: no build is started for it"
+github
+waits 30 700
+jq -c '.[0].labels = [{name: "idea"}, {name: "ready"}]' "$T/ready" > "$T/ready.new" && mv "$T/ready.new" "$T/ready"
+start
+expect_status 0
+expect_output "no ticket waits with ready: nothing was started"
+expect_no_call "gh workflow run"
+
 scenario "a merge that frees one place starts the ticket that has carried ready longest, and only that one"
 github
 in_progress 20 21 28 29

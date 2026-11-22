@@ -16,15 +16,17 @@ concurrency:
 
 env:
   ISSUE: ${{ github.event.issue.number || inputs.issue }}
-  # No background commands in a session with nobody in it (decisions A69f).
-  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+  # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A550).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\" \"$RUNNER_TEMP/ticket-text.txt\""}]}]}}'
 
 jobs:
   implement:
     # For the label, the event must say a trusted account opened the ticket, or that the owner added it (decisions W563b).
     # start-build.sh then asks GitHub who opened it, and tells a ticket it refuses (decisions T563f).
+    # On an idea the label starts Peta in refine.yml, and no build (decisions A611b).
     if: >-
       github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' &&
+      !contains(github.event.issue.labels.*.name, 'idea') &&
       (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
       contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login) ||
       github.event.sender.login == github.repository_owner))
@@ -111,6 +113,14 @@ jobs:
       - name: Set the scripts aside as they are on main
         if: steps.place.outputs.start == 'true'
         run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
+
+      # Read before the session begins, so that no comment the session writes names a file (decisions A550).
+      - name: Keep the ticket's text, which names the skill files the engineer may write
+        if: steps.place.outputs.start == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$RUNNER_TEMP/factory-scripts/thread.sh" "$ISSUE" > "$RUNNER_TEMP/ticket-text.txt"
 
       # If this fails the engineer starts from main, as when there is nothing to start from (decisions A69d).
       - name: Start from what an earlier build left unfinished

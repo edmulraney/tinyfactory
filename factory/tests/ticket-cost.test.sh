@@ -2,9 +2,17 @@
 # Tests for ticket-cost.sh, which sums what a merged ticket cost from GitHub and the sessions branch.
 . "$(dirname "$0")/helpers.sh"
 
+# The scripts are run from a copy, so the budgets they read are this file's and not the owner's.
+project="$_base/project"
+mkdir -p "$project/factory"
+cp -R "$scripts" "$project/factory/scripts"
+scripts="$project/factory/scripts"
+
 # Pull request #72 closes ticket #57; $T/fail lists the gh calls that fail, by their first words.
 github() {
   : > "$T/fail"
+  # Ticket #57 is labelled `factory`: one build costs 11 minutes and $10.21.
+  printf '# The budgets.\n\ntweak 5 2\nfactory 11 10.21\n' > "$project/factory/budget.txt"
   mkdir -p "$T/sessions" "$T/jobs"
   echo '[]' > "$T/rounds"
   echo '[{"number":72,"merged_at":"2026-11-16T09:12:00Z"}]' > "$T/pulls"
@@ -116,6 +124,123 @@ expect_status 0
 expect_output "- **Claude usage:** \$10.21 at API prices, in 3 sessions on claude-fable-5-2"
 expect_output "- **Ready to merged:** 1 h 12 min"
 expect_no_call "gh "
+
+over() { run "$scripts/ticket-cost.sh" --over-budget; }
+
+scenario "a ticket that cost its budget to the minute and the cent: each figure beside its budget, and over neither"
+github; one_build
+cost 72 "$T/sessions"
+expect_status 0
+[ "$(grep -c . <<<"$out")" = 4 ] || fail "expected four lines"
+expect_output "- **Claude usage:** \$10.21 at API prices, in 3 sessions on claude-fable-5-2; the budget for a \`factory\` ticket is \$10.21"
+expect_output "- **Actions minutes:** 11, in 2 runs; the budget for a \`factory\` ticket is 11 minutes"
+cost --json 72 "$T/sessions"
+[ "$(jq -c .budget <<<"$out")" = '{"type":"factory","minutes":11,"cost_usd":10.21}' ] || fail "expected the budget of a factory ticket, found: $(jq -c .budget <<<"$out")"
+over <<<"$out"
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+
+scenario "a ticket over its budget of minutes alone: the comment says so of the minutes, and only they are named"
+github; one_build
+echo "factory 10 10.21" > "$project/factory/budget.txt"
+cost 72 "$T/sessions"
+expect_output "- **Actions minutes:** 11, in 2 runs; over the budget of 10 minutes for a \`factory\` ticket"
+expect_output "claude-fable-5-2; the budget for a \`factory\` ticket is \$10.21"
+cost --json 72 "$T/sessions"
+over <<<"$out"
+expect_status 0
+[ "$out" = "Actions minutes" ] || fail "expected only the minutes to be named"
+
+scenario "a ticket over its budget of cost alone: the comment says so of the cost, after a transcript that gave none"
+github; one_build
+echo "factory 11 8.65" > "$project/factory/budget.txt"
+echo '[{"type":"result","total_cost_usd":1.8' > "$T/sessions/pr-72/20261116T080000Z-ryan-run801.json"
+cost 72 "$T/sessions"
+expect_output "- **Claude usage:** \$8.66 at API prices, in 2 sessions on claude-fable-5-2; 1 more transcript gave no cost; over the budget of \$8.65 for a \`factory\` ticket"
+expect_output "- **Actions minutes:** 11, in 2 runs; the budget for a \`factory\` ticket is 11 minutes"
+cost --json 72 "$T/sessions"
+over <<<"$out"
+expect_status 0
+[ "$out" = "Claude usage" ] || fail "expected only the cost to be named"
+
+scenario "the budget is that of the type the ticket holds now, not of one taken off it"
+github; one_build
+echo '[]' > "$T/events"
+labelled events labeled factory 07:00
+labelled events labeled ready 08:00
+labelled events unlabeled factory 08:01
+labelled events labeled tweak 08:02
+cost 72 "$T/sessions"
+expect_output "- **Actions minutes:** 11, in 2 runs; over the budget of 5 minutes for a \`tweak\` ticket"
+expect_output "over the budget of \$2.00 for a \`tweak\` ticket"
+
+scenario "a type with no budget, and a pull request that closes no ticket: the figures alone, and over nothing"
+github; one_build
+echo "tweak 5 2" > "$project/factory/budget.txt"
+cost 72 "$T/sessions"
+expect_status 0
+expect_output "- **Actions minutes:** 11, in 2 runs"
+expect_no_output "budget"
+cost --json 72 "$T/sessions"
+[ "$(jq -c .budget <<<"$out")" = null ] || fail "expected no budget"
+over <<<"$out"
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+pull_request 72 none "2026-11-16T09:12:00Z"
+echo '{"workflow_runs":[]}' > "$T/runs"
+rm "$project/factory/budget.txt"
+cost 72 "$T/sessions"
+expect_status 0
+expect_no_output "budget"
+
+scenario "figures recorded before budgets began: the four lines hold no budget, and they are over nothing"
+github
+figures='{"pr":72,"issue":57,"cost_usd":10.21,"sessions":3,"unread":0,"models":["claude-fable-5-2"],"minutes":11,"runs":2,"fix_rounds":0,"owner_rounds":0,"seconds":4320}'
+run "$scripts/ticket-cost.sh" --comment <<<"$figures"
+expect_status 0
+expect_output "- **Actions minutes:** 11, in 2 runs"
+expect_no_output "budget"
+over <<<"$figures"
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+
+for line in "factory eleven 10" "factory 11" "factory 11 \$10" "factory 11 10 12"; do
+  scenario "stops with a message, and prints no cost, for a budget that is not minutes and dollars: $line"
+  github; one_build
+  printf 'tweak 5 2\n%s\n' "$line" > "$project/factory/budget.txt"
+  cost 72 "$T/sessions"
+  expect_failure
+  expect_output "factory/budget.txt:2: a line is \"<type> <minutes> <dollars>\", and this is not: $line"
+  expect_output "Could not read factory/budget.txt, so the budget of ticket #57 is not known."
+  expect_no_output "Claude usage"
+done
+
+scenario "stops with a message, and prints no cost, when the budgets are missing"
+github; one_build
+rm "$project/factory/budget.txt"
+cost 72 "$T/sessions"
+expect_failure
+expect_output "Could not read factory/budget.txt, so the budget of ticket #57 is not known."
+expect_no_output "Claude usage"
+
+for given in "not json" "" '{"pr":72}'; do
+  scenario "whether figures are over a budget is refused for figures that are not the script's own: ${given:-nothing}"
+  github
+  over <<<"$given"
+  expect_failure
+  expect_output "The figures on stdin are not a line ticket-cost.sh --json printed, so whether they are over a budget is not known."
+done
+
+scenario "the budgets the factory ships with can be read, and hold one for each type of ticket"
+github; one_build
+cp "$root/factory/budget.txt" "$project/factory/budget.txt"
+for type in $(sed -n 's/^types=(\(.*\))$/\1/p' "$scripts/check-ticket.sh"); do
+  echo '[]' > "$T/events"
+  labelled events labeled "$type" 07:00
+  cost --json 72 "$T/sessions"
+  expect_status 0
+  [ "$(jq -r .budget.type <<<"$out")" = "$type" ] || fail "expected a budget for a $type ticket"
+done
 
 for given in "not json" "" '{"pr":72}'; do
   scenario "the four lines are refused for figures that are not the script's own: ${given:-nothing}"

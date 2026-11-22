@@ -12,13 +12,15 @@ env:
 
 jobs:
   refine:
-    # Only an idea a trusted account opened, on its label and on a comment (decisions A563e).
-    # Only the owner's comment takes a place in the queue below, so nobody else's replaces an answer that waits; start-refine.sh checks it again (decisions A353f).
+    # Only an idea a trusted account opened, on its label, on `ready` and on a comment (decisions A563e, A611a).
+    # Only the owner's comment or `ready` takes a place in the queue below, so nobody else's replaces an answer that waits; start-refine.sh checks it again (decisions A353f).
     # A comment that holds @claude is the mention agent's to answer (decisions A372h).
     if: >-
       (contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
       contains(fromJSON('["claude[bot]","github-actions[bot]"]'), github.event.issue.user.login)) &&
-      ((github.event_name == 'issues' && github.event.label.name == 'idea') ||
+      ((github.event_name == 'issues' && (github.event.label.name == 'idea' ||
+      (github.event.label.name == 'ready' && contains(github.event.issue.labels.*.name, 'idea') &&
+      github.event.sender.login == github.repository_owner))) ||
       (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
       contains(github.event.issue.labels.*.name, 'idea') && github.event.comment.user.login == github.repository_owner &&
       !contains(github.event.comment.body, '@claude')))
@@ -50,7 +52,33 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           OWNER: ${{ github.repository_owner }}
           COMMENT: ${{ github.event.comment.id }}
-        run: factory/scripts/start-refine.sh "$ISSUE" "$OWNER" .refine/idea.md "$COMMENT"
+          LABEL: ${{ github.event.label.name }}
+        run: factory/scripts/start-refine.sh "$ISSUE" "$OWNER" .refine/idea.md "$COMMENT" "$LABEL"
+
+      # In no script, as the steps of ci.yml that hold the key, and only once the account is trusted and Peta runs: so
+      # after the checkout of main, as no other step with the key is (decisions M15, M605b).
+      - name: Count the people with an account in production's database
+        id: users
+        if: steps.start.outputs.start == 'true' && vars.NEON_PROJECT_ID != ''
+        # A count that could not be read is said to be unknown, and must not fail the job.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
+          # One fetch a line so a failed request stops the step. Production's branch is Neon's default one.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
+          branch=$(jq -er '.branches[] | select(.default) | .id' <<<"$branches")
+          databases=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches/$branch/databases")
+          database=$(jq -er '.databases[0] | "database_name=\(.name | @uri)&role_name=\(.owner_name | @uri)"' <<<"$databases")
+          connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$branch&$database")
+          uri=$(jq -er .uri <<<"$connection")
+          echo "::add-mask::$uri"
+          # Neon Auth keeps each account as a row of `neon_auth.user`.
+          count=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c 'select count(*) from neon_auth."user"')
+          [[ "$count" =~ ^[0-9]+$ ]]
+          echo "count=$count" >> "$GITHUB_OUTPUT"
 
       # save-session.sh runs as main has it, not as Peta's session left it.
       - name: Set the scripts aside as they are on main
@@ -65,9 +93,11 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # No background commands in a session with nobody in it (decisions A69f).
           settings: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+          # `format`, so that a count of 0 is never taken for no count.
           prompt: |
             You are Peta. Read .claude/skills/refine/SKILL.md and follow it for idea #${{ env.ISSUE }} in this repository.
             The idea, your earlier comments on it and the owner's answers are in .refine/idea.md. Write your own files in .refine/.
+            Production's database, counted as this run started, holds an account for ${{ steps.users.outputs.count != '' && format('{0} people', steps.users.outputs.count) || 'a number of people that could not be read' }}.
           # She comments on this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
           # The mode denies what the list does not cover: the action's own default lets a review pass it (decisions A353b, A353e).
           claude_args: |

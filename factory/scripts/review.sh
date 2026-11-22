@@ -7,7 +7,8 @@
 #          Needs GH_TOKEN, to read. If GitHub cannot be read it exits 1 and leaves no folder.
 #        review.sh sessions <pr-number> <head-sha> <adam|ryan>... -- <arguments for each claude session>
 #          From a checkout of the base that holds the commit <head-sha>, whose files it puts outside that checkout,
-#          in $RUNNER_TEMP/pull-request. Each reviewer named is given <NAME>_PROMPT and <NAME>_SCHEMA, as ADAM_PROMPT.
+#          in $RUNNER_TEMP/pull-request, and what stale-documents.sh prints for it in $RUNNER_TEMP/stale-documents.txt.
+#          Each reviewer named is given <NAME>_PROMPT and <NAME>_SCHEMA, as ADAM_PROMPT.
 #          Needs `claude` with CLAUDE_CODE_OAUTH_TOKEN, and no GitHub token: with GH_TOKEN or GITHUB_TOKEN set, or
 #          a token in the checkout's git config, it starts no session and exits 1 (decisions A541d), with
 #          workflow-behind.sh's sentence in a run whose ci.yml main no longer holds or is about to replace, which
@@ -70,6 +71,7 @@ work=$(mktemp -d) || {
 trap 'rm -rf "$work"' EXIT
 # What a reviewer reads from GitHub, which a session has no token to ask (decisions A541d).
 github="$temp/github"
+documents="$temp/stale-documents.txt"
 
 if [ "$mode" = context ]; then
   unread() {
@@ -125,6 +127,8 @@ review() {
 
 This directory is a checkout of the branch the pull request merges into. The pull request's files, as its commit $head has them, are in $files: read them there. \`git diff\` and \`git log\` know that commit from this directory.
 
+$documents holds each line of a document that names a file, label or command the pull request changes or removes, as that commit has the line. It is empty when no line does.
+
 You have no \`gh\`. What it would print is in $github: pull-request.md holds the pull request's title, description, comments and reviews, and ticket-<n>.md the text and comments of the ticket it closes, each without what an account with no write access to the repository wrote. For the pull request's diff, run \`git diff HEAD...$head\`."
   # The waits before continuing after an API error (decisions A69a, A69b).
   for wait in 120 300; do
@@ -174,6 +178,8 @@ sessions() {
     return
   }
   mkdir -p "$kept" || { echo "review.sh: could not make $kept, so no review ran." >&2; return; }
+  # A reviewer cannot run a script, and reads why a list was not made where the list would be (decisions A615a, A615c).
+  "$script_dir/stale-documents.sh" HEAD "$head" > "$documents" 2>&1 || cat "$documents" >&2
   for role in "${roles[@]}"; do
     # Each line says whose it is: the two write to one log as they go.
     review "$role" 2>&1 | while IFS= read -r line; do printf '%s: %s\n' "$role" "$line"; done &
