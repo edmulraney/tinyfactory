@@ -124,8 +124,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue list --state open --limit 1000 --json number,title,labels \
-            --jq '[.[] | {number, title, labels: [.labels[].name]}]' > .sessions/tickets.json || {
+          factory/scripts/open-issues.sh > .sessions/tickets.json || {
             rm -f .sessions/tickets.json
             echo "the open tickets could not be listed: the retro goes on without them"
           }
