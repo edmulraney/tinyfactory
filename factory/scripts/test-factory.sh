@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Runs the factory scripts' own tests, in factory/tests/*.test.sh, as the first part of `pnpm test` (decisions H3).
 # Usage: test-factory.sh [<commit-of-main>]   (from the repo root)
-#        With no commit, every test file runs. With one, only those the change since that commit can affect
-#        (decisions H429a), and every one when that cannot be worked out (H429d).
+#        Only the test files that the change since that commit can affect run (decisions H429a). With no commit,
+#        the commit is where the branch left origin/main (H596a). Every file runs when that cannot be worked out (H429d).
 set -euo pipefail
 
-main="${1:-}"
+given="${1:-}"
+main=$given
+[ -n "$given" ] || main=$(git merge-base origin/main HEAD 2>/dev/null) || main=""
 
 # Every file is run even after one fails, so one push shows everything that is broken (decisions H21).
 failed=0
@@ -20,11 +22,9 @@ fi
 
 # affected: prints the test files that the change since $main can affect (decisions H429a, H429b, H429e).
 affected() {
-  local changed names found boundary='A-Za-z0-9_-'
-  # Read as checks-needed.sh reads them (decisions H268d).
-  changed=$(git -c core.quotePath=false diff --name-only --no-renames "$main" HEAD) || return 1
+  local names found boundary='A-Za-z0-9_-'
   # What every test file is run by, or reads by its folder (decisions H429c).
-  if grep -qE '^(factory/workflows/|\.github/|factory/scripts/test-factory\.sh$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$)' <<<"$changed"; then
+  if grep -qE '^(factory/workflows/|\.github/|factory/scripts/test-factory\.sh$|package\.json$|pnpm-workspace\.yaml$)' <<<"$changed"; then
     echo "$tests"
     return 0
   fi
@@ -43,13 +43,20 @@ affected() {
   done
   grep -E "^factory/tests/$names_pattern\$" <<<"$tests" || true
 }
-if [ -n "$main" ]; then
-  if chosen=$(affected); then
-    echo "The change since $main can affect $(grep -c . <<<"$chosen" || true) of the $(grep -c . <<<"$tests" || true) test files, and only those run."
-    tests=$chosen
-  else
-    echo "test-factory.sh could not work out which test files the change since $main can affect, so every test file runs."
-  fi
+if [ -z "$main" ]; then
+  echo "test-factory.sh found no commit that this branch shares with origin/main, so every test file runs."
+# Read as checks-needed.sh reads them (decisions H268d), with what the working tree holds uncommitted (H596a).
+elif ! changed=$(git -c core.quotePath=false diff --name-only --no-renames "$main" \
+  && git -c core.quotePath=false ls-files --others --exclude-standard); then
+  echo "test-factory.sh could not work out which test files the change since $main can affect, so every test file runs."
+elif [ -z "$given" ] && [ -z "$changed" ]; then
+  # A run on main itself is a test of main (decisions H596b).
+  echo "Nothing has changed since origin/main, so every test file runs."
+elif chosen=$(affected); then
+  echo "The change since $main can affect $(grep -c . <<<"$chosen" || true) of the $(grep -c . <<<"$tests" || true) test files, and only those run."
+  tests=$chosen
+else
+  echo "test-factory.sh could not work out which test files the change since $main can affect, so every test file runs."
 fi
 
 # As many files at once as the machine has processors, each writing to a file of its own (decisions H249a, H249b).

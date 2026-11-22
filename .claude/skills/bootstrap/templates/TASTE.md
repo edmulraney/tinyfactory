@@ -24,6 +24,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 - **No tautological tests.** A test that restates the implementation, asserts on mocks it set up itself, or cannot fail proves nothing.
 - **Test behaviour, not structure.** Tests survive a refactor that keeps behaviour the same.
 - **Never weaken a test or a lint rule to get to green.** Fix the code, or say why the rule is wrong.
+- **A test stays only when it proves behaviour a user or a caller depends on that no other test proves.**
 
 ## Pull requests
 
@@ -33,6 +34,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 ## Documents
 
 - **A file holds what stays true until someone edits it.** A ticket's state, a date or "for now" is wrong by the next merge. What happened goes in the ticket or a decision row.
+- **A decision row stays only when it stops a rejected path being tried again, or changes how the next change is built.**
 - **A reason is given in one place.** Every other place still says the fact in a full sentence and names where its reason is: "The factory stores no Vercel token (decisions [M9](factory/decisions/setup.md))", never "([M9](factory/decisions/setup.md))" alone.
 
 ## Writing

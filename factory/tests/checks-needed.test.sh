@@ -189,7 +189,7 @@ done
 scenario "ci.yml gives it, and the factory's tests, main's commit: the first parent of the merge commit checks runs on"
 job checks | grep -qxF '        run: factory/scripts/checks-needed.sh HEAD^1 >> "$GITHUB_OUTPUT"' \
   || fail "expected checks to compare with the first parent of GitHub's merge commit"
-# With no commit test-factory.sh runs every test file, whatever changed (decisions H429a).
+# With no commit test-factory.sh compares with origin/main, which this checkout does not hold (decisions H596a).
 job checks | grep -qxF '        run: factory/scripts/test-factory.sh HEAD^1' \
   || fail "expected the factory's tests in checks to be given the first parent of GitHub's merge commit"
 # Without the parents in the checkout the comparison fails and every check runs, every time.

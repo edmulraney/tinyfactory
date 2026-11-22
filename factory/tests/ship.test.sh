@@ -412,7 +412,7 @@ expect_no_call "gh workflow run install-workflows.yml"
 
 scenario "confirms the deploy and then fails when the installer could not be started"
 ready_to_ship
-echo '[{"filename":"factory/workflows/ci.yml"}]' > "$T/files.json"
+echo '[{"filename":"factory/workflows/ci.yml"},{"filename":"apps/web/src/app/page.tsx"}]' > "$T/files.json"
 echo "workflow run install-workflows.yml" > "$T/fail"
 ship
 expect_status 1
@@ -478,15 +478,15 @@ expect_call "gh pr comment 7 --body Merged as abcdef0, but not everything"
 expect_call "- the deploy check: production at https://myapp.example/ did not report"
 expect_no_call "--add-label deployed"
 
-scenario "passes when Vercel skipped the deployment of a merge that changes no app code, says nothing was deployed, and does not mark the ticket deployed"
+scenario "passes without waiting for production after a merge that changes no app code, says there was nothing to deploy, and does not mark the ticket deployed"
 ready_to_ship
-echo '[{"filename":"factory/scripts/ship.sh"},{"filename":".claude/skills/implement/SKILL.md"}]' > "$T/files.json"
+echo '[{"filename":"factory/scripts/ship.sh"},{"filename":"README.md"}]' > "$T/files.json"
 echo '{"commit":"0000000000000000000000000000000000000000"}' > "$T/health"
-echo '[{"context":"Vercel","state":"success","description":"Skipped - Not affected"}]' > "$T/statuses.json"
 ship
 expect_status 0
-expect_calls 1 "curl "
-expect_call "gh pr comment 7 --body Merged as abcdef0. Nothing was deployed: this pull request changes no app code"
+expect_no_call "curl"
+expect_no_call "gh api repos/{owner}/{repo}/commits/$merged/statuses"
+expect_call "gh pr comment 7 --body Merged as abcdef0. Nothing to deploy: this pull request changes no app code, so production at https://myapp.example/ serves the app it did before."
 expect_no_call "not everything that follows a merge finished"
 expect_no_call "--add-label deployed"
 
@@ -499,15 +499,13 @@ echo "api repos/owner/myapp/pulls/7/files" > "$T/fail"
 ship
 expect_status 1
 expect_call "- the deploy check: Vercel skipped the deployment of this commit"
-expect_no_call "Nothing was deployed"
+expect_no_call "Nothing to deploy"
 expect_no_call "--add-label deployed"
 
-scenario "fails when the merge changes no app code, Vercel skipped it, and the comment saying so cannot be posted"
+scenario "fails when the merge changes no app code and the comment saying so cannot be posted"
 ready_to_ship
 echo '[{"filename":"factory/scripts/ship.sh"}]' > "$T/files.json"
-echo '{"commit":"0000000000000000000000000000000000000000"}' > "$T/health"
-echo '[{"context":"Vercel","state":"success","description":"Skipped - Not affected"}]' > "$T/statuses.json"
-echo "pr comment 7 --body Merged as abcdef0. Nothing was deployed" > "$T/fail"
+echo "pr comment 7 --body Merged as abcdef0. Nothing to deploy" > "$T/fail"
 ship
 expect_status 1
 expect_output "the comment saying so could not be posted"
@@ -1046,19 +1044,40 @@ for number in 7 8 9; do
 done
 expect_call "- the deploy check: production at https://myapp.example/ did not report 9999999 within 10 minutes. Check the Vercel deployment"
 
-scenario "when Vercel skips the last commit, which changes no app code, the commit before it is the one production comes to run"
+scenario "when the last commit changes no app code, the commit before it is the one waited for, and Vercel is not asked about the last"
 a_group
 echo '[{"filename":"factory/scripts/ship.sh"}]' > "$T/files-9.json"
+echo "{\"commit\":\"$merged\"}" > "$T/health"
+ship "8:$head_8" "7:$head" "9:$head_9"
+expect_status 0
+expect_no_call "gh api repos/{owner}/{repo}/commits/$nine_merged/statuses"
+expect_call "gh pr comment 7 --body Deployed: production at https://myapp.example/ is running abcdef0."
+expect_call "gh pr comment 8 --body Deployed: production at https://myapp.example/ is running abcdef0, which holds this pull request's commit 8888888."
+expect_call "gh pr comment 9 --body Merged as 9999999. Nothing to deploy: this pull request changes no app code"
+expect_call "gh issue edit 12 --add-label deployed"
+expect_call "gh issue edit 13 --add-label deployed"
+expect_no_call "gh issue edit 14 --add-label deployed"
+
+scenario "when Vercel deploys the last commit though it changes no app code, production running it holds the commit before it"
+a_group
+echo '[{"filename":"README.md"}]' > "$T/files-9.json"
+ship "8:$head_8" "7:$head" "9:$head_9"
+expect_status 0
+expect_call "gh pr comment 7 --body Deployed: production at https://myapp.example/ is running 9999999, which holds this pull request's commit abcdef0."
+expect_call "gh pr comment 8 --body Deployed: production at https://myapp.example/ is running 9999999, which holds this pull request's commit 8888888."
+expect_call "gh pr comment 9 --body Merged as 9999999. Nothing to deploy"
+expect_call "gh issue edit 12 --add-label deployed"
+expect_no_call "gh issue edit 14 --add-label deployed"
+
+scenario "when Vercel skips the last commit, which changes app code, the commit before it is waited for and the skipped one is not marked deployed"
+a_group
 echo '[{"context":"Vercel","description":"Skipped, no changes"}]' > "$T/skipped-statuses.json"
 echo "$nine_merged" > "$T/skipped-commit"
 echo "{\"commit\":\"$merged\"}" > "$T/health"
 ship "8:$head_8" "7:$head" "9:$head_9"
-expect_status 0
+expect_status 1
 expect_call "gh pr comment 7 --body Deployed: production at https://myapp.example/ is running abcdef0."
-expect_call "gh pr comment 8 --body Deployed: production at https://myapp.example/ is running abcdef0, which holds this pull request's commit 8888888."
-expect_call "gh pr comment 9 --body Merged as 9999999. Nothing was deployed: this pull request changes no app code"
-expect_call "gh issue edit 12 --add-label deployed"
-expect_call "gh issue edit 13 --add-label deployed"
+expect_call "- the deploy check: Vercel skipped the deployment of this commit"
 expect_no_call "gh issue edit 14 --add-label deployed"
 
 scenario "main holds what was tested: the tree the last merge made is the tree that passed, and nothing is said"
@@ -1393,11 +1412,10 @@ expect_calls 1 "gh issue comment 12 --body"
 scenario "after the merge button on a pull request that changes no app code, says what was deployed and takes needs-human off the ticket"
 ready_to_ship
 echo '[{"filename":"factory/scripts/ship.sh"}]' > "$T/files.json"
-jq -n --arg sha "$merged" '[{context: "Vercel", state: "success", description: "Skipped: ignored build step"}]' > "$T/statuses.json"
 rm "$T/health"
 finish
 expect_status 0
-expect_call "gh pr comment 7 --body Merged as abcdef0. Nothing was deployed"
+expect_call "gh pr comment 7 --body Merged as abcdef0. Nothing to deploy"
 expect_call "gh issue edit 12 --remove-label in-progress --remove-label needs-human"
 expect_no_call "gh issue edit 12 --add-label deployed"
 

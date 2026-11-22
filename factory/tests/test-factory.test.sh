@@ -228,7 +228,7 @@ RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
 expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
 
 scenario "a change to one of the root's package files, or under .github/, starts every test file"
-changed pnpm-lock.yaml
+changed pnpm-workspace.yaml
 RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
 expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
 rm "$T/ran"/*
@@ -236,6 +236,11 @@ echo "# changed" > .github-file && mkdir -p .github/actions/setup && mv .github-
 git add . && git commit -q -m "a shared action"
 RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
 expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+
+scenario "a change to pnpm-lock.yaml starts no test file: no shell test installs a package"
+changed pnpm-lock.yaml
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran ""
 
 scenario "a changed test file runs, and so does one more for each other changed script"
 changed factory/tests/re-ship.test.sh factory/scripts/watch.sh
@@ -277,11 +282,64 @@ git commit -q -a -m "the change"
 RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
 expect_ran "approve-merge déploy ship shipping"
 
-scenario "with no commit every test file runs, whatever changed"
+scenario "with no commit, only the test files that the commits since the branch left origin/main can affect run"
+changed factory/scripts/watch.sh
+git update-ref refs/remotes/origin/main HEAD^
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "watch"
+expect_output "can affect 1 of the 7 test files, and only those run."
+
+scenario "with no commit, the commit compared with is where the branch left origin/main, not where origin/main is now"
+changed factory/scripts/watch.sh
+git branch -q later HEAD^
+git checkout -q later
+echo "# changed on main" >> factory/scripts/re-ship.sh
+git commit -q -a -m "main moved on"
+git update-ref refs/remotes/origin/main HEAD
+git checkout -q main
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "watch"
+
+scenario "with no commit, a file changed in the working tree counts, staged or not, beside the committed ones"
+changed factory/scripts/watch.sh
+git update-ref refs/remotes/origin/main HEAD^
+echo "# changed" >> factory/scripts/re-ship.sh
+echo "# changed" >> SKILL.md
+git add SKILL.md
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "re-ship retro-lesson watch"
+
+scenario "with no commit, a new file that git does not yet track counts"
+changed
+# shellcheck disable=SC2016
+echo 'cat "$root/notes.md"' >> factory/scripts/watch.sh
+git commit -q -a -m "a script that reads a file"
+git update-ref refs/remotes/origin/main HEAD
+echo "# Notes" > notes.md
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "watch"
+
+scenario "with no commit and nothing changed since origin/main, every test file runs, and it says so: that is a test of main"
+changed factory/scripts/watch.sh
+git update-ref refs/remotes/origin/main HEAD
+RAN="$T/ran" run "$scripts/test-factory.sh"
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "Nothing has changed since origin/main, so every test file runs."
+
+scenario "with no commit and no origin/main, every test file runs, and it says so"
 changed factory/scripts/watch.sh
 RAN="$T/ran" run "$scripts/test-factory.sh"
 expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "found no commit that this branch shares with origin/main, so every test file runs."
 expect_no_output "can affect"
+
+scenario "runs every test file, and says so, when the files git does not track cannot be listed"
+changed factory/scripts/watch.sh
+git=$(command -v git)
+stub git "case \" \$* \" in *' --others '*) exit 2 ;; *) exec \"$git\" \"\$@\" ;; esac"
+RAN="$T/ran" run "$scripts/test-factory.sh" HEAD^
+expect_ran "approve-merge re-ship retro-lesson ship shipping test-factory watch"
+expect_output "so every test file runs."
 
 scenario "runs every test file, and says so, when the changed files cannot be read"
 changed factory/scripts/watch.sh

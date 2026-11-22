@@ -27,6 +27,12 @@ expect_output "live: https://myapp.example/api/health reports $expected"
 expect_call "curl -fsS --max-time 10 https://myapp.example/api/health"
 expect_no_call "gh api"
 
+scenario "says live when production reports a later commit, which holds the one waited for"
+production 1111111111111111111111111111111111111111
+run "$scripts/wait-for-deploy.sh" https://myapp.example/ "$expected" 2222222222222222222222222222222222222222 1111111111111111111111111111111111111111
+expect_status 0
+expect_output "live: https://myapp.example/api/health reports 1111111111111111111111111111111111111111"
+
 scenario "times out, saying what production reports, when it runs another commit"
 production 0000000000000000000000000000000000000000
 wait_for

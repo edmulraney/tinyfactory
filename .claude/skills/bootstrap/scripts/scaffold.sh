@@ -3,7 +3,8 @@
 # grey-scale theme, the factory's own files (skills, workflows, ticket templates, check scripts,
 # test tooling) and the seed docs.
 # Then proves it lints, typechecks, passes the app's tests and builds.
-# Safe to re-run: each part is skipped if it already exists.
+# Safe to re-run: each part is skipped if it already exists, and an app that an earlier run
+# stopped while making is made again.
 # Usage: scaffold.sh [name]   (name defaults to the directory name)
 set -euo pipefail
 
@@ -55,10 +56,16 @@ install_factory_files() {
   done
 }
 
+# This file exists while a run makes the app. A run that finds it deletes the half-made app and
+# makes it again (decisions S602).
+unfinished=apps/web.unfinished
+[ ! -e "$unfinished" ] || rm -rf apps/web
+
 fresh=no
 if [ ! -d apps/web ]; then
   fresh=yes
   mkdir -p apps  # create-next-app refuses to run if the parent folder is missing
+  touch "$unfinished"
   pnpm create next-app@latest apps/web \
     --ts --eslint --app --src-dir --tailwind --import-alias "@/*" \
     --use-pnpm --skip-install --disable-git --yes
@@ -203,6 +210,7 @@ if [ "$fresh" = yes ]; then
   pnpm --filter web add -D vitest @playwright/test "@types/node@^24" \
     eslint-plugin-better-tailwindcss @axe-core/playwright drizzle-kit
   pnpm --filter web add drizzle-orm @neondatabase/serverless
+  rm "$unfinished"
 else
   install_factory_files
 fi

@@ -31,7 +31,7 @@ When a merged pull request changes a setup script, `factory/scripts/apply-setup.
 
 ## Human-only (technical limits)
 
-The human never types a command. A script starts each of these and waits; the human approves in a browser.
+A script starts each of these and waits; the human approves in a browser, or at the terminal for Neon's terms. The human types a command only to agree to those terms when an agent runs setup.
 
 | Step | Why |
 |---|---|
@@ -43,7 +43,7 @@ The human never types a command. A script starts each of these and waits; the hu
 | The workflow app | Two clicks in the browser: GitHub creates an app only from its owner's browser, and no API installs one. `workflow-app.sh` opens both pages, waits, and stores the key. |
 | Installing GitHub Apps (Claude, Vercel) | No API creates an installation. Once per account; with "All repositories" later projects need nothing |
 | Neon sign-in | OAuth consent in the browser; `database-key.sh` starts it with Neon's CLI and waits, and `sign-in.sh` uses the same session. It works for a Neon account that Vercel created. The session stays on the owner's machine; only a key limited to this project is stored in GitHub |
-| Neon terms | `database.sh` accepts Neon's marketplace terms through the Vercel CLI. A real product should show the links and let the user agree |
+| Neon terms | Only the person who is bound by Neon's marketplace terms can agree to them. `database.sh` prints the links and asks at the terminal before it accepts them through the Vercel CLI. With no terminal, as when an agent runs setup, it stops and prints the command for the human to run in one (decisions [S601](decisions/601.md)) |
 
 ## Agent jobs on the owner's runner
 

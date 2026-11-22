@@ -28,6 +28,30 @@ const misplaced = (files, ignores, message) => ({
 
 const useTheClient = "Call outboundFetch in src/lib/outbound, which sets a time limit.";
 
+// ARCHITECTURE.md, "Types are the contract": an exported function of a module takes and returns
+// types that have a name. A type written inline in a signature is one a caller cannot name.
+const inlineObjectType = {
+  selector:
+    ":matches(ExportNamedDeclaration > FunctionDeclaration, ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression) > :matches(.params, .returnType) TSTypeLiteral",
+  message: "An exported function of a module takes and returns named types. Declare this object type in the module's types.ts.",
+};
+
+// A selector cannot tell a function imported from a module from one such as setTimeout, so this
+// rule reads where the function's name was declared.
+const namedContract = {
+  rules: {
+    "no-return-type-of-module": {
+      meta: { type: "problem", schema: [], messages: { named: "Import the named type the module's function answers, not the ReturnType of the function." } },
+      create: (context) => ({
+        "TSTypeReference[typeName.name='ReturnType'] TSTypeQuery > Identifier.exprName"(node) {
+          const declared = context.sourceCode.getScope(node).references.find((reference) => reference.identifier === node)?.resolved?.defs[0];
+          if (declared?.type === "ImportBinding" && /^@\/domain\//.test(declared.parent.source.value)) context.report({ node, messageId: "named" });
+        },
+      }),
+    },
+  },
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -61,6 +85,16 @@ const eslintConfig = defineConfig([
     { group: [...pastTheIndex.group, "!@/domain/*/repository"], message: useTheIndex },
     besideTheModule,
   ),
+  {
+    files: ["src/domain/**/*.ts"],
+    ignores: ["src/domain/**/*.test.ts", "src/domain/*/index.ts"],
+    rules: { "no-restricted-syntax": ["error", inlineObjectType] },
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: { "named-contract": namedContract },
+    rules: { "named-contract/no-return-type-of-module": "error" },
+  },
   // A module's index says what the module answers in types of its own. A type or function forwarded
   // from its repository or the database's folder would tie every caller to the table's shape.
   {
@@ -72,8 +106,16 @@ const eslintConfig = defineConfig([
           selector: ":matches(ExportNamedDeclaration, ExportAllDeclaration)[source.value=/^(@\\/db(\\/|$)|\\.\\/repository$)/]",
           message: "A module's index does not re-export from its repository or from src/db. Declare what a caller needs in the module.",
         },
+        inlineObjectType,
       ],
     },
+  },
+  // ARCHITECTURE.md, "Structure": a component has a file of its own, so a reader finds it by its
+  // name. shadcn ships several components in a file, and its files stay as generated.
+  {
+    files: ["src/**/*.tsx"],
+    ignores: ["src/components/ui/**"],
+    rules: { "react/no-multi-comp": "error" },
   },
   misplaced(
     ["src/**"],

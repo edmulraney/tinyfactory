@@ -42,7 +42,7 @@ Use Conventional Commits. Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `te
 
 ## Decisions are written down
 
-Nothing is decided in passing, for two reasons: a written decision can be traced and understood later, by a person or an agent; and an agent starts every task cold, so what is written is the only context it has to make fewer mistakes and to see the wider goal its task serves. When you choose between real alternatives (a tool, a setting, a pattern, a limit, a way of working), record what you chose, why, and what you rejected, in the same change, in the place a reader would look for it:
+Nothing is decided in passing: a written decision can be traced and understood later, and an agent starts every task cold, so what is written is the only context it has. When you choose between real alternatives (a tool, a setting, a pattern, a limit, a way of working), record what you chose, why, and what you rejected, in the same change, in the place a reader would look for it:
 
 | A decision about | Goes in |
 |---|---|
@@ -59,7 +59,7 @@ Nothing is decided in passing, for two reasons: a written decision can be traced
 
 Plans and status notes are not files. A plan is an issue; a result is a commit message, a pull request or a row in the decision record. A file made to get a piece of work done is deleted in the change that finishes it. `pnpm lint` fails on a document nobody owns.
 
-The repo is the only memory. A rule, preference or lesson that should shape future work is written in this repo, where every person and every agent reads it. It is never kept only in an assistant's private memory, local settings or a file on one person's machine, because the next person or agent to work here would not have it.
+The repo is the only memory. A rule, preference or lesson that should shape future work is written in this repo, never only in an assistant's private memory, local settings or a file on one person's machine.
 
 A decision record is a `decisions.md` file that holds the format and the sections, and a folder beside it where each ticket keeps its rows in its own file (`factory/decisions/<ticket>.md`), so that two pull requests never edit the same file. `factory/scripts/decisions.sh [record]` prints a whole record; `pnpm lint` checks it.
 
