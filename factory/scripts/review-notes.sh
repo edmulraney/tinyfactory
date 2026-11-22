@@ -42,7 +42,7 @@ case "${1:-}" in
       body="## Change
 Apply the reviewers' notes: each is in a comment on this ticket headed by a reviewer's name and a pull request's number (\`factory/scripts/thread.sh <this ticket>\`); skip any other comment.
 
-- First search the open tickets and pull requests for each note's subject (\`gh issue list --search\`, \`gh pr list --search\`): a note one of them holds is not applied, and its answer names that number. Apply each other note in the file it names, \`apps/\` included, or answer it in one line saying why not.
+- First search the open tickets and pull requests for each note's subject (\`factory/scripts/open-issues.sh --search <words>\`): a note one of them holds is not applied, and its answer names that number. Apply each other note in the file it names, \`apps/\` included, or answer it in one line saying why not.
 - Put the answers in one comment on this ticket, and name there each kind of note seen three times: a repeat is a rule or a check that is missing.
 
 ## How we will know it works

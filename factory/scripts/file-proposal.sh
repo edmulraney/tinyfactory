@@ -2,7 +2,7 @@
 # Files a retro's proposal as a ticket, or notes it on the open ticket the lesson says already holds it.
 # Usage: file-proposal.sh <lesson-file> <open-tickets-file> <lessons-folder> [<execution-file>]
 #        OUTPUT='<json, or nothing>' file-proposal.sh <lesson-file> <open-tickets-file> <lessons-folder> --rewritten <execution-file>
-#        The lesson is as retro.yml saves it; the tickets are `[{number, title, labels}]`, and the file may be missing.
+#        The lesson is as retro.yml saves it; the tickets are as `open-issues.sh` prints them, and the file may be missing.
 #        The folder holds the earlier lessons, each as retro.yml saved it. The execution file is the one the retro's
 #        session left, or with `--rewritten` the one the session asked to rewrite its proposal left; either may be missing.
 #        Prints the sentence for the run's ticket, or nothing for a lesson below the bar.

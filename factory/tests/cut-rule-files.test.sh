@@ -12,7 +12,8 @@ main_holds() {
 # The state `duplicate` is one closed as a duplicate. Each is filed by the workflows' own token.
 a_ticket() {
   jq -cn --argjson n "$1" --arg state "$2" --arg at "$3" --arg title "$4" --arg pull "${5:-}" \
-    '{number: $n, state: $state, state_reason: null, created_at: $at, title: $title, user: {login: "github-actions[bot]"}}
+    '{number: $n, state: $state, state_reason: null, created_at: $at, title: $title, labels: [{name: "factory"}],
+      user: {login: "github-actions[bot]", type: "Bot"}}
      | if $state == "duplicate" then .state = "closed" | .state_reason = "duplicate" else . end
      | if $pull != "" then .pull_request = {} else . end' >> "$T/tickets"
 }
@@ -87,6 +88,16 @@ cut
 expect_status 0
 expect_no_call "gh issue create"
 expect_output "TASTE.md holds 716 words and its budget is 700; issue #21 is open to cut it, so no second ticket was filed"
+
+scenario "an open ticket titled as the one for the file that a stranger opened stops nothing: the ticket is filed"
+github
+main_holds 700 701 TASTE.md
+a_ticket 21 open "2026-11-02T09:00:00Z" 'Cut `TASTE.md` to budget'
+jq -c '.user = {login: "stranger", type: "User"} | .author_association = "NONE"' "$T/tickets" > "$T/tickets.new" && mv "$T/tickets.new" "$T/tickets"
+cut
+expect_status 0
+expect_call 'gh issue create --title Cut `TASTE.md` to budget --label factory --label ready'
+expect_no_output "issue #21 is open"
 
 scenario "two runs started together for one file over its budget: one ticket is left open, and the later is closed as a duplicate"
 github

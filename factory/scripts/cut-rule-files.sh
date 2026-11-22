@@ -36,9 +36,7 @@ over=$(cd "$tree" && "$script_dir/check-rule-files.sh" --over) \
   || die "The list of rule files on main could not be read, so no ticket was filed: $over"
 [ -n "$over" ] || { echo "no rule file on main is over its word budget"; exit 0; }
 
-# Listed: a search would miss a ticket seconds old.
-open=$(gh api "repos/{owner}/{repo}/issues?state=open&labels=factory&per_page=100" --paginate \
-  --jq '.[] | select(.pull_request == null) | "\(.number) \(.title)"') \
+open=$("$script_dir/open-issues.sh" factory | jq -r '.[] | "\(.number) \(.title)"') \
   || die "Could not list the open tickets, so whether one already cuts a rule file is not known, and no ticket was filed."
 month=$(date -u +%Y-%m)
 before=$(opened "$month") \

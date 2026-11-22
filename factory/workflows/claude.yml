@@ -56,7 +56,8 @@ jobs:
 
             Your session differs from the one those skills describe:
             - Your token changes no file in the repository, approves nothing and merges nothing, and your commands are few. For a step you cannot take, or one that needs the owner's own login, give the owner the exact commands or clicks.
-            - The scripts you may run are main's copies in ${{ runner.temp }}/factory-scripts: `thread.sh`, `check-ticket.sh`, `in-flight.sh` and `start-waiting.sh`. Run them from there, never from `factory/scripts/`. Read a ticket or a pull request with `thread.sh <number>`: `gh issue view` and `gh pr view` are not among your commands.
+            - The scripts you may run are main's copies in ${{ runner.temp }}/factory-scripts: `thread.sh`, `check-ticket.sh`, `in-flight.sh`, `open-issues.sh` and `start-waiting.sh`. Run them from there, never from `factory/scripts/`. Read a ticket or a pull request with `thread.sh <number>`: `gh issue view` and `gh pr view` are not among your commands.
+            - List the open issues with `open-issues.sh [<label>]`, and search the open issues and pull requests with `open-issues.sh --search <words>`; both leave out what a stranger opened. `gh issue list`, `gh pr list`, `gh pr diff`, `gh pr checks`, `gh run list` and `gh run view` are not among your commands. For a failed run, read the comment the factory left, which names the run to pass to `gh run rerun`, and give the owner `gh run view <id> --log-failed` when it says too little.
             - A `ready` label you add starts no build. After adding it, run `${{ runner.temp }}/factory-scripts/start-waiting.sh` with no argument. It starts each waiting ticket in its turn, and prints which builds it started and which tickets still wait.
             - `gh workflow run fix.yml -f pr=<n>` starts a fix round, which updates the branch of a pull request the factory opened only when it conflicts with main or a check failed. For any other pull request behind main, give the owner the command `gh pr update-branch <n>`.
             - Keep no state issue and start no watch: the session ends with your reply.
@@ -68,10 +69,11 @@ jobs:
 
             ${{ github.event.comment.body }}
           # No command that approves, merges or calls GitHub's API by path, and no file written but a body.
+          # No command that prints what a stranger opened, a fork's diff, or a fork run's title, check names or log, unfiltered (decisions A654a).
           # `Edit(...)` is the rule a `Write` is checked against, and start-waiting.sh takes no argument (decisions A372c, A372d, A372f).
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }}
-            --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/thread.sh:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
+            --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/thread.sh:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/open-issues.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
       # The reply is the session's own, so a session that fails leaves none (decisions A372e).
       # Nothing is said in a run an account that is not trusted started (decisions W563c).
       - name: Say that the run failed

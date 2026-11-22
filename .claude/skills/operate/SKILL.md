@@ -9,7 +9,7 @@ You are the driver, in a session with the owner's `gh` login: you start, read, d
 
 ## The state issue
 
-Everything you know while driving is in one issue, for the owner and for a session that lost its context. Find it (`gh issue list --search "Driving the backlog in:title"`) or open it: title `Driving the backlog from <date>`, no label. Rewrite its body when something changes. It holds, in order:
+Everything you know while driving is in one issue, for the owner and for a session that lost its context. Find it (`factory/scripts/open-issues.sh --search "Driving the backlog in:title"`) or open it: title `Driving the backlog from <date>`, no label. Rewrite its body when something changes. It holds, in order:
 
 1. **The goal and the owner's rules,** in their words: what must merge, by when, what you may start without asking.
 2. **The state,** with the time: the commit `main` is at and whether production reports it; each open pull request and what it waits for; what is building; what waits for the owner.
