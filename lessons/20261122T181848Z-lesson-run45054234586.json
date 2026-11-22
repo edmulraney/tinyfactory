@@ -1,0 +1,72 @@
+{
+  "pr": 651,
+  "issue": 627,
+  "facts": {
+    "run": 45053642995,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45053642995",
+    "conclusion": "success",
+    "pr": 651,
+    "issue": 627,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.42,
+    "turns": 28,
+    "changed_by": {
+      "pr": 648,
+      "issue": 642,
+      "title": "chore: bring in the setup and review changes of 22 November",
+      "assumptions": {
+        "adam": [
+          {
+            "assumes": "Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.",
+            "if_wrong": "Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production."
+          }
+        ],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "e2e",
+        "step": "Playwright against the preview",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Tell whether this job stopped at its time limit",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "CI run 45053642995 on pull request #651 never reached either step that pull request #648 changed, so whether those changes work is still unproven; nothing needs doing until a later run reaches them.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #648 changed two steps in factory/workflows/ci.yml. It ran the end-to-end step \"Playwright against the preview\" as `pnpm test:e2e --workers=4`. It also made \"Tell whether this job stopped at its time limit\" work out the minutes with jq instead of `date -d`. Run 45053642995 checked pull request #651, which only changes a document, and it succeeded. Both changed steps were skipped. The e2e job does not run here because this repository has no app. The time-limit step runs only when the review job fails or is cancelled, and this one passed. A later run that reaches these steps will show whether the changes work.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45053642995",
+      "https://github.com/edmulraney/tinyfactory/pull/648",
+      "https://github.com/edmulraney/tinyfactory/pull/651"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its two reviewer sessions spent $0.42 in 28 turns on their normal review of #651.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: no fault was found to prevent, so there is no saving to give against the $0.42 the run spent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
