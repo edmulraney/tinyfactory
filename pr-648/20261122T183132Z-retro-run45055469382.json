@@ -1,0 +1,1042 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "c124cf33-4e0e-45ec-81c8-3c19a15779d5",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2901.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgBB4KbcZrfcjn3D1T",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01FDgSYGT7z2yCHtv9DvroDU",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9480,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9480
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "a4835461-bc77-495c-841e-acc192f08a40",
+    "timestamp": "2026-11-22T18:31:10.448Z",
+    "request_id": "req_011ChJSgB3Nd8pSFy8taV3Z6",
+    "wire_tool_inputs": {
+      "toolu_01FDgSYGT7z2yCHtv9DvroDU": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01FDgSYGT7z2yCHtv9DvroDU",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## A defect met in use\n50\t\n51\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n52\t\n53\t## When to propose\n54\t\n55\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n56\t\n57\t- `cost.kind` is not empty;\n58\t- step 4 lists a lesson.\n59\t\n60\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n61\t\n62\t## Output\n63\t\n64\t- `summary`: one sentence a person can act on.\n65\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n66\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n67\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n68\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n69\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n70\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n71\t- `repeats`: the file names of step 4's lessons.\n72\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n73\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n74\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "083e6247-5ca4-46f2-83b6-81d1412a65db",
+    "timestamp": "2026-11-22T18:31:10.471Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 74,
+        "startLine": 1,
+        "totalLines": 74
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01FDgSYGT7z2yCHtv9DvroDU",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgBB4KbcZrfcjn3D1T",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01SHoHWiG98NZBJgqYD1Umvq",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9480,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9480
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "6fd9d98a-be88-4134-90f0-7529b3e122c1",
+    "timestamp": "2026-11-22T18:31:11.238Z",
+    "request_id": "req_011ChJSgB3Nd8pSFy8taV3Z6",
+    "wire_tool_inputs": {
+      "toolu_01SHoHWiG98NZBJgqYD1Umvq": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.54,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "55454a67-6876-4918-8a97-f19a680486da",
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01SHoHWiG98NZBJgqYD1Umvq",
+          "type": "tool_result",
+          "content": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n{\n  \"run\": 45054178991,\n  \"workflow\": \"merge-group\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"begin\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"merge\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "8d59f692-2e38-4074-9500-9d874f6e7c54",
+    "timestamp": "2026-11-22T18:31:11.514Z",
+    "tool_use_result": {
+      "stdout": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n{\n  \"run\": 45054178991,\n  \"workflow\": \"merge-group\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"begin\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"merge\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01SHoHWiG98NZBJgqYD1Umvq",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "913039d9-2700-403f-82fb-59a8d85b82db"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 208,
+    "estimated_tokens_delta": 158,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "1a604028-3259-4846-8252-8772f0fa9add"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgPm6Y56a713zes9f9",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQStwYKEAgUGAI4AUIIdGhpbmtpbmcSDHtQ47QlfUfdd5pDvxoMLGtnXXXKAK8VP2P7IjCGOcTz4GMdEtI8PHNvcpzxE5EdQCdYCQB8NevtjFzTa4UqGxrJAntyEoeg36tKjR4q1AVcq1uF9AzABZUiotCEFWIgkdLDLhsOCFAiCDE1giU6G12VFTSEoMmRK59OSVABnw2mIy9UtJ3HWnTN1gmn2K4qPrLpnCt4M/+CPNhlmER/glMFfjekOA6go2y9S/cfOVCR9zfJ/2/inB2N/idj7a+Rprh1VgUTYrwrbO6dxA5tjZBllX2lJM38AHovamtpMsnbOz2ocPXMpQq5vH00hCIZNejrAcIvfvdTYSkErssrxpeOX4L6AnfestOroeOQm+ArS+wyehuH2Aw/Iz1qMG5uyNOFXN1Tb5HX3XBQNk3sNfyKz/LC5RXcadGhDTusg1HPaLqBndcY0wmG18M/gs9JxUA1ZfHMSWV13T5UMfucr1u8L0F85gsg9TBllbg6+87TqQE1T/r3lQ5soKwWn5ZQAf4MQDceEbcAHQ4eH13fX979GV+Sta1ozu2WILeJcledbBAQq85/ZVbFsL5AAQ9L7z6E+1hdrzUA8UWVkEK95Y5ho399F9rVmrwTiLziLsFpnC9HsPPU1VtN6aYVDW4iSPo1HE91S5DkkME8ley0yy4EF7wiC6qehCx89xhlDY3rYEXaqSOmGWlL8XV1mJ11KNCGHmmqqQlQ8hF4dGs/l3Fu/MM0e5P24e0PLddsUg6F/sR+tmGchjfyQmA9sFOboF++7DnIgtSFAdoMfhixA7HI5sMjZIQGuy5Bvt+qhZaQLNRmMzoXuFZ4y15WfcqRrf4owOviDJrjaC1WfVKPJWfSzDufu6owe134XtxEDcLwCajdw34vhxdZzgGegEpiCwl+gCvratYH1tGfwATk6xlL9P4E9f+bddTpIly0XialuKExrIeT2pbdsYdQPW9bJTalO/I63FJig1ZTp2GfwMiAPk+jlPAnrT+bLs2USMhdgybX6fClH6euVAF0kbeL9BLv421Vxn+YCRMiiTvcNv9hAKMxqSeMlWuZpG373kuOBrELGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3752,
+        "cache_read_input_tokens": 25223,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3752
+        },
+        "output_tokens": 5,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "a054a0c6-bd97-49b5-ab97-3b83b3ac4fbc",
+    "timestamp": "2026-11-22T18:31:15.756Z",
+    "request_id": "req_011ChJSgPdQVVDbWxF7FMfV6",
+    "thinking_duration_ms": 450,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgPm6Y56a713zes9f9",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01P1awNFQp8F1a1iEXAZYMNH",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 2>/dev/null | grep -n \"merge-group\" | head; grep -n -B3 -A12 \"time limit\" factory/workflows/merge-group.yml | head -60"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3752,
+        "cache_read_input_tokens": 25223,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3752
+        },
+        "output_tokens": 5,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "619f99a3-8f5f-4534-88cd-bdff9e50caa3",
+    "timestamp": "2026-11-22T18:31:16.370Z",
+    "request_id": "req_011ChJSgPdQVVDbWxF7FMfV6",
+    "wire_tool_inputs": {
+      "toolu_01P1awNFQp8F1a1iEXAZYMNH": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 2>/dev/null | grep -n \"merge-group\" | head; grep -n -B3 -A12 \"time limit\" factory/workflows/merge-group.yml | head -60"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01P1awNFQp8F1a1iEXAZYMNH",
+          "type": "tool_result",
+          "content": "1403:+expect_no_call \"gh workflow run merge-group.yml\"\n1813:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n1815:--- a/factory/workflows/merge-group.yml\n1816:+++ b/factory/workflows/merge-group.yml\n45-          path: ${{ runner.temp }}/group.json\n46-          retention-days: 7\n47-          overwrite: true   # a run started again records the same name\n48:      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n49:      - name: Tell whether this job stopped at its time limit\n50-        id: limit\n51-        if: cancelled()\n52-        env:\n53-          GH_TOKEN: ${{ github.token }}\n54-          GH_REPO: ${{ github.repository }}\n55-          LIMIT_MINUTES: 10   # this job's timeout-minutes\n56-        run: |\n57-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n58-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n59:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n60-            exit 1\n61-          }\n62-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n63-          # jq reads the time (decisions H632b).\n64-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n65-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n66-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n67-      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n68-      - name: Start a retro when this job failed\n69-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n70-        env:\n71-          GH_TOKEN: ${{ github.token }}\n--\n144-          GROUP: ${{ needs.begin.outputs.group }}\n145-          TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)\n146-        run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '\"$RUNNER_TEMP/group.json\" $GROUP' || '--not-begun' }}\n147:      - name: Tell whether this job stopped at its time limit\n148-        id: limit\n149-        if: cancelled()\n150-        env:\n151-          GH_TOKEN: ${{ github.token }}\n152-          GH_REPO: ${{ github.repository }}\n153-          LIMIT_MINUTES: 20   # this job's timeout-minutes\n154-        run: |\n155-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n156-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n157:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n158-            exit 1\n159-          }\n160-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n161-          # jq reads the time (decisions H632b).\n162-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n163-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n164-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n165-      - name: Start a retro when this job failed\n166-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n167-        env:\n168-          GH_TOKEN: ${{ github.token }}\n169-          GH_REPO: ${{ github.repository }}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "e545f93d-7726-4e8f-90ab-7af52d894f7f",
+    "timestamp": "2026-11-22T18:31:17.256Z",
+    "tool_use_result": {
+      "stdout": "1403:+expect_no_call \"gh workflow run merge-group.yml\"\n1813:diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\n1815:--- a/factory/workflows/merge-group.yml\n1816:+++ b/factory/workflows/merge-group.yml\n45-          path: ${{ runner.temp }}/group.json\n46-          retention-days: 7\n47-          overwrite: true   # a run started again records the same name\n48:      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n49:      - name: Tell whether this job stopped at its time limit\n50-        id: limit\n51-        if: cancelled()\n52-        env:\n53-          GH_TOKEN: ${{ github.token }}\n54-          GH_REPO: ${{ github.repository }}\n55-          LIMIT_MINUTES: 10   # this job's timeout-minutes\n56-        run: |\n57-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n58-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n59:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n60-            exit 1\n61-          }\n62-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n63-          # jq reads the time (decisions H632b).\n64-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n65-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n66-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n67-      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n68-      - name: Start a retro when this job failed\n69-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n70-        env:\n71-          GH_TOKEN: ${{ github.token }}\n--\n144-          GROUP: ${{ needs.begin.outputs.group }}\n145-          TRY: ${{ inputs.try }}   # a fault that stays for three tries reaches a person (decisions M455j)\n146-        run: factory/scripts/ship.sh ${{ needs.begin.result == 'success' && '\"$RUNNER_TEMP/group.json\" $GROUP' || '--not-begun' }}\n147:      - name: Tell whether this job stopped at its time limit\n148-        id: limit\n149-        if: cancelled()\n150-        env:\n151-          GH_TOKEN: ${{ github.token }}\n152-          GH_REPO: ${{ github.repository }}\n153-          LIMIT_MINUTES: 20   # this job's timeout-minutes\n154-        run: |\n155-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n156-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n157:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n158-            exit 1\n159-          }\n160-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n161-          # jq reads the time (decisions H632b).\n162-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n163-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n164-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n165-      - name: Start a retro when this job failed\n166-        if: failure() || (cancelled() && steps.limit.outputs.reached == 'true')\n167-        env:\n168-          GH_TOKEN: ${{ github.token }}\n169-          GH_REPO: ${{ github.repository }}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01P1awNFQp8F1a1iEXAZYMNH",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgpGjLTSoz8T71yMja",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS3gYKEAgUGAI4AUIIdGhpbmtpbmcSDCnCHRz4d0BF6WV7kRoMtLUSUjseg9DPUA2nIjCinuvLZAQG8S8UsZY39NKZGkAv1DTfPgW1cZ+mm+/dl2BC8KvmC/vCbddjn9/L7MAq+wXbmZ7u2bWqmJe2vYfb7Kq8hgX5tuySyhF4xujxJuKcGIar9IoTFWFzvYKIq0n7hS7QAWwOCdV4Io/hNdggklTY52HYfWIm+mQ/4US9vjo3a7tE669NOKjIp/e5gIOzjtW9UgieW3YUvArJZ48Dth/P6guuZDh336DfZGJm/Om9vbPk9Lg9mCOb+iO8LaK7nV28WNY17MScbOYt8jmkdWUsaO0lse+5mn6NAlZnuBW2kVKsMYzLhMjSMSNy5AjJlVO62Ey5HEgi7pWeYrUiRSTbSSVeqnl8aMcxrOD1YfNWpN2mrBsiMxPMsNZO4NCYsqniWk6kBmGfJLc5pT23aW9Cb7QOtn6lowVyDMVRf2e8i9Yj6zYcozPxbpuBtc0rWSwUp/t7tAVh+7Zvln2APuQxe0pMxSGRV2144voTez6uAkYD8qivt4lMX7JfITI/I0WKfm0QcqvMBIRoXAY2zmTCR2SVkpIf7TOaL+cwG+w/5hmL1J4YecVJa6vprHbzwMd63AI8C6CZ5ajfKTVr4yX99zo1r3ag1J8j7qRsOcIGyDCH4ywP/T4k6pzhEb4o5d7W9CsEKRhLUJ4hc3gVxjJ1J14WMX0GoWYw4++r1/gBsMWOKaAhTwSjXRy4aID7Mu3NldPT+/2BVeBq3CRuzXWxRr/cg++sETWzOgZyH14dX+Phy3vf9chh9UgFh4SYmEFuk/YKUH6e/9R9a6pJuEsfFP7eLgmY3+jyG6oLPvpRJZWxs4o6JqznTdxdG+5qG3BPSZoy8/8l5r7/5lsBzxFqfHBaxT3bQJo0PX5/4D0zQKCIY8liO3vc7VppC16ZeFVOZ34RgIIbzxlIUrlRvleLBA9GjMglSo0NEDs9kU5iSUX63ixnThMxwqlPTg+3UaRzvgZHSQ3O+gtJ+Hz/sjxtj+JPtcYWpWgFNE1uSva42sqjHbKA2e/pyqrSN1FSSEzeArlulTBKSp30Hfz9MYtS425W0AqWKLsmIltoK8ZxOcm/kryJLWLB3+klGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1832,
+        "cache_read_input_tokens": 28975,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1832
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "ac03c84d-5ae3-44dc-b79a-dc413b54f990",
+    "timestamp": "2026-11-22T18:31:21.161Z",
+    "request_id": "req_011ChJSgp8Jpo9LJQ8YM1Eog",
+    "thinking_duration_ms": 387,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJSgpGjLTSoz8T71yMja",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WCRC5zVSjtp2mjb8wt3Ugs",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 | sed -n '1813,1880p'"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1832,
+        "cache_read_input_tokens": 28975,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1832
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "923f7aa3-337e-4527-b117-56325c265713",
+    "timestamp": "2026-11-22T18:31:21.427Z",
+    "request_id": "req_011ChJSgp8Jpo9LJQ8YM1Eog",
+    "wire_tool_inputs": {
+      "toolu_01WCRC5zVSjtp2mjb8wt3Ugs": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 | sed -n '1813,1880p'"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01WCRC5zVSjtp2mjb8wt3Ugs",
+          "type": "tool_result",
+          "content": "diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\nindex a19707c..a493121 100644\n--- a/factory/workflows/merge-group.yml\n+++ b/factory/workflows/merge-group.yml\n@@ -60,7 +60,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n@@ -157,7 +158,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       - name: Start a retro when this job failed\ndiff --git a/factory/workflows/probe-time-limit.yml b/factory/workflows/probe-time-limit.yml\nindex 225904e..6b76409 100644\n--- a/factory/workflows/probe-time-limit.yml\n+++ b/factory/workflows/probe-time-limit.yml\n@@ -35,7 +35,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       - name: Start a retro when this job failed\ndiff --git a/package.json b/package.json\nindex 138e69b..732d1ac 100644\n--- a/package.json\n+++ b/package.json\n@@ -10,7 +10,7 @@\n   \"bin\": {\n     \"tinyfactory\": \"bin/tinyfactory.mjs\"\n   },\n-  \"packageManager\": \"pnpm@10.32.1\",\n+  \"packageManager\": \"pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be\",\n   \"scripts\": {\n     \"lint\": \"factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-reference-feature.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh\",\n     \"typecheck\": \"node --check bin/tinyfactory.mjs\",",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "5389ade2-ba9f-4367-a683-124cfd58b69b",
+    "timestamp": "2026-11-22T18:31:22.116Z",
+    "tool_use_result": {
+      "stdout": "diff --git a/factory/workflows/merge-group.yml b/factory/workflows/merge-group.yml\nindex a19707c..a493121 100644\n--- a/factory/workflows/merge-group.yml\n+++ b/factory/workflows/merge-group.yml\n@@ -60,7 +60,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n@@ -157,7 +158,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       - name: Start a retro when this job failed\ndiff --git a/factory/workflows/probe-time-limit.yml b/factory/workflows/probe-time-limit.yml\nindex 225904e..6b76409 100644\n--- a/factory/workflows/probe-time-limit.yml\n+++ b/factory/workflows/probe-time-limit.yml\n@@ -35,7 +35,8 @@ jobs:\n             exit 1\n           }\n           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n-          minutes=$(( ($(date +%s) - $(date -d \"$started\" +%s)) / 60 + 1 ))\n+          # jq reads the time (decisions H632b).\n+          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n           echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n           [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n       - name: Start a retro when this job failed\ndiff --git a/package.json b/package.json\nindex 138e69b..732d1ac 100644\n--- a/package.json\n+++ b/package.json\n@@ -10,7 +10,7 @@\n   \"bin\": {\n     \"tinyfactory\": \"bin/tinyfactory.mjs\"\n   },\n-  \"packageManager\": \"pnpm@10.32.1\",\n+  \"packageManager\": \"pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be\",\n   \"scripts\": {\n     \"lint\": \"factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-reference-feature.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh\",\n     \"typecheck\": \"node --check bin/tinyfactory.mjs\",",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01WCRC5zVSjtp2mjb8wt3Ugs",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShB4tX3xPdgrimLrMW",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS0QYKEAgUGAI4AUIIdGhpbmtpbmcSDDyZ88zTePDjvg8VOxoMzEXCYgjyJpf4e6LRIjCp9Gpw+mChFFNkRJKC87LgM0RxvYcq2WGD+9lAeiFGmm0H2BaxfpODOHxaFnSLkiIq7gUEPQ5MSvrXan9fAlE4yBmqJZHxw1Q0p1q4nkPaXPxQUT3AtSHK1gYpjyRaXKY7He0NT9qIJTCj/h4Wk2jY1KP0ufCN7seGNZBR+ss0Gv9+Lut/8vkjZ3+8hXwkhGl9Y/Sx3pd1cFWL2MKiitwB1Jy+lOcdV/hUg5wXrJbebDUOdHxWw2snX1k8wmWDDxP8pkERa0zRW0diw+/D3G0FQk5Ie7B2ZGId09Pk33RMuKKuMOsyyI+3ncEobohrX9yDHwGQxxC9iZSxwkL1fadxNObIsRPH5EavAzdMyBq3hX3G8//yTdyCwGCOV0jepQWkOKLKYOzE5ULr3BjY+6hhOfN8Rd9mu483r22JI3poL5NbvgBilwsbnt7KoTSibJq3rPhP/buxNaBmelwZfNGJUU/JU7qZ2K9aaspk4uqxhp70C4pzR5gn1RF1kwbJ6loIf8IxOqDihkFZyt0/+kNsTYnKjGo7LaJ2dskHsg7g02An8PvO+8h0kXvElLYVGZIHxjJ0T/tnMSzRih5YBo1Xtc1hIVjVUOqZ7NRxFO71hL88ejyiCl26iSQfnh2WDjKG/2ipc5rfAzCz2eIoVAadh2lnMCoPP/DbzREcx9EEmTFADnqJ1mhGruFIffQflbDNsU1IufM4CZKW9y2lC7dPHMWA5lSMAcnSYp/3/SM92W/xWIM3/rl2RD25vuq+kuqBSLKRRBOL+GmCP8caF2CnwMBXmgAsxI7mkCcDe8XE/xnML9gQIXf7BLQrOlbbvlPgOn6xBuwJoRvZyA6XxO7eUubr/5gSDIcxAPoxrdMd9uRVlSadYwriSgU/f3rpq7OMRbh0DN8HtsVu4cibLB9T0pTKDInCZJ6wuM9QfKTKzXj26iCXrOtBKssjBP8tSwfsgD8syDrO4sOD/HhdfHhnyDpgtp6zvYUYWVDZpDs1HJYimL1ds2KVyZyZrWy52xv4QlFhkDO1CoXaqZGV+H5CcWudhKWvreKQNXlzvEDv6mQYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1584,
+        "cache_read_input_tokens": 30807,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1584
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "aa01f7bb-bf7c-4b2e-ae95-bec207015494",
+    "timestamp": "2026-11-22T18:31:24.309Z",
+    "request_id": "req_011ChJShAvx2PNwvqGVDB6aN",
+    "thinking_duration_ms": 501,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJShB4tX3xPdgrimLrMW",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PeSLxtsBiy2Xz3dJ61BBUV",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The run never reached what pull request #648 changed in merge-group: both jobs succeeded, so the time-limit steps, which run only when a job is cancelled, were skipped, and the jq time arithmetic is still unchecked in a real run.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #648 replaced the `date -d` arithmetic in the \"Tell whether this job stopped at its time limit\" step of the begin and merge jobs with `jq ... fromdate`. That step runs only under `if: cancelled()`. Run 45054178991 was a workflow_dispatch run that ended in success, so GitHub skipped the step in both jobs and nothing ran the new line. Nothing went wrong and there is nothing to fix. The change will first be tested when a merge-group job is cancelled.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+              "https://github.com/edmulraney/tinyfactory/pull/648"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded and cost $0 across 0 agent turns.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing to save: the run cost $0 and lost no work.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1584,
+        "cache_read_input_tokens": 30807,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1584
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "cae9a5c3-3b4f-4d61-9003-9b3a826414b1",
+    "timestamp": "2026-11-22T18:31:29.277Z",
+    "request_id": "req_011ChJShAvx2PNwvqGVDB6aN",
+    "wire_tool_inputs": {
+      "toolu_01PeSLxtsBiy2Xz3dJ61BBUV": {
+        "summary": "The run never reached what pull request #648 changed in merge-group: both jobs succeeded, so the time-limit steps, which run only when a job is cancelled, were skipped, and the jq time arithmetic is still unchecked in a real run.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #648 replaced the `date -d` arithmetic in the \"Tell whether this job stopped at its time limit\" step of the begin and merge jobs with `jq ... fromdate`. That step runs only under `if: cancelled()`. Run 45054178991 was a workflow_dispatch run that ended in success, so GitHub skipped the step in both jobs and nothing ran the new line. Nothing went wrong and there is nothing to fix. The change will first be tested when a merge-group job is cancelled.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+          "https://github.com/edmulraney/tinyfactory/pull/648"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded and cost $0 across 0 agent turns.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing to save: the run cost $0 and lost no work.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01PeSLxtsBiy2Xz3dJ61BBUV",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "uuid": "4ba2c2d7-3955-4a10-bb3e-b2c4ad92c3c7",
+    "timestamp": "2026-11-22T18:31:29.282Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01PeSLxtsBiy2Xz3dJ61BBUV",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 19915,
+    "stop_reason": "tool_use",
+    "session_id": "246cdfd9-7700-46ec-a550-ec7bfc994aa0",
+    "total_cost_usd": 0.1786276,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 16648,
+      "cache_read_input_tokens": 100748,
+      "output_tokens": 1256,
+      "output_tokens_details": {
+        "thinking_tokens": 142
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 16648,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 752,
+          "cache_read_input_tokens": 30807,
+          "cache_creation_input_tokens": 1584,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1584
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1256,
+        "cacheReadInputTokens": 100748,
+        "cacheCreationInputTokens": 16648,
+        "webSearchRequests": 0,
+        "costUSD": 0.1784856,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 142,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16648,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 6,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The run never reached what pull request #648 changed in merge-group: both jobs succeeded, so the time-limit steps, which run only when a job is cancelled, were skipped, and the jq time arithmetic is still unchecked in a real run.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #648 replaced the `date -d` arithmetic in the \\\"Tell whether this job stopped at its time limit\\\" step of the begin and merge jobs with `jq ... fromdate`. That step runs only under `if: cancelled()`. Run 45054178991 was a workflow_dispatch run that ended in success, so GitHub skipped the step in both jobs and nothing ran the new line. Nothing went wrong and there is nothing to fix. The change will first be tested when a merge-group job is cancelled.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45054178991\",\"https://github.com/edmulraney/tinyfactory/pull/648\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run succeeded and cost $0 across 0 agent turns.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing to save: the run cost $0 and lost no work.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The run never reached what pull request #648 changed in merge-group: both jobs succeeded, so the time-limit steps, which run only when a job is cancelled, were skipped, and the jq time arithmetic is still unchecked in a real run.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #648 replaced the `date -d` arithmetic in the \"Tell whether this job stopped at its time limit\" step of the begin and merge jobs with `jq ... fromdate`. That step runs only under `if: cancelled()`. Run 45054178991 was a workflow_dispatch run that ended in success, so GitHub skipped the step in both jobs and nothing ran the new line. Nothing went wrong and there is nothing to fix. The change will first be tested when a merge-group job is cancelled.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45054178991",
+        "https://github.com/edmulraney/tinyfactory/pull/648"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded and cost $0 across 0 agent turns.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing to save: the run cost $0 and lost no work.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 2058,
+    "type": "result",
+    "duration_ms": 20898,
+    "uuid": "790f7496-ff70-4988-a63d-0662dec431bd",
+    "ttft_stream_ms": 1509,
+    "time_to_request_ms": 181,
+    "first_content_frame_ms": 1510,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1256,
+        "cacheReadInputTokens": 100748,
+        "cacheCreationInputTokens": 16648,
+        "webSearchRequests": 0,
+        "costUSD": 0.1784856,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 142,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16648,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
