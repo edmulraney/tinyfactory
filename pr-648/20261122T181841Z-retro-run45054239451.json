@@ -1,0 +1,1388 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "b76d5195-9a28-4585-9f64-4c220de9b4ad",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2534.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRgoYTZmQpeJ5aSeWFv",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PPaH4ex32CyU4Udhv4eJW1",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9481,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9481
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "fac562eb-a63b-4c06-bc4f-b75a4a598c81",
+    "timestamp": "2026-11-22T18:18:13.355Z",
+    "request_id": "req_011ChJRgoQHApsTNztbhVmi2",
+    "wire_tool_inputs": {
+      "toolu_01PPaH4ex32CyU4Udhv4eJW1": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01PPaH4ex32CyU4Udhv4eJW1",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run\n42\t\n43\tIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n44\t\n45\t## A request for help\n46\t\n47\tThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n48\t\n49\t## A defect met in use\n50\t\n51\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n52\t\n53\t## When to propose\n54\t\n55\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n56\t\n57\t- `cost.kind` is not empty;\n58\t- step 4 lists a lesson.\n59\t\n60\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n61\t\n62\t## Output\n63\t\n64\t- `summary`: one sentence a person can act on.\n65\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n66\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n67\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n68\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n69\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n70\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n71\t- `repeats`: the file names of step 4's lessons.\n72\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n73\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n74\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "367a58e0-7571-41e4-a282-cf418a367557",
+    "timestamp": "2026-11-22T18:18:13.392Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 74,
+        "startLine": 1,
+        "totalLines": 74
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01PPaH4ex32CyU4Udhv4eJW1",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRgoYTZmQpeJ5aSeWFv",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013hnqworfG6jreMyDqdQz3d",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json",
+            "description": "List session files and show facts"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9481,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9481
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "b950f458-85e6-4e46-9c0f-b882ebfb2859",
+    "timestamp": "2026-11-22T18:18:14.454Z",
+    "request_id": "req_011ChJRgoQHApsTNztbhVmi2",
+    "wire_tool_inputs": {
+      "toolu_013hnqworfG6jreMyDqdQz3d": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -R | head -50; cat facts.json",
+        "description": "List session files and show facts"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.54,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "0003554e-1637-4cb5-8d2c-86aedb8b89a8",
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_013hnqworfG6jreMyDqdQz3d",
+          "type": "tool_result",
+          "content": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n{\n  \"run\": 45052415270,\n  \"workflow\": \"implement\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45052415270\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": 627,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"fred\",\n      \"file\": \"issue-627/20261122T181129Z-fred-run45052415270.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.8900540000000001,\n      \"turns\": 22,\n      \"seconds\": 733,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.89,\n  \"turns\": 22,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"implement\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "80eb1f6b-f453-42c3-80a2-4a44e2951646",
+    "timestamp": "2026-11-22T18:18:14.850Z",
+    "tool_use_result": {
+      "stdout": ".:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-651\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n{\n  \"run\": 45052415270,\n  \"workflow\": \"implement\",\n  \"event\": \"workflow_dispatch\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45052415270\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": 627,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"fred\",\n      \"file\": \"issue-627/20261122T181129Z-fred-run45052415270.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.8900540000000001,\n      \"turns\": 22,\n      \"seconds\": 733,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.89,\n  \"turns\": 22,\n  \"changed_by\": {\n    \"pr\": 648,\n    \"issue\": 642,\n    \"title\": \"chore: bring in the setup and review changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [\n        {\n          \"assumes\": \"Page views on preview deployments, including every end-to-end test run against a preview, do not count toward the 50,000 Web Analytics events a month that the account's projects share on Hobby.\",\n          \"if_wrong\": \"Test runs use up the quota, and Vercel stops recording production visitors without telling anyone. Fix: render Analytics only when VERCEL_ENV is production.\"\n        }\n      ],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"implement\",\n      \"step\": \"Tell whether this job stopped at its time limit\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_013hnqworfG6jreMyDqdQz3d",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRh98hCQ3dhn3fbPHj6",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS2AUKEAgUGAI4AUIIdGhpbmtpbmcSDDJ9KEnuyZgl7zUQUhoM1or/7q31xzUe/izsIjA66Ik8+nX5Ix5bYlSGGYryt71bnupEaZXyagHwwGZsnhDsNwZpczD0q4PcKi26EDUq9QR6cQJVszGdCTekhrxcVwpBLE9hAz+/gor3VXQM5ZQQGeFGRR26dvo4QeyEq3Z3ED2zDttPc8YiWE+Q8gmEJgYRnVRB4b60of63xStdLdPJVH8ym8UkVWiyXRzv90fKrZsHvj4P5fw7VV4tDCrcuZgSLiYZLsmqOOLlca4pv8badpla1YxuNdrKCxNVqSwlUO3mnouHI9luria0tReed9VwbJj8Qvf66r3H78A1tR7QPp87Uj2rnSojZvpQ1lvaw2Wq2yvHN0oH+8dBYi6uO/OCHjywO4q3Uc+aquqvZDqJHLm1/TWQyCCtGRKi711NIizrF7UrKU79rkCwVuMzd6ZHsre5M9+RMmfLwA8gAY9nY4nYAy0I3LHKTZzDRBz7Sm/29HSRO3d06yKexrkVV/XIbmOcEBOSXZS+eHLloWgXuW2lD6F35aEPsZ30QhAzLS/or+Jrt+tVD/CQOU6vJ6AsLoCdhxtEWI456Noz35aFI7/g5LSk9vMUTohEqsseGR7PiHe9f7m5DAMoBV2WPXmnuqa42SIdLgaNCwY4vi57bETespK42vEvpN8yiF3v2vw9wJVwcIj9nHS5qSv/XzVxckdNHhNumvJ16IuHL/BsftuE/4JkCFnlvXP+p7kwZ0nZLpt+i7rLF+WmqUElAGuZXH/deLlADhbeXlAtHZQwgO1E4JFgJSoVNkW+zkptdJrBXc2cxrRFLZdFudZAmPBWpj4uIiQk3rBOBIm+OxzUOGqtcm1FAF0AGxCd6OmQFy9c+kXqcC/kdxxvnL/He5UrfPeSkyppJUDt2M2f2TSZAPnxJkZpEa8/xtcszulTtaHTmk0PyxgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3892,
+        "cache_read_input_tokens": 25224,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3892
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "c18d1d45-9414-4231-a397-b642b5960654",
+    "timestamp": "2026-11-22T18:18:16.681Z",
+    "request_id": "req_011ChJRh8zkYxmsuwx1y1a9H",
+    "thinking_duration_ms": 431,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRh98hCQ3dhn3fbPHj6",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Mgn7KHU21vHbxGnpuVf4gc",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 -- factory/workflows/implement.yml 2>/dev/null | head -0; gh pr diff 648 --name-only; gh pr diff 648 | grep -n -B3 -A30 \"time limit\" | head -80",
+            "description": "Show PR 648 diff around the changed step"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3892,
+        "cache_read_input_tokens": 25224,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3892
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "c04d5d0e-531f-461d-8eaf-211e1866a8a5",
+    "timestamp": "2026-11-22T18:18:17.597Z",
+    "request_id": "req_011ChJRh8zkYxmsuwx1y1a9H",
+    "wire_tool_inputs": {
+      "toolu_01Mgn7KHU21vHbxGnpuVf4gc": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 -- factory/workflows/implement.yml 2>/dev/null | head -0; gh pr diff 648 --name-only; gh pr diff 648 | grep -n -B3 -A30 \"time limit\" | head -80",
+        "description": "Show PR 648 diff around the changed step"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Mgn7KHU21vHbxGnpuVf4gc",
+          "type": "tool_result",
+          "content": ".claude/skills/bootstrap/SKILL.md\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/DESIGN.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/record-usage.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/repository.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/types.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts\n.claude/skills/refine/SKILL.md\n.claude/skills/review-architecture/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\nREADME.md\nfactory/README/known-gaps/tests-need-linux.md\nfactory/decisions/353.md\nfactory/decisions/456.md\nfactory/decisions/617.md\nfactory/decisions/629.md\nfactory/decisions/632.md\nfactory/decisions/633.md\nfactory/decisions/634.md\nfactory/decisions/636.md\nfactory/decisions/637.md\nfactory/decisions/638.md\nfactory/decisions/640.md\nfactory/decisions/643.md\nfactory/decisions/644.md\nfactory/decisions/645.md\nfactory/decisions/646.md\nfactory/decisions/647.md\nfactory/decisions/649.md\nfactory/free-tier/640.md\nfactory/free-tier/644.md\nfactory/free-tier/limits.md\nfactory/free-tier/when-to-pay.md\nfactory/scripts/in-flight.sh\nfactory/scripts/merge-gate.sh\nfactory/scripts/quality.sh\nfactory/scripts/run-facts.sh\nfactory/scripts/start-waiting.sh\nfactory/scripts/test-factory.sh\nfactory/scripts/usage-limit.sh\nfactory/tests/ci-job-order.test.sh\nfactory/tests/file-proposal.test.sh\nfactory/tests/helpers.sh\nfactory/tests/merge-gate.test.sh\nfactory/tests/ready-to-ship.sh\nfactory/tests/rerun-refused.test.sh\nfactory/tests/run-facts.test.sh\nfactory/tests/save-session.test.sh\nfactory/tests/scaffold.test.sh\nfactory/tests/start-retro.test.sh\nfactory/tests/vercel.test.sh\nfactory/tests/watch.test.sh\nfactory/workflows/approve-merge.yml\nfactory/workflows/ci.yml\nfactory/workflows/fix.yml\nfactory/workflows/implement.yml\nfactory/workflows/install-workflows.yml\nfactory/workflows/merge-group.yml\nfactory/workflows/probe-time-limit.yml\npackage.json\n261-+    rules: { \"shadcn/no-restyle\": \"off\", \"shadcn/no-arbitrary-values\": \"off\", \"shadcn/no-inline-styles\": \"off\" },\n262-   },\n263-   // ARCHITECTURE.md, \"Outside services\": only the client may call fetch, so no request to an\n264:   // outside service can be made without its time limit.\n265-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n266-index c86142e..4bcb129 100644\n267---- a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n268-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n269-@@ -1,3 +1,5 @@\n270-+// A build fails when code that reaches the browser imports this file, so the database stays on the server.\n271-+import \"server-only\";\n272- import { neonConfig } from \"@neondatabase/serverless\";\n273- import { drizzle } from \"drizzle-orm/neon-http\";\n274- import { outboundFetch } from \"@/lib/outbound\";\n275-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n276-new file mode 100644\n277-index 0000000..ef9397b\n278---- /dev/null\n279-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n280-@@ -0,0 +1,5 @@\n281-+CREATE TABLE \"usage_events\" (\n282-+\t\"account_id\" text,\n283-+\t\"event\" text NOT NULL,\n284-+\t\"occurred_at\" timestamp with time zone DEFAULT now() NOT NULL\n285-+);\n286-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n287-new file mode 100644\n288-index 0000000..f3e947c\n289---- /dev/null\n290-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n291-@@ -0,0 +1,77 @@\n292-+{\n293-+  \"id\": \"16320abd-6e57-4c9c-b952-a0ca10240286\",\n294-+  \"prevId\": \"aee814c8-cc21-43af-9752-1d2f4fd3003e\",\n--\n785-+++ b/factory/decisions/617.md\n786-@@ -4,7 +4,6 @@\n787- | A617b | Peta's slices take no rule against a one-layer slice, the \"tracer bullet\" of mattpocock/skills `to-tickets`. | Each slice already \"leaves something the owner can use\", which one layer alone cannot, and no retro records a slice that failed it. | Taking it: a second wording of the same rule in a skill over its word budget. | #617 |\n788: | A617c | No skill sizes a ticket to one session, as mattpocock/skills `to-tickets` sizes a slice to one context window. | The builds of #455 and #484 ended at the job's time limit, and a second such stop already asks for a split ([A467b](467.md)). | A sizing rule in `ticket` or `refine`: a writer cannot measure a session beforehand, and `promote` already asks for one pull request's worth. | #617, #467 |\n789- | A617d | Peta plans no refactoring slice ahead of a feature and no expand-then-contract sequence, both from mattpocock/skills `to-tickets`. | No retro records a slice that failed for want of either, and the product is small enough to change in one pull request. | Taking them: slices that leave the owner nothing to use, which the skill forbids. | #617 |\n790--| A617e | Slices stay one chain of `After #<n>` lines, not the dependency graph of mattpocock/skills `to-tickets` and pstack `multi-phase-plan`. | The chain keeps each build on a `main` that holds the slice before it ([T339a](339.md)), and no retro records time lost to it. | A graph of independent slices: parallel builds edit the same lines, and each conflict costs a fix round. | #617 |\n791- | A617f | Peta orders no slice by its risk and adds no prototype slice, as pstack `figure-it-out` and mattpocock/skills `prototype` do. | A research slice already precedes a slice that rests on a fact nobody has, and no retro records a slice built on a wrong guess. | A prototype slice: code that merges and leaves the owner nothing to use. | #617 |\n792- | A617g | Neither `refine` nor `ticket` gains the search for a request already built that mattpocock/skills `triage` makes. | Peta reads `apps/` and reports where the code contradicts the notes; #409's repeated work came from a review-notes ticket, not from either skill. | A search of open tickets by Peta: her commands are two scripts and nothing else ([A353b](353.md)). | #617 |\n793- | A617h | A ticket may name files, against the rule of mattpocock/skills `triage/AGENT-BRIEF.md` that a path goes stale. | A ticket is built within days of its filing, the Factory template asks for the files, and no retro records a stale path. | Taking it: Fred would search for what the owner already knew. | #617 |\n794-diff --git a/factory/decisions/629.md b/factory/decisions/629.md\n795-new file mode 100644\n796-index 0000000..4f4af0d\n797---- /dev/null\n798-+++ b/factory/decisions/629.md\n799-@@ -0,0 +1,4 @@\n800-+| ID | Decision | Why | Rejected | Source |\n801-+|---|---|---|---|---|\n802-+| M629a | An older approval stands when each file `owner-decides.sh` holds is the same at both commits, or changes the same ([A160b](160.md)) where `main` changed it. | On 21 November 2026 #560 waited 30 minutes, approved, after a fix round settled a conflict in a file the owner does not decide; the reviewers pass the rest again. | The printed lines alone, as the ticket says: `TASTE.md` changed again prints the same line and merges unseen. The change alone: it reads the same moved between like lines. | #629 |\n803-+| M629b | [M629a](629.md) carries no approval that followed the owner's \"Request changes\", and none of a pull request that changes a workflow. | The first covers every file ([M48](48.md)), and the installer knows only the carry of [W456](456.md), so it would refuse the merged workflow. | Teaching the installer the rule: a third script run by its git id and a loop over files in a workflow, for a wait no workflow change has yet had. | #629 |\n804-diff --git a/factory/decisions/632.md b/factory/decisions/632.md\n805-new file mode 100644\n806-index 0000000..ce019f1\n807---- /dev/null\n808-+++ b/factory/decisions/632.md\n809-@@ -0,0 +1,4 @@\n810-+| ID | Decision | Why | Rejected | Source |\n811-+|---|---|---|---|---|\n812-+| H632a | Factory scripts and tests use only what a Mac's bash 3.2 and BSD tools share with GNU's; awk reads a multi-line value from the environment. | The owner runs scripts and tests on a Mac: 237 tests failed there on 22 November 2026, and BSD awk refuses a newline in `-v`. | GNU tools installed on the Mac: a setup step for each contributor. A lint rule for each construct: the text does not show an empty array or a multi-line value. | #632 |\n813-+| H632b | A script, test or workflow step works out a time with jq (`fromdate`, `todate`), never with `date -d`. | GNU and BSD `date` disagree on the flag, and an agent job's time-limit step runs on the owner's runner ([A426a](426.md)), which can be a Mac. | `date -j -f` as a branch for the Mac: two paths, and CI tests one. A stand-in for `date` in the test: the step still fails on a Mac runner. | #632 |\n814-diff --git a/factory/decisions/633.md b/factory/decisions/633.md\n815-new file mode 100644\n816-index 0000000..5d142ae\n817---- /dev/null\n818-+++ b/factory/decisions/633.md\n--\n1609-@@ -70,7 +70,7 @@ done < <(each_job)\n1610- # stopped <workflow> <job> <minutes>: runs the time-limit step as that job would, cancelled so many minutes after it started; needs \\$limit.\n1611- stopped() {\n1612:   local found; found=$(step \"$1\" \"$2\" \"Tell whether this job stopped at its time limit\")\n1613--  STARTED=$(date -u -d \"$(( $3 * 60 + 5 )) seconds ago\" +%Y-%m-%dT%H:%M:%SZ)\n1614-+  STARTED=$(jq -rn \"now - ($3 * 60 + 5) | todate\")\n1615-   export STARTED\n1616-   : > \"$T/output\"\n1617-   run env GH_TOKEN=workflow-token GH_REPO=owner/myapp GITHUB_RUN_ID=900 GITHUB_RUN_ATTEMPT=2 GITHUB_JOB=\"$2\" \\\n1618-diff --git a/factory/tests/vercel.test.sh b/factory/tests/vercel.test.sh",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "237acde8-3854-4f3d-a82a-d17b02d49f39",
+    "timestamp": "2026-11-22T18:18:19.156Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/bootstrap/SKILL.md\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/DESIGN.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/_journal.json\n.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/index.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/record-usage.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/repository.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/usage/types.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts\n.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts\n.claude/skills/refine/SKILL.md\n.claude/skills/review-architecture/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\nREADME.md\nfactory/README/known-gaps/tests-need-linux.md\nfactory/decisions/353.md\nfactory/decisions/456.md\nfactory/decisions/617.md\nfactory/decisions/629.md\nfactory/decisions/632.md\nfactory/decisions/633.md\nfactory/decisions/634.md\nfactory/decisions/636.md\nfactory/decisions/637.md\nfactory/decisions/638.md\nfactory/decisions/640.md\nfactory/decisions/643.md\nfactory/decisions/644.md\nfactory/decisions/645.md\nfactory/decisions/646.md\nfactory/decisions/647.md\nfactory/decisions/649.md\nfactory/free-tier/640.md\nfactory/free-tier/644.md\nfactory/free-tier/limits.md\nfactory/free-tier/when-to-pay.md\nfactory/scripts/in-flight.sh\nfactory/scripts/merge-gate.sh\nfactory/scripts/quality.sh\nfactory/scripts/run-facts.sh\nfactory/scripts/start-waiting.sh\nfactory/scripts/test-factory.sh\nfactory/scripts/usage-limit.sh\nfactory/tests/ci-job-order.test.sh\nfactory/tests/file-proposal.test.sh\nfactory/tests/helpers.sh\nfactory/tests/merge-gate.test.sh\nfactory/tests/ready-to-ship.sh\nfactory/tests/rerun-refused.test.sh\nfactory/tests/run-facts.test.sh\nfactory/tests/save-session.test.sh\nfactory/tests/scaffold.test.sh\nfactory/tests/start-retro.test.sh\nfactory/tests/vercel.test.sh\nfactory/tests/watch.test.sh\nfactory/workflows/approve-merge.yml\nfactory/workflows/ci.yml\nfactory/workflows/fix.yml\nfactory/workflows/implement.yml\nfactory/workflows/install-workflows.yml\nfactory/workflows/merge-group.yml\nfactory/workflows/probe-time-limit.yml\npackage.json\n261-+    rules: { \"shadcn/no-restyle\": \"off\", \"shadcn/no-arbitrary-values\": \"off\", \"shadcn/no-inline-styles\": \"off\" },\n262-   },\n263-   // ARCHITECTURE.md, \"Outside services\": only the client may call fetch, so no request to an\n264:   // outside service can be made without its time limit.\n265-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n266-index c86142e..4bcb129 100644\n267---- a/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n268-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/client.ts\n269-@@ -1,3 +1,5 @@\n270-+// A build fails when code that reaches the browser imports this file, so the database stays on the server.\n271-+import \"server-only\";\n272- import { neonConfig } from \"@neondatabase/serverless\";\n273- import { drizzle } from \"drizzle-orm/neon-http\";\n274- import { outboundFetch } from \"@/lib/outbound\";\n275-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n276-new file mode 100644\n277-index 0000000..ef9397b\n278---- /dev/null\n279-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0001_usage-events.sql\n280-@@ -0,0 +1,5 @@\n281-+CREATE TABLE \"usage_events\" (\n282-+\t\"account_id\" text,\n283-+\t\"event\" text NOT NULL,\n284-+\t\"occurred_at\" timestamp with time zone DEFAULT now() NOT NULL\n285-+);\n286-diff --git a/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n287-new file mode 100644\n288-index 0000000..f3e947c\n289---- /dev/null\n290-+++ b/.claude/skills/bootstrap/templates/apps/web/src/db/migrations/meta/0001_snapshot.json\n291-@@ -0,0 +1,77 @@\n292-+{\n293-+  \"id\": \"16320abd-6e57-4c9c-b952-a0ca10240286\",\n294-+  \"prevId\": \"aee814c8-cc21-43af-9752-1d2f4fd3003e\",\n--\n785-+++ b/factory/decisions/617.md\n786-@@ -4,7 +4,6 @@\n787- | A617b | Peta's slices take no rule against a one-layer slice, the \"tracer bullet\" of mattpocock/skills `to-tickets`. | Each slice already \"leaves something the owner can use\", which one layer alone cannot, and no retro records a slice that failed it. | Taking it: a second wording of the same rule in a skill over its word budget. | #617 |\n788: | A617c | No skill sizes a ticket to one session, as mattpocock/skills `to-tickets` sizes a slice to one context window. | The builds of #455 and #484 ended at the job's time limit, and a second such stop already asks for a split ([A467b](467.md)). | A sizing rule in `ticket` or `refine`: a writer cannot measure a session beforehand, and `promote` already asks for one pull request's worth. | #617, #467 |\n789- | A617d | Peta plans no refactoring slice ahead of a feature and no expand-then-contract sequence, both from mattpocock/skills `to-tickets`. | No retro records a slice that failed for want of either, and the product is small enough to change in one pull request. | Taking them: slices that leave the owner nothing to use, which the skill forbids. | #617 |\n790--| A617e | Slices stay one chain of `After #<n>` lines, not the dependency graph of mattpocock/skills `to-tickets` and pstack `multi-phase-plan`. | The chain keeps each build on a `main` that holds the slice before it ([T339a](339.md)), and no retro records time lost to it. | A graph of independent slices: parallel builds edit the same lines, and each conflict costs a fix round. | #617 |\n791- | A617f | Peta orders no slice by its risk and adds no prototype slice, as pstack `figure-it-out` and mattpocock/skills `prototype` do. | A research slice already precedes a slice that rests on a fact nobody has, and no retro records a slice built on a wrong guess. | A prototype slice: code that merges and leaves the owner nothing to use. | #617 |\n792- | A617g | Neither `refine` nor `ticket` gains the search for a request already built that mattpocock/skills `triage` makes. | Peta reads `apps/` and reports where the code contradicts the notes; #409's repeated work came from a review-notes ticket, not from either skill. | A search of open tickets by Peta: her commands are two scripts and nothing else ([A353b](353.md)). | #617 |\n793- | A617h | A ticket may name files, against the rule of mattpocock/skills `triage/AGENT-BRIEF.md` that a path goes stale. | A ticket is built within days of its filing, the Factory template asks for the files, and no retro records a stale path. | Taking it: Fred would search for what the owner already knew. | #617 |\n794-diff --git a/factory/decisions/629.md b/factory/decisions/629.md\n795-new file mode 100644\n796-index 0000000..4f4af0d\n797---- /dev/null\n798-+++ b/factory/decisions/629.md\n799-@@ -0,0 +1,4 @@\n800-+| ID | Decision | Why | Rejected | Source |\n801-+|---|---|---|---|---|\n802-+| M629a | An older approval stands when each file `owner-decides.sh` holds is the same at both commits, or changes the same ([A160b](160.md)) where `main` changed it. | On 21 November 2026 #560 waited 30 minutes, approved, after a fix round settled a conflict in a file the owner does not decide; the reviewers pass the rest again. | The printed lines alone, as the ticket says: `TASTE.md` changed again prints the same line and merges unseen. The change alone: it reads the same moved between like lines. | #629 |\n803-+| M629b | [M629a](629.md) carries no approval that followed the owner's \"Request changes\", and none of a pull request that changes a workflow. | The first covers every file ([M48](48.md)), and the installer knows only the carry of [W456](456.md), so it would refuse the merged workflow. | Teaching the installer the rule: a third script run by its git id and a loop over files in a workflow, for a wait no workflow change has yet had. | #629 |\n804-diff --git a/factory/decisions/632.md b/factory/decisions/632.md\n805-new file mode 100644\n806-index 0000000..ce019f1\n807---- /dev/null\n808-+++ b/factory/decisions/632.md\n809-@@ -0,0 +1,4 @@\n810-+| ID | Decision | Why | Rejected | Source |\n811-+|---|---|---|---|---|\n812-+| H632a | Factory scripts and tests use only what a Mac's bash 3.2 and BSD tools share with GNU's; awk reads a multi-line value from the environment. | The owner runs scripts and tests on a Mac: 237 tests failed there on 22 November 2026, and BSD awk refuses a newline in `-v`. | GNU tools installed on the Mac: a setup step for each contributor. A lint rule for each construct: the text does not show an empty array or a multi-line value. | #632 |\n813-+| H632b | A script, test or workflow step works out a time with jq (`fromdate`, `todate`), never with `date -d`. | GNU and BSD `date` disagree on the flag, and an agent job's time-limit step runs on the owner's runner ([A426a](426.md)), which can be a Mac. | `date -j -f` as a branch for the Mac: two paths, and CI tests one. A stand-in for `date` in the test: the step still fails on a Mac runner. | #632 |\n814-diff --git a/factory/decisions/633.md b/factory/decisions/633.md\n815-new file mode 100644\n816-index 0000000..5d142ae\n817---- /dev/null\n818-+++ b/factory/decisions/633.md\n--\n1609-@@ -70,7 +70,7 @@ done < <(each_job)\n1610- # stopped <workflow> <job> <minutes>: runs the time-limit step as that job would, cancelled so many minutes after it started; needs \\$limit.\n1611- stopped() {\n1612:   local found; found=$(step \"$1\" \"$2\" \"Tell whether this job stopped at its time limit\")\n1613--  STARTED=$(date -u -d \"$(( $3 * 60 + 5 )) seconds ago\" +%Y-%m-%dT%H:%M:%SZ)\n1614-+  STARTED=$(jq -rn \"now - ($3 * 60 + 5) | todate\")\n1615-   export STARTED\n1616-   : > \"$T/output\"\n1617-   run env GH_TOKEN=workflow-token GH_REPO=owner/myapp GITHUB_RUN_ID=900 GITHUB_RUN_ATTEMPT=2 GITHUB_JOB=\"$2\" \\\n1618-diff --git a/factory/tests/vercel.test.sh b/factory/tests/vercel.test.sh",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Mgn7KHU21vHbxGnpuVf4gc",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhTYiUqECSs1dYaL3y",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01GcaC2PviJqHpbAJ6MH92Dc",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+            "description": "Show implement.yml diff and current step"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4970,
+        "cache_read_input_tokens": 29116,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4970
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "ae713b45-3c30-4b82-9cb1-4c09cea54244",
+    "timestamp": "2026-11-22T18:18:21.833Z",
+    "request_id": "req_011ChJRhTP3HT7fHA2XjMxvG",
+    "wire_tool_inputs": {
+      "toolu_01GcaC2PviJqHpbAJ6MH92Dc": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+        "description": "Show implement.yml diff and current step"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01GcaC2PviJqHpbAJ6MH92Dc",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+    "uuid": "bc8db66d-568a-4503-bbfc-e4202adbc4fe",
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+          "is_error": true,
+          "tool_use_id": "toolu_01GcaC2PviJqHpbAJ6MH92Dc"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "ae7955d3-8b6a-426f-a676-7c5809b2f6b9",
+    "timestamp": "2026-11-22T18:18:21.849Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01GcaC2PviJqHpbAJ6MH92Dc",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhf32WVG1ZsUM6NxnU",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012aYjymkhoCpFzt7Vmr7nwS",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/pr648.diff; grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+            "description": "Save PR diff and locate implement.yml section"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 318,
+        "cache_read_input_tokens": 34086,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 318
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "e9d0343c-5924-4964-9828-b00e147e9b44",
+    "timestamp": "2026-11-22T18:18:26.934Z",
+    "request_id": "req_011ChJRhetb9k9Lb8p2EhPvx",
+    "wire_tool_inputs": {
+      "toolu_012aYjymkhoCpFzt7Vmr7nwS": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/pr648.diff; grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+        "description": "Save PR diff and locate implement.yml section"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_012aYjymkhoCpFzt7Vmr7nwS",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+    "uuid": "c7464586-70df-4697-a5b6-fefdcf353ff1",
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+          "is_error": true,
+          "tool_use_id": "toolu_012aYjymkhoCpFzt7Vmr7nwS"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "466f2bc5-81ab-40ce-87ce-ac60fca7208b",
+    "timestamp": "2026-11-22T18:18:26.962Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: gh pr diff 648, grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+    "tool_result_meta": [
+      {
+        "id": "toolu_012aYjymkhoCpFzt7Vmr7nwS",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRhf32WVG1ZsUM6NxnU",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017gbZGkMxHHgpN3fAwyJb9Y",
+          "name": "Grep",
+          "input": {
+            "pattern": "stopped at its time limit",
+            "path": "/home/runner/work/tinyfactory/tinyfactory/factory/workflows/implement.yml",
+            "output_mode": "content",
+            "-B": 2,
+            "-A": 14
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 318,
+        "cache_read_input_tokens": 34086,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 318
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "b27a33b1-0d13-4947-b9ee-dd0d2d221fcf",
+    "timestamp": "2026-11-22T18:18:28.004Z",
+    "request_id": "req_011ChJRhetb9k9Lb8p2EhPvx",
+    "wire_tool_inputs": {
+      "toolu_017gbZGkMxHHgpN3fAwyJb9Y": {
+        "pattern": "stopped at its time limit",
+        "path": "/home/runner/work/tinyfactory/tinyfactory/factory/workflows/implement.yml",
+        "output_mode": "content",
+        "-B": 2,
+        "-A": 14
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_017gbZGkMxHHgpN3fAwyJb9Y",
+          "type": "tool_result",
+          "content": "226-          retention-days: 90\n227-\n228:      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n229:      - name: Tell whether this job stopped at its time limit\n230-        id: limit\n231-        if: cancelled()\n232-        env:\n233-          GH_TOKEN: ${{ github.token }}\n234-          GH_REPO: ${{ github.repository }}\n235-          LIMIT_MINUTES: 60   # this job's timeout-minutes\n236-        run: |\n237-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n238-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n239:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n240-            exit 1\n241-          }\n242-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n243-          # jq reads the time (decisions H632b).\n244-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n245-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n246-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n247-\n248-      - name: Keep the work and flag the ticket if no pull request ready for review came out\n249-        if: always() && steps.place.outputs.start == 'true' && steps.agent.outcome != 'skipped'\n250-        env:\n251-          GH_TOKEN: ${{ github.token }}\n252-          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)\n253-          FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "0dd03afb-275d-4880-9266-ca7636b460ec",
+    "timestamp": "2026-11-22T18:18:28.039Z",
+    "tool_use_result": {
+      "mode": "content",
+      "numFiles": 0,
+      "filenames": [],
+      "content": "226-          retention-days: 90\n227-\n228:      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n229:      - name: Tell whether this job stopped at its time limit\n230-        id: limit\n231-        if: cancelled()\n232-        env:\n233-          GH_TOKEN: ${{ github.token }}\n234-          GH_REPO: ${{ github.repository }}\n235-          LIMIT_MINUTES: 60   # this job's timeout-minutes\n236-        run: |\n237-          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n238-            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n239:            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n240-            exit 1\n241-          }\n242-          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n243-          # jq reads the time (decisions H632b).\n244-          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n245-          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n246-          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n247-\n248-      - name: Keep the work and flag the ticket if no pull request ready for review came out\n249-        if: always() && steps.place.outputs.start == 'true' && steps.agent.outcome != 'skipped'\n250-        env:\n251-          GH_TOKEN: ${{ github.token }}\n252-          BOARD_TOKEN: ${{ secrets.BOARD_TOKEN }}   # lets start-waiting.sh read the order of the board (decisions T335a)\n253-          FILE: ${{ steps.resume2.outputs.execution_file || steps.resume1.outputs.execution_file || steps.agent.outputs.execution_file }}",
+      "numLines": 28,
+      "totalLines": 28
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_017gbZGkMxHHgpN3fAwyJb9Y",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "394e8683-aeda-43dd-b5eb-317c7a71052b"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 293,
+    "estimated_tokens_delta": 243,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "dc5d29e0-63c7-445a-a103-11bd6d050fe5"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRi7WEvcKD1qPgoRxb8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSigkKEAgUGAI4AUIIdGhpbmtpbmcSDB0sficw6KUCwgyh8RoMSRXy+ZEwKymqqvo3IjAOJqyIAnlBdArDz9JLO+yq+nFdvKh+9DPsnut8FiFPmrqiSA3VBqdEMMg77ucjWckqpwhtvMwmnHHBF+QypoXSiSrVTSwz+3F4h3+Fnk9mPi6+1YNTKjko9e8Sz8d6bre9YSzWxeLXlCRHR7Rohu+6h03+ENmYgtYqKr2dLWO5kyXX4Q9qpx+ZOOy3t5CRfazTNYF4BiKGLRgB15c7vvxuRuv0cLeOEcAVDP9LtBTVPl8BHVqG+9S/lQd0vqNuMTOsXP5b6OFDVBCMODgUFNCIlC1n5gceNBbS5ed/+WimkHlIAe9Qv3bklwaEiKmvnz2vPVXYFh4t0swNkaMD57D4owKoh8bEnFLGiLDr8gL9+5FWFObt0MBv7yn670MVWciiJmb6unjYzmgKJRitrFuFMqrM1sTn1YWcstHBMs91LyvETmVEX4FqN0Dan27NdGQOyqE9YJvVc6p+/CHC2ekF3nAvh9CqHDN9w5moQfTGjxzIaHZqUoRL3k2ud0IP+wvk9bLDN+5XTSuS8Yw4i5P4H93kaVskCBh24e4jYTkMc1Zaae8S/scXf2kTqs+6WCZCO7Dqk10qoVQuLbIKC+Ys7n8Tw4qPx2ba8Lw/VzUHfxFHb39P9CEawQX82kPfWnuDv0VV00NxLKnP7JXK96yEBKLY4sZr3VyFxz0Hv/vmAvFsOu7Cp5DsKwSNb7EORQ9CWbPUo9a8t8zPIivDUpKCgYt0CL0E/t36s2+WUWu5wluyTYiWKh2AuhcYjRGQTttKnjLD6nkPNVGrAtqu3a2F2aZd+rKqinNRqnS1A4UUWJ2aKGtJDb4QUjkTodFxKwrd126BDkShzaIgdFzRR1QZP+kFXEXSgdBwSfjnR1nH+r+fk8RYsDOQAttXsnIF52AGRk/B0IY3rrn4j854+gac8XyFyHTYgTUaPJilwk/RD6RdyxWcsvOj5OVyYWTrNRUydUZEfTEc6Cjmv3rbuuO5PeCPyDGv8VGPOVAhMT5sBlIaFOwMYoAjYg4NTFPGYqaUr2SM8iTMPIOBq+Lwp2YI8kLK7j/TrX3hvUU9Pae2g8nak8jNkUyd6USir5IopJJmjHB9EkWXTvjm2Cjv26UzZBYsBpM3vW25qT/uAztgBTHAjTnD/dAYJHwnCQ7GGXlKPtO8J/2WlNmMAK6+kmT6vleIDKRYDcjrFQRZO7YCBgd/jbd2hrR8nvMLQfHGMWSB6em8oaI+LMbfO1i7pd3PF+Lsc5bh2nk8ipEMptW83X1jBuH1JTSNDrkeJ6mnTXPqgWDnneaWQHKSnMCoVia7PY6uVVqM9Fi+cPIuK0nMQTWFF5bmIGMsL4/X42pvo/vQ42AomoQHB4Un9qKLhGBDCsb/YWUtnbvaXk+lC+u7SXl3auK4O9n+aR75Xy4vxfDvalVqoPLiKveyTHK1wiADp/CEKmYZ0kEsNGPIJV/EvolZZQ9aJ2WJAxFHGkF8WR3vXQNn9g+R2shGGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1235,
+        "cache_read_input_tokens": 34404,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1235
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "c4b82075-8ce8-4031-a555-7068a428e41d",
+    "timestamp": "2026-11-22T18:18:30.389Z",
+    "request_id": "req_011ChJRi7PJL3G16sob8TDYD",
+    "thinking_duration_ms": 801,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRi7WEvcKD1qPgoRxb8",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01SpWrrL5e7RPVm5bH5aretR",
+          "name": "Grep",
+          "input": {
+            "pattern": "Analytics|time limit",
+            "path": "/home/runner/work/tinyfactory/tinyfactory/.sessions/lessons",
+            "output_mode": "content"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1235,
+        "cache_read_input_tokens": 34404,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1235
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "92cb7c82-47e9-459c-a6e8-20655a5f1161",
+    "timestamp": "2026-11-22T18:18:31.054Z",
+    "request_id": "req_011ChJRi7PJL3G16sob8TDYD",
+    "wire_tool_inputs": {
+      "toolu_01SpWrrL5e7RPVm5bH5aretR": {
+        "pattern": "Analytics|time limit",
+        "path": "/home/runner/work/tinyfactory/tinyfactory/.sessions/lessons",
+        "output_mode": "content"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01SpWrrL5e7RPVm5bH5aretR",
+          "type": "tool_result",
+          "content": ".sessions/lessons/20261121T115710Z-lesson-run44901406884.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115710Z-lesson-run44901415445.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115715Z-lesson-run44901421212.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:49:        \"step\": \"Ask for a person when the reviews were stopped at the time limit\",\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:89:        \"step\": \"Tell whether this job stopped at its time limit\",\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:108:[Omitted long matching line]\n.sessions/lessons/20261121T192953Z-lesson-run44941119423.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T193001Z-lesson-run44941126149.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json:41:[Omitted long matching line]"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "b7be2eda-2c32-44c3-a4c4-a9dec18daa41",
+    "timestamp": "2026-11-22T18:18:31.084Z",
+    "tool_use_result": {
+      "mode": "content",
+      "numFiles": 0,
+      "filenames": [],
+      "content": ".sessions/lessons/20261121T115710Z-lesson-run44901406884.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115710Z-lesson-run44901415445.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115715Z-lesson-run44901421212.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:49:        \"step\": \"Ask for a person when the reviews were stopped at the time limit\",\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:89:        \"step\": \"Tell whether this job stopped at its time limit\",\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json:108:[Omitted long matching line]\n.sessions/lessons/20261121T192953Z-lesson-run44941119423.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261121T193001Z-lesson-run44941126149.json:31:            \"if_wrong\": \"The time-limit marker is never counted, so a build that stops at its time limit is started again each time with no stop, and each start spends Claude usage and runner minutes unnoticed.\"\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json:41:[Omitted long matching line]",
+      "numLines": 10,
+      "totalLines": 10
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01SpWrrL5e7RPVm5bH5aretR",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRiLcnLXEfb1bQkRXnj",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS6wYKEAgUGAI4AUIIdGhpbmtpbmcSDPEfC9/rpuLOOiAskhoMwcETfnWuuItQbiHiIjCAJYzSVV0Xb8W4ygiIEOFJX62iSy3EDWcVWggR1cJpoYHbqXQU9GkeO3OcFVtqVnYqiAbMfO7NK7JkS23zczkgLrH0nQW0Kq5D7iZ/qRrZaRntNT9GPlM+KMUDGCCnbWaoqLVblBxYhTYLrYM8DsfbIZjQwlrV98C2J1LHA599KtLFhKHtHEDSh1D9HNI0uzzEN2aDSIy9EM3WTlz6wubJZopW6ux5S7L+wVwrtsibaR76iKPiFulJTbNeVuBmTZDnr2hGOZ3FpldSHFN7PYHieE+2EjdJakmyyvYcA9HvkRYZSmzFuX2hi+ccpoZhZImXoC0XEWMGeiPxk5pqHDC3DKD+V0muW34QewZI8/Np+cuJ9qjeByiaVBKrrgMc4MROHh/KNBDwzclDRUH5fx1WnM2MEs1xZFM1jcFuhrnO987GMqYgvh8ph66l7wJdP0vT9zjgM+TobdlvDJVcE5wTFJwEBSoHWHmiT0YfTlSuZauPhQMcfP87aIL4+PoGq2lgQ0ISr5LP13/Tq2liUeKnCF0qQjroKkYg6rw/uhtTBnUH5oGE3ueJd17urcDY8tCEc8pwLPodjByVtOcJ/MSSJTfEUNdlJpveEqMdPJNEDiAtEQRVTxypIV7s3jEJCAGRs9ef45pvE+u2y5K5o59zkTYH1N03X3TozTPMYwBDyDORjbwyIIqMXo8EMkrgup0BQcrfGc05HCgvy/h+am/f3LaA0ZTlSRnwUsnmZHDEz1UmswZEMMm+RUArXNaVqmXfak1Is7zX0jUcBr28K5TggrwrOlqyprZclCy0YySHyJvrJQS5PMxphnZgBtSYtUgTDOL9FhdIDJ9nxBvp6QHizl3JcxZCYMTmrR6zES1qY50qpajOMYDaPEJ60rj7phUjnF1/vv6QWGHCJBjpris5qmiDpK7T9XdPZkIK24qhg7Id9/ETW9i+VMlv8l07sWpqGHUYLq3nIEq3FHzgS3lsSwMUssvNzvSy3f3HqJk6M/badOmekgLWQ2LmavVILP+RNbKfg+uU0bvDQ+1h4SiPle3jNL8Ctsv5JtXoJtsNlf4abWVumSFoE7gM0bNuFEkBYqnRqE/RNGi6NRgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1085,
+        "cache_read_input_tokens": 35639,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1085
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "1cecf233-4bad-4a75-80e3-8df889347be5",
+    "timestamp": "2026-11-22T18:18:33.129Z",
+    "request_id": "req_011ChJRiLVL4gGzrv6yxftga",
+    "thinking_duration_ms": 665,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRiLcnLXEfb1bQkRXnj",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'm checking whether the step that PR #648 changed actually ran in workflow run 45052415270. It did not, so I'm recording a no-change lesson."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1085,
+        "cache_read_input_tokens": 35639,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1085
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "5c4dc29a-e6f4-4830-8cb7-aeba3771cb1d",
+    "timestamp": "2026-11-22T18:18:33.131Z",
+    "request_id": "req_011ChJRiLVL4gGzrv6yxftga"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJRiLcnLXEfb1bQkRXnj",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_018Cjw9XAUHo6vxNdyRKHYTn",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "Run 45052415270 never reached what PR #648 changed: the time-limit step is skipped unless the job is cancelled, and this build finished normally, so there is nothing to change.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "PR #648 rewrote one step in `factory/workflows/implement.yml`, \"Tell whether this job stopped at its time limit\". It used to work out the minutes with GNU `date -d` and now uses jq's `fromdate` (decisions H632b), so the step also works on a Mac runner. The step only runs when the job is cancelled (`if: cancelled()`). In run 45052415270, Fred built issue #627 in 733 seconds, 22 turns and $0.89, and the run ended with conclusion `success`. The step was therefore skipped and its log is empty. The run neither confirms nor refutes the change. Adam's assumption on PR #648 is about Vercel Web Analytics counting preview page views. This run did not touch that, and no earlier lesson holds an assumption about it.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+              "https://github.com/edmulraney/tinyfactory/pull/648"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": "nothing"
+            },
+            "cost": {
+              "amount": "Nothing: the run finished its build ($0.89, 733 seconds) and the changed step never ran.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: there was no fault to prevent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1085,
+        "cache_read_input_tokens": 35639,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1085
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "4b3bdea0-9e9c-40c9-891b-8ae9c5060503",
+    "timestamp": "2026-11-22T18:18:38.906Z",
+    "request_id": "req_011ChJRiLVL4gGzrv6yxftga",
+    "wire_tool_inputs": {
+      "toolu_018Cjw9XAUHo6vxNdyRKHYTn": {
+        "summary": "Run 45052415270 never reached what PR #648 changed: the time-limit step is skipped unless the job is cancelled, and this build finished normally, so there is nothing to change.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "PR #648 rewrote one step in `factory/workflows/implement.yml`, \"Tell whether this job stopped at its time limit\". It used to work out the minutes with GNU `date -d` and now uses jq's `fromdate` (decisions H632b), so the step also works on a Mac runner. The step only runs when the job is cancelled (`if: cancelled()`). In run 45052415270, Fred built issue #627 in 733 seconds, 22 turns and $0.89, and the run ended with conclusion `success`. The step was therefore skipped and its log is empty. The run neither confirms nor refutes the change. Adam's assumption on PR #648 is about Vercel Web Analytics counting preview page views. This run did not touch that, and no earlier lesson holds an assumption about it.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+          "https://github.com/edmulraney/tinyfactory/pull/648"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": "nothing"
+        },
+        "cost": {
+          "amount": "Nothing: the run finished its build ($0.89, 733 seconds) and the changed step never ran.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: there was no fault to prevent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_018Cjw9XAUHo6vxNdyRKHYTn",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "uuid": "93d5c882-a1fe-4ad9-acf7-591b3df188ed",
+    "timestamp": "2026-11-22T18:18:38.913Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_018Cjw9XAUHo6vxNdyRKHYTn",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 27592,
+    "stop_reason": "tool_use",
+    "session_id": "d7020a69-90fd-4354-beff-77b82af76c0c",
+    "total_cost_usd": 0.2447404,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 20981,
+      "cache_read_input_tokens": 174212,
+      "output_tokens": 2093,
+      "output_tokens_details": {
+        "thinking_tokens": 200
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 20981,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 875,
+          "cache_read_input_tokens": 35639,
+          "cache_creation_input_tokens": 1085,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1085
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2093,
+        "cacheReadInputTokens": 174212,
+        "cacheCreationInputTokens": 20981,
+        "webSearchRequests": 0,
+        "costUSD": 0.24459840000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 200,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 20981,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01GcaC2PviJqHpbAJ6MH92Dc",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 | awk '/^diff --git a\\/factory\\/workflows\\/implement.yml/{p=1} /^diff --git/&&!/implement.yml/{p=0} p'; grep -n -A12 \"stopped at its time limit\" factory/workflows/implement.yml",
+          "description": "Show implement.yml diff and current step"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_012aYjymkhoCpFzt7Vmr7nwS",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 648 > /tmp/pr648.diff; grep -n \"^diff --git a/factory/workflows/implement.yml\" /tmp/pr648.diff",
+          "description": "Save PR diff and locate implement.yml section"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 9,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"Run 45052415270 never reached what PR #648 changed: the time-limit step is skipped unless the job is cancelled, and this build finished normally, so there is nothing to change.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"PR #648 rewrote one step in `factory/workflows/implement.yml`, \\\"Tell whether this job stopped at its time limit\\\". It used to work out the minutes with GNU `date -d` and now uses jq's `fromdate` (decisions H632b), so the step also works on a Mac runner. The step only runs when the job is cancelled (`if: cancelled()`). In run 45052415270, Fred built issue #627 in 733 seconds, 22 turns and $0.89, and the run ended with conclusion `success`. The step was therefore skipped and its log is empty. The run neither confirms nor refutes the change. Adam's assumption on PR #648 is about Vercel Web Analytics counting preview page views. This run did not touch that, and no earlier lesson holds an assumption about it.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45052415270\",\"https://github.com/edmulraney/tinyfactory/pull/648\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"nothing\"},\"cost\":{\"amount\":\"Nothing: the run finished its build ($0.89, 733 seconds) and the changed step never ran.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: there was no fault to prevent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "Run 45052415270 never reached what PR #648 changed: the time-limit step is skipped unless the job is cancelled, and this build finished normally, so there is nothing to change.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "PR #648 rewrote one step in `factory/workflows/implement.yml`, \"Tell whether this job stopped at its time limit\". It used to work out the minutes with GNU `date -d` and now uses jq's `fromdate` (decisions H632b), so the step also works on a Mac runner. The step only runs when the job is cancelled (`if: cancelled()`). In run 45052415270, Fred built issue #627 in 733 seconds, 22 turns and $0.89, and the run ended with conclusion `success`. The step was therefore skipped and its log is empty. The run neither confirms nor refutes the change. Adam's assumption on PR #648 is about Vercel Web Analytics counting preview page views. This run did not touch that, and no earlier lesson holds an assumption about it.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45052415270",
+        "https://github.com/edmulraney/tinyfactory/pull/648"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": "nothing"
+      },
+      "cost": {
+        "amount": "Nothing: the run finished its build ($0.89, 733 seconds) and the changed step never ran.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: there was no fault to prevent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 3247,
+    "type": "result",
+    "duration_ms": 28813,
+    "uuid": "febe9eb9-5877-4644-bada-5e9e5f305e49",
+    "ttft_stream_ms": 2699,
+    "time_to_request_ms": 180,
+    "first_content_frame_ms": 2699,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2093,
+        "cacheReadInputTokens": 174212,
+        "cacheCreationInputTokens": 20981,
+        "webSearchRequests": 0,
+        "costUSD": 0.24459840000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 200,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 20981,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
