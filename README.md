@@ -116,7 +116,7 @@ To run the newest commit of this repository instead of the published package: `n
 
 ## Using it
 
-1. **Start with an idea or a ticket.** Open an issue with the Idea template, and Peta proposes the tickets and the decisions that are yours; answer her, or say "go", and she files them. Or file a ticket yourself with one of the other templates.
+1. **Start with an idea or a ticket.** Open an issue with the Idea template, and Peta proposes the tickets and the decisions that are yours; answer her, say "go" or add the `ready` label to the idea, and she files them. Or file a ticket yourself with one of the other templates.
 2. **Add the `ready` label** to a ticket to start its build. Five tickets are built at once at most, and the rest wait their turn.
 3. **Answer what needs you:** approve a pull request that waits for you, or submit a "Request changes" review and the engineer makes the changes. GitHub's merge button counts as your approval.
 4. **Read what the factory proposes.** A retro's proposal is a ticket written to be built as it is. Add `ready` to accept it, or close it.
