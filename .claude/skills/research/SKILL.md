@@ -39,7 +39,7 @@ Public posts are written by real people who did not agree to be studied.
    ```
    Closes #32
 
-   Most threads were about injury after a jump in weekly distance; none answered how runners choose a plan.
+   Most threads were about injury after a jump in weekly distance; none answered how people choose a plan.
 
    Differs from the ticket: the profiles rest on one forum, because the other asks for a login.
    ```

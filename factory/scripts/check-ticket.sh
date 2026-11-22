@@ -130,8 +130,8 @@ if [ "${found[0]}" = initiative ] && [ -n "$metric" ] && [[ -z "$created" || ! "
   metric_problem() { echo "- \"## Success metric\" names no $1. Write the line \"$2\"."; problems=1; }
   grep -qE '^- Event: [^[:space:]]' <<<"$metric" \
     || metric_problem "event" "- Event: <an event the product records>"
-  grep -qE '^- Number: at least [0-9]+ (runners?|times?) in a week\.?[[:space:]]*$' <<<"$metric" \
-    || metric_problem "number a script can read" "- Number: at least <n> runners in a week\" or \"- Number: at least <n> times in a week"
+  grep -qE '^- Number: at least [0-9]+ (users?|times?) in a week\.?[[:space:]]*$' <<<"$metric" \
+    || metric_problem "number a script can read" "- Number: at least <n> users in a week\" or \"- Number: at least <n> times in a week"
   grep -qE '^- Date: [0-9]{4}-[0-9]{2}-[0-9]{2}[[:space:]]*$' <<<"$metric" \
     || metric_problem "date to look" "- Date: <YYYY-MM-DD>"
 fi

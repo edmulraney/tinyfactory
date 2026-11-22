@@ -1,1 +1,1 @@
-| Whether each shipped initiative's hypothesis held | `product/verdicts/<ticket>.md`, which `factory/scripts/measure-initiatives.sh` writes each Monday from what production counted ([M631a](../../decisions/631.md), [M631e](../../decisions/631.md)) |
+| Whether each shipped initiative's hypothesis held | A comment on the initiative's ticket, which `factory/scripts/measure-initiatives.sh` posts each Monday from what production counted, and again only when the verdict changes ([M631a](../../decisions/631.md), [M631c](../../decisions/631.md), [M631e](../../decisions/631.md)) |

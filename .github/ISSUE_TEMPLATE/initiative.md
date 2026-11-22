@@ -14,9 +14,9 @@ labels: initiative
 <!-- "We believe that <change> will cause <outcome> for <who>." -->
 
 ## Success metric
-<!-- Three lines, each read by a script. The event is one the product records, which `ARCHITECTURE.md` lists; if it records none that fits, "Scope" adds the event. The number proves the hypothesis: "at least <n> runners in a week" or "at least <n> times in a week". The date is the day we look. -->
+<!-- Three lines, each read by a script. The event is one the product records, which `ARCHITECTURE.md` lists; if it records none that fits, "Scope" adds the event. The number proves the hypothesis: "at least <n> users in a week" or "at least <n> times in a week". The date is the day we look. -->
 <!-- Example: - Event: race added -->
-<!-- Example: - Number: at least 5 runners in a week -->
+<!-- Example: - Number: at least 5 users in a week -->
 <!-- Example: - Date: 2026-12-20 -->
 
 ## Scope

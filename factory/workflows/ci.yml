@@ -211,7 +211,8 @@ jobs:
         env:
           BASE_URL: ${{ steps.preview.outputs.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: pnpm test:e2e
+        # Every test, four files at a time (decisions M640a, M640b).
+        run: pnpm test:e2e --workers=4
       - name: Upload screenshots and the test report
         id: proof
         if: always()

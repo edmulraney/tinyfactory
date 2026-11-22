@@ -27,7 +27,7 @@ None.'
 
 scenario "passes a complete initiative"
 ticket initiative "## Problem
-Runners cannot share a forecast.
+Users cannot share a forecast.
 
 ## Hypothesis
 They will export it.
@@ -601,7 +601,7 @@ We believe that signing in straight after choosing a race, with Google or an ema
 ## Success metric
 
 - Event: race added
-- Number: at least 1 runner in a week
+- Number: at least 1 user in a week
 - Date: 2026-11-30
 
 ## Scope
@@ -719,12 +719,12 @@ metric() {
   run "$scripts/check-ticket.sh" --draft initiative "$name" draft.md
 }
 complete="- Event: race added
-- Number: at least 1 runner in a week
+- Number: at least 1 user in a week
 - Date: 2026-11-30"
 free_text="The owner chooses a race, signs in, and sees the same race on his dashboard from a second browser. We look when this merges."
 
 scenario "passes an initiative whose metric names the event, the number and the date"
-for number in "at least 5 runners in a week" "at least 1 runner in a week" "at least 20 times in a week."; do
+for number in "at least 5 users in a week" "at least 1 user in a week" "at least 20 times in a week."; do
   metric "- Event: race added
 - Number: $number
 - Date: 2026-12-20"
@@ -733,7 +733,7 @@ for number in "at least 5 runners in a week" "at least 1 runner in a week" "at l
 done
 
 scenario "refuses a metric that lacks the event, the number or the date, and names only what is missing"
-metric "- Number: at least 5 runners in a week
+metric "- Number: at least 5 users in a week
 - Date: 2026-12-20"
 expect_status 1
 expect_output '"## Success metric" names no event. Write the line "- Event: <an event the product records>".'
@@ -741,10 +741,10 @@ expect_output '"## Success metric" names no event. Write the line "- Event: <an 
 metric "- Event: race added
 - Date: 2026-12-20"
 expect_status 1
-expect_output '"## Success metric" names no number a script can read. Write the line "- Number: at least <n> runners in a week" or "- Number: at least <n> times in a week".'
+expect_output '"## Success metric" names no number a script can read. Write the line "- Number: at least <n> users in a week" or "- Number: at least <n> times in a week".'
 [ "$(wc -l <<<"$out")" -eq 1 ] || fail "expected the number to be its only problem"
 metric "- Event: race added
-- Number: at least 5 runners in a week"
+- Number: at least 5 users in a week"
 expect_status 1
 expect_output '"## Success metric" names no date to look. Write the line "- Date: <YYYY-MM-DD>".'
 [ "$(wc -l <<<"$out")" -eq 1 ] || fail "expected the date to be its only problem"
@@ -756,19 +756,24 @@ expect_output 'names no event.'
 expect_output 'names no number a script can read.'
 expect_output 'names no date to look.'
 metric "- Event: race added
-- Number: most runners add a race
+- Number: most users add a race
 - Date: when this merges"
 expect_status 1
 expect_no_output 'names no event.'
 expect_output 'names no number a script can read.'
 expect_output 'names no date to look.'
+metric "- Event: race added
+- Number: at least 5 runners in a week
+- Date: 2026-12-20"
+expect_status 1
+expect_output 'names no number a script can read.'
 
 scenario "refuses the template's own metric section as empty, and shows each line in an example"
 metric "$(awk '/^## Success metric$/ {on = 1; next} /^## / {on = 0} on' "$root/.github/ISSUE_TEMPLATE/initiative.md")"
 expect_status 1
 expect_output 'Section "## Success metric" is missing or empty.'
 expect_no_output 'names no'
-for line in "Event: race added" "Number: at least 5 runners in a week" "Date: 2026-12-20"; do
+for line in "Event: race added" "Number: at least 5 users in a week" "Date: 2026-12-20"; do
   grep -qxF "<!-- Example: - $line -->" "$root/.github/ISSUE_TEMPLATE/initiative.md" || fail "expected the template to show the line \"- $line\""
 done
 

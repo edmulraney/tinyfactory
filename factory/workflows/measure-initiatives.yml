@@ -1,4 +1,4 @@
-# Each Monday, writes on main whether each shipped initiative's hypothesis held, from the counts production keeps.
+# Each Monday, says on each shipped initiative's ticket whether its hypothesis held, from the counts production keeps.
 name: measure-initiatives
 
 on:
@@ -10,11 +10,13 @@ on:
 
 jobs:
   measure:
+    # Skipped, as ci.yml's Neon steps are, in a repository with no Neon project, such as one with no app (decisions M641a).
+    if: vars.NEON_PROJECT_ID != ''
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      contents: write   # to push the verdicts to main (decisions M631c)
-      issues: read      # to read the metric of each shipped initiative
+      contents: read
+      issues: write     # to read the metric of each shipped initiative and post its verdict there (decisions M631c)
     steps:
       # Before any checkout and in no script, as the steps of ci.yml that hold the key (decisions M15, M635a).
       - name: Read each week's usage counts from production's database
@@ -22,7 +24,6 @@ jobs:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
         run: |
-          [ -n "$NEON_PROJECT_ID" ] || { echo "::error::The repository variable NEON_PROJECT_ID is not set, so production's database could not be read."; exit 1; }
           api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
           # One fetch a line so a failed request stops the step. Production's branch is Neon's default one.
           branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
@@ -32,14 +33,14 @@ jobs:
           connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$branch&$database")
           uri=$(jq -er .uri <<<"$connection")
           echo "::add-mask::$uri"
-          # The app keeps each thing a runner did as a row of `usage_events` (ARCHITECTURE.md, "Usage"), and Postgres
+          # The app keeps each thing a user did as a row of `usage_events` (ARCHITECTURE.md, "Usage"), and Postgres
           # starts a week on Monday. A database with no such table answers `null`: its project records no usage.
           psql "$uri" -X -At -v ON_ERROR_STOP=1 > "$RUNNER_TEMP/usage-counts.json" <<'SQL'
           select to_regclass('public.usage_events') is not null as recorded \gset
           \if :recorded
             select coalesce(json_agg(counts), '[]') from (
               select to_char(date_trunc('week', occurred_at at time zone 'UTC'), 'YYYY-MM-DD') as week, event,
-                count(*) as times, count(distinct account_id) as runners
+                count(*) as times, count(distinct account_id) as users
               from usage_events group by 1, 2) as counts;
           \else
             select 'null';

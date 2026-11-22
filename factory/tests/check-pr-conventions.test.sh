@@ -17,7 +17,7 @@ good='Closes #12
 The forecast exports as CSV.
 
 ## Why
-Runners asked for it.
+Users asked for it.
 
 ## Docs updated
 - `ARCHITECTURE.md`: the export module.
@@ -516,7 +516,7 @@ refuses '"## After merging" lists #12, a ticket this pull request closes when it
 
 scenario "counts every closing word in the description, not only the first"
 branch_changing ARCHITECTURE.md
-replace_first "$good" 'Runners asked for it.' 'Runners asked for it. This also Fixes: #40.'
+replace_first "$good" 'Users asked for it.' 'Users asked for it. This also Fixes: #40.'
 also_fixes="$replaced"
 replace_first "$also_fixes" '## After merging
 Nothing' '## After merging

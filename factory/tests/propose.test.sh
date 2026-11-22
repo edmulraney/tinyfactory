@@ -136,7 +136,7 @@ proposal() { printf '%s\n' "## Should it be built" "$1" "" "## Building" "A runn
 
 scenario "posts a proposal that opens with whether to build the idea and names a file of the product's record"
 github
-proposal "Yes. product/signals.md holds three runners who asked for it." > proposal.md
+proposal "Yes. product/signals.md holds three users who asked for it." > proposal.md
 propose
 expect_status 0
 expect_call "gh issue comment 12 --body-file proposal.md"
@@ -162,7 +162,7 @@ expect_no_call "gh issue comment"
 
 scenario "refuses a proposal whose first part names nothing of the product's record, and posts nothing"
 github
-{ proposal "Yes: runners want it."; echo; echo "## Decided"; echo "- As product/decisions/348.md has it: its reason."; } > proposal.md
+{ proposal "Yes: users want it."; echo; echo "## Decided"; echo "- As product/decisions/348.md has it: its reason."; } > proposal.md
 propose
 expect_status 1
 expect_output 'The part "Should it be built" does not name product/.'

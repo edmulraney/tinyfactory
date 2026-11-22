@@ -73,6 +73,20 @@ comments=$(gh api "repos/{owner}/{repo}/issues/$issue/comments?per_page=100" --p
       | {login: .user.login, at: .created_at, body: (.body // \"\")} | @json") \
   || die "Could not read the comments on issue #$issue from GitHub, so what the owner answered is not known."
 
+# Whether a shipped hypothesis held is the last verdict measure-initiatives.sh posted on its initiative, which Peta cannot read herself (decisions M641c).
+marker="<!-- factory:verdict -->"
+shipped=$(gh api "repos/{owner}/{repo}/issues?state=all&labels=initiative,deployed&per_page=100" --paginate \
+    --jq '.[] | select(.pull_request == null) | .number') \
+  || die "Could not read the shipped initiatives from GitHub, so which of their hypotheses held is not known."
+verdicts=""
+for number in $shipped; do
+  verdict=$(gh api "repos/{owner}/{repo}/issues/$number/comments?per_page=100" --paginate \
+      --jq ".[] | select(.user.login == \"github-actions[bot]\" and .user.type == \"Bot\" and ((.body // \"\") | startswith(\"$marker\")))
+        | {number: $number, at: .created_at, body} | @json") \
+    || die "Could not read the comments on initiative #$number from GitHub, so whether its hypothesis held is not known."
+  [ -z "$verdict" ] || verdicts+="$(tail -n 1 <<<"$verdict")"$'\n'
+done
+
 if [ "$go" = true ]; then
   # A proposal is a comment of Peta's with the heading propose.sh asks of one; the owner's that quotes it is none.
   if ! jq -es 'any(.[]; .login == "claude[bot]" and (.body | test("(^|\n)## Tickets\r?(\n|$)")))' <<<"$comments" >/dev/null; then
@@ -96,6 +110,7 @@ mkdir -p "$(dirname "$file")"
 {
   jq -r '"# Idea #\(.number): \(.title)\n\n\(.body // "")\n"' <<<"$idea"
   [ -z "$comments" ] || jq -r '"===== comment by \(.login), \(.at) =====\n\(.body)\n"' <<<"$comments"
+  [ -z "$verdicts" ] || jq -r '"===== verdict on initiative #\(.number), \(.at) =====\n\(.body)\n"' <<<"$verdicts"
   [ "$go" != true ] || printf '===== the `ready` label, added by %s =====\ngo\n' "$owner"
 } > "$file"
 echo "start=true" >> "$outputs"

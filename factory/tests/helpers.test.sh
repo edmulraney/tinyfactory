@@ -3,7 +3,7 @@
 . "$(dirname "$0")/helpers.sh"
 
 text='## Why
-Runners asked for it.
+Users asked for it.
 
 ## How it was verified
 `pnpm test` passed, and the owner'"'"'s "export" worked.
@@ -16,7 +16,7 @@ replace_first "$text" '## Not proven
 Nothing' '## Not proven
 The first run.'
 [ "$replaced" = '## Why
-Runners asked for it.
+Users asked for it.
 
 ## How it was verified
 `pnpm test` passed, and the owner'"'"'s "export" worked.
@@ -29,7 +29,7 @@ replace_first "$text" '`pnpm test` passed, and the owner'"'"'s "export" worked.'
 * [x] a list item, `quoted`, with a \ and a $HOME
 ````'
 [ "$replaced" = '## Why
-Runners asked for it.
+Users asked for it.
 
 ## How it was verified
 ````

@@ -27,7 +27,7 @@ Your only commands are `factory/scripts/file-slice.sh` and `factory/scripts/prop
 
 Size the slices to `product/state.md` and the number of people your instructions give ([M605a](../../../factory/decisions/605.md)): what pays only with more people is left out. You keep that file true: a slice that changes what it says names it under "Docs to update".
 
-Decide everything you can, from what `product/` holds. `product/verdicts/` says which shipped hypotheses held. A choice is the owner's only when it changes who the product is for or what it will not do (`PURPOSE.md`), spends money, or cannot be undone once people use it. "Needs you" is usually "None", and `propose.sh` refuses more than three lines ([A583a](../../../factory/decisions/583.md), [A585](../../../factory/decisions/585.md)).
+Decide everything you can, from what `product/` holds. Each `verdict on initiative` in your file says whether that shipped initiative's hypothesis held. A choice is the owner's only when it changes who the product is for or what it will not do (`PURPOSE.md`), spends money, or cannot be undone once people use it. "Needs you" is usually "None", and `propose.sh` refuses more than three lines ([A583a](../../../factory/decisions/583.md), [A585](../../../factory/decisions/585.md)).
 
 One comment in this shape alone:
 

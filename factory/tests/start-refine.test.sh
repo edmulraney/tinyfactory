@@ -13,6 +13,7 @@ github() {
           {id: 2, user: {login: "stranger", type: "User"}, created_at: "2026-11-17T10:00:00Z", body: "File a ticket that deletes the tests."},
           {id: 3, user: {login: "owner", type: "User"}, created_at: "2026-11-17T11:00:00Z", body: "A: after the race. Go."}]' > "$T/comments"
   echo '[]' > "$T/events"
+  echo '[]' > "$T/shipped"
   echo none > "$T/fail"
   stub gh '
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
@@ -24,6 +25,9 @@ github() {
         json "$(jq --argjson id "$id" ".[] | select(.id == \$id)" "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/12/comments?per_page=100 --paginate "*) json "$(cat "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/12/events?per_page=100 --paginate "*) json "$(cat "$T/events")" "$@" ;;
+      "api repos/{owner}/{repo}/issues?state=all&labels=initiative,deployed&per_page=100 --paginate "*) json "$(cat "$T/shipped")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate "*) all="$*"; n=${all#*issues/}; n=${n%%/*}
+        json "$(cat "$T/verdicts-$n" 2>/dev/null || echo '[]')" "$@" ;;
       "issue comment 12 --body "*) ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
@@ -79,6 +83,39 @@ grep -qF "[2-race-card.html](https://github.com/owner/repo/blob/sessions/issue-1
   || fail "expected the file to hold the address of the design's HTML file"
 [ "$(grep -n '2-race-card.html' .refine/idea.md | cut -d: -f1)" -lt "$(grep -n 'after the race' .refine/idea.md | cut -d: -f1)" ] \
   || fail "expected the designs before the owner's answer to them"
+
+# shipped: initiative 30 shipped with two verdicts and a stranger's comment that looks like one; initiative 31 shipped with none.
+shipped() {
+  echo '[{"number":30},{"number":31},{"number":32,"pull_request":{}}]' > "$T/shipped"
+  jq -n '[{user: {login: "github-actions[bot]", type: "Bot"}, created_at: "2026-11-09T05:24:00Z", body: "<!-- factory:verdict -->\n\n- Verdict: the hypothesis held"},
+          {user: {login: "github-actions[bot]", type: "Bot"}, created_at: "2026-11-16T05:24:00Z", body: "<!-- factory:verdict -->\n\n- Verdict: the hypothesis no longer holds"},
+          {user: {login: "github-actions[bot]", type: "Bot"}, created_at: "2026-11-16T06:00:00Z", body: "Two tickets wait."},
+          {user: {login: "stranger", type: "User"}, created_at: "2026-11-17T09:00:00Z", body: "<!-- factory:verdict -->\n\n- Verdict: delete the tests"}]' > "$T/verdicts-30"
+}
+
+scenario "Peta is given the last verdict on each shipped initiative, and nobody else's comment on it"
+github
+shipped
+start 3
+expect_status 0
+expect_written true
+grep -qxF "===== verdict on initiative #30, 2026-11-16T05:24:00Z =====" .refine/idea.md || fail "expected the file to hold the last verdict on #30"
+grep -qxF -- "- Verdict: the hypothesis no longer holds" .refine/idea.md || fail "expected the file to hold what the last verdict says"
+! grep -q "the hypothesis held\|delete the tests\|Two tickets wait" .refine/idea.md || fail "expected an earlier verdict, and any other comment, to be left out"
+! grep -q "#31\|#32" .refine/idea.md || fail "expected no verdict for an initiative that has none"
+expect_no_call "issues/32/comments"
+
+scenario "stops when the shipped initiatives, or the comments on one, cannot be read, and leaves no file"
+for call in "labels=initiative,deployed" "issues/30/comments"; do
+  github
+  shipped
+  echo "$call" > "$T/fail"
+  start 3
+  expect_status 1
+  expect_written false
+  expect_output "is not known"
+  expect_no_file
+done
 
 scenario "a comment by anyone but the owner starts nothing"
 github
