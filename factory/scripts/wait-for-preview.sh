@@ -29,17 +29,14 @@ done
 [ "$state" = success ] || die "Timed out waiting for Vercel to deploy $sha (last state: $state)"
 
 # The address is sent a secret, so a comment counts only by the app that writes it, which the REST list names in full (decisions U563l).
-comments=$(gh api "repos/$GITHUB_REPOSITORY/issues/$pr/comments?per_page=100" --paginate \
-    --jq '.[] | select(.user.login == "vercel[bot]" or .user.login == "github-actions[bot]") | {login: .user.login, body: (.body // "")}') \
+comment=$(gh api "repos/$GITHUB_REPOSITORY/issues/$pr/comments?per_page=100" --paginate \
+    --jq '.[] | select(.user.login == "vercel[bot]") | {node_id, body: (.body // "")}') \
   || die "Could not read the comments of pull request #$pr from GitHub, so there is no preview URL"
-# Two lines, either empty: the URL in Vercel's newest comment, and the URL the end-to-end job last tested.
-found=$(jq -rs '
-  def url: [scan("https://[a-z0-9-]+\\.vercel\\.app")][0] // "";
-  ([.[] | select(.login == "vercel[bot]") | .body] | last // "" | url),
-  ([.[] | select(.login == "github-actions[bot]") | .body
-    | select(startswith("End-to-end tests ran against https://"))] | last // "" | url)' <<<"$comments") \
+url='[scan("https://[a-z0-9-]+\\.vercel\\.app")][0] // ""'
+# Two lines, either empty: the URL in Vercel's newest comment, and that comment's ID.
+found=$(jq -rs "last // {} | (.body // \"\" | $url), .node_id // \"\"" <<<"$comment") \
   || die "The comments of pull request #$pr could not be read as GitHub returned them, so there is no preview URL"
-{ read -r deployed; read -r tested; } <<<"$found" || true
+{ read -r deployed; read -r comment_id; } <<<"$found" || true
 earlier=$(gh pr view "$pr" --json commits --jq '.commits | map(.oid) | .[:(index("'"$sha"'") // 0)] | reverse | join(" ")') \
   || die "Could not read pull request #$pr from GitHub, so there is no preview URL"
 
@@ -63,10 +60,16 @@ if [[ "$description" == skipped* ]]; then
     esac
   done
   [ -n "$built" ] || die "$skipped, and it deployed no earlier commit of pull request #$pr, so there is no preview to test"
-  [ -n "$tested" ] || die "$skipped, and no earlier commit of pull request #$pr was tested on a preview, so there is none to test"
-  # A skipped commit has no preview of its own: the one this branch was last tested on is used (decisions M92a, M92b).
-  echo "$skipped. Testing $tested, the preview this branch was last tested on: it serves $built, the newest commit Vercel did deploy." >&2
-  echo "$tested"
+  [ -n "$comment_id" ] || die "$skipped, and Vercel left no comment on pull request #$pr, so there is no preview URL"
+  # A skipped commit has no preview of its own: the branch's is read from what Vercel's comment said before, newest edit first (decisions M92a, M92b).
+  # shellcheck disable=SC2016 # $id is GraphQL's variable
+  preview=$(gh api graphql -f id="$comment_id" \
+      -f query='query($id: ID!) { node(id: $id) { ... on IssueComment { userContentEdits(first: 100) { nodes { diff } } } } }' \
+      --jq "[.data.node.userContentEdits.nodes[] | .diff // \"\" | $url | select(. != \"\")][0] // \"\"") \
+    || die "Could not read the edits of Vercel's comment on pull request #$pr from GitHub, so there is no preview URL"
+  [ -n "$preview" ] || die "$skipped, and no edit of its comment on pull request #$pr holds a preview URL, so there is none to test"
+  echo "$skipped. Testing $preview, the preview of this branch: it serves $built, the newest commit Vercel did deploy." >&2
+  echo "$preview"
   exit 0
 fi
 [ -n "$deployed" ] || die "Vercel deployed $sha but its PR comment has no preview URL"

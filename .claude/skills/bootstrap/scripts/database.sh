@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Creates a free Neon Postgres database through Vercel's marketplace and connects it to the Vercel project.
 # Usage: database.sh [name]   (name defaults to the directory name)
-#        Safe to re-run. Needs only the Vercel login, and accepts Neon's marketplace terms for the Vercel team.
+#        Safe to re-run. Needs only the Vercel login. Before it creates the database it prints the links to
+#        Neon's marketplace terms and accepts them for the Vercel team only once a person at the terminal
+#        agrees; with no terminal it stops there (decisions S601).
 set -euo pipefail
 
 name="${1:-$(basename "$PWD")}"
@@ -19,8 +21,27 @@ created=no
 if vc integration resource inspect "$name" --json >/dev/null 2>&1; then
   echo "database '$name' already exists, skipping create"
 else
+  # Vercel holds the two addresses for Neon, and its own CLI shows the same three before it asks.
+  terms=$(vc api /v2/integrations/integration/neon --raw 2>/dev/null | tail -1 \
+    | jq -er '"Neon terms of service: \(.eulaDocUri // empty)", "Neon privacy policy: \(.privacyDocUri // empty)"') \
+    || { echo "could not read the links to Neon's terms from Vercel, so no database was created"; exit 1; }
+  echo "creating the database accepts these terms for your Vercel team:"
+  echo "Vercel marketplace addendum: https://vercel.com/legal/integration-marketplace-end-users-addendum"
+  echo "$terms"
+  if [ ! -t 0 ]; then
+    echo "database not created: nobody is at a terminal to agree to these terms. Read them, then run this in a terminal:"
+    # The script acts on the directory it runs in, and the person starts in another.
+    printf '   cd %q && %q %q\n' "$PWD" "$(cd "$(dirname "$0")" && pwd)/$(basename "$0")" "$name"
+    exit 1
+  fi
+  read -r -p "Do you agree to them? [y/N] " answer
+  case "$answer" in
+    y|Y|yes|Yes) ;;
+    *) echo "database not created: the terms were not agreed to"; exit 1 ;;
+  esac
+  vc integration accept-terms neon --yes >/dev/null 2>&1 \
+    || { echo "Vercel did not accept Neon's terms, so no database was created"; exit 1; }
   created=yes
-  vc integration accept-terms neon --yes --json 2>/dev/null | jq -r '.policy_links | to_entries[] | "accepted terms: \(.value)"'
   # iad1 is where Vercel runs functions by default, so the database sits next to the code that queries it.
   # auth=false: sign-in.sh switches Neon's auth on, only for a product with accounts, and for a
   # database that already exists too (decisions S287a).

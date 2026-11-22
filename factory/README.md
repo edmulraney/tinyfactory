@@ -30,6 +30,7 @@ Every decision in the record (`decisions.md`) should follow from one of these. W
 12. **An engineer cannot loosen the rules its own change is judged by,** only the owner changes what the factory spends or may reach, and every credential has the least access that works.
 13. **Build what the evidence supports.** A feature carries a hypothesis and a measure of success, and a problem heard once is watched, not built.
 14. **Every decision is written down with its reason.** For two reasons. A decision can then be traced and understood later: otherwise nobody, person or agent, can tell a choice from an accident. And an agent starts every task cold: what is written is the only context it has, and it is what lets it make fewer mistakes and see the wider goal its task serves.
+15. **A person's decision makes the agents' next decision more accurate.** A correction, an answer or an approval withheld is recorded with its reason where the next agent reads it, so that no person is asked the same thing twice. It is the reason for the decision records, and for the retro on a change the owner sends back.
 
 ## Where things are
 

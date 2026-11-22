@@ -457,18 +457,26 @@ fix_conflicting || unfinished "$last" "a fix round was not started for every ope
 # A merge may be what a pull request labelled `waits-for-main` waited for, or one its owner sent back (decisions A368a, A396a).
 "$script_dir/start-retests.sh" || unfinished "$last" "not every pull request labelled \`waits-for-main\`, or sent back by its owner, got its fix round (\`start-retests.sh\` failed); the next merge starts it"
 
-# Production comes to run the last commit of the group that Vercel deploys: it skips one that changes no app code,
-# and the commit before it is then the last (decisions M455g, M33).
-live=""; skipped=""; code=0
+# Production comes to run the last commit of the group that changes app code, or a later one that holds it:
+# a commit that changes none is not waited for, and one Vercel skipped is passed over (decisions M597, M455g, M33).
+live=""; skipped=""; unchanged=""; later=""; code=0
 if [ -n "${PRODUCTION_URL:-}" ]; then
   for pr in $newest_first; do
     commit=$(of "$pr" commit)
     [ -n "$commit" ] || continue
-    code=0
-    message=$("$script_dir/wait-for-deploy.sh" "$PRODUCTION_URL" "$commit") || code=$?
-    [ -z "$message" ] || echo "$message"
-    if [ "$code" -ne 2 ]; then live="$commit"; break; fi
-    skipped+="$pr "
+    # needs-e2e.sh says changed when unsure.
+    if [ "$("$script_dir/needs-e2e.sh" "$pr" 2>/dev/null)" = run=false ]; then
+      unchanged+="$pr "
+    else
+      code=0
+      # shellcheck disable=SC2086 # $later is a list of commits, one argument each.
+      message=$("$script_dir/wait-for-deploy.sh" "$PRODUCTION_URL" "$commit" $later) || code=$?
+      [ -z "$message" ] || echo "$message"
+      if [ "$code" -eq 0 ]; then live="${message##* }"; break; fi
+      if [ "$code" -ne 2 ]; then live="$commit"; break; fi
+      skipped+="$pr "
+    fi
+    later+="$commit "
   done
 else
   echo "merged; no PRODUCTION_URL is set, so the deploy was not confirmed"
@@ -480,14 +488,11 @@ for pr in $shipped; do
     unfinished "$pr" "GitHub did not return the merge commit, so the deploy was not checked"
   elif [ -z "${PRODUCTION_URL:-}" ]; then
     :
+  elif [[ " $unchanged" == *" $pr "* ]]; then
+    retry gh pr comment "$pr" --body "Merged as ${commit:0:7}. Nothing to deploy: this pull request changes no app code, so production at $PRODUCTION_URL serves the app it did before." >/dev/null \
+      || unfinished "$pr" "this pull request changes no app code, so there was nothing to deploy, and the comment saying so could not be posted"
   elif [[ " $skipped" == *" $pr "* ]]; then
-    # No app code changed means nothing to deploy (decisions M165c, M33); needs-e2e.sh says changed when unsure.
-    if [ "$("$script_dir/needs-e2e.sh" "$pr" 2>/dev/null)" = run=false ]; then
-      retry gh pr comment "$pr" --body "Merged as ${commit:0:7}. Nothing was deployed: this pull request changes no app code, so Vercel built nothing and production at $PRODUCTION_URL is as it was." >/dev/null \
-        || unfinished "$pr" "this pull request changes no app code, so Vercel deployed nothing, and the comment saying so could not be posted"
-    else
-      unfinished "$pr" "the deploy check: Vercel skipped the deployment of this commit, so production at $PRODUCTION_URL will never report it and the ticket is not marked \`deployed\`"
-    fi
+    unfinished "$pr" "the deploy check: Vercel skipped the deployment of this commit, so production at $PRODUCTION_URL will never report it and the ticket is not marked \`deployed\`"
   elif [ "$code" -eq 0 ]; then
     holds=""
     [ "$commit" = "$live" ] || holds=", which holds this pull request's commit ${commit:0:7}"

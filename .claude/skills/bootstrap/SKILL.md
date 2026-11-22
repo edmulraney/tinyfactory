@@ -5,16 +5,17 @@ description: Set up a new factory project end to end (monorepo, purpose, GitHub 
 
 # Bootstrap
 
-Ask the human nothing about setup: they only answer the purpose interview, and approve in a browser when a script waits for it.
+Ask the human nothing about setup: they only answer the purpose interview, agree to Neon's terms, and approve in a browser when a script waits for it.
 
 ## Steps
 
 From the project root, `scripts/bootstrap.sh` runs every step in order. Each is a script in `scripts/` that is safe to re-run; run them one at a time to handle a failure or an approval in between: `preflight.sh`, `scaffold.sh`, `purpose.sh`, `github.sh`, `vercel.sh`, `database.sh`, `database-key.sh`, `sign-in.sh`, `preview-access.sh`, `board.sh`, `board-token.sh`, `workflow-app.sh`, `agent-token.sh`.
 
-Run a script that waits for the human in the background, and pass on the code, URL or clicks it prints word for word. Never hand the human a command to type.
+Run a script that waits for the human in the background, and pass on the code, URL or clicks it prints word for word. Never hand the human a command to type, but the one `database.sh` prints.
 
 - `preflight.sh` fails: run each listed `fix:` command yourself (a login command prints a one-time code and a URL, then waits), and re-run preflight when it exits.
 - `purpose.sh` skips when you run the bootstrap yourself: run the `purpose` skill in the conversation at that point, so the first commit carries the purpose.
+- `database.sh` stops before it creates the database when you run it: only the human agrees to Neon's terms (`factory/decisions.md` [S601](../../../factory/decisions/601.md)). Pass on the links and the command it prints, and re-run it once they have run that command in a terminal.
 - `database.sh` and `board.sh` end by printing clicks for what no API can set: pass them on, then re-run the script to confirm.
 - `database-key.sh` may open a Neon sign-in: the human signs in the way the Vercel account does.
 - `sign-in.sh` skips a product whose `PURPOSE.md` says it has no accounts. If Neon refuses, it prints clicks: pass them on, then re-run it.
