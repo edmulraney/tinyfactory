@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import { plugin as shadcn } from "@shadcn/lint";
 import tailwind from "eslint-plugin-better-tailwindcss";
 
 const useTheIndex =
@@ -127,32 +128,43 @@ const eslintConfig = defineConfig([
   misplaced(["src/domain/*"], [], "A file of src/domain belongs to a module: move it to src/domain/<module>."),
   misplaced(["src/lib/*"], [], "Each helper in src/lib is a folder: move this file to src/lib/<name>/index.ts."),
   // DESIGN.md as a failing check. The theme in src/app/globals.css defines the only colours and
-  // sizes that exist, so a class outside it (bg-blue-500) is an unknown class, and a one-off
-  // value (w-[437px], text-[#333]) is refused outright.
+  // sizes that exist, and a screen composes shadcn's components without restyling them.
   {
     files: ["src/**/*.{ts,tsx}"],
-    plugins: { "better-tailwindcss": tailwind },
+    plugins: { shadcn, "better-tailwindcss": tailwind },
     settings: { "better-tailwindcss": { entryPoint: "src/app/globals.css" } },
     rules: {
-      "better-tailwindcss/no-unknown-classes": "error",
-      "better-tailwindcss/no-conflicting-classes": "error",
-      "better-tailwindcss/no-restricted-classes": [
+      // Any class on a shadcn/ui component but its place and width, such as p-4 on a Button.
+      "shadcn/no-restyle": [
         "error",
         {
-          restrict: [
-            {
-              pattern: "\\[([^\\[\\]]*?)\\](?!:)",
-              message: "No one-off values. Use the scale and the tokens in DESIGN.md.",
-            },
-          ],
+          // Where a component sits and how wide it is belongs to the screen. Its colour, type,
+          // spacing, shape, effects and motion are its own.
+          allow: ["layout"],
+          // DESIGN.md: a raised surface is white. shadcn ships the tooltip in the page's grey.
+          contracts: [{ pattern: "^ChartTooltipContent$", allow: ["layout", "bg-card"] }],
         },
       ],
+      // A colour outside the theme's tokens, such as bg-blue-500.
+      "shadcn/no-raw-colors": "error",
+      // A one-off value, such as w-[437px].
+      "shadcn/no-arbitrary-values": "error",
+      // An inline style. A value computed as the page runs is a custom property that a class
+      // reads, such as w-(--share).
+      "shadcn/no-inline-styles": "error",
+      // A class Tailwind does not know, such as rounded-huge.
+      "shadcn/no-unknown-classes": "error",
+      // A class built from a variable, such as `m-${size}`, which Tailwind never generates.
+      "shadcn/require-static-classes": "error",
+      // Two classes that fight, such as p-2 p-4.
+      "better-tailwindcss/no-conflicting-classes": "error",
     },
   },
-  // shadcn's components are written by its CLI and use one-off values by design. Leave them as generated.
+  // shadcn's components are written by its CLI, which uses one-off values and inline styles and
+  // styles one component inside another. Leave them as generated.
   {
     files: ["src/components/ui/**"],
-    rules: { "better-tailwindcss/no-restricted-classes": "off" },
+    rules: { "shadcn/no-restyle": "off", "shadcn/no-arbitrary-values": "off", "shadcn/no-inline-styles": "off" },
   },
   // ARCHITECTURE.md, "Outside services": only the client may call fetch, so no request to an
   // outside service can be made without its time limit.

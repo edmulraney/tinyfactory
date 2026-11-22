@@ -62,9 +62,10 @@ The waitlist on the home page, from its page down to its table, is the example o
 - **A module's door.** `apps/web/src/domain/waitlist/index.ts` exports the use case and the type of its answer, and nothing else.
 - **The module's types.** `apps/web/src/domain/waitlist/types.ts` names each answer the use case can give, told apart by `status`.
 - **A use case deciding a rule.** `joinWaitlist` in `apps/web/src/domain/waitlist/join.ts` decides what an email address is, and answers a database that cannot be reached as a value the page shows.
+- **An event recorded where it happens.** The same use case calls `recordUsage` from `apps/web/src/domain/usage/index.ts` once an address is added, with the name `apps/web/src/domain/usage/types.ts` holds ("Usage").
 - **The file that owns a table.** `apps/web/src/domain/waitlist/repository.ts` alone reads and writes `waitlist_entries`, which `apps/web/src/db/schema.ts` defines.
 - **A migration.** `apps/web/src/db/migrations/0000_waitlist.sql`, generated as "Database" says and committed with Drizzle's record of the schema.
-- **A unit test.** `apps/web/src/domain/waitlist/index.test.ts` tests each rule through the module's index, with its repository replaced, and with it failing.
+- **A unit test.** `apps/web/src/domain/waitlist/index.test.ts` tests each rule through the module's index, with its repository replaced, and with it failing. It proves that the event is recorded for an address added, and not for one already on the list.
 - **An acceptance test.** `apps/web/e2e/acceptance/0-join-waitlist.spec.ts` holds one test for each criterion and uses the page as a visitor does. `apps/web/e2e/acceptance/README.md` says how a ticket's acceptance tests are written.
 - **A route handler that only answers.** `apps/web/src/app/api/health/route.ts` returns what `getHealth` in `apps/web/src/domain/health/index.ts` answered.
 
@@ -87,8 +88,8 @@ Every environment answers `GET /api/health` with `{ "status": "ok", "commit": â€
 ## Database
 
 - **Where it is.** Vercel sets `DATABASE_URL` on every deployment: production's database, or the preview's own branch. A local run has none.
-- **Tools.** Drizzle ORM over Neon's serverless driver in its HTTP mode (`drizzle-orm/neon-http`). Every query goes through `db()` in `src/db/client.ts`; nothing else in the app reads `DATABASE_URL` to connect.
-- **The tables.** `src/db/schema.ts` defines them. `waitlist_entries` is the first: one row for each email address left on the home page, keyed by the address, with when it was left.
+- **Tools.** Drizzle ORM over Neon's serverless driver in its HTTP mode (`drizzle-orm/neon-http`). Every query goes through `db()` in `src/db/client.ts`; nothing else in the app reads `DATABASE_URL` to connect. The client imports `server-only`, so `pnpm build` fails when code that runs in the browser imports it, or imports a module that queries the database.
+- **The tables.** `src/db/schema.ts` defines them. `waitlist_entries` is the first: one row for each email address left on the home page, keyed by the address, with when it was left. `usage_events` is the `usage` module's (see Usage): one row each time a user does something the product counts, with the `event`'s name, `occurred_at`, the time the database wrote the row, and the `account_id` of the account that did it, which is empty when no account did. It has no key, because a user does the same thing many times and nothing names one row.
 - **Add or change a table.** Edit `src/db/schema.ts`, run `pnpm db:generate --name <what-changes>` in `apps/web`, and commit the migration it writes to `src/db/migrations`: the SQL and Drizzle's record of the schema beside it. A table's queries go in the `repository.ts` of the module that owns it.
 - **How a migration reaches a preview and production.** `pnpm build` runs `src/db/migrate.mts` before it builds the app. The script applies every migration the deployment's database has not had, in order. Vercel runs that build for every deployment, so a pull request's migration runs on its preview's own database branch, and on production's database when the merge to `main` builds. A migration that fails fails the build, and the deployment before it keeps serving. With no `DATABASE_URL`, as on a local run or in CI's build, the script runs nothing.
 - **A migration merged out of order fails the build.** Drizzle's migrator skips, without saying so, a migration dated before the newest one the database has had. The script then throws, naming it. Delete that migration's SQL, snapshot and journal entry, run `pnpm db:generate` again so that it is dated the newest, and merge that.
@@ -102,6 +103,19 @@ Why Drizzle, with migrations run in the build, and what was rejected: `factory/d
 
 Every request the app makes to an outside service goes through `outboundFetch` in `apps/web/src/lib/outbound`, so none can hang. The whole answer arrives within 5 seconds or the call throws an `OutboundError`; an answer with an error status is returned for the caller to read. The database is given the client (`src/db/client.ts`), because each query is one HTTPS request. Lint fails a `fetch` anywhere else in `src`.
 
+## Usage
+
+The product counts what its users do, in its own database, so that an initiative's success metric can be a number.
+
+
+
+- **The module.** `src/domain/usage` is an entity: a usage event is stored. With its `repository.ts`, it is the only code in the app that writes `usage_events` (see Database).
+- **The events.** `UsageEvent` in `src/domain/usage/types.ts` holds each event's name. "Waitlist joined" is recorded by `joinWaitlist` for an address it adds, and not for one already on the list.
+- **Add an event.** Add its name to `UsageEvent`, and one line where the feature happens, once it has happened: `await recordUsage("waitlist joined");`, with the account's id as a second argument when there is one. A name is a type so that a misspelt one fails `pnpm typecheck`.
+- **Who did it.** A product with accounts passes the account's id, so that the users who did an event can be counted as well as the times it happened. An event done with no account, such as joining the waitlist, is recorded with none, and the table holds nothing that names the visitor (`factory/decisions.md` [S636b](factory/decisions/636.md)).
+- **Visitors.** Vercel's Web Analytics counts page views, visitors and where they came from, which the `Analytics` component in `src/app/layout.tsx` reports from every page. Its free plan records no custom events, so an event a feature records goes in `usage_events` (`factory/decisions.md` [S644a](factory/decisions/644.md)).
+- **Recording never fails what the user did.** When the row cannot be written, `recordUsage` logs why and answers as it does when it can.
+
 ## Domain language
 
 Use these names everywhere: code, tickets, UI copy. Add a row before introducing a new concept.
@@ -109,3 +123,4 @@ Use these names everywhere: code, tickets, UI copy. Add a row before introducing
 | Term | Meaning | States | Relates to |
 |---|---|---|---|
 | Waitlist entry | An email address a visitor left on the home page, to be told when the product opens | | |
+| Usage event | Something a user did that the product counts, with who did it and the time: waitlist joined | | Recorded for one account or for none, counted by week |

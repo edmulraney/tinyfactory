@@ -70,7 +70,7 @@ done < <(each_job)
 # stopped <workflow> <job> <minutes>: runs the time-limit step as that job would, cancelled so many minutes after it started; needs \$limit.
 stopped() {
   local found; found=$(step "$1" "$2" "Tell whether this job stopped at its time limit")
-  STARTED=$(date -u -d "$(( $3 * 60 + 5 )) seconds ago" +%Y-%m-%dT%H:%M:%SZ)
+  STARTED=$(jq -rn "now - ($3 * 60 + 5) | todate")
   export STARTED
   : > "$T/output"
   run env GH_TOKEN=workflow-token GH_REPO=owner/myapp GITHUB_RUN_ID=900 GITHUB_RUN_ATTEMPT=2 GITHUB_JOB="$2" \

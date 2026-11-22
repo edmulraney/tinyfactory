@@ -240,7 +240,8 @@ jobs:
             exit 1
           }
           # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.
-          minutes=$(( ($(date +%s) - $(date -d "$started" +%s)) / 60 + 1 ))
+          # jq reads the time (decisions H632b).
+          minutes=$(jq -rn --arg started "$started" '(now - ($started | fromdate)) / 60 | floor + 1')
           echo "this job ran into minute $minutes of $LIMIT_MINUTES"
           [ "$minutes" -lt "$LIMIT_MINUTES" ] || echo "reached=true" >> "$GITHUB_OUTPUT"
 

@@ -6,8 +6,8 @@ How {{name}} looks and behaves.
 
 ## The system
 
-- **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`.
-- **Product components** are built from those and live under `src/app`: in the `_components` folder of the route that uses one, or of `app` itself when two or more routes share it (`ARCHITECTURE.md`, "Structure"). A pattern becomes a component at its second use.
+- **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them: a class on one sets only its place and width. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`.
+- **Product components** are built from those, in the `_components` folder `ARCHITECTURE.md` ("Structure") names. A pattern becomes a component at its second use.
 - **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.
 - **Colour is a closed set of named tokens**, defined in `src/app/globals.css`. Tailwind's default palette has been removed, so `bg-blue-500` does not exist.
 
@@ -47,10 +47,4 @@ These need judgement. A reviewer checks them on every change to the interface.
 
 ## What checks what
 
-| Rule | Checked by |
-|---|---|
-| A colour outside the tokens | Lint: `better-tailwindcss/no-unknown-classes` |
-| A one-off value | Lint: `better-tailwindcss/no-restricted-classes` |
-| Two classes that fight (`p-2 p-4`) | Lint: `better-tailwindcss/no-conflicting-classes` |
-| Unreadable contrast, a control with no name, an image with no text | The accessibility scan every end-to-end test runs (`e2e/test.ts`) |
-| A page that scrolls sideways | Every end-to-end test (`e2e/test.ts`) |
+Lint refuses what breaks the system above, and `apps/web/eslint.config.mjs` says beside each rule what it refuses. Every end-to-end test (`e2e/test.ts`) fails a page that scrolls sideways or fails the accessibility scan.

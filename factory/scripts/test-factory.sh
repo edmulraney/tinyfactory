@@ -33,7 +33,8 @@ affected() {
   while :; do
     names=$(sort -u <<<"$names" | sed '/^$/d')
     [ -n "$names" ] || return 0
-    names_pattern="($(sed -E "s/[^$boundary]/\\\\&/g" <<<"$names" | paste -sd '|' -))"
+    # Only what a pattern reads as more than itself is escaped: a letter outside ASCII stays whole (decisions H632a).
+    names_pattern="($(sed -E 's/[][(){}.*+?^$|\]/\\&/g' <<<"$names" | paste -sd '|' -))"
     # The shell files that hold one of the names as a whole word, on a line that is not a comment.
     found=$(git -c core.quotePath=false grep -l -E -e "^[[:space:]]*([^#[:space:]].*[^$boundary]|[^#[:space:]$boundary])?$names_pattern(\$|[^$boundary])" -- '*.sh') \
       || [ $? -eq 1 ] || return 1

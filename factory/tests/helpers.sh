@@ -12,7 +12,8 @@ root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 # shellcheck disable=SC2034
 scripts="$root/factory/scripts"
 
-_base=$(mktemp -d)
+# Its real path, which is what git prints for a repo inside it: a Mac's temporary folder is reached through a link.
+_base=$(cd "$(mktemp -d)" && pwd -P)
 _path="$PATH"
 _count=0
 _failed=0

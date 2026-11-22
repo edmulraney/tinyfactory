@@ -96,7 +96,7 @@ github
 a_run 507 ci success
 refused 506 retro 2
 refused 505 approve-merge 2
-sed -i 's/"run_attempt":2,"conclusion":"failure"/"run_attempt":2,"conclusion":null/' "$T/runs"
+sed -i.bak 's/"run_attempt":2,"conclusion":"failure"/"run_attempt":2,"conclusion":null/' "$T/runs" && rm "$T/runs.bak"
 a_run 504 ci success
 refused 503 implement
 run "$scripts/rerun-refused.sh"

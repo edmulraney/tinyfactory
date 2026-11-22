@@ -1,3 +1,5 @@
+// A build fails when code that reaches the browser imports this file, so the database stays on the server.
+import "server-only";
 import { neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { outboundFetch } from "@/lib/outbound";

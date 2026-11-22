@@ -82,8 +82,10 @@ if [ ! -d apps/web ]; then
   # The starter page is replaced by the factory's seed page, which uses the design tokens.
   rm -f apps/web/pnpm-workspace.yaml apps/web/README.md apps/web/src/app/page.tsx
   # create-next-app titles every page "Create Next App", which a visitor reads in the tab and in a shared link.
+  # Every page also renders Vercel's Analytics component, which reports each visit to the Web
+  # Analytics that vercel.sh switches on (decisions S644a).
   python3 - "$name" apps/web/src/app/layout.tsx <<'PY'
-import json, pathlib, sys
+import json, pathlib, re, sys
 name, layout = sys.argv[1], pathlib.Path(sys.argv[2])
 text = layout.read_text()
 for old, new in (
@@ -92,7 +94,9 @@ for old, new in (
 ):
     assert text.count(old) == 1, f"create-next-app's `{old}` was not found in {layout}"
     text = text.replace(old, new)
-layout.write_text(text)
+text, found = re.subn(r">\s*\{children\}\s*</body>", ">\n        {children}\n        <Analytics />\n      </body>", text)
+assert found == 1, f"create-next-app's `{{children}}</body>` was not found in {layout}"
+layout.write_text('import { Analytics } from "@vercel/analytics/next";\n' + text)
 PY
 
   (
@@ -110,11 +114,18 @@ fi
 if [ ! -f package.json ]; then
   # Read the version before the redirect below creates an empty package.json, which pnpm chokes on.
   pnpm_version=$(pnpm -v)
+  # The field carries the checksum the registry holds for that version, so that Corepack refuses a
+  # download that does not match (decisions S637).
+  if ! integrity=$(npm view "pnpm@$pnpm_version" dist.integrity) || [[ "$integrity" != sha512-* ]]; then
+    echo "scaffold: could not read the sha512 checksum of pnpm@$pnpm_version from the npm registry (npm view pnpm@$pnpm_version dist.integrity). Check the network and run the scaffold again." >&2
+    exit 1
+  fi
+  pnpm_checksum=$(python3 -c 'import base64, sys; print(base64.b64decode(sys.argv[1]).hex())' "${integrity#sha512-}")
   cat > package.json <<JSON
 {
   "name": "$name",
   "private": true,
-  "packageManager": "pnpm@$pnpm_version",
+  "packageManager": "pnpm@$pnpm_version+sha512.$pnpm_checksum",
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
@@ -207,10 +218,11 @@ if [ "$fresh" = yes ]; then
   install_factory_files overwrite   # the factory's ESLint config replaces the generated one
   design_foundation
   # vitest needs Node 22+ types; create-next-app pins @types/node to 20.
-  # The Tailwind lint plugin and the accessibility scanner are what enforce DESIGN.md.
+  # The Tailwind and shadcn lint plugins and the accessibility scanner are what enforce DESIGN.md.
+  # @shadcn/lint is at the version the factory's own app pins.
   pnpm --filter web add -D vitest @playwright/test "@types/node@^24" \
-    eslint-plugin-better-tailwindcss @axe-core/playwright drizzle-kit
-  pnpm --filter web add drizzle-orm @neondatabase/serverless
+    eslint-plugin-better-tailwindcss "@shadcn/lint@0.2.5" @axe-core/playwright drizzle-kit
+  pnpm --filter web add drizzle-orm @neondatabase/serverless @vercel/analytics server-only
   rm "$unfinished"
 else
   install_factory_files
