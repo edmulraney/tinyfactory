@@ -1,0 +1,61 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45040967783,
+    "workflow": "scaffold",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45040967783",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 625,
+      "issue": 604,
+      "title": "chore: bring in the factory changes of 22 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "scaffold",
+        "step": "Start the bootstrap in a new folder",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first scaffold run after #625 did what the change claimed: the bootstrap printed \"[1/13] preflight\", the new heading check matched it, and the step passed, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #625 changed one check in scaffold.yml's \"Start the bootstrap in a new folder\" step. The step used to look for the old \"== preflight ==\" heading. Now it looks for the heading bootstrap.sh prints, which gives the step's number out of the total and then its name. In run 45040967783 the bootstrap stopped at preflight, as expected on a runner where nothing is logged in. Its log printed \"[1/13] preflight\", which matches '^\\[1/[0-9]+\\] preflight$'. The step passed and the run passed. Neither reviewer recorded an assumption.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45040967783",
+      "https://github.com/edmulraney/tinyfactory/pull/625"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run passed with no agent session, costing $0 and 0 turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run had no fault, so it cost $0 and a change would save $0.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
