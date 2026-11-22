@@ -61,7 +61,7 @@ echo "$made" > "$T/ticket.json"
 run "$scripts/check-ticket.sh" 50
 expect_status 0
 for expected in "factory/scripts/thread.sh <this ticket>" "headed by a reviewer's name" "skip any other comment" "or answer it in one line" "seen three times" '`apps/` included' \
-  '`gh issue list --search`' '`gh pr list --search`' "a note one of them holds is not applied, and its answer names that number"; do
+  '`factory/scripts/open-issues.sh --search <words>`' "a note one of them holds is not applied, and its answer names that number"; do
   grep -qF -- "$expected" "$T/body" || fail "expected the ticket to say: $expected"
 done
 

@@ -484,7 +484,7 @@ expect_status 0
 grep -qF '`held_by`' "$skill" || fail "expected the skill to name \`held_by\`"
 
 scenario "the workflow lists the open tickets before every try of the agent, tells each where, and goes on without them"
-list=$(grep -n 'gh issue list --state open' "$workflow" | cut -d: -f1)
+list=$(grep -n 'factory/scripts/open-issues.sh > .sessions/tickets.json' "$workflow" | cut -d: -f1)
 first=$(grep -n 'uses: anthropics/claude-code-action' "$workflow" | head -n 1 | cut -d: -f1)
 [ -n "$list" ] && [ -n "$first" ] || fail "expected the workflow to list the open tickets and run the agent"
 [ "${list:-0}" -lt "${first:-0}" ] || fail "expected the tickets listed before the agent runs"
