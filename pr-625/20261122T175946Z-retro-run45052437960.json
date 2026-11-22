@@ -1,0 +1,823 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "e3c89c22-b546-4220-84cb-1c87d7caa041",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2455.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJQGGjGYufy1QAimZ7nC",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013kQYetdxKWxobFEg84arfx",
+          "name": "Bash",
+          "input": {
+            "command": "cat .claude/skills/retro/SKILL.md; echo ----; cat .sessions/facts.json; ls -R .sessions | head -50"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9464,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9464
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "23d8e53d-1754-4d32-9af9-6d72b271909b",
+    "timestamp": "2026-11-22T17:59:33.461Z",
+    "request_id": "req_011ChJQGGaqr4FmN2cfp8Snc",
+    "wire_tool_inputs": {
+      "toolu_013kQYetdxKWxobFEg84arfx": {
+        "command": "cat .claude/skills/retro/SKILL.md; echo ----; cat .sessions/facts.json; ls -R .sessions | head -50"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1795431600,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.54,
+          "resetsAt": 1795431600,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "fc8dc095-4104-4100-985a-dceef5da145d",
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_013kQYetdxKWxobFEg84arfx",
+          "type": "tool_result",
+          "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\nReturn the required structured format:\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n----\n{\n  \"run\": 45040967783,\n  \"workflow\": \"scaffold\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45040967783\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 625,\n    \"issue\": 604,\n    \"title\": \"chore: bring in the factory changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"scaffold\",\n      \"step\": \"Start the bootstrap in a new folder\",\n      \"conclusion\": \"success\",\n      \"log\": \"npm notice Tarball Details\\nnpm notice name: tinyfactory\\nnpm notice version: 0.0.1\\nnpm notice filename: tinyfactory-0.0.1.tgz\\nnpm notice package size: 817.3 kB\\nnpm notice unpacked size: 3.3 MB\\nnpm notice shasum: 8446d2cb04937997aa96c9b4ec17c3ee7d0d5249\\nnpm notice integrity: sha512-RejBi4ZxBEJm3[...]3pye1/sPyO5sQ==\\nnpm notice total files: 727\\nnpm notice\\nif node \\\"$RUNNER_TEMP/package/bin/tinyfactory.mjs\\\" \\\"Some Fun Idea\\\"; then\\n  echo \\\"the command accepted a name with spaces and capitals\\\"\\n  exit 1\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\nusage: npx tinyfactory <name>\\n\\n<name> is the new project: its folder here, its GitHub repository and its Vercel project.\\nUse lower-case letters, digits and hyphens, for example: npx tinyfactory my-idea\\nRun it again to carry on after a failure. Inside the project folder the name can be left out.\\n# Nothing is logged in on this runner, so the bootstrap stops at its first step, which changes nothing.\\nif node \\\"$RUNNER_TEMP/package/bin/tinyfactory.mjs\\\" started > started.log 2>&1; then\\n  cat started.log\\n  echo \\\"the bootstrap passed on a runner where nothing is logged in\\\"\\n  exit 1\\nfi\\ncat started.log\\n[ -d started ]\\n# The first step's heading, as bootstrap.sh prints it: its number of the steps there are, then its name.\\ngrep -qE '^\\\\[1/[0-9]+\\\\] preflight$' started.log\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\n\\n[1/13] preflight\\n✓ node v24.22.3\\n✓ pnpm 10.34.9\\n✓ git\\n✓ gh\\n✓ jq\\n✗ claude not found\\n  fix: install Claude Code: https://claude.com/claude-code\\n✓ python3\\n✓ openssl\\n✓ curl\\n✗ gh not logged in\\n  fix: gh auth login -s repo,workflow,project\\n✗ Vercel not logged in\\n  fix: npx vercel@latest login\\n✗ preflight failed\\n✗ Setup stopped at preflight. Fix what it reports, then run the same command again: it carries on from here.\\ngit config --global user.name scaffold-check\\ngit config --global user.email scaffold-check@users.noreply.github.com\\nmkdir demo && cd demo\\n\\\"$RUNNER_TEMP/package/.claude/skills/bootstrap/scripts/scaffold.sh\\\" demo\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\"\n    }\n  ]\n}\n.sessions:\napps\nfacts.json\nissue-564\nissue-567\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\ntickets.json\n\n.sessions/apps:\nweb\n\n.sessions/apps/web:\nvercel.json\n\n.sessions/issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n.sessions/issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n.sessions/lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n\n.sessions/pr-565:\n20261120T140555Z-adam-run44749322815.json\n20261120T140557Z-ryan-run44749322815.json\n20261121T115712Z-retro-run44901406884.json\n20261121T115717Z-retro-run44901421212.json\n20261121T115722Z-retro-run44901411090.json\n20261121T115726Z-retro-run44901415445.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "2516b1cb-2bdb-426f-aa4c-d8ea0d1b0aa2",
+    "timestamp": "2026-11-22T17:59:33.808Z",
+    "tool_use_result": {
+      "stdout": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended. For a changed workflow's first run, `changed_by` holds that pull request and its reviewers' assumptions, and `changed_steps` each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it. For a request for help, `ask` holds the comment that asked `@claude` and its link.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run\n\nIn place of steps 2 and 3, compare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nThe owner asked `@claude` for what the factory did not do by itself. In place of steps 2 and 3, find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\nReturn the required structured format:\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n----\n{\n  \"run\": 45040967783,\n  \"workflow\": \"scaffold\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45040967783\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 625,\n    \"issue\": 604,\n    \"title\": \"chore: bring in the factory changes of 22 November\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"scaffold\",\n      \"step\": \"Start the bootstrap in a new folder\",\n      \"conclusion\": \"success\",\n      \"log\": \"npm notice Tarball Details\\nnpm notice name: tinyfactory\\nnpm notice version: 0.0.1\\nnpm notice filename: tinyfactory-0.0.1.tgz\\nnpm notice package size: 817.3 kB\\nnpm notice unpacked size: 3.3 MB\\nnpm notice shasum: 8446d2cb04937997aa96c9b4ec17c3ee7d0d5249\\nnpm notice integrity: sha512-RejBi4ZxBEJm3[...]3pye1/sPyO5sQ==\\nnpm notice total files: 727\\nnpm notice\\nif node \\\"$RUNNER_TEMP/package/bin/tinyfactory.mjs\\\" \\\"Some Fun Idea\\\"; then\\n  echo \\\"the command accepted a name with spaces and capitals\\\"\\n  exit 1\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\nusage: npx tinyfactory <name>\\n\\n<name> is the new project: its folder here, its GitHub repository and its Vercel project.\\nUse lower-case letters, digits and hyphens, for example: npx tinyfactory my-idea\\nRun it again to carry on after a failure. Inside the project folder the name can be left out.\\n# Nothing is logged in on this runner, so the bootstrap stops at its first step, which changes nothing.\\nif node \\\"$RUNNER_TEMP/package/bin/tinyfactory.mjs\\\" started > started.log 2>&1; then\\n  cat started.log\\n  echo \\\"the bootstrap passed on a runner where nothing is logged in\\\"\\n  exit 1\\nfi\\ncat started.log\\n[ -d started ]\\n# The first step's heading, as bootstrap.sh prints it: its number of the steps there are, then its name.\\ngrep -qE '^\\\\[1/[0-9]+\\\\] preflight$' started.log\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\n\\n[1/13] preflight\\n✓ node v24.22.3\\n✓ pnpm 10.34.9\\n✓ git\\n✓ gh\\n✓ jq\\n✗ claude not found\\n  fix: install Claude Code: https://claude.com/claude-code\\n✓ python3\\n✓ openssl\\n✓ curl\\n✗ gh not logged in\\n  fix: gh auth login -s repo,workflow,project\\n✗ Vercel not logged in\\n  fix: npx vercel@latest login\\n✗ preflight failed\\n✗ Setup stopped at preflight. Fix what it reports, then run the same command again: it carries on from here.\\ngit config --global user.name scaffold-check\\ngit config --global user.email scaffold-check@users.noreply.github.com\\nmkdir demo && cd demo\\n\\\"$RUNNER_TEMP/package/.claude/skills/bootstrap/scripts/scaffold.sh\\\" demo\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\"\n    }\n  ]\n}\n.sessions:\napps\nfacts.json\nissue-564\nissue-567\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\ntickets.json\n\n.sessions/apps:\nweb\n\n.sessions/apps/web:\nvercel.json\n\n.sessions/issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n.sessions/issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n.sessions/lessons:\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n\n.sessions/pr-565:\n20261120T140555Z-adam-run44749322815.json\n20261120T140557Z-ryan-run44749322815.json\n20261121T115712Z-retro-run44901406884.json\n20261121T115717Z-retro-run44901421212.json\n20261121T115722Z-retro-run44901411090.json\n20261121T115726Z-retro-run44901415445.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_013kQYetdxKWxobFEg84arfx",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJQGWCebXPxV1xn9mAEJ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSgAYKEAgUGAI4AUIIdGhpbmtpbmcSDPwLfIPzG7nswb8sXBoMMN8V1OWweXmpfWGiIjAd2CgKabvtJ4n9xp2iwRAMjCIIEgTLITUZ4aPcVVfXKnugUJI1tvn8KIzJf+FuEmMqnQUFuQC9Zzn4B8uu+axTNYR6LhOEsJY7Ak2hB032NTKAIGebTXeAK6lsJk5pvfALC0hM7PnXLwM1Fml7HifByllZJaIDykQac5pOsKFpXzIU7JbLt+PDs9IaP5nfpVce9zrbCAhN4on1j1mlkbGiEzvh7K2iT9fu8K9Bnx61kv5fRfrZ8dEygbYpyzCiso7eDm0saTxfLBcGf99jC7ZGwJvb2phr8KZAozOv0ySKq1jbw8OaWlv6VPYVPaz/iUW02uAkTwZ48e5qbNhcKgPnZ73uGxHpvZRrSD1//guAs2ZplJlftPMqa9mo2ViNubsUtNC//TrcOw3/hpASYD/q8MsK7PHVNHes2QnnBZZ0fQaKRUFt3CApIkb4SQA2riWFMfh4pumQEWP2LkkH/gbV8/be8OR3r0BMndRWnPmMGfs6OpG71YpXlcw4rKmzl9G7jJtHhU9wsVgoEXJCb95Rzqau+qB3RlGgw0ysHZo5UJdsSe5vHkpGgHIMbk7jlARnzSouA7zgXHIds8QE+NCG1qbbc2By/HxajR1SiOUbRr6K5i27rW1vFQbIAOVr7Y8Nt6zzEgHNAdiwTh7Xh1ijXUXbpt6EfVU7YrZhm9Fw9/F56tkSTCGZaNnCz8MQzFQXntsayizOWDKBeGsfwyGrtPSMeGcBnGrRozY1vp7QGWPEtz/5ARd+cr//496XeVGhmJDQMpPKnCxbjqpX1A+EBeqv/4eeK0Pt8jxKHvuWF15Y5Ce2ZfynClfzOguzXC2XOuD10je/W+AfPS5w4hzyK9dTewhakOSzA5F4La6PNX4e1F/V5BnruLF8yITuwQQWeLbS1nZZMWpyka9TVxR6ZiIQzD9AOgyKA31cQozqzyymt10P6QRM2HTh1/U4wVsYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4473,
+        "cache_read_input_tokens": 25207,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4473
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "e4159f1b-8170-4dc9-928d-acc734e0ec4d",
+    "timestamp": "2026-11-22T17:59:36.246Z",
+    "request_id": "req_011ChJQGW4xrczfcWsjvSHj3",
+    "thinking_duration_ms": 490,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJQGWCebXPxV1xn9mAEJ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015HmiwginVurtfhpYHjVcr7",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 625 --name-only; gh pr diff 625 | grep -A60 'workflows/scaffold' | head -120"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4473,
+        "cache_read_input_tokens": 25207,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4473
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "fcac9622-e6e3-48f9-8d57-622cca3b5be2",
+    "timestamp": "2026-11-22T17:59:36.513Z",
+    "request_id": "req_011ChJQGW4xrczfcWsjvSHj3",
+    "wire_tool_inputs": {
+      "toolu_015HmiwginVurtfhpYHjVcr7": {
+        "command": "gh pr diff 625 --name-only; gh pr diff 625 | grep -A60 'workflows/scaffold' | head -120"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_015HmiwginVurtfhpYHjVcr7",
+          "type": "tool_result",
+          "content": ".claude/skills/bootstrap/manifest.txt\n.claude/skills/bootstrap/scripts/agent-token.sh\n.claude/skills/bootstrap/scripts/board-token.sh\n.claude/skills/bootstrap/scripts/board.sh\n.claude/skills/bootstrap/scripts/bootstrap.sh\n.claude/skills/bootstrap/scripts/database-key.sh\n.claude/skills/bootstrap/scripts/database.sh\n.claude/skills/bootstrap/scripts/github.sh\n.claude/skills/bootstrap/scripts/preflight.sh\n.claude/skills/bootstrap/scripts/present.sh\n.claude/skills/bootstrap/scripts/preview-access.sh\n.claude/skills/bootstrap/scripts/purpose.sh\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/scripts/workflow-app.sh\n.claude/skills/bootstrap/templates/CLAUDE.md\n.claude/skills/bootstrap/templates/DESIGN.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/product/README.md\n.claude/skills/bootstrap/templates/product/state.md\n.claude/skills/design/SKILL.md\n.claude/skills/factory-engineer/SKILL.md\n.claude/skills/implement/SKILL.md\n.claude/skills/operate/SKILL.md\n.claude/skills/refine/SKILL.md\n.claude/skills/retro/SKILL.md\n.claude/skills/review-architecture/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\n.github/ISSUE_TEMPLATE/bug.md\n.github/ISSUE_TEMPLATE/idea.md\n.github/ISSUE_TEMPLATE/initiative.md\n.github/ISSUE_TEMPLATE/tweak.md\nREADME.md\nfactory/README/where-things-are/metrics.md\nfactory/README/where-things-are/sessions-branch.md\nfactory/README/where-things-are/ticket-cost.md\nfactory/budget.txt\nfactory/decisions/39.md\nfactory/decisions/421.md\nfactory/decisions/550.md\nfactory/decisions/551.md\nfactory/decisions/605.md\nfactory/decisions/606.md\nfactory/decisions/607.md\nfactory/decisions/608.md\nfactory/decisions/609.md\nfactory/decisions/610.md\nfactory/decisions/611.md\nfactory/decisions/612.md\nfactory/decisions/613.md\nfactory/decisions/614.md\nfactory/decisions/615.md\nfactory/decisions/616.md\nfactory/decisions/617.md\nfactory/decisions/618.md\nfactory/decisions/619.md\nfactory/decisions/620.md\nfactory/decisions/621.md\nfactory/decisions/622.md\nfactory/decisions/623.md\nfactory/decisions/624.md\nfactory/free-tier/605.md\nfactory/free-tier/613.md\nfactory/owner-guide.md\nfactory/rule-files.txt\nfactory/scripts/allow-skill-write.sh\nfactory/scripts/apply-setup.sh\nfactory/scripts/check-inventory.sh\nfactory/scripts/check-ticket.sh\nfactory/scripts/close-duplicate.sh\nfactory/scripts/close-idea.sh\nfactory/scripts/continue-session.sh\nfactory/scripts/cut-rule-files.sh\nfactory/scripts/file-slice.sh\nfactory/scripts/flag-public.sh\nfactory/scripts/flag-unfinished.sh\nfactory/scripts/metrics.sh\nfactory/scripts/needs-e2e.sh\nfactory/scripts/owner-decides.sh\nfactory/scripts/post-screenshots.sh\nfactory/scripts/propose.sh\nfactory/scripts/quality.sh\nfactory/scripts/revert.sh\nfactory/scripts/review.sh\nfactory/scripts/sessions-branch.sh\nfactory/scripts/ship.sh\nfactory/scripts/stale-documents.sh\nfactory/scripts/start-refine.sh\nfactory/scripts/start-waiting.sh\nfactory/scripts/ticket-cost.sh\nfactory/scripts/wait-for-ticket.sh\nfactory/scripts/watch.sh\nfactory/tests/allow-skill-write.test.sh\nfactory/tests/apply-setup.test.sh\nfactory/tests/board-token.test.sh\nfactory/tests/board.test.sh\nfactory/tests/bootstrap.test.sh\nfactory/tests/check-inventory.test.sh\nfactory/tests/check-ticket.test.sh\nfactory/tests/close-duplicate.test.sh\nfactory/tests/continue-session.test.sh\nfactory/tests/cut-rule-files.test.sh\nfactory/tests/file-slice.test.sh\nfactory/tests/flag-public.test.sh\nfactory/tests/flag-unfinished.test.sh\nfactory/tests/helpers.sh\nfactory/tests/metrics.test.sh\nfactory/tests/needs-e2e.test.sh\nfactory/tests/owner-decides.test.sh\nfactory/tests/post-screenshots.test.sh\nfactory/tests/present.test.sh\nfactory/tests/propose.test.sh\nfactory/tests/quality.test.sh\nfactory/tests/ready-to-ship.sh\nfactory/tests/revert.test.sh\nfactory/tests/review.test.sh\nfactory/tests/ship.test.sh\nfactory/tests/sign-in.test.sh\nfactory/tests/stale-documents.test.sh\nfactory/tests/start-refine.test.sh\nfactory/tests/start-waiting.test.sh\nfactory/tests/ticket-cost.test.sh\nfactory/tests/trusted.test.sh\nfactory/tests/wait-for-ticket.test.sh\nfactory/tests/watch.test.sh\nfactory/workflows/ci.yml\nfactory/workflows/implement.yml\nfactory/workflows/install-workflows.yml\nfactory/workflows/refine.yml\nfactory/workflows/review-notes.yml\nfactory/workflows/scaffold.yml\ndiff --git a/factory/workflows/scaffold.yml b/factory/workflows/scaffold.yml\nindex d376ba0..f5e058d 100644\n--- a/factory/workflows/scaffold.yml\n+++ b/factory/workflows/scaffold.yml\n@@ -43,7 +43,8 @@ jobs:\n           fi\n           cat started.log\n           [ -d started ]\n-          grep -qF \"== preflight ==\" started.log\n+          # The first step's heading, as bootstrap.sh prints it: its number of the steps there are, then its name.\n+          grep -qE '^\\[1/[0-9]+\\] preflight$' started.log\n       - name: Scaffold a project from the package in an empty directory\n         run: |\n           git config --global user.name scaffold-check",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "18a30d30-94b1-40c0-b838-bb50f714a8d8",
+    "timestamp": "2026-11-22T17:59:37.695Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/bootstrap/manifest.txt\n.claude/skills/bootstrap/scripts/agent-token.sh\n.claude/skills/bootstrap/scripts/board-token.sh\n.claude/skills/bootstrap/scripts/board.sh\n.claude/skills/bootstrap/scripts/bootstrap.sh\n.claude/skills/bootstrap/scripts/database-key.sh\n.claude/skills/bootstrap/scripts/database.sh\n.claude/skills/bootstrap/scripts/github.sh\n.claude/skills/bootstrap/scripts/preflight.sh\n.claude/skills/bootstrap/scripts/present.sh\n.claude/skills/bootstrap/scripts/preview-access.sh\n.claude/skills/bootstrap/scripts/purpose.sh\n.claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/scripts/vercel.sh\n.claude/skills/bootstrap/scripts/workflow-app.sh\n.claude/skills/bootstrap/templates/CLAUDE.md\n.claude/skills/bootstrap/templates/DESIGN.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/product/README.md\n.claude/skills/bootstrap/templates/product/state.md\n.claude/skills/design/SKILL.md\n.claude/skills/factory-engineer/SKILL.md\n.claude/skills/implement/SKILL.md\n.claude/skills/operate/SKILL.md\n.claude/skills/refine/SKILL.md\n.claude/skills/retro/SKILL.md\n.claude/skills/review-architecture/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\n.github/ISSUE_TEMPLATE/bug.md\n.github/ISSUE_TEMPLATE/idea.md\n.github/ISSUE_TEMPLATE/initiative.md\n.github/ISSUE_TEMPLATE/tweak.md\nREADME.md\nfactory/README/where-things-are/metrics.md\nfactory/README/where-things-are/sessions-branch.md\nfactory/README/where-things-are/ticket-cost.md\nfactory/budget.txt\nfactory/decisions/39.md\nfactory/decisions/421.md\nfactory/decisions/550.md\nfactory/decisions/551.md\nfactory/decisions/605.md\nfactory/decisions/606.md\nfactory/decisions/607.md\nfactory/decisions/608.md\nfactory/decisions/609.md\nfactory/decisions/610.md\nfactory/decisions/611.md\nfactory/decisions/612.md\nfactory/decisions/613.md\nfactory/decisions/614.md\nfactory/decisions/615.md\nfactory/decisions/616.md\nfactory/decisions/617.md\nfactory/decisions/618.md\nfactory/decisions/619.md\nfactory/decisions/620.md\nfactory/decisions/621.md\nfactory/decisions/622.md\nfactory/decisions/623.md\nfactory/decisions/624.md\nfactory/free-tier/605.md\nfactory/free-tier/613.md\nfactory/owner-guide.md\nfactory/rule-files.txt\nfactory/scripts/allow-skill-write.sh\nfactory/scripts/apply-setup.sh\nfactory/scripts/check-inventory.sh\nfactory/scripts/check-ticket.sh\nfactory/scripts/close-duplicate.sh\nfactory/scripts/close-idea.sh\nfactory/scripts/continue-session.sh\nfactory/scripts/cut-rule-files.sh\nfactory/scripts/file-slice.sh\nfactory/scripts/flag-public.sh\nfactory/scripts/flag-unfinished.sh\nfactory/scripts/metrics.sh\nfactory/scripts/needs-e2e.sh\nfactory/scripts/owner-decides.sh\nfactory/scripts/post-screenshots.sh\nfactory/scripts/propose.sh\nfactory/scripts/quality.sh\nfactory/scripts/revert.sh\nfactory/scripts/review.sh\nfactory/scripts/sessions-branch.sh\nfactory/scripts/ship.sh\nfactory/scripts/stale-documents.sh\nfactory/scripts/start-refine.sh\nfactory/scripts/start-waiting.sh\nfactory/scripts/ticket-cost.sh\nfactory/scripts/wait-for-ticket.sh\nfactory/scripts/watch.sh\nfactory/tests/allow-skill-write.test.sh\nfactory/tests/apply-setup.test.sh\nfactory/tests/board-token.test.sh\nfactory/tests/board.test.sh\nfactory/tests/bootstrap.test.sh\nfactory/tests/check-inventory.test.sh\nfactory/tests/check-ticket.test.sh\nfactory/tests/close-duplicate.test.sh\nfactory/tests/continue-session.test.sh\nfactory/tests/cut-rule-files.test.sh\nfactory/tests/file-slice.test.sh\nfactory/tests/flag-public.test.sh\nfactory/tests/flag-unfinished.test.sh\nfactory/tests/helpers.sh\nfactory/tests/metrics.test.sh\nfactory/tests/needs-e2e.test.sh\nfactory/tests/owner-decides.test.sh\nfactory/tests/post-screenshots.test.sh\nfactory/tests/present.test.sh\nfactory/tests/propose.test.sh\nfactory/tests/quality.test.sh\nfactory/tests/ready-to-ship.sh\nfactory/tests/revert.test.sh\nfactory/tests/review.test.sh\nfactory/tests/ship.test.sh\nfactory/tests/sign-in.test.sh\nfactory/tests/stale-documents.test.sh\nfactory/tests/start-refine.test.sh\nfactory/tests/start-waiting.test.sh\nfactory/tests/ticket-cost.test.sh\nfactory/tests/trusted.test.sh\nfactory/tests/wait-for-ticket.test.sh\nfactory/tests/watch.test.sh\nfactory/workflows/ci.yml\nfactory/workflows/implement.yml\nfactory/workflows/install-workflows.yml\nfactory/workflows/refine.yml\nfactory/workflows/review-notes.yml\nfactory/workflows/scaffold.yml\ndiff --git a/factory/workflows/scaffold.yml b/factory/workflows/scaffold.yml\nindex d376ba0..f5e058d 100644\n--- a/factory/workflows/scaffold.yml\n+++ b/factory/workflows/scaffold.yml\n@@ -43,7 +43,8 @@ jobs:\n           fi\n           cat started.log\n           [ -d started ]\n-          grep -qF \"== preflight ==\" started.log\n+          # The first step's heading, as bootstrap.sh prints it: its number of the steps there are, then its name.\n+          grep -qE '^\\[1/[0-9]+\\] preflight$' started.log\n       - name: Scaffold a project from the package in an empty directory\n         run: |\n           git config --global user.name scaffold-check",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_015HmiwginVurtfhpYHjVcr7",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "3ad45c11-60a0-4e08-9342-c560cd99ea4e"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 234,
+    "estimated_tokens_delta": 184,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "60f2c282-1c67-4f1b-abc2-1fcd3172b6c6"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJQGnnYEwAEwR1fzR9tF",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSoQcKEAgUGAI4AUIIdGhpbmtpbmcSDMuWseceMcn9+FxjMBoMrEK7MKCoPN6904pDIjCwiOJrOHTByKzCC85foCtWqeX5sozMR5DVNDBS3sdTHJb+ly4ePj9w9PvvJIdQ5A8qvgbl1rmCnZYTvRYhQb0qCOvv7Jyqywyf6V+MK2Mk4CRuUUcoZF0dbwVe76LHKhcZpaELAbtZ4C7LbqiJfC21c1FTGyWEYbGWQbBnabCzdnOTuE1V53OM0jz2E/sGn3ipcWANDBtMdLs+jADqQKuYmKvIuw4rDDrgFH0+LCqGmNc8Vo+XWp583I09a5YD9oV1jGRrZsygrFU2CQLDaUKP90FkmLypMGi2Pw3oSgrkleHyvR53ie8s8l5jSfTaIvVTV//3YvQQZkC9g6hMA/iNRkihLmvzLLMLRRaFKW6f2hof49+as8woL2lIEXWyRLXaMLC4H0m5cQljHtJwIsi1k1swkiRtRnaY1OZE2+8gFyxg24bOv2gi+09pnazgPnR55j1U9lQbO8xhBhXieCTV/YG5mt8K/AgyCMhjy1m14Ae/vKh8yhf2SCBL9NxZIvCyfevYRzKYzy/uNEUDXEvotyGU93IHP3fpcCYC4/Y8Xw2GaA1gLRIKEDMZgiVFOlZFlLeALv0FSNuYQ6uF7eQ/jw6RWTP2zOPqt5ug/TJf6zucjnIcdn+7at9uZhnM1A+HsV3YmIkH29lpKZIUeSLBu+lXDnIdKArXFnKIeCWmn8kcoX4SmPwro/2LI8c/0PjBMTuYbhVwbgeeNpthjZIJVg4hEICnO1PpzhoT7rLXM9GvlAlNFAxx0Vq0vQ5rhajroXEiQlyqryNLG9VLFEclhIgQVo86VdXOQoDgDRi7SffYgi7kgd0joqnC+FDMlPLg2afvnOmofh1bFmg+72bLerOTqDM29XlG70BdSDh0kV9GqFN+fzDJ7saczOW9st2l6Pl51/rHd+JtSZ7KlAHmrPYOEW1SHymfRzIjuZfFLP/p94TOzqdaMf8/M/MaKCmvDXM1JUFNEfxBV5opRDsC6TBUZ75+TtVFY4Wt6oZDrteKJa2dG8iucieVs2kPlG6BOcLaawLRACWEjOSIVuN0RkkyZHZG/A6ZpTT1WfICUv2xDQTAGOPO5oNoip4Z0hnnIKYo1o59E1uPcvYs80ttEedv5OrIosSGFEwxorj8d2+2n2vLnXvqXUbcmJJwpyOv0YpcSAqu2UN5X8RgQOga4BgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2574,
+        "cache_read_input_tokens": 29680,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2574
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "363884b9-a6d2-4fd7-b12d-565b6b72fffd",
+    "timestamp": "2026-11-22T17:59:39.792Z",
+    "request_id": "req_011ChJQGner4RNW1udPJw3RE",
+    "thinking_duration_ms": 500,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChJQGnnYEwAEwR1fzR9tF",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0154ME3cMCWFNVNHudX15mvd",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first scaffold run after #625 did what the change claimed: the bootstrap printed \"[1/13] preflight\", the new heading check matched it, and the step passed, so nothing needs changing.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #625 changed one check in scaffold.yml's \"Start the bootstrap in a new folder\" step. The step used to look for the old \"== preflight ==\" heading. Now it looks for the heading bootstrap.sh prints, which gives the step's number out of the total and then its name. In run 45040967783 the bootstrap stopped at preflight, as expected on a runner where nothing is logged in. Its log printed \"[1/13] preflight\", which matches '^\\[1/[0-9]+\\] preflight$'. The step passed and the run passed. Neither reviewer recorded an assumption.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45040967783",
+              "https://github.com/edmulraney/tinyfactory/pull/625"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run passed with no agent session, costing $0 and 0 turns.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: the run had no fault, so it cost $0 and a change would save $0.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2574,
+        "cache_read_input_tokens": 29680,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2574
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "1d11397f-13b4-4641-903f-c294177320de",
+    "timestamp": "2026-11-22T17:59:44.722Z",
+    "request_id": "req_011ChJQGner4RNW1udPJw3RE",
+    "wire_tool_inputs": {
+      "toolu_0154ME3cMCWFNVNHudX15mvd": {
+        "summary": "The first scaffold run after #625 did what the change claimed: the bootstrap printed \"[1/13] preflight\", the new heading check matched it, and the step passed, so nothing needs changing.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #625 changed one check in scaffold.yml's \"Start the bootstrap in a new folder\" step. The step used to look for the old \"== preflight ==\" heading. Now it looks for the heading bootstrap.sh prints, which gives the step's number out of the total and then its name. In run 45040967783 the bootstrap stopped at preflight, as expected on a runner where nothing is logged in. Its log printed \"[1/13] preflight\", which matches '^\\[1/[0-9]+\\] preflight$'. The step passed and the run passed. Neither reviewer recorded an assumption.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45040967783",
+          "https://github.com/edmulraney/tinyfactory/pull/625"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run passed with no agent session, costing $0 and 0 turns.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: the run had no fault, so it cost $0 and a change would save $0.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_0154ME3cMCWFNVNHudX15mvd",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "uuid": "97080800-ae51-4ef1-9d14-b21728b636a6",
+    "timestamp": "2026-11-22T17:59:44.728Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_0154ME3cMCWFNVNHudX15mvd",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 14818,
+    "stop_reason": "tool_use",
+    "session_id": "96bcd83e-e470-4840-adc6-9a9a7ecb8232",
+    "total_cost_usd": 0.16744950000000003,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 16511,
+      "cache_read_input_tokens": 70630,
+      "output_tokens": 1045,
+      "output_tokens_details": {
+        "thinking_tokens": 128
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 16511,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 813,
+          "cache_read_input_tokens": 29680,
+          "cache_creation_input_tokens": 2574,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2574
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 361,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.00031150000000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 342,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1045,
+        "cacheReadInputTokens": 70630,
+        "cacheCreationInputTokens": 16511,
+        "webSearchRequests": 0,
+        "costUSD": 0.167138,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 128,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16511,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 4,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first scaffold run after #625 did what the change claimed: the bootstrap printed \\\"[1/13] preflight\\\", the new heading check matched it, and the step passed, so nothing needs changing.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #625 changed one check in scaffold.yml's \\\"Start the bootstrap in a new folder\\\" step. The step used to look for the old \\\"== preflight ==\\\" heading. Now it looks for the heading bootstrap.sh prints, which gives the step's number out of the total and then its name. In run 45040967783 the bootstrap stopped at preflight, as expected on a runner where nothing is logged in. Its log printed \\\"[1/13] preflight\\\", which matches '^\\\\[1/[0-9]+\\\\] preflight$'. The step passed and the run passed. Neither reviewer recorded an assumption.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45040967783\",\"https://github.com/edmulraney/tinyfactory/pull/625\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run passed with no agent session, costing $0 and 0 turns.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: the run had no fault, so it cost $0 and a change would save $0.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first scaffold run after #625 did what the change claimed: the bootstrap printed \"[1/13] preflight\", the new heading check matched it, and the step passed, so nothing needs changing.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #625 changed one check in scaffold.yml's \"Start the bootstrap in a new folder\" step. The step used to look for the old \"== preflight ==\" heading. Now it looks for the heading bootstrap.sh prints, which gives the step's number out of the total and then its name. In run 45040967783 the bootstrap stopped at preflight, as expected on a runner where nothing is logged in. Its log printed \"[1/13] preflight\", which matches '^\\[1/[0-9]+\\] preflight$'. The step passed and the run passed. Neither reviewer recorded an assumption.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45040967783",
+        "https://github.com/edmulraney/tinyfactory/pull/625"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run passed with no agent session, costing $0 and 0 turns.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: the run had no fault, so it cost $0 and a change would save $0.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 2947,
+    "type": "result",
+    "duration_ms": 14222,
+    "uuid": "08b9dc13-b6d4-4548-99ca-f921d5592e1d",
+    "ttft_stream_ms": 2005,
+    "time_to_request_ms": 150,
+    "first_content_frame_ms": 2005,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 361,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.00031150000000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 342,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1045,
+        "cacheReadInputTokens": 70630,
+        "cacheCreationInputTokens": 16511,
+        "webSearchRequests": 0,
+        "costUSD": 0.167138,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 128,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16511,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
