@@ -225,7 +225,7 @@ echo "neon-auth enable" > "$T/fail"
 run "$sign_in" myapp
 expect_failure
 expect_output "Neon would not switch sign-in on for this database"
-expect_output "open     https://console.neon.tech/app/projects/quiet-wood-1/branches/br-main-1"
+expect_output "$(printf '\n  https://console.neon.tech/app/projects/quiet-wood-1/branches/br-main-1\n  ')"
 expect_output "click    Enable Auth"
 [ ! -s "$T/posted" ] || fail "expected nothing to be sent to Vercel"
 expect_no_output "sign-in ok"

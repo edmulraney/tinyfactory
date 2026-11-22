@@ -7,7 +7,7 @@ How {{name}} looks and behaves.
 ## The system
 
 - **Components come from shadcn/ui**, in `src/components/ui`. Compose them; do not restyle or rewrite them. When a screen needs one that is not there (a dialog, a select), add it with `pnpm dlx shadcn@latest add <name>` from `apps/web`.
-- **Product components** are built from those and live in `src/components`. A pattern becomes a component at its second use.
+- **Product components** are built from those and live under `src/app`: in the `_components` folder of the route that uses one, or of `app` itself when two or more routes share it (`ARCHITECTURE.md`, "Structure"). A pattern becomes a component at its second use.
 - **Static content is markup.** A handful of fixed items is written out in the component. No array of objects and no loop to render text that never changes; data structures are for data.
 - **Colour is a closed set of named tokens**, defined in `src/app/globals.css`. Tailwind's default palette has been removed, so `bg-blue-500` does not exist.
 
@@ -35,6 +35,7 @@ These need judgement. A reviewer checks them on every change to the interface.
 - **Every view has its empty, loading and error states.** A screen that only works with data is not finished.
 - **Works by keyboard.**
 - **Copy is plain.** Sentence case, no exclamation marks, and buttons say what they do.
+- **Easy to read.** Numbers a user compares are tabular figures. Running text is at most 65 characters wide. A control sits beside what it changes. A number, amount or date is never cut short.
 
 ## Supported screens
 
@@ -52,3 +53,4 @@ These need judgement. A reviewer checks them on every change to the interface.
 | A one-off value | Lint: `better-tailwindcss/no-restricted-classes` |
 | Two classes that fight (`p-2 p-4`) | Lint: `better-tailwindcss/no-conflicting-classes` |
 | Unreadable contrast, a control with no name, an image with no text | The accessibility scan every end-to-end test runs (`e2e/test.ts`) |
+| A page that scrolls sideways | Every end-to-end test (`e2e/test.ts`) |

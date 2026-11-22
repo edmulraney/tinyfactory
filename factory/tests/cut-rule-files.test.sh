@@ -9,11 +9,17 @@ main_holds() {
   echo $(seq "$2") > "$T/main/repo/$3"
 }
 # a_ticket <number> <state> <opened at> <title> [pull]: one GitHub lists among the open tickets, or those changed this month.
+# The state `duplicate` is one closed as a duplicate. Each is filed by the workflows' own token.
 a_ticket() {
   jq -cn --argjson n "$1" --arg state "$2" --arg at "$3" --arg title "$4" --arg pull "${5:-}" \
-    '{number: $n, state: $state, created_at: $at, title: $title} | if $pull != "" then .pull_request = {} else . end' >> "$T/tickets"
+    '{number: $n, state: $state, state_reason: null, created_at: $at, title: $title, user: {login: "github-actions[bot]"}}
+     | if $state == "duplicate" then .state = "closed" | .state_reason = "duplicate" else . end
+     | if $pull != "" then .pull_request = {} else . end' >> "$T/tickets"
 }
+export -f a_ticket
 # The month is November 2026, and the next ticket filed is #30. $T/title-<n> and $T/body-<n> hold what was filed.
+# GitHub lists a filed ticket before any with a larger number, and so does this. With $T/together, no run is told the open
+# tickets before two runs have asked for them, and none files a ticket before both were told.
 github() {
   : > "$T/fail"; : > "$T/tickets"
   stub date 'echo 2026-11'
@@ -21,16 +27,31 @@ github() {
     while IFS= read -r words; do
       case "$*" in "$words"*) echo "gh: failed: $*" >&2; exit 1 ;; esac
     done < "$T/fail"
+    wait_for() { for _ in $(seq 400); do [ "$(grep -cF -- "$2" "$3" 2>/dev/null)" -lt "$1" ] || return 0; sleep 0.05; done; }
     case "$*" in
       "api repos/{owner}/{repo}/tarball/main") tar -cz -C "$T/main" repo ;;
       "api repos/{owner}/{repo}/issues?state=open&labels=factory&per_page=100 --paginate --jq "*)
-        json "$(jq -sc "map(select(.state == \"open\"))" "$T/tickets")" "$@" ;;
+        [ ! -e "$T/together" ] || wait_for 2 "issues?state=open&labels=factory" "$T/calls"
+        json "$(jq -sc "map(select(.state == \"open\"))" "$T/tickets")" "$@"
+        echo told >> "$T/told" ;;
       "api --method GET repos/{owner}/{repo}/issues -f state=all -f labels=factory -f since=2026-11-01T00:00:00Z -f per_page=100 --paginate --jq "*)
         json "$(jq -sc . "$T/tickets")" "$@" ;;
       "issue create --title "*)
-        n=$(($(cat "$T/filed" 2>/dev/null || echo 29) + 1)); echo "$n" > "$T/filed"
+        [ ! -e "$T/together" ] || wait_for 2 told "$T/told"
+        # In the order each call was appended, which no two share: a call lists its ticket once the one before has.
+        echo "$$" >> "$T/order"
+        place=$(grep -nxF "$$" "$T/order" | cut -d: -f1); n=$((29 + place)); echo "$n" > "$T/filed"
+        [ "$place" -eq 1 ] || wait_for 1 "$((n - 1))" "$T/listed"
         printf "%s" "$4" > "$T/title-$n"; printf "%s\n" "${@: -1}" > "$T/body-$n"
+        a_ticket "$n" open "2026-11-21T22:00:00Z" "$4"
+        echo "$n" >> "$T/listed"
         echo "https://github.com/owner/myapp/issues/$n" ;;
+      "api repos/{owner}/{repo}/issues?state=open&sort=created&direction=desc&per_page=100")
+        jq -sc "map(select(.state == \"open\")) | reverse" "$T/tickets" ;;
+      "issue edit "*" --remove-label ready") ;;
+      "issue close "*" --reason duplicate --comment "*)
+        jq -c "if .number == $3 then .state = \"closed\" | .state_reason = \"duplicate\" else . end" "$T/tickets" > "$T/tickets.new"
+        mv "$T/tickets.new" "$T/tickets" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
@@ -66,6 +87,42 @@ cut
 expect_status 0
 expect_no_call "gh issue create"
 expect_output "TASTE.md holds 716 words and its budget is 700; issue #21 is open to cut it, so no second ticket was filed"
+
+scenario "two runs started together for one file over its budget: one ticket is left open, and the later is closed as a duplicate"
+github
+main_holds 700 716 TASTE.md
+touch "$T/together"
+"$scripts/cut-rule-files.sh" > "$T/other" 2>&1 &
+cut
+wait
+expect_status 0
+expect_calls 2 "gh issue create"
+[ "$(jq -sc 'map(select(.state == "open") | .number)' "$T/tickets")" = "[30]" ] \
+  || fail "expected #30 alone to be left open, got: $(jq -sc 'map(select(.state == "open") | .number)' "$T/tickets")"
+expect_calls 1 "gh issue close 31 --reason duplicate --comment Nothing to do: two runs filed this ticket at once, and #30, filed first, is the one that is built."
+out+=$'\n'$(cat "$T/other")
+expect_output "TASTE.md holds 716 words and its budget is 700: filed with ready, and its build starts when a place is free, https://github.com/owner/myapp/issues/30"
+expect_output "TASTE.md holds 716 words and its budget is 700; another run filed issue #30 to cut it at the same time, so https://github.com/owner/myapp/issues/31 was closed"
+
+scenario "a ticket closed as a duplicate counts for no proposal: the third ticket in a month after one is filed with ready"
+github
+main_holds 700 716 TASTE.md
+a_ticket 21 closed "2026-11-02T09:00:00Z" 'Cut `TASTE.md` to budget'
+a_ticket 22 duplicate "2026-11-02T09:00:00Z" 'Cut `TASTE.md` to budget'
+cut
+expect_status 0
+expect_call 'gh issue create --title Cut `TASTE.md` to budget --label factory --label ready '
+expect_no_call "--label proposal"
+
+scenario "the ticket is filed, and whether another run filed it too cannot be read: it says so, and the ticket stays open"
+github
+main_holds 700 716 TASTE.md
+echo "api repos/{owner}/{repo}/issues?state=open&sort=created" > "$T/fail"
+cut
+expect_status 0
+expect_output "Whether another run filed the same ticket as #30 could not be read from GitHub, so #30 stays open."
+expect_output "filed with ready, and its build starts when a place is free, https://github.com/owner/myapp/issues/30"
+expect_no_call "gh issue close"
 
 scenario "an open ticket for another file, a closed one for this file and a pull request titled as the ticket stop nothing"
 github
@@ -168,7 +225,7 @@ expect_output "The list of rule files on main could not be read, so no ticket wa
 expect_output "factory/rule-files.txt:2: factory/README.md is not a file"
 expect_no_call "gh issue create"
 
-scenario "count prints how many such tickets each file had in the month, whatever their state"
+scenario "count prints how many such tickets each file had in the month, whatever their state but closed as a duplicate"
 github
 a_ticket 19 closed "2026-10-30T09:00:00Z" 'Cut `TASTE.md` to budget'
 a_ticket 21 closed "2026-11-02T09:00:00Z" 'Cut `TASTE.md` to budget'
@@ -176,9 +233,10 @@ a_ticket 22 open "2026-11-09T09:00:00Z" 'Cut `TASTE.md` to budget'
 a_ticket 23 closed "2026-11-10T09:00:00Z" 'Cut `.claude/skills/retro/SKILL.md` to budget'
 a_ticket 24 closed "2026-11-11T09:00:00Z" 'Cut the cost of a retro'
 a_ticket 25 open "2026-11-12T09:00:00Z" 'Cut `DESIGN.md` to budget' pull
+a_ticket 26 duplicate "2026-11-09T09:00:00Z" 'Cut `TASTE.md` to budget'
 cut count 2026-11
 expect_status 0
-[ "$out" = "1 .claude/skills/retro/SKILL.md"$'\n'"2 TASTE.md" ] || fail "expected one ticket for the retro skill and two for TASTE.md, and nothing else"
+[ "$out" = "1 .claude/skills/retro/SKILL.md"$'\n'"2 TASTE.md" ] || fail "expected one ticket for the retro skill and two for TASTE.md, the duplicate not counted, and nothing else"
 
 scenario "count prints nothing for a month with no such ticket"
 github

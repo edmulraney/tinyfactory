@@ -3,6 +3,7 @@
 # Usage: github.sh [name]   (name defaults to the directory name)
 #        Safe to re-run: a repo that exists is not made again.
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -59,4 +60,4 @@ fi
 # itself after a merge (factory/scripts/apply-setup.sh), with nothing but the workflow's own token.
 "$(cd "$(dirname "$0")" && pwd)/labels.sh" "$repo"
 
-echo "github ok: https://github.com/$repo"
+mark done "github ok: https://github.com/$repo"

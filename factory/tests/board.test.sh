@@ -194,7 +194,7 @@ run "$board" myapp
 expect_status 0
 expect_output "select   Auto-add to project"
 expect_output "set      Filters: the repository owner/myapp, and the text is:issue is:open"
-[ "$(grep -c '^   select ' <<<"$out")" = 1 ] || fail "expected one click, got: $(grep '^   select ' <<<"$out")"
+[ "$(grep -c '^ *select ' <<<"$out")" = 1 ] || fail "expected one click, got: $(grep '^ *select ' <<<"$out")"
 
 scenario "creates the board when the only one of that name is closed"
 github_holds
@@ -280,7 +280,7 @@ run "$board" myapp
 expect_status 0
 expect_output "select   Pull request linked to issue"
 expect_output "set      Set value: Status → In progress"
-expect_output "open     https://github.com/users/owner/projects/4/workflows"
+expect_output "$(printf 'cannot.\n  https://github.com/users/owner/projects/4/workflows\n')"
 expect_no_output "select   Item closed"
 expect_no_output "all five automations are on"
 

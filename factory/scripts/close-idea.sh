@@ -23,7 +23,7 @@ open=$(gh api "repos/{owner}/{repo}/issues/$idea/sub_issues?per_page=100" --pagi
     --jq ".[] | select(.state == \"open\" and .number != $slice) | \"#\(.number)\"") \
   || die "Could not read the slices of idea #$idea from GitHub, so it was not closed."
 if [ -n "$open" ]; then
-  echo "idea #$idea stays open: $(paste -sd' ' <<<"$open") is still open"
+  echo "idea #$idea stays open: $(paste -sd' ' - <<<"$open") is still open"
   exit 0
 fi
 

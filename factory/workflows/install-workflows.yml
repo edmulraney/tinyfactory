@@ -20,7 +20,7 @@ concurrency:
 env:
   PR: ${{ inputs.pr || github.event.pull_request.number }}
   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-  RULE: bceb3efa44f5857519ab33f9b81890284aa75fb8   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
+  RULE: 91dcb3882edd0218863244dded9e892791250b6c   # the git id of factory/scripts/owner-decides.sh (decisions W272b)
   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)
 
 jobs:

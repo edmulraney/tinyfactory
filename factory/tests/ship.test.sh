@@ -361,6 +361,79 @@ ship
 expect_failure
 expect_call "- the retro could not be started"
 
+# a_tweak <minutes> <dollars>: ticket #12 is a tweak, whose budget is that; the pull request cost 4 minutes and $1.50.
+a_tweak() {
+  echo '[{"event":"labeled","label":{"name":"tweak"},"created_at":"2026-11-16T08:00:00Z"},
+         {"event":"labeled","label":{"name":"ready"},"created_at":"2026-11-16T08:30:00Z"}]' > "$T/events-12.json"
+  printf 'tweak %s %s\n' "$1" "$2" > "$scripts/../budget.txt"
+}
+
+scenario "a pull request within both budgets: the cost comment gives each beside its figure, and no retro starts"
+ready_to_ship
+a_tweak 4 1.50
+ship
+expect_status 0
+expect_call "- **Claude usage:** \$1.50 at API prices, in 1 session on claude-fable-5-2; the budget for a \`tweak\` ticket is \$1.50"
+expect_call "- **Actions minutes:** 4, in 1 run; the budget for a \`tweak\` ticket is 4 minutes"
+expect_no_call "gh workflow run retro.yml"
+
+scenario "a pull request over its budget of minutes starts one retro, after the cost comment says so"
+ready_to_ship
+a_tweak 3 12
+ship
+expect_status 0
+expect_call "- **Actions minutes:** 4, in 1 run; over the budget of 3 minutes for a \`tweak\` ticket"
+expect_call "claude-fable-5-2; the budget for a \`tweak\` ticket is \$12.00"
+expect_calls 1 "gh workflow run retro.yml -f pr=7"
+[ "$(grep -n '^gh workflow run retro.yml' "$T/calls" | cut -d: -f1)" -gt "$(grep -n '^gh issue comment 12 ' "$T/calls" | cut -d: -f1)" ] \
+  || fail "expected the retro to start after the cost comment"
+
+scenario "a pull request over its budget of cost starts one retro"
+ready_to_ship
+a_tweak 60 1.49
+ship
+expect_status 0
+expect_call "claude-fable-5-2; over the budget of \$1.49 for a \`tweak\` ticket"
+expect_call "- **Actions minutes:** 4, in 1 run; the budget for a \`tweak\` ticket is 60 minutes"
+expect_calls 1 "gh workflow run retro.yml -f pr=7"
+
+scenario "a pull request over both budgets after two fix rounds starts one retro, not two"
+ready_to_ship
+a_tweak 3 1
+echo "[$round,$round]" > "$T/rounds"
+ship
+expect_status 0
+expect_calls 1 "gh workflow run retro.yml -f pr=7"
+
+scenario "a ticket whose type has no budget: the cost comment gives no budget, and no retro starts"
+ready_to_ship
+a_tweak 3 1
+printf 'bug 3 1\n' > "$scripts/../budget.txt"
+ship
+expect_status 0
+expect_call "- **Actions minutes:** 4, in 1 run"
+expect_no_call "budget"
+expect_no_call "gh workflow run retro.yml"
+
+scenario "fails when the retro of a pull request over its budget could not be started"
+ready_to_ship
+a_tweak 3 1
+echo "workflow run retro.yml" > "$T/fail"
+ship
+expect_failure
+expect_call "- the retro of a pull request over its budget could not be started"
+
+scenario "a budget that cannot be read: the cost is not posted, no retro starts, and the merge stands"
+ready_to_ship
+a_tweak 3 1
+echo "tweak sixty 12" > "$scripts/../budget.txt"
+ship
+expect_status 0
+expect_output 'factory/budget.txt:1: a line is "<type> <minutes> <dollars>", and this is not: tweak sixty 12'
+expect_output "what ticket #12 cost could not be worked out"
+expect_no_call "gh issue comment"
+expect_no_call "gh workflow run retro.yml"
+
 a_changed_workflow_waits() {
   echo '[{"number":40}]' > "$T/waiting.json"
   echo '[{"user":{"login":"github-actions[bot]"},"created_at":"2026-11-16T10:00:00Z","body":"Installed in abc1234\n\n<!-- factory:installed ci.yml -->"}]' > "$T/rounds-40"

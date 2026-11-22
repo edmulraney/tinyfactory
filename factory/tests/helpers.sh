@@ -150,6 +150,13 @@ run() {
   out=$("$@" 2>&1) || status=$?
 }
 
+# in_terminal <command>...: runs the command with a terminal as its output, and passes on what it wrote and its exit code.
+in_terminal() {
+  python3 -c '
+import os, pty, sys
+sys.exit(os.waitstatus_to_exitcode(pty.spawn(sys.argv[1:])))' "$@" </dev/null
+}
+
 fail() { _problems+="$1"$'\n'; }
 
 # replace_first <text> <old> <new>: sets $replaced to the text with its first <old> replaced, as written (decisions H22).

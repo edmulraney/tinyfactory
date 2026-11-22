@@ -382,7 +382,11 @@ for pr in $shipped; do
   issue=$(of "$pr" issue); commit=$(of "$pr" commit)
   # A retro only after two fix rounds or an owner's round; a conflict's are in neither count (decisions A430a, A48d, A124b).
   if rounds=$(retry "$script_dir/fix-rounds.sh" "$pr") && owner_rounds=$(retry "$script_dir/fix-rounds.sh" "$pr" owner); then
-    { [ "$rounds" -lt 2 ] && [ "$owner_rounds" -eq 0 ]; } || gh workflow run retro.yml -f pr="$pr" || unfinished "$pr" "the retro could not be started"
+    if [ "$rounds" -ge 2 ] || [ "$owner_rounds" -gt 0 ]; then
+      # Kept, so a pull request also over its budget gets no second retro (decisions M612).
+      : > "$state/$pr.retro"
+      gh workflow run retro.yml -f pr="$pr" || unfinished "$pr" "the retro could not be started"
+    fi
   else
     unfinished "$pr" "the fix rounds could not be counted, so no retro was started"
   fi
@@ -465,7 +469,7 @@ if [ -n "${PRODUCTION_URL:-}" ]; then
     commit=$(of "$pr" commit)
     [ -n "$commit" ] || continue
     # needs-e2e.sh says changed when unsure.
-    if [ "$("$script_dir/needs-e2e.sh" "$pr" 2>/dev/null)" = run=false ]; then
+    if [ "$("$script_dir/needs-e2e.sh" "$pr" 2>/dev/null | sed -n 1p)" = run=false ]; then
       unchanged+="$pr "
     else
       code=0
@@ -510,6 +514,11 @@ for pr in $shipped; do
       "$script_dir/measures.sh" record <<<"$figures" || echo "the measures of ticket #$issue were not recorded" >&2
       cost=$("$script_dir/ticket-cost.sh" --comment <<<"$figures") && retry gh issue comment "$issue" --body "$cost" >/dev/null \
         || echo "what ticket #$issue cost could not be posted on it" >&2
+      # After the comment, which tells the retro what the pull request went over (decisions M612).
+      over=$("$script_dir/ticket-cost.sh" --over-budget <<<"$figures") || over=""
+      if [ -n "$over" ] && [ ! -e "$state/$pr.retro" ]; then
+        gh workflow run retro.yml -f pr="$pr" || unfinished "$pr" "the retro of a pull request over its budget could not be started"
+      fi
     else
       echo "what ticket #$issue cost could not be worked out, so it was not posted on it and its measures were not recorded" >&2
     fi

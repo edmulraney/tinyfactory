@@ -4,12 +4,15 @@
 
 # A sixth wait fails, so that a watch that should have ended fails its test and never hangs it.
 # A run in "$T/runs" ended as its `conclusion` says, or in failure, and is listed only when that ending is asked for.
+# Its workflow's id is its workflow's name, a push started it unless its `event` says otherwise, and it started in the
+# order of its id unless its `startedAt` says when. "$T/open" holds the branches with an open pull request.
 github() {
   echo '[]' > "$T/pulls"
   echo '[]' > "$T/issues"
   echo '[]' > "$T/proposals"
   echo '[]' > "$T/proofs"
   echo '[]' > "$T/runs"
+  echo '[]' > "$T/open"
   main_is abc1234def "fix: wait out the install gap (#139)"
   : > "$T/fail"
   echo 0 > "$T/waits"
@@ -23,9 +26,15 @@ github() {
       "issue list --state open --label needs-human --limit 100 --json number,title"*) json "$(cat "$T/issues")" "$@" ;;
       "issue list --state open --label proposal --limit 100 --json number,title"*) json "$(cat "$T/proposals")" "$@" ;;
       "issue list --state open --label proof --limit 100 --json number,title"*) json "$(cat "$T/proofs")" "$@" ;;
-      "run list --status "*" --limit 20 --json databaseId,workflowName,headBranch,displayTitle"*)
-        json "$(jq -c --arg ended "$4" "map(select((.conclusion // \"failure\") == \$ended))" "$T/runs" 2>/dev/null \
+      "pr list --state open --limit 100 --json headRefName"*) json "$(cat "$T/open")" "$@" ;;
+      "run list --status "*" --limit 20 --json databaseId,workflowDatabaseId,workflowName,headBranch,event,startedAt,displayTitle"*)
+        json "$(jq -c --arg ended "$4" "map(select((.conclusion // \"failure\") == \$ended) | .workflowDatabaseId = .workflowName
+          | .event //= \"push\" | .startedAt //= (.databaseId | todate))" "$T/runs" 2>/dev/null \
           || cat "$T/runs")" "$@" ;;
+      "api --method GET repos/{owner}/{repo}/actions/workflows/"*"/runs -f branch="*" -f status=success -f per_page=1 "*)
+        workflow=${4#*/workflows/}
+        json "$(jq -c --arg workflow "${workflow%/runs}" --arg branch "${6#branch=}" "{workflow_runs: map(select(
+          .conclusion == \"success\" and .workflowName == \$workflow and .headBranch == \$branch) | {id: .databaseId, run_started_at: (.startedAt // (.databaseId | todate))}) | sort_by(-.id) | .[:1]}" "$T/runs")" "$@" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub sleep '
@@ -39,10 +48,16 @@ main_is() {
 }
 # after <n> <bash>: what happens on GitHub during wait <n>.
 after() { printf '%s\n' "$2" > "$T/after-$1"; }
+open_branch='[{"headRefName":"feat/12-export-forecast-csv"}]'
+# failed_and <run>...: a failed run of ci on the open pull request's branch, and the runs given.
+failed_and() {
+  echo "$open_branch" > "$T/open"
+  printf '%s\n' '{"databaseId":4390,"workflowName":"ci","headBranch":"feat/12-export-forecast-csv","displayTitle":"feat: export forecast as CSV"}' "$@" | jq -cs . > "$T/runs"
+}
 merge='jq -cn "{sha: \"fed9876abc\", commit: {message: \"feat: export forecast as CSV (#12)\"}}" > "$T/main"'
 expect_looks() {
   local looks
-  looks=$(grep -c '^gh api ' "$T/calls" || true)
+  looks=$(grep -c '^gh api repos/{owner}/{repo}/commits/main' "$T/calls" || true)
   [ "$looks" = "$1" ] || fail "expected $1 looks at GitHub, got $looks"
 }
 
@@ -50,7 +65,7 @@ scenario "prints the pull requests waiting, the last merge, what is flagged and 
 github
 echo '[{"number":148,"title":"fix: remove the merge attribute switch"}]' > "$T/pulls"
 echo '[{"number":133,"title":"Remove the merge attribute switch from fits-main"}]' > "$T/issues"
-echo '[{"databaseId":4390,"workflowName":"ci","headBranch":"feat/12-export-forecast-csv","displayTitle":"feat: export forecast as CSV"}]' > "$T/runs"
+failed_and
 after 1 "$merge"
 run "$scripts/watch.sh"
 expect_status 0
@@ -59,6 +74,82 @@ expect_output "last merge: abc1234 fix: wait out the install gap (#139)"
 expect_output "flagged for a person: #133 Remove the merge attribute switch from fits-main"
 expect_output "failed run: 4390 ci on feat/12-export-forecast-csv: feat: export forecast as CSV"
 expect_no_output "Its body."
+
+scenario "leaves out a failed run on the branch of a pull request that merged or closed"
+github
+failed_and
+echo '[{"headRefName":"feat/14-pace-per-mile"}]' > "$T/open"
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_no_output "failed run"
+expect_no_call "actions/workflows"
+
+scenario "leaves out a failed run once a later run of the same workflow on the same branch has passed"
+github
+failed_and '{"databaseId":4395,"conclusion":"success","workflowName":"ci","headBranch":"feat/12-export-forecast-csv","displayTitle":"fix: the export"}'
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_no_output "failed run"
+
+scenario "lists a failed run after which only another workflow, another branch or an earlier run passed"
+github
+failed_and '{"databaseId":4395,"conclusion":"success","workflowName":"review","headBranch":"feat/12-export-forecast-csv","displayTitle":"a run"}' \
+  '{"databaseId":4396,"conclusion":"success","workflowName":"ci","headBranch":"main","displayTitle":"a run"}' \
+  '{"databaseId":4380,"conclusion":"success","workflowName":"ci","headBranch":"feat/12-export-forecast-csv","displayTitle":"a run"}'
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_output "failed run: 4390 ci on feat/12-export-forecast-csv: feat: export forecast as CSV"
+
+scenario "lists a failed run that was run again and failed after a newer run had passed"
+github
+failed_and '{"databaseId":4395,"conclusion":"success","workflowName":"ci","headBranch":"feat/12-export-forecast-csv","displayTitle":"fix: the export"}'
+jq -c '.[0].startedAt = "2026-11-22T10:00:00Z"' "$T/runs" > "$T/again" && mv "$T/again" "$T/runs"
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_output "failed run: 4390 ci on feat/12-export-forecast-csv: feat: export forecast as CSV"
+
+for event in push schedule; do
+  scenario "leaves out a failed run on main that a $event started, once a later run of its workflow has passed"
+  github
+  echo "[{\"databaseId\":4390,\"event\":\"$event\",\"workflowName\":\"flag-idle\",\"headBranch\":\"main\",\"displayTitle\":\"flag-idle\"},
+    {\"databaseId\":4395,\"conclusion\":\"success\",\"workflowName\":\"flag-idle\",\"headBranch\":\"main\",\"displayTitle\":\"flag-idle\"}]" > "$T/runs"
+  after 1 "$merge"
+  run "$scripts/watch.sh"
+  expect_status 0
+  expect_no_output "failed run"
+done
+
+scenario "lists a failed build of one ticket on main, though the build of another ticket passed after it"
+github
+echo '[{"databaseId":4390,"event":"workflow_dispatch","workflowName":"implement","headBranch":"main","displayTitle":"implement"},
+  {"databaseId":4395,"conclusion":"success","event":"workflow_dispatch","workflowName":"implement","headBranch":"main","displayTitle":"implement"}]' > "$T/runs"
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_output "failed run: 4390 implement on main: implement"
+expect_no_call "actions/workflows"
+
+scenario "exits when a later run passes, and says the failed run is gone"
+github
+failed_and
+cp "$T/runs" "$T/failed"
+after 1 'jq -c ". + [{databaseId: 4395, conclusion: \"success\", workflowName: \"ci\", headBranch: \"feat/12-export-forecast-csv\", displayTitle: \"fix: the export\"}]" "$T/failed" > "$T/runs"'
+run "$scripts/watch.sh"
+expect_status 0
+expect_looks 2
+expect_output "  gone: failed run: 4390 ci on feat/12-export-forecast-csv: feat: export forecast as CSV"
+
+scenario "asks once at each look for the last passing run of a workflow on a branch, however many of its runs failed"
+github
+echo '[{"databaseId":4390,"workflowName":"ci","headBranch":"main","displayTitle":"a run"},{"databaseId":4391,"workflowName":"ci","headBranch":"main","displayTitle":"a run"}]' > "$T/runs"
+after 1 "$merge"
+run "$scripts/watch.sh"
+expect_status 0
+expect_calls 2 "gh api --method GET repos/{owner}/{repo}/actions/workflows/ci/runs -f branch=main -f status=success -f per_page=1"
 
 scenario "goes on watching while nothing changes, a minute between looks unless told otherwise"
 github
@@ -273,6 +364,7 @@ expect_call "gh pr list --state open --label needs-human"
 expect_call "gh issue list --state open --label needs-human"
 expect_call "gh issue list --state open --label proposal"
 expect_call "gh issue list --state open --label proof"
+expect_call "gh pr list --state open --limit 100 --json headRefName"
 expect_call "gh run list --status failure"
 expect_call "gh run list --status timed_out"
 expect_call "gh run list --status startup_failure"
@@ -284,14 +376,17 @@ for read in "pr list|The pull requests waiting for the owner could not be read" 
   "issue list --state open --label needs-human|The issues flagged for a person could not be read" \
   "issue list --state open --label proposal|The proposals could not be read" \
   "issue list --state open --label proof|The proof tickets could not be read" \
+  "pr list --state open --limit 100 --json headRefName|The branches with an open pull request could not be read" \
   "run list --status failure|The runs that ended failure could not be read" \
   "run list --status timed_out|The runs that ended timed_out could not be read" \
-  "run list --status startup_failure|The runs that ended startup_failure could not be read"; do
+  "run list --status startup_failure|The runs that ended startup_failure could not be read" \
+  "api --method GET|The last passing run of workflow ci on main could not be read"; do
   call=${read%%|*}
   message=${read#*|}
 
   scenario "stops when \`gh $call\` fails at the first look: that is not 'nothing there'"
   github
+  echo '[{"databaseId":4390,"workflowName":"ci","headBranch":"main","displayTitle":"a run"}]' > "$T/runs"
   echo "$call" > "$T/fail"
   run "$scripts/watch.sh"
   expect_status 1

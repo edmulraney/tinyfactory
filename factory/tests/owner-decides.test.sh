@@ -291,7 +291,7 @@ PURPOSE.md
 docs/factory/workflows/build.yml
 EOF
 
-# The product's bar and CLAUDE.md, as CLAUDE.md ("Off limits") lists them.
+# The product's bar, CLAUDE.md and the budget of a pull request, as CLAUDE.md ("Off limits") lists them.
 while IFS='|' read -r kind path; do
   scenario "holds any change to $path, as $kind"
   change "$path" "one" "two"
@@ -311,6 +311,7 @@ the product's bar|apps/web/playwright.config.ts
 the product's bar|apps/web/e2e/test.ts
 the agents' instructions|CLAUDE.md
 secrets or permissions|SECURITY.md
+spend or limits|factory/budget.txt
 EOF
 
 scenario "holds the theme moved to another name, and a new file of the bar"

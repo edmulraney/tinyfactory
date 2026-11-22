@@ -26,13 +26,18 @@ decide() {
   run "$T/repo/factory/scripts/needs-e2e.sh" 7
   result=$("$T/repo/factory/scripts/needs-e2e.sh" 7 2>/dev/null) || true
 }
-expect_result() { [ "$result" = "$1" ] || fail "expected stdout to be exactly \"$1\", got \"$result\""; }
+# expect_result <run=…> [reason]: stdout is that line, then one line `reason=`, which holds the reason when one is given.
+expect_result() {
+  [ "$(sed -n 1p <<<"$result")" = "$1" ] && [ "$(grep -c . <<<"$result")" -eq 2 ] && grep -q '^reason=.' <<<"$(sed -n 2p <<<"$result")" \
+    || fail "expected stdout to be exactly \"$1\" and a line \"reason=…\", got \"$result\""
+  [ -z "${2:-}" ] || [ "$(sed -n 2p <<<"$result")" = "reason=$2" ] || fail "expected the reason \"$2\", got \"$(sed -n 2p <<<"$result")\""
+}
 
 scenario "skips for a change to a factory script alone"
 changes factory/scripts/ship.sh
 decide
 expect_status 0
-expect_result "run=false"
+expect_result "run=false" "Pull request #7 changes no app code, so the app in its preview is the app on main."
 expect_output "changes no app code"
 
 scenario "skips for factory files, skills, workflows and documents together"
@@ -146,7 +151,7 @@ decide_no_app() {
   run "$1" 7
   result=$("$1" 7 2>/dev/null) || true
   expect_status 0
-  expect_result "run=false"
+  expect_result "run=false" "This repository holds no apps folder, so it has no end-to-end tests to run for pull request #7."
   expect_output "This repository holds no apps folder"
   expect_no_call "gh"
 }
@@ -181,6 +186,9 @@ job e2e | grep -qF 'run: factory/scripts/needs-e2e.sh "$PR" >> "$GITHUB_OUTPUT"'
 job e2e | grep -qF 'run: ${{ steps.needed.outputs.run }}' || fail "the e2e job does not pass the answer on to the jobs that need it"
 job e2e | grep -A1 -F -- '- name: Say that the end-to-end tests were skipped' | grep -qxF "        if: steps.needed.outputs.run == 'false'" \
   || fail "expected the e2e job to say, on a plain false only, that its tests were skipped"
+job e2e | grep -qxF '          REASON: ${{ steps.needed.outputs.reason }}   # the sentence needs-e2e.sh printed (decisions M608)' \
+  && job e2e | grep -F 'gh pr comment "$PR"' | grep -qF 'were skipped for $HEAD_SHA. $REASON factory/scripts/needs-e2e.sh decides this."' \
+  || fail "expected the comment about skipped tests to carry the reason the script printed, and no sentence of the workflow's own"
 needs_e2e_line=$(job e2e | grep -n 'run: factory/scripts/needs-e2e.sh' | cut -d: -f1)
 for step in 'uses: ./.github/actions/setup' 'name: Wait for the Vercel preview' 'name: Playwright against the preview'; do
   at=$(job e2e | grep -n -F -- "- $step" | cut -d: -f1)

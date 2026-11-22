@@ -13,7 +13,7 @@ esac
 
 # look: sets $state, what it prints; $events, the lines whose change is an event; and $later (decisions H7, H120c).
 look() {
-  local waiting main flagged proposals proofs ended runs old failed="" slid=""
+  local waiting main flagged proposals proofs open ended runs old id workflow branch event started line pass passes="" failed="" slid=""
   waiting=$(gh pr list --state open --label needs-human --limit 100 --json number,title \
     --jq '.[] | "waiting for the owner: pull request #\(.number) \(.title)"') \
     || die "The pull requests waiting for the owner could not be read from GitHub, so the watch stopped. Run it again."
@@ -31,18 +31,37 @@ look() {
     --jq '.[] | "to read when convenient: proof ticket #\(.number) \(.title)"') \
     || die "The proof tickets could not be read from GitHub, so the watch stopped. Run it again."
   later=$(printf '%s\n%s\n' "$proposals" "$proofs" | grep -v '^$' || true)
+  open=$(gh pr list --state open --limit 100 --json headRefName --jq '.[].headRefName') \
+    || die "The branches with an open pull request could not be read from GitHub, so the watch stopped. Run it again."
   # Asked for one ending at a time, so that each keeps its own 20 newest (decisions H166).
   for ended in failure timed_out startup_failure; do
-    runs=$(gh run list --status "$ended" --limit "$window" --json databaseId,workflowName,headBranch,displayTitle \
-      --jq '.[] | "failed run: \(.databaseId) \(.workflowName) on \(.headBranch): \(.displayTitle)"') \
+    runs=$(gh run list --status "$ended" --limit "$window" --json databaseId,workflowDatabaseId,workflowName,headBranch,event,startedAt,displayTitle \
+      --jq '.[] | "\(.databaseId)\t\(.workflowDatabaseId)\t\(.headBranch)\t\(.event)\t\(.startedAt)\tfailed run: \(.databaseId) \(.workflowName) on \(.headBranch): \(.displayTitle)"') \
       || die "The runs that ended $ended could not be read from GitHub, so the watch stopped. Run it again."
     old="oldest_$ended"
     if [ -n "$first" ] && [ "$(grep -c . <<<"$runs" || true)" -ge "$window" ]; then
-      printf -v "$old" '%s' "$(sed -n 's/^failed run: \([0-9]*\) .*/\1/p' <<<"$runs" | sort -n | head -n 1)"
+      printf -v "$old" '%s' "$(cut -f 1 <<<"$runs" | sort -n | head -n 1)"
     fi
-    # An older run only slid in when one of the 20 left the list (decisions H120e).
-    slid+=$(awk -v oldest="${!old:-}" 'oldest != "" && $3 + 0 < oldest + 0' <<<"$runs")$'\n'
-    failed+="$runs"$'\n'
+    while IFS=$'\t' read -r id workflow branch event started line; do
+      [ -n "$id" ] || continue
+      # A failure nobody can still act on is left out (decisions H624a).
+      [ "$branch" = main ] || grep -qxF -e "$branch" <<<"$open" || continue
+      # On main a run that a ticket started is not answered by a later pass (decisions H624b).
+      if [ "$branch" != main ] || [ "$event" = push ] || [ "$event" = schedule ]; then
+        pass=$(awk -v key="$workflow $branch " 'index($0, key) == 1 { print substr($0, length(key) + 1) }' <<<"$passes")
+        if [ -z "$pass" ]; then
+          pass=$(gh api --method GET "repos/{owner}/{repo}/actions/workflows/$workflow/runs" \
+            -f branch="$branch" -f status=success -f per_page=1 --jq '.workflow_runs[0].run_started_at // 0') \
+            || die "The last passing run of workflow $workflow on $branch could not be read from GitHub, so the watch stopped. Run it again."
+          passes+="$workflow $branch $pass"$'\n'
+        fi
+        # Compared by when each started: a run that started earlier can pass after a newer one failed.
+        [[ "$started" > "$pass" ]] || continue
+      fi
+      # An older run only slid in when one of the 20 left the list (decisions H120e).
+      [ -z "${!old:-}" ] || [ "$id" -ge "${!old}" ] || slid+="$line"$'\n'
+      failed+="$line"$'\n'
+    done <<<"$runs"
   done
   first=""
   # Sorted, so that the same things in another order are not a change; a run two endings list is one line.

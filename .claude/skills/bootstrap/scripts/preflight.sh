@@ -3,10 +3,11 @@
 # Usage: preflight.sh
 #        Exits non-zero having listed the fix for each failure, so a person makes them all in one pass.
 set -uo pipefail
+. "$(dirname "$0")/present.sh"
 
 fail=0
-ok()  { echo "ok    $1"; }
-bad() { echo "FAIL  $1"; echo "      fix: $2"; fail=1; }
+ok()  { mark done "$1"; }
+bad() { mark failed "$1"; echo "  fix: $2"; fail=1; }
 
 # The app's build runs a TypeScript file with node (src/db/migrate.mts), which Node does unaided from 22.18,
 # from 23.6 within major 23, and in every later major.
@@ -65,5 +66,5 @@ else
   bad "Vercel not logged in" "npx vercel@latest login"
 fi
 
-[ "$fail" -eq 0 ] && echo "preflight passed" || echo "preflight failed"
+[ "$fail" -eq 0 ] && mark done "preflight passed" || mark failed "preflight failed"
 exit "$fail"

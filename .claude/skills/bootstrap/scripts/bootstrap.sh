@@ -6,20 +6,36 @@ set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
 name="${1:-$(basename "$PWD")}"
+. "$here/present.sh"
 
-for step in preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token; do
-  printf '\n== %s ==\n' "$step"
+# Each step writes here what it left for the owner (decisions S421c).
+SETUP_NEEDS_OWNER=$(mktemp)
+export SETUP_NEEDS_OWNER
+trap 'rm -f "$SETUP_NEEDS_OWNER"' EXIT
+
+steps=(preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token)
+number=0
+for step in "${steps[@]}"; do
+  number=$((number + 1))
+  heading "[$number/${#steps[@]}] $step"
   # The scaffold ends by proving the project, which takes minutes. A project whose first commit
   # holds the app and the factory's scripts was scaffolded and proven by the run that made the
   # commit. A commit that holds neither, such as a clone with only a README, is no scaffold.
   if [ "$step" = scaffold ] && [ "$(git rev-parse --show-toplevel 2>/dev/null)" = "$(pwd -P)" ] \
     && git cat-file -e HEAD:apps/web/package.json 2>/dev/null && git cat-file -e HEAD:factory/scripts 2>/dev/null; then
-    echo "scaffold ok: $name has its first commit already"
+    mark done "scaffold ok: $name has its first commit already"
     continue
   fi
   if ! "$here/$step.sh" "$name"; then
-    printf '\nSetup stopped at %s. Fix what it reports, then run the same command again: it carries on from here.\n' "$step" >&2
+    mark failed "Setup stopped at $step. Fix what it reports, then run the same command again: it carries on from here." >&2
     exit 1
   fi
 done
-printf '\nbootstrap complete: %s\n' "$name"
+
+heading "What to do next"
+if [ -s "$SETUP_NEEDS_OWNER" ]; then
+  { echo "Do what these steps ask above, then run the same command again: it confirms each."; cat "$SETUP_NEEDS_OWNER"; } | owner_block
+else
+  mark done "bootstrap complete: $name"
+  echo "File a ticket, then add the \`ready\` label to it, which starts its build: factory/owner-guide.md says how."
+fi

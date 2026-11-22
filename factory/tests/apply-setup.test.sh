@@ -159,7 +159,7 @@ ticket_says "could not create the label"
 expect_no_output "a setup script failed after the merge"
 
 scenario "neither runs nor flags a script that changes nothing in a project already set up"
-merged_change preflight.sh scaffold.sh purpose.sh bootstrap.sh
+merged_change preflight.sh scaffold.sh purpose.sh bootstrap.sh present.sh
 apply BOARD_TOKEN=board-token
 expect_status 0
 expect_output "scaffold.sh changed; it has nothing to apply"

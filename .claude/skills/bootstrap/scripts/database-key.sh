@@ -4,6 +4,7 @@
 #        Stores the Neon project id as the repo variable NEON_PROJECT_ID.
 #        Safe to re-run: skips when the secret and the variable exist (FORCE=1 replaces them).
 set -euo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -19,7 +20,7 @@ secrets=$(gh secret list -R "$repo" --json name --jq '.[].name') \
 variables=$(gh variable list -R "$repo" --json name --jq '.[].name') \
   || { echo "cannot read the variables of $repo: sign in to gh as an admin of the repo and re-run"; exit 1; }
 if [ "${FORCE:-}" != 1 ] && grep -qx NEON_API_KEY <<<"$secrets" && grep -qx NEON_PROJECT_ID <<<"$variables"; then
-  echo "database key ok: secret NEON_API_KEY and variable NEON_PROJECT_ID already set (FORCE=1 to replace them)"
+  mark done "database key ok: secret NEON_API_KEY and variable NEON_PROJECT_ID already set (FORCE=1 to replace them)"
   exit 0
 fi
 
@@ -38,7 +39,7 @@ fi
 # `me` exits 1 when nobody is signed in and is the one command that never starts the sign-in
 # itself, on any machine (neonctl 9.5.0); `auth` then opens the browser, prints the URL and waits.
 if ! neon me >/dev/null 2>&1; then
-  echo "approve the Neon sign-in in the browser (sign in the way the Vercel account does)"
+  owner_block <<<"approve the Neon sign-in in the browser (sign in the way the Vercel account does)"
   neon auth
 fi
 # The organisation is kept because a key limited to a project belongs to it, and revoking one
@@ -78,4 +79,4 @@ gh variable set NEON_PROJECT_ID -R "$repo" --body "$project"
 # Piped to gh, so the key is never printed or written to disk.
 printf %s "$key" | gh secret set NEON_API_KEY -R "$repo"
 stored=1
-echo "database key ok: secret NEON_API_KEY stored (this project only), variable NEON_PROJECT_ID=$project, $branches database branches now"
+mark done "database key ok: secret NEON_API_KEY stored (this project only), variable NEON_PROJECT_ID=$project, $branches database branches now"

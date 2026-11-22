@@ -2,18 +2,20 @@
 # Files a ticket that cuts each rule file `main` holds over its word budget, labelled `ready` (decisions H476a).
 # Usage: cut-rule-files.sh                   after a merge. A file with such a ticket open gets no second, and the third
 #                                            for one file in a calendar month (UTC) is a proposal that waits for the owner
-#        cut-rule-files.sh count <yyyy-mm>   prints "<tickets> <file>" for each file such a ticket was opened for that month
+#        cut-rule-files.sh count <yyyy-mm>   prints "<tickets> <file>" for each file such a ticket was opened for that month,
+#                                            one closed as a duplicate apart
 #        Needs GH_TOKEN (contents: read; issues: write). A call to GitHub that fails stops it with a message and exit 1.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1" >&2; exit 1; }
 
-# opened <yyyy-mm>: the file of each such ticket opened in that month, one a line. The title is as decisions H476e says.
+# opened <yyyy-mm>: the file of each such ticket opened in that month, one a line, but one closed as a duplicate
+# (decisions T620). The title is as decisions H476e says.
 opened() {
   local titles
   titles=$(gh api --method GET "repos/{owner}/{repo}/issues" -f state=all -f labels=factory -f since="$1-01T00:00:00Z" -f per_page=100 --paginate \
-    --jq ".[] | select(.pull_request == null and (.created_at | startswith(\"$1\"))) | .title") || return 1
+    --jq ".[] | select(.pull_request == null and (.created_at | startswith(\"$1\")) and .state_reason != \"duplicate\") | .title") || return 1
   sed -n 's/^Cut `\(.*\)` to budget$/\1/p' <<<"$titles"
 }
 
@@ -63,17 +65,25 @@ while read -r words budget file; do
 - a split of the file, so that what only some tasks need is in a document those tasks read.
 
 $proves"
-    url=$(gh issue create --title "$title" --label factory --label proposal --body "$body") \
-      || die "Could not file the proposal for $file, over its word budget for the third time in $month; the next merge files it."
-    echo "$file holds $words words and its budget is $budget, for the third time in $month: a proposal waits for the owner, $url"
-    continue
-  fi
-  body="## Change
+    labels=(--label factory --label proposal)
+    failed="Could not file the proposal for $file, over its word budget for the third time in $month; the next merge files it."
+    filed="$file holds $words words and its budget is $budget, for the third time in $month: a proposal waits for the owner,"
+  else
+    body="## Change
 \`$file\` holds $words words on \`main\`, and its budget in \`factory/rule-files.txt\` is $budget words. Cut the file to its budget: move what only some tasks need to the document those tasks read, and delete what no agent needs to do its work well, to avoid a mistake or to save tokens (\`TASTE.md\`, \"Writing\"). Do not raise the budget.
 
 $proves"
-  # ready at filing: start-waiting.sh, which ship.sh runs next, starts it in its turn (decisions H476c).
-  url=$(gh issue create --title "$title" --label factory --label ready --body "$body") \
-    || die "Could not file the ticket that cuts $file to its word budget; the next merge files it."
-  echo "$file holds $words words and its budget is $budget: filed with ready, and its build starts when a place is free, $url"
+    # ready at filing: start-waiting.sh, which ship.sh runs next, starts it in its turn (decisions H476c).
+    labels=(--label factory --label ready)
+    failed="Could not file the ticket that cuts $file to its word budget; the next merge files it."
+    filed="$file holds $words words and its budget is $budget: filed with ready, and its build starts when a place is free,"
+  fi
+  url=$(gh issue create --title "$title" "${labels[@]}" --body "$body") || die "$failed"
+  # Two runs at once both find no ticket open (decisions T620). A look that fails says so, and the ticket stays.
+  first=$("$script_dir/close-duplicate.sh" "${url##*/}") || first=""
+  if [ -n "$first" ]; then
+    echo "$file holds $words words and its budget is $budget; another run filed issue #$first to cut it at the same time, so $url was closed"
+    continue
+  fi
+  echo "$filed $url"
 done <<<"$over"

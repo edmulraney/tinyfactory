@@ -60,7 +60,9 @@ const eslintConfig = defineConfig([
     ["src/app/**", "src/proxy.ts"],
     ["db"],
     "A screen does not touch the database. Call a use case of a module in src/domain.",
-    pastTheIndex,
+    // A module's state.ts is pure, and a client component runs it in the browser, where the index
+    // would bring the database's code.
+    { group: [...pastTheIndex.group, "!@/domain/*/state"], message: useTheIndex },
   ),
   mayNotImport(
     ["src/components/**"],

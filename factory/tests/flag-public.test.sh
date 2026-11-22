@@ -3,9 +3,9 @@
 . "$(dirname "$0")/helpers.sh"
 
 title="Protect the repository now that it is public"
-# $T/issues is what GitHub lists as open; $T/fail holds words of the call to fail.
+# $T/issues is what GitHub lists as open, and $T/since what another run filed after that; $T/fail holds words of the call to fail.
 github() {
-  echo '[]' > "$T/issues"
+  echo '[]' > "$T/issues"; echo '[]' > "$T/since"
   echo none > "$T/fail"
   stub gh '
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
@@ -13,6 +13,10 @@ github() {
       "api repos/{owner}/{repo}/issues?state=open&per_page=100 --paginate --jq "*) json "$(cat "$T/issues")" "$@" ;;
       "issue create --title Protect the repository now that it is public --label needs-human --body "*)
         printf "%s\n" "$8" > "$T/body"; echo https://github.com/owner/repo/issues/50 ;;
+      "api repos/{owner}/{repo}/issues?state=open&sort=created&direction=desc&per_page=100")
+        jq -c ". + \$since + [{number: 50, title: \"Protect the repository now that it is public\", user: {login: \"github-actions[bot]\"}}]" \
+          --argjson since "$(cat "$T/since")" "$T/issues" ;;
+      "issue edit 50 --remove-label ready" | "issue close 50 --reason duplicate --comment "*) ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
 }
@@ -70,6 +74,24 @@ echo "[$(issue 48 "$title" stranger User),$(issue 49 "$title" github-actions Use
 run "$scripts/flag-public.sh"
 expect_status 0
 expect_calls 1 "gh issue create"
+
+scenario "another run filed the ticket at the same time: the later is closed, and the output names the one that stays"
+github
+echo "[$(issue 48 "$title" 'github-actions[bot]' Bot)]" > "$T/since"
+run "$scripts/flag-public.sh"
+expect_status 0
+expect_calls 1 "gh issue close 50 --reason duplicate"
+expect_output "issue #48 already tells the owner that the repository is public: https://github.com/owner/repo/issues/50, filed at the same time, was closed"
+expect_no_output "told the owner that the repository is public: "
+
+scenario "whether another run filed the ticket too cannot be read: it says so, and the owner is told"
+github
+echo "sort=created" > "$T/fail"
+run "$scripts/flag-public.sh"
+expect_status 0
+expect_output "Whether another run filed the same ticket as #50 could not be read from GitHub, so #50 stays open."
+expect_output "told the owner that the repository is public: https://github.com/owner/repo/issues/50"
+expect_no_call "gh issue close"
 
 scenario "a pull request with the same title stops none: the ticket is filed"
 github

@@ -164,6 +164,27 @@ report --depth 1
 expect_status 0
 expect_row 1 "0 |  | 50% of 10 added lines, after 1 of the ten pull requests"
 
+scenario "--json: a line for each product pull request, its added lines and how many were reworked, with no read of its comments"
+github
+write other.ts kept; merge 1 factory
+ten_lines app.ts; write other.ts kept added; merge 2
+write app.ts one TWO three four five six seven eight ten; write other.ts KEPT added; merge 3
+git clone -q "file://$T/origin" "$T/work/clone"
+cd "$T/work/clone" || exit 1
+run "$scripts/quality.sh" --json
+expect_status 0
+[ "$out" = '{"pr":2,"added":11,"reworked":2}
+{"pr":3,"added":2,"reworked":null}' ] || fail "expected a line for pull requests 2 and 3, the second with no rework known"
+expect_no_call "/comments"
+
+scenario "--json: prints nothing when no pull request has merged"
+github
+git clone -q "file://$T/origin" "$T/work/clone" 2>/dev/null
+cd "$T/work/clone" || exit 1
+run "$scripts/quality.sh" --json
+expect_status 0
+[ -z "$out" ] || fail "expected no line"
+
 scenario "a title cannot add a column"
 github
 ten_lines app.ts; merge 1

@@ -95,6 +95,11 @@ if [[ " ${required[*]} " == *" Acceptance criteria "* ]] && ! section "Acceptanc
   echo "- No numbered acceptance criteria. Write each as \"- **AC1:** Given …, when …, then …\"."
   problems=1
 fi
+# Every end-to-end test already runs at both supported widths, so no criterion asks for one (decisions T607).
+while read -r criterion; do
+  echo "- The criterion \"$criterion\" gives a size in pixels. Every end-to-end test already runs at both supported widths, mobile and desktop (DESIGN.md, \"Supported screens\"), so a criterion names no width. Say what the person sees or does."
+  problems=1
+done < <(section "Acceptance criteria" | grep -iE '[0-9][ -]?(px|pixels?)([^[:alnum:]]|$)' || true)
 # Each row names a criterion the ticket has, or says "unchanged" (decisions T575b, T575c).
 rows=$(section "States")
 if $states && [ -n "$rows" ] && ! [[ "$rows" =~ ^[[:space:]]*[Nn]o\ screen\.?[[:space:]]*$ ]]; then

@@ -4,6 +4,7 @@
 #        Safe to re-run: skips making a token when the secret exists (FORCE=1 replaces it), and skips the
 #        agent-check run that proves the token once that run has passed.
 set -uo pipefail
+. "$(dirname "$0")/present.sh"
 
 name="${1:-$(basename "$PWD")}"
 owner=$(gh api user --jq .login)
@@ -14,7 +15,7 @@ repo="$owner/$name"
 # and pull the token straight out of the output stream.
 make_token() {
 script -q /dev/null sh -c 'stty cols 1000 rows 50; claude setup-token' </dev/null 2>&1 \
-  | REPO="$repo" python3 -u -c '
+  | REPO="$repo" BLOCK="$(printf '%s\n' "Approve the agents' token in the browser." "{url}" | owner_block)" python3 -u -c '
 import os, re, select, subprocess, sys
 ansi = re.compile(rb"\x1b\[[0-9;?]*[ -/]*[@-~]|\x1b\][^\x07]*\x07|\x1b[=>]")
 token_re = re.compile(rb"sk-ant-oat\d\d-[A-Za-z0-9_\-]{60,}")
@@ -31,7 +32,7 @@ while True:
     buf += ansi.sub(b"", chunk)
     for url in url_re.findall(buf):
         if url not in shown and b"sk-ant" not in url:
-            shown.add(url); print("approve in the browser:", url.decode(errors="replace"), flush=True)
+            shown.add(url); print(os.environ["BLOCK"].replace("{url}", url.decode(errors="replace")), flush=True)
     found = token_re.findall(buf)
     if found:
         token = max(found, key=len)
@@ -46,7 +47,7 @@ print("secret CLAUDE_CODE_OAUTH_TOKEN stored (%d characters)" % len(token))
 
 if [ "${FORCE:-}" != 1 ] && gh secret list -R "$repo" --json name --jq '.[].name' | grep -qx CLAUDE_CODE_OAUTH_TOKEN; then
   if [ "$(gh run list -R "$repo" --workflow agent-check --limit 1 --json conclusion --jq '.[0].conclusion')" = success ]; then
-    echo "agent ok: secret CLAUDE_CODE_OAUTH_TOKEN already set, and agent-check has passed (FORCE=1 to replace the token)"
+    mark done "agent ok: secret CLAUDE_CODE_OAUTH_TOKEN already set, and agent-check has passed (FORCE=1 to replace the token)"
     exit 0
   fi
   echo "secret CLAUDE_CODE_OAUTH_TOKEN already set (FORCE=1 to replace it); agent-check has not passed yet"
@@ -63,7 +64,7 @@ for _ in $(seq 1 12); do
 done
 if [ -z "${id:-}" ]; then echo "agent-check run did not start"; exit 1; fi
 if gh run watch "$id" -R "$repo" --interval 5 --exit-status >/dev/null 2>&1; then
-  echo "agent ok: token and model work in Actions"
+  mark done "agent ok: token and model work in Actions"
 else
   echo "agent-check failed: gh run view $id -R $repo --log"
   exit 1

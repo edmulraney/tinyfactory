@@ -182,6 +182,28 @@ expect_call "gh issue edit 12 --remove-label in-progress"
 [ ! -s "$T/posted" ] || fail "expected no comment"
 [ -z "$(on_github branch --list 'feat/*')" ] || fail "expected nothing to be pushed"
 
+scenario "an engineer who left the ticket to wait for another is not spoken over: no comment, no flag, and the place goes to a ticket that waits"
+ended completed
+echo '{"labels":[{"name":"factory"},{"name":"ready"}]}' > "$T/labels.json"
+echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"
+echo '[{"number":30}]' > "$T/ready"
+echo "export" > export.ts
+run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
+expect_status 0
+expect_output "the engineer stopped on purpose and left issue #12 to wait for the ticket it needs"
+expect_silence
+expect_no_call "gh issue edit 12"
+expect_call "gh workflow run implement.yml -f issue=30"
+[ -z "$(on_github branch --list 'feat/*')" ] || fail "expected nothing to be pushed"
+
+scenario "ready added while the build ran is no stop on purpose: the build that ended unfinished asks for a person"
+ended completed
+echo '{"labels":[{"name":"in-progress"},{"name":"ready"}]}' > "$T/labels.json"
+run "$scripts/flag-unfinished.sh" build 12 "$T/session.json"
+expect_status 1
+expect_call "gh issue edit 12 --add-label needs-human --remove-label in-progress"
+expect_posted "The build ended with no pull request ready for review"
+
 scenario "a build that ends with needs-human and no pull request, while a ticket waits with ready, starts that ticket's build"
 ended completed
 echo '[{"number":20},{"number":21},{"number":28},{"number":29}]' > "$T/issues"

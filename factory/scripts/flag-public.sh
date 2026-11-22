@@ -50,4 +50,10 @@ The factory acts only for an account with write access to this repository, and f
 $steps"
 url=$(gh issue create --title "$title" --label needs-human --body "$body") \
   || die "The owner was not told that the repository is public: the ticket that says so could not be filed."
+# Two runs at once both find no ticket open (decisions T620). A look that fails says so, and the ticket stays.
+first=$("$(dirname "$0")/close-duplicate.sh" "${url##*/}") || first=""
+if [ -n "$first" ]; then
+  echo "issue #$first already tells the owner that the repository is public: $url, filed at the same time, was closed"
+  exit 0
+fi
 echo "told the owner that the repository is public: $url"
