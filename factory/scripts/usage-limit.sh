@@ -26,7 +26,7 @@
 #                                                    hold, runs each run that waited again and starts the tickets
 #                                                    that wait with `ready`. Prints nothing when no hold is recorded.
 #        AGENT_MODEL names the model an agent runs on and AGENT_MODEL_FALLBACK the second one, in a job that runs
-#        one; with neither, a hold of one model holds no job.
+#        one; with neither, a hold of one model holds no job. A second model that is the first is none.
 #        Needs GH_TOKEN and GITHUB_REPOSITORY (contents: read; hold, wait, ended and resume: contents write; wait
 #        and ended: issues or pull-requests write; resume: actions write, and what start-waiting.sh needs).
 #        A call that fails stops it with a message and exit 1.
@@ -35,6 +35,8 @@ set -euo pipefail
 usage="Usage: usage-limit.sh held | start <number> <what> | hold <resets> | wait <number> <what> [failed] | ended <execution-file> <number> <what> | resume [now]"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1" >&2; exit 1; }
+# Decisions A683b.
+[ "${AGENT_MODEL_FALLBACK:-}" != "${AGENT_MODEL:-}" ] || AGENT_MODEL_FALLBACK=""
 
 # The hold is the file `usage-limit` on the sessions branch: the reset time and the model it holds, none naming every
 # model, then a line for each run that waits (decisions A395a, A395b, A663a).

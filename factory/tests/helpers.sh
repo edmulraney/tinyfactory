@@ -25,6 +25,7 @@ replaced=""
 
 # What a workflow would set is taken away, so a test passes or fails the same in CI as on a laptop.
 unset BOARD_TOKEN PRODUCTION_URL GITHUB_BASE_REF GH_TOKEN GITHUB_TOKEN GITHUB_WORKFLOW_REF GITHUB_WORKFLOW_SHA
+unset MODEL AGENT_MODEL AGENT_MODEL_FALLBACK
 # The tests that need a git repo make their own; it must not depend on who runs them.
 export GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com
 export GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com

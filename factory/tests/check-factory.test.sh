@@ -113,6 +113,46 @@ run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
 
+# Put together from two halves for the same reason (decisions H684).
+amp='&'
+pairs='-A'
+builtin='readarray'
+
+scenario "fails on each construct a Mac's bash 3.2 lacks, naming the file, the line and the replacement"
+for line in 'declare -A seen' "f() { local $pairs seen; }" "x=\$(declare -g${pairs#-} seen)" 'mapfile -t lines < "$1"' "if true; then $builtin -t lines; fi" \
+    'coproc cat' "echo \"${open}name,,}\"" "echo \"${open}names[@]^^}\"" "echo \"${open}name^}\"" "make ${amp}>> log" "make |${amp} tee log"; do
+  repo_with one.test.sh 'echo "ok - first"'
+  printf '%s\n' '#!/usr/bin/env bash' "$line" > factory/scripts/new.sh
+  git add .
+  run "$scripts/check-factory.sh"
+  expect_status 1
+  expect_output "factory/scripts/new.sh: a construct that the bash 3.2 of a Mac lacks and bash 5 runs"
+  expect_output "a newline-separated string and read it with grep"
+  expect_output "  2:$line"
+  expect_no_output "factory scripts ok"
+  rm -rf .git factory
+done
+
+scenario "fails on one in a test file too, and names only the lines that hold one"
+repo_with one.test.sh "true
+declare -a list
+declare $pairs seen"
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/tests/one.test.sh: a construct that the bash 3.2 of a Mac lacks"
+expect_output "  4:declare -A seen"
+expect_no_output "declare -a list"
+
+scenario "passes what bash 3.2 has, and a comment or a message that names what it lacks"
+repo_with one.test.sh 'echo "ok - first"'
+printf '%s\n' '#!/usr/bin/env bash' 'declare -a list' 'f() { local -r A=1; }' 'mapfile=lines.txt' '# mapfile needs bash 4, and so does declare -A.' \
+  'echo "use tr, not readarray or coproc"' 'echo "${1:-a,b}" "${list[0]}, ^"' 'tr "[:upper:]" "[:lower:]" <<<"$1"' \
+  'make >> log 2>&1' "make ${amp}> log" 'make 2>&1 | tee log' "sed 's|old|${amp}, new|' \"\$1\"" 'true || make &' > factory/scripts/plain.sh
+git add .
+run "$scripts/check-factory.sh"
+expect_status 0
+expect_output "factory scripts ok"
+
 scenario "stops with a message outside a git repository: that is not a repo with no script in it"
 mkdir -p factory/scripts
 printf '#!/usr/bin/env bash\nif true; then\n' > factory/scripts/broken.sh

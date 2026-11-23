@@ -32,7 +32,7 @@ run "$scripts/flag-public.sh"
 expect_status 0
 expect_calls 1 "gh issue create"
 expect_call "gh issue create --title $title --label needs-human --body"
-[ "$(sed -n 1p "$T/body")" = 'Add a `SECURITY.md` and switch on private vulnerability reporting, then close this ticket: the factory does neither.' ] \
+[ "$(sed -n 1p "$T/body")" = 'Add a `SECURITY.md`, and run the `publicize-repo` skill unless it made the repository public, then close this ticket.' ] \
   || fail "expected the first line to say what the owner must do, got: $(sed -n 1p "$T/body")"
 [ -z "$(sed -n 2p "$T/body")" ] || fail "expected the first line to stand alone"
 expect_output "https://github.com/owner/repo/issues/50"
@@ -48,16 +48,16 @@ expect_part "What the factory still refuses" "only for an account with write acc
 expect_part "What the factory still refuses" "decisions U563a"
 expect_part "What the factory still refuses" "starts no build, no agent and no merge"
 expect_part "What is left to you" '1. **Add a `SECURITY.md`**'
-expect_part "What is left to you" "2. **Switch on private vulnerability reporting,**"
+expect_part "What is left to you" "2. **Ask an assistant to run the \`publicize-repo\` skill,**"
 
-scenario "a repository that holds a SECURITY.md is asked only for private vulnerability reporting"
+scenario "a repository that holds a SECURITY.md is asked only for the publicize-repo skill"
 github
 touch SECURITY.md
 run "$scripts/flag-public.sh"
 expect_status 0
-[ "$(sed -n 1p "$T/body")" = 'Switch on private vulnerability reporting, then close this ticket: the factory cannot.' ] \
-  || fail "expected the first line to ask only for private vulnerability reporting, got: $(sed -n 1p "$T/body")"
-expect_part "What is left to you" "1. **Switch on private vulnerability reporting,**"
+[ "$(sed -n 1p "$T/body")" = 'Run the `publicize-repo` skill unless it made the repository public, then close this ticket.' ] \
+  || fail "expected the first line to ask only for the publicize-repo skill, got: $(sed -n 1p "$T/body")"
+expect_part "What is left to you" "1. **Ask an assistant to run the \`publicize-repo\` skill,**"
 ! grep -qF 'Add a `SECURITY.md`' "$T/body" || fail "expected no step that adds a SECURITY.md"
 
 scenario "a second time, the ticket is open: none is filed"

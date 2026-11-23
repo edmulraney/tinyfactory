@@ -18,7 +18,7 @@ env:
   # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
   # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
   AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}
   ISSUE: ${{ github.event.issue.number || inputs.issue }}
   # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A550).
   AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\" \"$RUNNER_TEMP/ticket-text.txt\""}]}]}}'

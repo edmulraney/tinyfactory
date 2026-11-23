@@ -239,6 +239,40 @@ expect_silent
 [ "$(cat "$T/env")" = "MODEL=claude-opus-5-5" ] || fail "expected the retro's agents to be given claude-opus-5-5, got: $(cat "$T/env")"
 unset AGENT_MODEL AGENT_MODEL_FALLBACK GITHUB_ENV
 
+# unset_default <workflow> <name>: what the workflow's env gives <name> in a repository that sets no variable.
+unset_default() { sed -n "s/^  $2: \${{ vars\.$2 || '\(.*\)' }}$/\1/p" "$1"; }
+
+for file in $(grep -l '^  AGENT_MODEL_FALLBACK:' "$root"/factory/workflows/*.yml); do
+  scenario "in a repository that sets no variable, a job of ${file##*/} starts on the second model while the first's limit holds"
+  github sessions
+  : > "$T/env"
+  AGENT_MODEL=$(unset_default "$file" AGENT_MODEL) AGENT_MODEL_FALLBACK=$(unset_default "$file" AGENT_MODEL_FALLBACK)
+  export GITHUB_ENV="$T/env" AGENT_MODEL AGENT_MODEL_FALLBACK
+  hold_is "$ahead $AGENT_MODEL"
+  limit wait 7 "a fix round"
+  expect_status 0
+  expect_written ""
+  limit start 7 "a fix round"
+  expect_status 0
+  [ "$(cat "$T/env")" = "MODEL=claude-opus-5-5" ] || fail "expected the agents of ${file##*/} to be given claude-opus-5-5, got: $(cat "$T/env")"
+  expect_posted "#7: Nothing to do: a fix round runs on \`claude-opus-5-5\`, the second model, because the Claude usage limit of \`claude-fable-5-2\` holds"
+done
+unset AGENT_MODEL AGENT_MODEL_FALLBACK GITHUB_ENV
+
+scenario "a second model that is the first is none: the hold is of every model, and the job is held as with no second model"
+github sessions
+: > "$T/env"
+export GITHUB_ENV="$T/env" AGENT_MODEL=claude-opus-5-5 AGENT_MODEL_FALLBACK=claude-opus-5-5 MODEL=claude-opus-5-5
+limit hold "$ahead"
+expect_hold "$ahead"
+unset MODEL
+limit wait 7 "a fix round"
+expect_status 0
+expect_written "held=true"$'\n'"kept=true"
+expect_posted "The limit covers the whole account, so no agent starts before then."
+[ ! -s "$T/env" ] || fail "expected no model to be given to a job that is held, got: $(cat "$T/env")"
+unset AGENT_MODEL AGENT_MODEL_FALLBACK GITHUB_ENV
+
 scenario "start: tells nobody when the job runs on the first model, or is held"
 github sessions
 export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5
