@@ -30,16 +30,17 @@ trap 'rm -rf "$state"' EXIT
 # test_again <try> <why> <pr>:<head>...: each keeps its place, and merge-group.yml tests them again as that try.
 # A fault that stays for three tries, or a run that cannot be started, reaches a person (decisions M455j).
 test_again() {
-  local next="$1" why="$2" pull number body; shift 2
+  local next="$1" why="$2" pull number body group_page; shift 2
   if [ "$next" -le 3 ] && start_merge_group "$next"; then
     echo "$why. Each of $* keeps its place, and merge-group.yml was started to test them again, as try $next of 3"
     return 0
   fi
   if [ "$next" -le 3 ]; then why+=", and \`merge-group.yml\` could not be started to test its group again"; else why+=", on each of three tries"; fi
+  group_page=$("$script_dir/workflow-page.sh" merge-group.yml)
   for pull; do
     number="${pull%%:*}"
     # The first line says what a person must do (decisions A371a).
-    body="Start the \`merge-group\` workflow from the Actions tab: this pull request still waits to merge, and that run tests and merges it.
+    body="Start the test of this pull request's group on $group_page. This pull request still waits to merge, and that run tests and merges it.
 
 Not merged: $why.$(run_log)"
     echo "pull request #$number: $body" >&2
@@ -215,7 +216,8 @@ Not merged: $why. It gets no fix round, because $person."
     retry gh pr edit "$pr" --add-label needs-human >/dev/null || { echo "needs-human could not be added to pull request #$pr" >&2; status=1; }
   # Asked again when it fails: a second round for one commit is refused when it begins (decisions M455k, A124g).
   elif ! retry "$script_dir/start-fix-round.sh" "$pr"; then
-    retry gh pr comment "$pr" --body "Start the \`fix\` workflow from the Actions tab, with this pull request's number, $pr: the fix round the comment before this one names could not be started.$(run_log)" >/dev/null \
+    fix_page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr")
+    retry gh pr comment "$pr" --body "Start the fix round on $fix_page. The fix round the comment before this one names could not be started.$(run_log)" >/dev/null \
       || echo "and pull request #$pr could not be told that its fix round was not started" >&2
     retry gh pr edit "$pr" --add-label needs-human >/dev/null || echo "and needs-human could not be added to pull request #$pr" >&2
     status=1

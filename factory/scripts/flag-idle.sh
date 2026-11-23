@@ -2,7 +2,8 @@
 # Flags for a person each ticket in flight that no run is working on and nothing has touched for an hour.
 # Usage: flag-idle.sh   (by flag-idle.yml, on its schedule)
 #        First it starts again what the Claude usage limit held, once the limit has reset, and then flags nothing.
-#        Needs GH_TOKEN (actions and contents: write; pull-requests: read; issues: write) and GITHUB_REPOSITORY, or a checkout gh can read.
+#        An idle pull request in conflict is given a fix round, once for a commit, before its ticket is flagged.
+#        Needs GH_TOKEN (actions and contents: write; pull-requests: read; issues: write) and GITHUB_REPOSITORY.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
@@ -69,13 +70,13 @@ while IFS= read -r line; do
   ready=""
   conflict=""
   for pr in $(grep -oE 'pull request #[0-9]+' <<<"$about" | grep -oE '[0-9]+' || true); do
-    pull=$(gh pr view "$pr" --json updatedAt,headRefName,mergeable,isDraft \
-      --jq '"\(.updatedAt) \(.mergeable) \(.isDraft) \(.headRefName)"') \
+    pull=$(gh pr view "$pr" --json updatedAt,headRefName,headRefOid,mergeable,isDraft \
+      --jq '"\(.updatedAt) \(.mergeable) \(.isDraft) \(.headRefOid) \(.headRefName)"') \
       || die "Pull request #$pr of ticket #$ticket could not be read from GitHub"
-    read -r at mergeable draft branch <<<"$pull"
+    read -r at mergeable draft head branch <<<"$pull"
     [[ "$at" < "$touched" ]] || touched=$at
     [ "$draft" != false ] || ready=$pr
-    [ "$mergeable" != CONFLICTING ] || [ "$draft" != false ] || conflict=$pr
+    [ "$mergeable" != CONFLICTING ] || [ "$draft" != false ] || conflict="$pr $head"
     [ -n "$run" ] || run=$(awk -v branch="$branch" '$1 == "ci" && $2 == branch { print $1; exit }' <<<"$running")
   done
   if [ -n "$run" ]; then
@@ -88,17 +89,30 @@ while IFS= read -r line; do
     echo "left: #$ticket was touched $minutes minutes ago"
     continue
   fi
+  # start: the pull request and commit a fix round is started for, in place of a flag, or `-`.
+  start=-
   if [ -n "$conflict" ]; then
-    todo="Run \`gh workflow run fix.yml -f pr=$conflict\`: a fix round starts and fits the branch to \`main\`."
-    next="Pull request #$conflict conflicts with \`main\`, and no fix round is going for it."
+    pr=${conflict% *}
+    # The factory starts the round for a commit once, and a person is asked only after it (decisions A691b).
+    started=$("$script_dir/fix-rounds.sh" "$ticket" conflict-started "${conflict#* }") \
+      || die "Whether a fix round was started before for the conflict of pull request #$pr could not be read"
+    if [ "$started" -eq 0 ]; then
+      page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr") || die "The page that starts a fix round for pull request #$pr could not be named"
+      start=$conflict
+      todo="Start a fix round on $page: it fits the branch to \`main\`."
+      next="Pull request #$pr conflicts with \`main\`, and GitHub did not start the fix round the factory asked for."
+    else
+      todo="Submit a \"Request changes\" review on pull request #$pr saying how to fit it to \`main\`: that starts a fix round that is not one of the three."
+      next="Pull request #$pr conflicts with \`main\`, and the fix round the factory started for this commit left it so."
+    fi
   elif [ -n "$ready" ]; then
-    todo="Run \`gh pr checks $ready\` and run again the job it shows stopped: the pull request merges once its checks and reviews pass."
+    todo="Open the checks of pull request #$ready and run again the job they show stopped: the pull request merges once its checks and reviews pass."
     next="Pull request #$ready is ready for review, and no check, review, fix round or merge is going for it."
   else
     todo="Add the \`ready\` label again: a build starts when a place is free."
     next="No build of it is going."
   fi
-  to_flag+="$ticket $minutes $touched $about"$'\t'"$next"$'\t'"$todo"$'\n'
+  to_flag+="$ticket $minutes $touched $about"$'\t'"$next"$'\t'"$todo"$'\t'"$start"$'\n'
 done <<<"$in_flight"
 
 if [ -z "$to_flag" ]; then
@@ -110,9 +124,26 @@ run_link=""
 [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" Found by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 status=0
 flagged=""
-while IFS=$'\t' read -r found next todo; do
+while IFS=$'\t' read -r found next todo start; do
   [ -n "$found" ] || continue
   read -r ticket minutes touched about <<<"$found"
+  if [ "$start" != - ]; then
+    pr=${start% *}
+    # The record first, so that a start GitHub refuses is not made again at the next look, and on the ticket,
+    # where this token may write (decisions A691b).
+    if ! gh api "repos/{owner}/{repo}/issues/$ticket/comments" -f body="<!-- factory:conflict-started ${start#* } -->Nothing to do: the factory is starting a fix round of pull request #$pr, which fits its branch to \`main\`.
+
+Pull request #$pr conflicts with \`main\`, and nothing had happened on this ticket for $minutes minutes.$run_link" >/dev/null; then
+      echo "Pull request #$pr conflicts with main, and the comment that records its fix round's start could not be posted, so none was started." >&2
+      status=1
+      continue
+    fi
+    # Never asked twice: a start that failed may have happened (decisions M26).
+    if gh workflow run fix.yml -f pr="$pr" >/dev/null; then
+      echo "started: a fix round for pull request #$pr of ticket #$ticket, which conflicts with main"
+      continue
+    fi
+  fi
   # The label first: it is what keeps the next look from flagging the ticket again (decisions T271d).
   if ! gh issue edit "$ticket" --add-label needs-human --remove-label in-progress >/dev/null; then
     echo "Nothing is working on ticket #$ticket, and needs-human could not be added to it: it was not flagged." >&2

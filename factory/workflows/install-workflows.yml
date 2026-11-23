@@ -255,7 +255,8 @@ jobs:
             if [ -s "$RUNNER_TEMP/refused.md" ]; then
               printf 'File the two `factory` tickets described below: the factory installs nothing until the second merges.\n\n'
             else
-              printf 'Read the log linked below, then start `install-workflows` again with this pull request'"'"'s number: the changes are installed when that run passes.\n\n'
+              # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.
+              printf 'Read the log linked below, then start the installer again on the [`install-workflows` workflow'"'"'s page](%s/%s/actions/workflows/install-workflows.yml), where "Run workflow" starts it with `pr` set to `%s`. The changes are installed when that run passes.\n\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$PR"
             fi
             printf 'The workflow changes in this pull request were **not installed**, so `.github/workflows/` still runs the earlier versions and `pnpm lint` fails on `%s` until the two folders match.\n\n' "$DEFAULT_BRANCH"
             if [ -s "$RUNNER_TEMP/refused.md" ]; then
@@ -288,9 +289,10 @@ jobs:
             sleep 20
           done
           {
-            printf 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `%s`' "$next"
-            [ -z "$rest" ] || printf ' and `then` to `%s`' "$rest"
-            printf ': that run installs the workflow changes this pull request merged.\n\n'
+            # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.
+            printf 'Start the installer on the [`install-workflows` workflow'"'"'s page](%s/%s/actions/workflows/install-workflows.yml), where "Run workflow" starts it with `pr` set to `%s`' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$next"
+            [ -z "$rest" ] || printf ' and `then` set to `%s`' "$rest"
+            printf '. That run installs the workflow changes this pull request merged.\n\n'
             printf 'They are **not installed**: the installer of pull request #%s, merged before this one, could not start this one'"'"'s.\n' "$PR"
             printf '\n%s/%s/actions/runs/%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
           } > "$RUNNER_TEMP/not-started.md"

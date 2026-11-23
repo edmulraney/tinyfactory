@@ -404,13 +404,13 @@ resets_at=99999999999 fix_ended usage-limit
 echo "issue comment 7" > "$T/fail"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
-expect_output "its place could not be kept: run \`gh workflow run fix.yml -f pr=7\` after 5138-11-16 09:46 UTC."
+expect_output "its place could not be kept: after 5138-11-16 09:46 UTC, start a new fix round on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 
 scenario "a fix round ended by a usage limit that has already reset asks for a person as before"
 resets_at=1000000000 fix_ended usage-limit
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 0
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\` after 2001-09-09 01:46 UTC: a new fix round starts."
+expect_first_line "gh pr comment 7 --body" "Start a new fix round after 2001-09-09 01:46 UTC on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_call "gh pr edit 7 --add-label needs-human"
 
 scenario "a build with nothing to keep says so, and still fails the job"
@@ -697,7 +697,7 @@ fix_ended api-error
 echo '[{"name":"waits-for-main"}]' > "$T/pr-labels.json"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
+expect_first_line "gh pr comment 7 --body" "Start a new fix round on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_posted "The fix round ended without pushing a fix: the model's API was overloaded (error 529)."
 
 scenario "the owner's round that pushed nothing flags the ticket it had unflagged, with the pull request"
@@ -741,7 +741,7 @@ scenario "a fix round cut short with nothing changed says the cause, reports no 
 fix_ended api-error
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
+expect_first_line "gh pr comment 7 --body" "Start a new fix round on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_posted "The fix round ended without pushing a fix: the model's API was overloaded (error 529). The engineer left no work to keep"
 expect_not_posted "unverified"
 expect_call "gh pr edit 7 --add-label needs-human"
@@ -789,7 +789,7 @@ no_pushing
 echo "more" >> export.ts
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before"
 expect_status 1
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
+expect_first_line "gh pr comment 7 --body" "Start a new fix round on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_posted "What the engineer had could not be pushed, and is lost with the runner."
 expect_not_posted "is on the branch"
 expect_no_call "gh workflow run retro.yml"

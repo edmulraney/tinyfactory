@@ -125,7 +125,7 @@ open 7 "$seven"
 echo "workflow run merge-group.yml" > "$T/fail"
 run "$scripts/merge-queue.sh" add 7 "$seven"
 expect_failure
-expect_first_line "gh pr comment 7 --body Start the \`merge-group\` workflow from the Actions tab: this pull request waits to merge, and that run tests and merges" "it."
+expect_first_line "gh pr comment 7 --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/repo-owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request waits to merge, and that run tests and merges it."
 expect_calls 6 "gh workflow run merge-group.yml"
 expect_no_call "Approve this pull request again"
 list

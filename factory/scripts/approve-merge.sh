@@ -47,8 +47,9 @@ No ci run of ${head:0:7} ran its jobs. A fix round that is not one of the three 
     || not_merged "GitHub did not take the comment that says the checks for ${head:0:7} are being started, so they were not started"
   # Never asked twice: a start that failed may have happened (decisions M26).
   if ! gh workflow run fix.yml -f pr="$pr" >/dev/null; then
+    page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr")
     notify_not_merged "$unrun, and GitHub did not start \`fix.yml\`, the fix round that starts them" \
-      "Start the fix round: \`gh workflow run fix.yml -f pr=$pr\`. It starts the checks, and this pull request merges when they pass." || true
+      "Start the fix round on $page. It starts the checks, and this pull request merges when they pass." || true
     exit 1
   fi
   echo "$unrun: fix.yml was started for the round that starts them"

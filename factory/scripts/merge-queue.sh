@@ -41,8 +41,9 @@ case "$action" in
         || not_merged "GitHub did not take the comment that makes this pull request wait to merge"
     fi
     if ! start_merge_group; then
+      group_page=$("$script_dir/workflow-page.sh" merge-group.yml)
       # It keeps its place. The first line says what a person must do (decisions A371a, M455j).
-      body="Start the \`merge-group\` workflow from the Actions tab: this pull request waits to merge, and that run tests and merges it.
+      body="Start the test of this pull request's group on $group_page. This pull request waits to merge, and that run tests and merges it.
 
 \`merge-group.yml\` could not be started.$(run_log)"
       echo "$body" >&2

@@ -436,7 +436,7 @@ expect_status 1
 expect_written "go=false"
 [ "$(wc -l < "$T/outputs")" -eq 1 ] || fail "expected it to write go=false and nothing else"
 [ "$(grep -c '^gh pr edit 7 --remove-label needs-human$' "$T/calls")" = 6 ] || fail "expected the label call to be made six times"
-expect_first_line "gh pr comment 7 --body" "Start the fix round again: \`gh workflow run fix.yml -f pr=7\`"
+expect_first_line "gh pr comment 7 --body" "Start the fix round again on the [\`fix\` workflow's page](https://github.example/owner/myapp/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 [ "$(grep -c '^gh pr comment 7 --body Start the fix round again' "$T/calls")" = 1 ] || fail "expected one comment saying no round began"
 expect_call "No fix round began, though the comment before this one says one did: GitHub did not take the \`needs-human\` label off this pull request. The log has what GitHub answered: https://github.example/owner/myapp/actions/runs/900"
 expect_output "Could not take needs-human off pull request #7, so no fix round was begun."
@@ -447,7 +447,7 @@ checks_failed; sent_back
 echo "issue edit 12" > "$T/fail"
 begin
 expect_status 1
-expect_first_line "gh pr comment 7 --body" "Start the fix round again: \`gh workflow run fix.yml -f pr=7\`"
+expect_first_line "gh pr comment 7 --body" "Start the fix round again on the [\`fix\` workflow's page](https://github.com/owner/myapp/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_call "GitHub did not mark ticket #12 as in progress again."
 
 scenario "a round not announced gets no comment saying none began"

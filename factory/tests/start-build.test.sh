@@ -705,7 +705,7 @@ start
 expect_status 0
 expect_written false
 expect_output "not started: the Claude usage limit holds every agent until $when, so issue #12 waits with ready"
-expect_call "gh issue comment 12 --body Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $when. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once."
+expect_call "gh issue comment 12 --body Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $when. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, start everything that waits at once on the [\`resume\` workflow's page](https://github.com/owner/myapp/actions/workflows/resume.yml), where \"Run workflow\" starts it."
 expect_no_call "gh issue edit"
 expect_no_call "gh workflow run implement.yml"
 expect_no_place 12

@@ -2,9 +2,11 @@
 # Tests for flag-idle.sh: a ticket in flight that nothing works on is flagged once (decisions T271a to T271d).
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/sessions-remote.sh"
+export GITHUB_REPOSITORY=owner/repo
 
 # $T/issues and $T/pulls are what in-flight.sh reads; $T/issue-<n> and $T/pull-<n> answer for each one;
 # $T/runs-<state> holds the runs in that state; $T/fail holds the start of each call that should fail.
+# $T/comments-<ticket> holds the comments of a ticket, the record of a fix round's start among them.
 # A flagged ticket leaves $T/issues, as the label's removal has it leave flight; $T/ready is as waiting_on_github says.
 github() {
   echo '[]' > "$T/issues"
@@ -22,7 +24,15 @@ github() {
         [ -e "$T/runs-$state" ] || : > "$T/runs-$state"
         json "$(jq -s "{workflow_runs: .}" "$T/runs-$state")" "$@" ;;
       "issue view "*" --json labels,updatedAt --jq "*) json "$(cat "$T/issue-$3")" "$@" ;;
-      "pr view "*" --json updatedAt,headRefName,mergeable,isDraft --jq "*) json "$(cat "$T/pull-$3")" "$@" ;;
+      "pr view "*" --json updatedAt,headRefName,headRefOid,mergeable,isDraft --jq "*) json "$(cat "$T/pull-$3")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate --jq "*)
+        pr=${2#*issues/}; pr=${pr%%/*}
+        [ -e "$T/comments-$pr" ] || echo "[]" > "$T/comments-$pr"
+        json "$(cat "$T/comments-$pr")" "$@" ;;
+      "api repos/{owner}/{repo}/issues/"*"/comments -f body="*)
+        pr=${2#*issues/}; pr=${pr%%/*}
+        jq -nc --arg body "${4#body=}" "[{id: 1, user: {login: \"github-actions[bot]\"}, body: \$body}]" > "$T/comments-$pr" ;;
+      "workflow run fix.yml -f pr="*) : ;;
       "issue edit "*" --add-label needs-human --remove-label in-progress")
         jq -c --argjson n "$3" "map(select(.number != \$n))" "$T/issues" > "$T/issues.new" && mv "$T/issues.new" "$T/issues" ;;
       "issue comment "*) : ;;
@@ -42,7 +52,7 @@ pull() {
     '. + [{number: $number, headRefName: $branch, author: {login: "app/claude"}, isDraft: $draft,
       labels: (if $label == "" then [] else [{name: $label}] end)}]' "$T/pulls" > "$T/pulls.new" && mv "$T/pulls.new" "$T/pulls"
   jq -cn --arg branch "$2" --argjson ago "$3" --arg mergeable "${4:-MERGEABLE}" --argjson draft "${5:-false}" \
-    '{updatedAt: (now - $ago * 60 | todate), headRefName: $branch, mergeable: $mergeable, isDraft: $draft}' > "$T/pull-$1"
+    '{updatedAt: (now - $ago * 60 | todate), headRefName: $branch, headRefOid: ("5" * 40), mergeable: $mergeable, isDraft: $draft}' > "$T/pull-$1"
 }
 a_run() { jq -cn --arg name "$2" --arg branch "$3" '{name: $name, head_branch: $branch}' >> "$T/runs-$1"; }
 flags() { grep -c '^gh issue edit' "$T/calls" || true; }
@@ -54,7 +64,7 @@ pull 112 feat/64-three-in-flight 200
 run "$scripts/flag-idle.sh"
 expect_status 0
 expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress"
-expect_first_line "gh issue comment 64 --body" "Run \`gh pr checks 112\` and run again the job it shows stopped: the pull request merges once its checks and reviews pass."
+expect_first_line "gh issue comment 64 --body" "Open the checks of pull request #112 and run again the job they show stopped: the pull request merges once its checks and reviews pass."
 expect_call "Nothing is working on this ticket. It is in flight (pull request #112), no run is going or queued for it, and nothing has happened on it since "
 expect_call ", 200 minutes ago. Pull request #112 is ready for review"
 expect_output "flagged: #64 (pull request #112), last touched 200 minutes ago"
@@ -262,14 +272,69 @@ expect_output "left: #64 waits with ready for a place"
 expect_no_call "gh issue edit"
 expect_no_call "gh issue comment"
 
-scenario "says of a conflict that no fix round is going, and how to start one"
+head=5555555555555555555555555555555555555555
+scenario "starts the fix round of a conflict nothing works on, having recorded the start on the ticket, and flags nothing"
 github
 ticket 64 300
 pull 112 feat/64-three-in-flight 200 CONFLICTING
 run "$scripts/flag-idle.sh"
 expect_status 0
-expect_first_line "gh issue comment 64 --body" "Run \`gh workflow run fix.yml -f pr=112\`: a fix round starts and fits the branch to \`main\`."
-expect_call "Pull request #112 conflicts with \`main\`, and no fix round is going for it."
+expect_first_line "gh api repos/{owner}/{repo}/issues/64/comments -f body=<!-- factory:conflict-started $head -->Nothing" "to do: the factory is starting a fix round of pull request #112, which fits its branch to \`main\`."
+expect_no_call "gh api repos/{owner}/{repo}/issues/112/comments"
+expect_calls 1 "gh workflow run fix.yml -f pr=112"
+expect_output "started: a fix round for pull request #112 of ticket #64, which conflicts with main"
+expect_no_call "gh issue edit"
+expect_no_call "gh issue comment"
+[ "$(grep -n -m1 'conflict-started' "$T/calls" | cut -d: -f1)" -lt "$(grep -n -m1 '^gh workflow run fix.yml' "$T/calls" | cut -d: -f1)" ] \
+  || fail "expected the start to be recorded before the round is started"
+
+scenario "a conflict left after the round the factory started for that commit is flagged, with the review that starts the owner's round, and no second start"
+github
+ticket 64 300
+pull 112 feat/64-three-in-flight 200 CONFLICTING
+run "$scripts/flag-idle.sh"
+run "$scripts/flag-idle.sh"
+expect_status 0
+expect_calls 1 "gh workflow run fix.yml -f pr=112"
+expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress"
+expect_first_line "gh issue comment 64 --body" "Submit a \"Request changes\" review on pull request #112 saying how to fit it to \`main\`: that starts a fix round that is not one of the three."
+expect_call "Pull request #112 conflicts with \`main\`, and the fix round the factory started for this commit left it so."
+
+scenario "a start GitHub refuses is asked once, and the ticket is flagged with the page that starts the round"
+github
+ticket 64 300
+pull 112 feat/64-three-in-flight 200 CONFLICTING
+echo "workflow run fix.yml" > "$T/fail"
+run "$scripts/flag-idle.sh"
+expect_status 0
+expect_calls 1 "gh workflow run fix.yml -f pr=112"
+expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress"
+expect_first_line "gh issue comment 64 --body" "Start a fix round on the [\`fix\` workflow's page](https://github.com/owner/repo/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`112\`: it fits the branch to \`main\`."
+expect_call "Pull request #112 conflicts with \`main\`, and GitHub did not start the fix round the factory asked for."
+run "$scripts/flag-idle.sh"
+expect_calls 1 "gh workflow run fix.yml -f pr=112"
+
+scenario "a start that cannot be recorded starts no round, flags nothing and fails"
+github
+ticket 64 300
+pull 112 feat/64-three-in-flight 200 CONFLICTING
+echo "api repos/{owner}/{repo}/issues/64/comments -f" > "$T/fail"
+run "$scripts/flag-idle.sh"
+expect_status 1
+expect_output "the comment that records its fix round's start could not be posted, so none was started"
+expect_no_call "gh workflow run fix.yml"
+expect_no_call "gh issue edit"
+
+scenario "stops, with nothing started or flagged, when the earlier starts for a conflict cannot be read"
+github
+ticket 64 300
+pull 112 feat/64-three-in-flight 200 CONFLICTING
+echo "api repos/{owner}/{repo}/issues/64/comments?per_page" > "$T/fail"
+run "$scripts/flag-idle.sh"
+expect_status 1
+expect_output "Whether a fix round was started before for the conflict of pull request #112 could not be read, so nothing was flagged."
+expect_no_call "gh workflow run fix.yml"
+expect_no_call "gh issue edit"
 
 scenario "names the run that found it, in a workflow"
 github

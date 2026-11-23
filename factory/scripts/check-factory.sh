@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lints the factory's scripts and tests, their headers, who may start a workflow, the reviewers' tools and merged lists.
+# Lints the factory's scripts and tests: headers, commands for a person, who starts a workflow, reviewers' tools, lists.
 # Usage: check-factory.sh   (from the repo root)
 set -euo pipefail
 
@@ -104,6 +104,21 @@ for file in $workflows; do
   ' "$file")
   if [ -n "$found" ]; then
     echo "$file: a reviewer's tools run no script from the repo (H293d). Each Bash entry in the review job's --allowedTools begins \`gh \` or \`git \`:"
+    sed 's/^/  /' <<<"$found"
+    failed=1
+  fi
+done
+# A person is given a link to press, and an agent's prompt names the commands the agent runs (decisions H691).
+for file in $scripts $workflows; do
+  case "$file" in factory/scripts/* | factory/workflows/*) ;; *) continue ;; esac
+  found=$(awk '
+    /^ *prompt: *[|>]/ { match($0, /^ */); prompt = RLENGTH; in_prompt = 1; next }
+    in_prompt && /[^ ]/ { match($0, /^ */); if (RLENGTH <= prompt) in_prompt = 0 }
+    in_prompt || /^[ \t]*#/ { next }
+    /`gh [a-z]/ { print FNR ":" $0 }
+  ' "$file")
+  if [ -n "$found" ]; then
+    echo "$file: words the factory writes hold a \`gh\` command in backticks, and a person reading on a phone has no terminal. Have the script run it, or link the workflow's page with factory/scripts/workflow-page.sh (decisions H691):"
     sed 's/^/  /' <<<"$found"
     failed=1
   fi

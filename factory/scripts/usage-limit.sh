@@ -158,10 +158,11 @@ case "${1:-}" in
     echo "kept=true" >> "${GITHUB_OUTPUT:-/dev/null}"
     why="The limit covers the whole account, so no agent starts before then."
     [ -z "$held_model" ] || [ -z "${AGENT_MODEL_FALLBACK:-}" ] || why="The limit holds \`$held_model\`, which this run began on, and the runs that begin meanwhile run on the second model."
+    resume_page=$("$script_dir/workflow-page.sh" resume.yml)
     # The first line says what a person must do (decisions A371a).
     [ -z "$number" ] || gh issue comment "$number" --body "Nothing to do: $what starts after the Claude usage limit resets on $when.
 
-$why If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once." >/dev/null \
+$why If the limit was lifted sooner, start everything that waits at once on $resume_page." >/dev/null \
       || die "The Claude usage limit holds every agent until $when, and #$number could not be told that $what starts after it."
     echo "the Claude usage limit holds every agent until $when: $what starts after it"
     [ -z "$rerun" ] || exit 1

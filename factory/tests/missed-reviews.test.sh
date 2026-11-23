@@ -190,5 +190,5 @@ echo "workflow run approve-merge.yml" > "$T/fail"
 look
 expect_status 1
 [ "$(grep -c '^gh workflow run' "$T/calls")" = 1 ] || fail "expected the start to be asked for once"
-expect_call "gh api repos/{owner}/{repo}/issues/753/comments -f body=Start its merge: \`gh workflow run approve-merge.yml -f pr=753\`"$'\n\n'
+expect_call "gh api repos/{owner}/{repo}/issues/753/comments -f body=Start its merge on the [\`approve-merge\` workflow's page](https://github.com/repo-owner/myapp/actions/workflows/approve-merge.yml), where \"Run workflow\" starts it with \`pr\` set to \`753\`."$'\n\n'
 expect_output "GitHub did not start approve-merge.yml for its merge"

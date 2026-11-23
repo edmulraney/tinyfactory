@@ -23,7 +23,7 @@ github() {
     esac'
 }
 a_session() { echo '[{"type":"result","terminal_reason":"completed","session_id":"abc-123"}]' > "$T/execution.json"; }
-record() { run env GH_TOKEN=workflow-token "$scripts/record-fix-round.sh" 7 "$@"; }
+record() { run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp "$scripts/record-fix-round.sh" 7 "$@"; }
 count() { env GH_TOKEN=workflow-token "$scripts/fix-rounds.sh" 7 "$@"; }
 expect_count() {
   local now
@@ -56,7 +56,7 @@ record ""
 expect_status 1
 expect_count 1
 expect_call "gh pr edit 7 --add-label needs-human"
-expect_first_line "gh pr comment 7 --body" "Run \`gh workflow run fix.yml -f pr=7\`: a new fix round starts."
+expect_first_line "gh pr comment 7 --body" "Start a new fix round on the [\`fix\` workflow's page](https://github.com/owner/myapp/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`."
 expect_call "The fix round did not run: no engineer's session began, so nothing was fixed and the round is not counted."
 expect_output "The fix round did not run"
 expect_no_call "gh issue edit"
