@@ -12,7 +12,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 - **Deep modules.** Small interface, substantial implementation. A wrapper that only forwards calls is noise.
 - **No dead code.** No unused exports, commented-out code, speculative options, or "for later" hooks.
 - **Solve today's problem.** No abstraction until the second real use. Three similar lines beat a premature helper.
-- **Names carry the meaning.** Use the domain language in `ARCHITECTURE.md`. A comment explains why, never what.
+- **Names carry the meaning.** Use the domain language in `GLOSSARY.md`. A comment explains why, never what.
 - **An identifier takes the standard engineering term.** Prose stays plain; a variable, function, output or file is named with the word an engineer would search for (`notified`, `failed`, `retry`), never a house word (`told`).
 - **Errors are handled where something can be done about them,** and nowhere else. Never swallow one silently.
 - **No comment that defends not doing something.** A comment explains why something surprising is there. If the simple thing was done, there is nothing to explain.
