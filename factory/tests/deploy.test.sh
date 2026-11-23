@@ -7,6 +7,8 @@ deploy="$root/.claude/skills/bootstrap/scripts/deploy.sh"
 # production_holds: main is at abc1234…, and production reports the commit in $T/live (empty: no answer) until a deployment is
 # ready, then abc1234…. $T/states holds the deployment's readyState answers, one a line; the body sent to Vercel is kept in $T/body.
 production_holds() {
+  # deploy.sh runs in a project, which holds the factory's wait-for-deploy.sh.
+  mkdir -p factory/scripts && cp "$root/factory/scripts/wait-for-deploy.sh" factory/scripts/
   echo old0000000000000000000000000000000000000 > "$T/live"
   printf 'BUILDING\nREADY\n' > "$T/states"
   stub gh '
