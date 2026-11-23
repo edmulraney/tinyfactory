@@ -29,7 +29,7 @@ Read the mission and principles in `factory/README.md`, then the decisions your 
    - a changed rule: search every document for its subject, not its old wording (`git grep -n -i 'description'`, not `'How it was verified'`), and make each line found true, or decide in a decision row what replaces a flow the change ended.
 6. **Describe it.** The pull request finishes its ticket, leaving nothing for a follow-up but the ticket step 2 files. Write the description to a temporary file outside the repo; run `factory/scripts/check-pr-conventions.sh "<title>" "<branch>" <file>` and fix what it reports; then push, `gh pr edit <pr> --title "<title>" --body-file <file>`.
 7. **Review it.** Start two subagents at once, each told only to read one of `.claude/skills/review-architecture/SKILL.md` and `.claude/skills/review-code/SKILL.md` and follow it for the draft pull request. Fix each `design` or `bug` finding that holds against the code, and review no second time ([A428a](../../../factory/decisions/428.md)).
-8. **Hand over,** last. However far `main` has moved, merge it into the branch only now, once (`git fetch origin main && git merge origin/main`), and after a conflict, rerun only `pnpm lint && pnpm typecheck`; `ci` runs every check on the merged commit ([A468](../../../factory/decisions/468.md)). Then correct the description and run `factory/scripts/hand-over.sh <pr>`, which pushes and marks the pull request ready; commit nothing after it ([A266c](../../../factory/decisions/266.md)). The build is not finished until then.
+8. **Hand over,** last. However far `main` has moved, merge it into the branch only now, once (`git fetch origin main && git merge origin/main`), and after a conflict, rerun only `pnpm lint && pnpm typecheck`; `ci` runs every check on the merged commit ([A468](../../../factory/decisions/468.md)). Then correct the description and run `factory/scripts/hand-over.sh <pr>`, which pushes and marks the pull request ready; commit nothing after it ([A266c](../../../factory/decisions/266.md)).
 
 ## Fixing a pull request
 
@@ -37,7 +37,7 @@ A check or review failed, or the owner sent it back with a "Request changes" rev
 
 ## Always
 
-- Work only on your branch. Never push to `main`.
+- Never push to `main`.
 - File any other ticket only for a defect you saw happen, linking the run or output that shows it (`factory/decisions.md` [T223](../../../factory/decisions/223.md)).
 - Change code under `apps/` only when the ticket names the file there (the lint config, the test fixture, the health endpoint), or holds a review note that names it.
 - If you cannot finish, say so in a comment and add `needs-human`. A comment that leaves work to a person starts with one line: what they must do, or "Nothing to do", then what the factory does next and when ([A371a](../../../factory/decisions/371.md)).
