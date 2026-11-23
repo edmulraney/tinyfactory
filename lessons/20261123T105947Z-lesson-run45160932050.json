@@ -1,0 +1,61 @@
+{
+  "pr": 648,
+  "issue": 642,
+  "facts": {
+    "run": 45153460798,
+    "workflow": "retro",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45153460798",
+    "conclusion": "success",
+    "pr": 648,
+    "issue": 642,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.21,
+    "turns": 8,
+    "changed_by": {
+      "pr": 655,
+      "issue": 652,
+      "title": "fix: keep strangers' issue titles away from the agents",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "retro",
+        "step": "List the open tickets",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first run of retro.yml after #655 did what that pull request claimed: its \"List the open tickets\" step listed the open issues through factory/scripts/open-issues.sh and wrote 61 of them, with no pull requests, to .sessions/tickets.json, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #655 changed retro.yml's \"List the open tickets\" step. The step now builds the ticket list with factory/scripts/open-issues.sh. That script keeps only the issues the owner, a writer or the factory's own bots opened, so a stranger's title never reaches the retro agent. If the listing fails, the step deletes the file and the retro goes on without the tickets. In run 45153460798 the step succeeded and ran the new command. The file it wrote holds 61 open issues in the shape the script documents: number, title, labels, pull_request and check. Every entry has pull_request false and check null, which means the owner opened each one. The retro session itself completed in 8 turns and 22 seconds for $0.21. Neither reviewer of #655 recorded an assumption.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45153460798",
+      "https://github.com/edmulraney/tinyfactory/pull/655"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the changed step succeeded on its first run, and the retro session cost $0.21 over 22 seconds.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run had no fault to prevent and spent 0 minutes on one.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
