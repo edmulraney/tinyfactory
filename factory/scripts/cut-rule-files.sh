@@ -10,12 +10,13 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 die() { echo "$1" >&2; exit 1; }
 
-# opened <yyyy-mm>: the file of each such ticket opened in that month, one a line, but one closed as a duplicate
-# (decisions T620). The title is as decisions H476e says.
+# opened <yyyy-mm>: the file of each such ticket the factory's two bots opened in that month, one a line, but one closed
+# as a duplicate (decisions T620, H662). The title is as decisions H476e says.
 opened() {
   local titles
   titles=$(gh api --method GET "repos/{owner}/{repo}/issues" -f state=all -f labels=factory -f since="$1-01T00:00:00Z" -f per_page=100 --paginate \
-    --jq ".[] | select(.pull_request == null and (.created_at | startswith(\"$1\")) and .state_reason != \"duplicate\") | .title") || return 1
+    --jq ".[] | select(.pull_request == null and (.created_at | startswith(\"$1\")) and .state_reason != \"duplicate\"
+      and .user.type == \"Bot\" and (.user.login == \"github-actions[bot]\" or .user.login == \"claude[bot]\")) | .title") || return 1
   sed -n 's/^Cut `\(.*\)` to budget$/\1/p' <<<"$titles"
 }
 

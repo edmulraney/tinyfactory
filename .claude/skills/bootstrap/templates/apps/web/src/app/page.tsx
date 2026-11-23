@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+
+import { PrefetchedVersion } from "./_components/prefetched-version";
 import { WaitlistForm } from "./_components/waitlist-form";
 
 export default function Home() {
@@ -10,6 +13,11 @@ export default function Home() {
         </p>
         <WaitlistForm />
       </main>
+      <footer className="pb-6">
+        <Suspense>
+          <PrefetchedVersion />
+        </Suspense>
+      </footer>
     </div>
   );
 }

@@ -45,7 +45,8 @@ while IFS= read -r line || [ -n "$line" ]; do
   esac
   if [ ! -f "$file" ]; then
     # A private repository has no SECURITY.md, and one with no interface no DESIGN.md (decisions U563r, H501a).
-    case "$file" in SECURITY.md | DESIGN.md) continue ;; esac
+    # The factory's own repository holds no app, so it has no GLOSSARY.md of domain words either.
+    case "$file" in SECURITY.md | DESIGN.md | GLOSSARY.md) continue ;; esac
     echo "$list:$number: $file is not a file: take the line out, or correct its path"
     failed=1
     continue

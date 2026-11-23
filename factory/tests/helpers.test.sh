@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for replace_first in helpers.sh, which builds the descriptions tests give scripts (decisions H22).
+# Tests for helpers.sh: replace_first (decisions H22) and the parse check in stub (decisions H674).
 . "$(dirname "$0")/helpers.sh"
 
 text='## Why
@@ -53,3 +53,12 @@ replace_first "$text" '## Not here' 'anything'
 [[ "$_problems" == "replace_first found nothing to replace: ## Not here"* ]] || fail "the scenario was not failed"
 # That failure was the point of this scenario, so it is taken back; any other stays.
 _problems=${_problems#"replace_first found nothing to replace: ## Not here"$'\n'}
+
+scenario "fails the scenario when a stand-in does not parse, and passes one that does"
+stub gh 'case "$*" in "pr view"*) exit 0 ;; esac'
+[ -z "$_problems" ] || fail "a stand-in that parses failed the scenario"
+# That failure is the point of this scenario, so it is taken back before the check.
+stub gh 'case "$*" in "pr view"*) exit 0 ;;'
+refused=$_problems
+_problems=""
+[[ "$refused" == "the stand-in for gh does not parse: "* ]] || fail "the scenario was not failed: $refused"

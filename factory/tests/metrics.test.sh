@@ -282,6 +282,31 @@ expect_output "metrics.md could not be written to the sessions branch, so the pa
 expect_no_page
 expect_nothing_left
 
+scenario "usage: the page ends with each week's people and events from production's database, beside the tickets deployed"
+github
+# As review-notes.yml's query reads two events over two weeks from a stand-in for the database.
+printf '%s\t%s\t%s\t%s\n' 2026-W02 "" 3 2 2026-W02 "race added" 3 2 \
+  2026-W03 "" 4 3 2026-W03 "race added" 1 1 2026-W03 "dashboard opened" 3 3 > "$T/usage.tsv"
+race=$(a_ticket 10 ready "2026-01-05T00:00:00Z" deployed "2026-01-05T01:00:00Z" | jq -c '.title = "Add a race"')
+merge 1 "2026-01-05T00:00:00Z" "$race"
+# A ticket a second pull request closes again is shown once.
+merge 2 "2026-01-05T02:00:00Z" "$race"
+merge 3 "2026-01-12T00:00:00Z" "$(a_ticket 11 deployed "2026-01-12T01:00:00Z" | jq -c '.title = "Open the dashboard"')"
+USAGE_ROWS="$T/usage.tsv" report
+expect_status 0
+expect_in "Usage by week" '| Week | People active | `dashboard opened` | `race added` | Tickets deployed |
+| --- | --- | --- | --- | --- |
+| 2026-W02 | 2 | 0 times by 0 people | 3 times by 2 people | [#10](https://github.com/owner/repo/issues/10) Add a race |
+| 2026-W03 | 3 | 3 times by 3 people | 1 time by 1 person | [#11](https://github.com/owner/repo/issues/11) Open the dashboard |'
+[ "$(grep '^## ' <<<"$page" | tail -n 1)" = "## Usage by week" ] || fail "expected the usage to end the page"
+without=$page
+: > "$T/usage.tsv"
+USAGE_ROWS="$T/usage.tsv" report
+expect_status 0
+[ "$page" = "${without%%$'\n\n'"## Usage by week"*}" ] || fail "expected a database with no usage table to leave the page as it is with no database"
+report
+[ "$page" = "${without%%$'\n\n'"## Usage by week"*}" ] || fail "expected a project with no database to have the page it had before"
+
 scenario "a record that holds a line nothing can read: stops with a message after one clone, and writes no page"
 github
 merge 1 "2026-01-05T00:00:00Z"
@@ -343,6 +368,10 @@ job=$(awk '/^  metrics:$/ { inside = 1; next } /^  [a-z-]+:$/ { inside = 0 } ins
 grep -qxF '        run: factory/scripts/metrics.sh' <<<"$job" || fail "review-notes.yml has no metrics job that runs metrics.sh"
 grep -qE '^      contents: write( |$)' <<<"$job" || fail "the metrics job may not write the sessions branch"
 grep -qxF '          GH_TOKEN: ${{ github.token }}' <<<"$job" || fail "the metrics job gives metrics.sh no token"
+[ "$(grep -n 'NEON_API_KEY: ' <<<"$job" | cut -d: -f1)" -lt "$(grep -n 'uses: actions/checkout' <<<"$job" | cut -d: -f1)" ] \
+  || fail "the metrics job reads production's database after the checkout, where decisions M15 asks for before it"
+grep -qF "USAGE_ROWS: \${{ vars.NEON_PROJECT_ID != '' && format('{0}/usage.tsv', runner.temp) || '' }}" <<<"$job" \
+  || fail "the metrics job gives metrics.sh no usage read from production's database"
 
 scenario "the owner guide links the page on the sessions branch"
 grep -qF '](../../sessions/metrics.md)' "$root/factory/owner-guide.md" || fail "factory/owner-guide.md does not link metrics.md on the sessions branch"

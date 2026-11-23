@@ -308,8 +308,9 @@ bodies=$(gh api "repos/{owner}/{repo}/issues/$pr/comments?per_page=100" --pagina
   || die "Could not read the comments of pull request #$pr from GitHub, so its reviewers' verdicts are not known."
 
 # Each read is on its own line, so that a failed read stops here and is not taken for "nothing failed" (decisions H7).
-runs=$(gh run list --workflow ci.yml --branch "$branch" --limit 20 --json databaseId,conclusion \
-    --jq '.[] | select(.conclusion == "failure") | .databaseId') \
+# A run of a fork's pull request on a branch of the same name ran the fork's copy, and its log holds what the fork wrote.
+runs=$(gh api --method GET "repos/{owner}/{repo}/actions/workflows/ci.yml/runs" -f branch="$branch" -f per_page=20 \
+    --jq '.workflow_runs[] | select(.conclusion == "failure" and .head_repository.full_name == .repository.full_name) | .id') \
   || die "Could not list the ci runs of $branch, so which jobs failed is not known."
 names=""
 for run in $runs; do

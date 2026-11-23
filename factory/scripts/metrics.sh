@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Writes metrics.md on the `sessions` branch: nine measures of the factory's delivery by week (decisions H613a).
+# Writes metrics.md on the `sessions` branch: nine delivery measures and the product's usage by week (decisions H613a).
 # Usage: metrics.sh   (in a clone whose `origin` is the repo on GitHub; the history of `main` is fetched)
 #        A week is an ISO week that has ended, UTC, and holds the pull requests merged in it.
+#        With USAGE_ROWS, the file review-notes.yml read from production's database, the page ends with usage.sh's section.
 #        Needs GH_TOKEN (contents: write; pull-requests and issues: read) and GITHUB_REPOSITORY.
 set -euo pipefail
 
@@ -116,6 +117,15 @@ page='
          (.rows[] | "| \(.week) | \(.value) | \(.over) |")
        end)'
 
+usage=""
+if [ -n "${USAGE_ROWS:-}" ]; then
+  # A ticket two pull requests closed is shown once.
+  tickets=$(jq -cs 'map(.closingIssuesReferences.nodes[]) | unique_by(.number)[]' <<<"$pulls") \
+    || die "The tickets the merged pull requests closed could not be read as GitHub returned them, so metrics.md is not written."
+  # usage.sh says for itself what it could not read.
+  usage=$("$script_dir/usage.sh" "$USAGE_ROWS" <(printf '%s\n' "$tickets")) || exit 1
+fi
+
 # shellcheck source=factory/scripts/sessions-branch.sh
 . "$script_dir/sessions-branch.sh"
 problem=""
@@ -143,6 +153,7 @@ write_page() {
     return 0
   fi
   printf '%s\n' "$text" > "$clone/metrics.md"
+  [ -z "$usage" ] || printf '\n%s\n' "$usage" >> "$clone/metrics.md"
 }
 push_to_sessions "metrics: the weeks that have ended" write_page \
   || die "metrics.md could not be written to the sessions branch, so the page there is the one written before."

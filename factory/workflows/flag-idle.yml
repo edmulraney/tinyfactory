@@ -1,4 +1,4 @@
-# Four times a day, runs again the jobs refused for billing or held by the usage limit, then flags each idle ticket.
+# Four times a day, deletes closed pull requests' preview databases, reruns jobs, acts on reviews, flags idle tickets.
 name: flag-idle
 
 on:
@@ -17,11 +17,42 @@ jobs:
       actions: write        # to run a refused run again (decisions H220a)
       checks: read          # to read why a job never started
     steps:
+      # Before any checkout, and in no script, which an agent can change (decisions M15, M672b).
+      - name: Delete the preview database branches of pull requests that are closed
+        if: vars.NEON_PROJECT_ID != ''
+        # Housekeeping must not keep the idle tickets from being flagged.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # A failure inside $(…) or a pipe stops the step too: an unread list would read as every pull request closed.
+          shopt -s inherit_errexit
+          set -o pipefail
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api")
+          open=$(gh api "repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" --paginate --jq '.[].head.ref')
+          jq -r '.branches[] | select(.name | startswith("preview/")) | [.id, .name] | @tsv' <<<"$branches" \
+            | while IFS=$'\t' read -r id name; do
+                if grep -qxF -- "${name#preview/}" <<<"$open"; then
+                  echo "kept $name: its pull request is open"
+                else
+                  curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$id" >/dev/null
+                  echo "deleted $name: no open pull request is built from its git branch"
+                fi
+              done
       - uses: actions/checkout@v4
       - name: Run again the jobs GitHub refused to start for billing
         env:
           GH_TOKEN: ${{ github.token }}
         run: factory/scripts/rerun-refused.sh
+      # GitHub runs no workflow for a review of a pull request in conflict, and the schedule is the one event left (decisions A675a).
+      - name: Start what the owner's review of a pull request in conflict asks for
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: factory/scripts/missed-reviews.sh
       # A refused run that could not be read or run again hides no idle ticket (decisions T271f).
       - name: Start again what the usage limit held, or flag each ticket in flight that nothing is working on
         if: ${{ !cancelled() }}

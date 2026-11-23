@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Prints how many fix rounds a pull request has used, so that everything that needs the count counts it one way.
-# Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head>]
+# Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head> |
+#        review-started <review-id>]
 #        [review-id]  counts only the owner's rounds begun for that "Request changes" review.
 #        <head|all>   counts the rounds for a conflict begun at that commit, or at every commit.
 #        <head>       after start-checks, counts the times approve-merge.sh started the checks of that commit.
+#        <review-id>  after review-started, counts the times missed-reviews.sh acted on that review of the owner's.
 #        Needs GH_TOKEN (pull-requests: read).
 set -euo pipefail
 
-usage="Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head>]"
+usage="Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head> | review-started <review-id>]"
 pr="${1:?$usage}"; whose="${2:-}"; head="${3:-}"
 case "$whose" in
   # A round is a comment record-fix-round.sh posted, starting with the marker (decisions A89c, A28).
@@ -32,6 +34,10 @@ case "$whose" in
   start-checks)
     [[ "$head" =~ ^[0-9a-f]{40,64}$ ]] || { echo "$usage" >&2; exit 2; }
     marker="<!-- factory:checks-started $head -->" ;;
+  # A review GitHub ran nothing for is acted on once, recorded by a comment naming it (decisions A675b).
+  review-started)
+    [[ "$head" =~ ^[0-9]+$ ]] || { echo "$usage" >&2; exit 2; }
+    marker="<!-- factory:review-started $head -->" ;;
   *) echo "$usage" >&2; exit 2 ;;
 esac
 # An id per round and not a length, as gh runs the filter on each page; a failed read is not "no round" (decisions H7).

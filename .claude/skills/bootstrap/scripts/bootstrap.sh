@@ -10,8 +10,10 @@ name="${1:-$(basename "$PWD")}"
 
 # Each step writes here what it left for the owner (decisions S421c).
 SETUP_NEEDS_OWNER=$(mktemp)
-export SETUP_NEEDS_OWNER
-trap 'rm -f "$SETUP_NEEDS_OWNER"' EXIT
+# The deploy step writes here the address production answers at, for the closing summary.
+SETUP_PRODUCTION=$(mktemp)
+export SETUP_NEEDS_OWNER SETUP_PRODUCTION
+trap 'rm -f "$SETUP_NEEDS_OWNER" "$SETUP_PRODUCTION"' EXIT
 
 steps=(preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token deploy)
 number=0
@@ -33,6 +35,7 @@ for step in "${steps[@]}"; do
 done
 
 heading "What to do next"
+[ ! -s "$SETUP_PRODUCTION" ] || mark done "$name is live: $(cat "$SETUP_PRODUCTION") runs the commit on main"
 if [ -s "$SETUP_NEEDS_OWNER" ]; then
   { echo "Do what these steps ask above, then run the same command again: it confirms each."; cat "$SETUP_NEEDS_OWNER"; } | owner_block
 else

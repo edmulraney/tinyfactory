@@ -13,6 +13,10 @@ concurrency:
   group: fix-${{ inputs.pr }}
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   PR: ${{ inputs.pr }}
   OWNER: ${{ github.repository_owner }}
   # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A475b).
@@ -80,7 +84,7 @@ jobs:
         if: steps.round.outputs.go == 'true'
         # A session cut short is continued below; the steps after it decide whether the job failed.
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # The session's token reads the runs' jobs, timings and logs, which it otherwise may not (decisions A259).
@@ -95,7 +99,7 @@ jobs:
             You are ${{ steps.round.outputs.name }}. Read ${{ steps.round.outputs.skill }} and follow its "Fixing a pull request" section for pull request #${{ inputs.pr }} in this repository. Its branch, ${{ steps.round.outputs.branch }}, is checked out.
             What there is to fix is in ${{ runner.temp }}/failed-checks.txt: the tails of the failed job logs, a conflict with main if there is one, and what the repo's owner asked for if they sent the pull request back. Review findings are in the pull request's comments.
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # Nothing pushed: continued twice at most, with a wait first when the model's API failed (decisions A69a, A69b).
       - name: Was the session cut short? First look
@@ -110,7 +114,7 @@ jobs:
         id: resume1
         if: steps.cut1.outputs.continue == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the step it continues
@@ -121,7 +125,7 @@ jobs:
           prompt: ${{ steps.cut1.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut1.outputs.session }}
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # `again`: an engineer told once that nothing was pushed is not asked a second time (decisions A69g).
       - name: Was the session cut short again? Second and last look
@@ -136,7 +140,7 @@ jobs:
         id: resume2
         if: steps.cut2.outputs.continue == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the step it continues
@@ -147,7 +151,7 @@ jobs:
           prompt: ${{ steps.cut2.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut2.outputs.session }}
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.round.outputs.tools }}"
       # Every run of the action writes the same file, so only the last session that began names it: one the time
       # limit killed names none, and its session file is saved, not the earlier result again (decisions A418b).
@@ -157,8 +161,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           "$RUNNER_TEMP/factory-scripts/save-session.sh" "${{ steps.round.outputs.role }}" "pr-$PR" "${{ steps.cut1.outputs.continue != 'true' && steps.agent.outputs.execution_file || steps.cut2.outputs.continue != 'true' && steps.resume1.outputs.execution_file || steps.resume2.outputs.execution_file }}"
-      - name: Keep a second copy of the transcript on this run
+      # An artifact is public on a public repository, and GitHub masks secrets only in logs (decisions A667a).
+      - name: Scrub the tokens from the transcripts
+        id: scrub
         if: always() && steps.agent.outputs.execution_file != ''
+        run: |
+          "$RUNNER_TEMP/factory-scripts/scrub-tokens.sh" "${{ steps.agent.outputs.execution_file }}" "$RUNNER_TEMP/cut-short-sessions"
+      - name: Keep a second copy of the transcript on this run
+        if: always() && steps.agent.outputs.execution_file != '' && steps.scrub.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: session-${{ steps.round.outputs.role }}-${{ github.run_id }}-${{ github.run_attempt }}

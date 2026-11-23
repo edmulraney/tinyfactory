@@ -3,7 +3,7 @@
 . "$(dirname "$0")/helpers.sh"
 
 # setup: a copy of bootstrap.sh beside stand-ins for its steps. Each writes its name to $T/steps; the one named in $T/fails exits 1,
-# and the one named in $T/asks leaves a click to the owner.
+# the one named in $T/asks leaves a click to the owner, and deploy gives the closing summary production's address.
 setup() {
   mkdir -p "$T/setup"
   cp "$root/.claude/skills/bootstrap/scripts/bootstrap.sh" "$root/.claude/skills/bootstrap/scripts/present.sh" "$T/setup/"
@@ -17,6 +17,7 @@ setup() {
 . "\$(dirname "\$0")/present.sh"
 echo "$step" >> "\$T/steps"
 if grep -qx "$step" "\$T/asks"; then mark needs-owner "$step: a click is left for you"; else mark done "$step ok"; fi
+[ "$step" != deploy ] || [ -s "\$SETUP_NEEDS_OWNER" ] || echo https://shop.example > "\$SETUP_PRODUCTION"
 ! grep -qx "$step" "\$T/fails"
 EOF
     chmod +x "$T/setup/$step.sh"
@@ -38,7 +39,6 @@ setup
 run "$T/setup/bootstrap.sh" shop
 expect_status 0
 ran scaffold
-ran agent-token
 ran deploy
 expect_output "bootstrap complete: shop"
 
@@ -79,11 +79,12 @@ expect_output $'\033[32m✓\033[0m preflight ok'
 expect_output $'\033[33m!\033[0m purpose: a click is left for you'
 expect_output $'\033[31m✗\033[0m Setup stopped at vercel.'
 
-scenario "ends a run that left nothing to the owner by saying what to do next"
+scenario "ends a run that left nothing to the owner by saying where production answers and what to do next"
 setup
 run "$T/setup/bootstrap.sh" shop
 expect_status 0
-expect_output "$(printf '\n\n[13/14] agent-token\n')"
+expect_output "$(printf '\n\n[14/14] deploy\n')"
+expect_output "✓ shop is live: https://shop.example runs the commit on main"
 expect_output "File a ticket, then add the \`ready\` label to it"
 expect_no_output "run the same command again"
 
@@ -94,6 +95,7 @@ run "$T/setup/bootstrap.sh" shop
 expect_status 0
 expect_output "$(printf 'run the same command again: it confirms each.\n  database: a click is left for you\n  board: a click is left for you\n')"
 expect_no_output "bootstrap complete"
+expect_no_output "is live"
 [ -z "$(ls -A "$TMPDIR")" ] || fail "left behind in the temporary directory: $(ls -A "$TMPDIR")"
 
 # words <text>: the text without escape codes and the box, its spaces and line ends as one space each.

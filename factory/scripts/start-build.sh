@@ -154,5 +154,7 @@ if [ -n "$taken" ]; then
   refuse "another ticket took the last place at the same moment as issue #$issue, which waits with ready until a place frees"
 fi
 
+# Its agents run on the second model while the first's limit holds it; a run whose model cannot be read starts on the first (decisions A663a).
+"$script_dir/usage-limit.sh" start "$issue" "its build" >&2 || echo "Issue #$issue: its build runs on the first model." >&2
 echo "start=true" >> "$outputs"
 echo "started: issue #$issue takes a place, with $(others "$in_flight_now") other tickets in flight"

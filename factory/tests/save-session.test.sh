@@ -187,3 +187,39 @@ save esme issue-12 ""
 expect_status 0
 expect_output "could not save the esme session (push kept failing)"
 expect_nothing_left
+
+scenario "saves no token on the branch, and leaves the transcript it was given as it was"
+sessions_remote sessions
+printf '{"env":"CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-Abc_def-0123456789abcdefghij GH_TOKEN=ghs_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 PAT=github_pat_11ABCDEFG0abcdefghijklmnopqrstuvwxyz https://x-access-token:hiddenvalue@github.com -----BEGIN OPENSSH PRIVATE KEY-----\\nb3BlbnNzaC1rZXk\\n-----END OPENSSH PRIVATE KEY-----"}\n' > "$T/out.json"
+given=$(cat "$T/out.json")
+save esme issue-12 "$T/out.json"
+expect_status 0
+file=$(saved issue-12 esme) || fail "expected the transcript saved, found: $(pushed_files)"
+for token in sk-ant-oat01-Abc_def-0123456789abcdefghij ghs_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 \
+  github_pat_11ABCDEFG0abcdefghijklmnopqrstuvwxyz x-access-token:hiddenvalue b3BlbnNzaC1rZXk; do
+  ! on_github show "sessions:$file" | grep -qF -- "$token" || fail "expected no $token on the branch, found: $(on_github show "sessions:$file")"
+done
+on_github show "sessions:$file" | grep -qF 'GH_TOKEN=ghs_[REDACTED]' || fail "expected a placeholder where the token was"
+[ "$(cat "$T/out.json")" = "$given" ] || fail "expected the file given, which later steps read, unchanged"
+expect_nothing_left
+
+scenario "saves no token from the session file Claude Code wrote as it ran"
+sessions_remote sessions
+session_file -work-repo abc '{"type":"user","text":"ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"}'
+save esme issue-12 ""
+expect_status 0
+file=$(saved issue-12 esme) || fail "expected the session file saved, found: $(pushed_files)"
+[ "$(on_github show "sessions:$file" | jq -c .)" = '[{"type":"user","text":"ghp_[REDACTED]"}]' ] \
+  || fail "expected the token replaced, found: $(on_github show "sessions:$file")"
+expect_nothing_left
+
+scenario "says so, exits 0 and pushes nothing when the tokens cannot be scrubbed"
+sessions_remote sessions
+tip=$(on_github rev-parse sessions)
+transcript
+stub perl 'exit 2'
+save esme issue-12 "$T/out.json"
+expect_status 0
+expect_output "could not save the esme session (its tokens could not be scrubbed)"
+[ "$(on_github rev-parse sessions)" = "$tip" ] || fail "expected the branch as it was"
+expect_nothing_left

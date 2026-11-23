@@ -75,7 +75,7 @@ branches=$(NEON_API_KEY="$key" neon branches list --project-id "$project" --outp
   || { echo "the new key cannot list the branches of project '$project'"; exit 1; }
 
 gh variable set NEON_PROJECT_ID -R "$repo" --body "$project"
-# ci.yml deletes the database branch of a pull request that is gone with this key (factory/free-tier.md, entry 8).
+# ci.yml and flag-idle.yml delete preview database branches with this key (factory/free-tier.md, entry #672).
 # Piped to gh, so the key is never printed or written to disk.
 printf %s "$key" | gh secret set NEON_API_KEY -R "$repo"
 stored=1

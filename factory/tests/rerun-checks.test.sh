@@ -47,7 +47,7 @@ expect_status 1
 expect_output "has no job named checks, so its checks were not run again."
 expect_no_call "gh run rerun"
 
-for words in "pr view 7 --json headRefOid" "run list --workflow ci.yml" "run view 900" "api repos/{owner}/{repo}/actions/runs/900/jobs" "run rerun --job 30"; do
+for words in "pr view 7 --json headRefOid" "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs" "run view 900" "api repos/{owner}/{repo}/actions/runs/900/jobs" "run rerun --job 30"; do
   scenario "stops with a message when this fails: gh $words"
   checks_failed
   printf 'in_progress\ncompleted\n' > "$T/status"

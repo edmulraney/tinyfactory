@@ -12,8 +12,11 @@ changes() {
       *) jq -n --arg new "$path" '{filename: $new}' ;;
     esac
   done | jq -s . > "$T/files.json"
+  [ -f "$T/comments.json" ] || echo '[]' > "$T/comments.json"
   stub gh 'case "$*" in
     "api repos/owner/repo/pulls/7/files --paginate "*) json "$(cat "$T/files.json")" "$@" ;;
+    "api repos/owner/repo/issues/7/comments --paginate "*) json "$(cat "$T/comments.json")" "$@" ;;
+    "api repos/owner/repo/compare/"*"...head456 "*) [ -f "$T/compare.json" ] && json "$(cat "$T/compare.json")" "$@" ;;
     *) echo "unexpected call: gh $*" >&2; exit 1 ;;
   esac'
 }
@@ -32,6 +35,91 @@ expect_result() {
     || fail "expected stdout to be exactly \"$1\" and a line \"reason=…\", got \"$result\""
   [ -z "${2:-}" ] || [ "$(sed -n 2p <<<"$result")" = "reason=$2" ] || fail "expected the reason \"$2\", got \"$(sed -n 2p <<<"$result")\""
 }
+
+# commented <login> <body>...: the pull request's comments, oldest first, each by that account.
+commented() {
+  local login="$1"
+  shift
+  printf '%s\n' "$@" | jq -R --arg login "$login" '{user: {login: $login}, body: .}' | jq -s . > "$T/comments.json"
+}
+# compared <status> <path>...: GitHub's comparison of the passed commit with head456.
+compared() {
+  local status="$1"
+  shift
+  printf '%s\n' "$@" | jq -R 'select(. != "") | {filename: .}' | jq -s --arg status "$status" '{status: $status, files: .}' > "$T/compare.json"
+}
+old=1111111111111111111111111111111111111111
+new=2222222222222222222222222222222222222222
+
+scenario "skips a commit whose app the newest passed commit's tests ran on, and says which"
+commented "github-actions[bot]" "End-to-end tests passed for $old against https://a.vercel.app. Screenshots and report - x" \
+  "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+compared ahead factory/scripts/ship.sh
+changes apps/web/src/app/page.tsx
+HEAD_SHA=head456 decide
+expect_status 0
+expect_result "run=false" "Pull request #7's end-to-end tests passed for 2222222, and no app file has changed since, so they passed on the app this commit holds."
+expect_call "gh api repos/owner/repo/compare/$new...head456"
+
+scenario "skips the very commit that passed, run again"
+commented "github-actions[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+compared identical
+changes apps/web/src/app/page.tsx
+HEAD_SHA=head456 decide
+expect_result "run=false"
+
+scenario "runs when an app file changed since the commit that passed"
+commented "github-actions[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+compared ahead factory/scripts/ship.sh apps/web/src/app/page.tsx
+changes apps/web/src/app/page.tsx
+HEAD_SHA=head456 decide
+expect_result "run=true" "Pull request #7 changes app code (apps/web/src/app/page.tsx), so its end-to-end tests run."
+
+scenario "runs when the commit that passed is not an ancestor of the one to test"
+commented "github-actions[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+compared diverged factory/scripts/ship.sh
+changes apps/web/src/app/page.tsx
+HEAD_SHA=head456 decide
+expect_result "run=true"
+
+scenario "runs when GitHub lists as many files as it lists of a comparison, so may have cut it short"
+commented "github-actions[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+# shellcheck disable=SC2046
+compared ahead $(seq -f 'factory/tests/%g.test.sh' 1 300)
+changes apps/web/src/app/page.tsx
+HEAD_SHA=head456 decide
+expect_result "run=true"
+
+scenario "runs on tests that ran and did not pass, and on a passed comment by any account but the workflow's"
+changes apps/web/src/app/page.tsx
+commented "claude[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+HEAD_SHA=head456 decide
+expect_result "run=true"
+expect_no_call "compare"
+commented "github-actions[bot]" "End-to-end tests ran against https://b.vercel.app. Screenshots and report - y"
+HEAD_SHA=head456 decide
+expect_result "run=true"
+expect_no_call "compare"
+
+for broken in comments compare; do
+  scenario "runs when the $broken read fails"
+  commented "github-actions[bot]" "End-to-end tests passed for $new against https://b.vercel.app. Screenshots and report - y"
+  changes apps/web/src/app/page.tsx
+  # With no comparison written, the stand-in fails that read.
+  [ "$broken" = compare ] || echo 'not json' > "$T/comments.json"
+  HEAD_SHA=head456 decide
+  expect_status 0
+  expect_result "run=true"
+done
+
+scenario "asks for no passed commit with no commit to test, nor for a pull request that changes no app code"
+changes apps/web/src/app/page.tsx
+decide
+expect_result "run=true"
+changes factory/scripts/ship.sh
+HEAD_SHA=head456 decide
+expect_result "run=false" "Pull request #7 changes no app code, so the app in its preview is the app on main."
+expect_no_call "comments"
 
 scenario "skips for a change to a factory script alone"
 changes factory/scripts/ship.sh
@@ -195,4 +283,25 @@ for step in 'uses: ./.github/actions/setup' 'name: Wait for the Vercel preview' 
   [ -n "$at" ] && [ "$at" -gt "$needs_e2e_line" ] || fail "expected the step \"$step\" after the one that asks"
   job e2e | sed -n "$((at + 1)),$((at + 2))p" | grep -qxF "        if: steps.needed.outputs.run != 'false'" \
     || fail "expected the step \"$step\" to run on anything but a plain false"
+done
+
+scenario "ci.yml gives it the commit to test, and names that commit in its comment only once Playwright passed"
+job e2e | sed -n '/^      - name: Do the end-to-end tests need to run?$/,/^      - /p' \
+  | grep -qxF '          HEAD_SHA: ${{ github.event.pull_request.head.sha }}' || fail "expected the step that asks to pass it the head commit"
+link=$(job e2e | sed -n '/^      - name: Link the visual proof on the pull request$/,$p')
+grep -qxF "          PASSED: \${{ steps.playwright.outcome == 'success' }}" <<<"$link" || fail "expected the comment to read Playwright's outcome"
+job e2e | grep -A1 -xF '      - name: Playwright against the preview' | grep -qxF '        id: playwright' \
+  || fail "expected the Playwright step to have the id its outcome is read from"
+commands=$(sed -n '/^        run: |$/,$p' <<<"$link" | sed -e 1d -e 's/^          //')
+stub gh 'exit 0'
+for passed in true false; do
+  run env PASSED=$passed HEAD_SHA=$new PR=7 PREVIEW=https://b.vercel.app PROOF=x GH_TOKEN=t bash --noprofile --norc -e -c "$commands"
+  body=$(sed -n 's/^gh pr comment 7 --body //p' "$T/calls" | tail -n 1)
+  commented "github-actions[bot]" "$body"
+  changes apps/web/src/app/page.tsx
+  compared ahead
+  HEAD_SHA=head456 decide
+  [ "$passed" = true ] && expected=run=false || expected=run=true
+  expect_result "$expected"
+  stub gh 'exit 0'
 done

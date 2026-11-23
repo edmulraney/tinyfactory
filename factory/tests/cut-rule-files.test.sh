@@ -173,6 +173,17 @@ expect_no_call "--label ready"
 expect_output "TASTE.md holds 716 words and its budget is 700, for the third time in 2026-11: a proposal waits for the owner, https://github.com/owner/myapp/issues/30"
 expect_buildable 30
 
+scenario "two tickets titled as the file's that strangers opened this month make no proposal: the ticket is filed with ready"
+github
+main_holds 700 716 TASTE.md
+a_ticket 21 closed "2026-11-02T09:00:00Z" 'Cut `TASTE.md` to budget'
+a_ticket 22 closed "2026-11-09T09:00:00Z" 'Cut `TASTE.md` to budget'
+jq -c '.user = {login: "stranger", type: "User"} | .author_association = "NONE"' "$T/tickets" > "$T/tickets.new" && mv "$T/tickets.new" "$T/tickets"
+cut
+expect_status 0
+expect_call 'gh issue create --title Cut `TASTE.md` to budget --label factory --label ready '
+expect_no_call "--label proposal"
+
 scenario "the second ticket in a month, after two in the month before and two for another file, is no proposal"
 github
 main_holds 700 716 TASTE.md

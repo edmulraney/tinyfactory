@@ -98,7 +98,7 @@ job claude claude | sed -n '/^    permissions:$/,/^    steps:$/p' | grep -qE '^ 
 scenario "the transcript is kept on the run, under the name run-facts.sh asks for, before the retro is started"
 found=$(step claude claude "Keep the transcript on this run")
 # shellcheck disable=SC2016
-for field in "        if: always() && steps.session.outputs.execution_file != ''" '        uses: actions/upload-artifact@v4' \
+for field in "        if: always() && steps.session.outputs.execution_file != '' && steps.scrub.outcome == 'success'" '        uses: actions/upload-artifact@v4' \
   '          name: session-claude-${{ github.run_id }}-${{ github.run_attempt }}' '          path: ${{ steps.session.outputs.execution_file }}'; do
   grep -qxF -- "$field" <<<"$found" || fail "expected the step to hold: $field"
 done
@@ -168,7 +168,9 @@ grep -qxF '  COMMENT: ${{ inputs.comment }}' "$workflows/retro.yml" || fail "exp
 
 scenario "the retro skill says how to judge a request for help"
 skill="$root/.claude/skills/retro/SKILL.md"
-section=$(sed -n '/^## A request for help$/,/^## /p' "$skill")
+help="$root/.claude/skills/retro/first-run-and-help.md"
+grep -qF 'follow `.claude/skills/retro/first-run-and-help.md`' "$skill" || fail "expected the skill to send a request for help to first-run-and-help.md"
+section=$(sed -n '/^## A request for help$/,$p' "$help")
 grep -qF 'what would have made the ask unneeded' <<<"$section" || fail "expected the skill to ask what would have made the ask unneeded"
 grep -qF 'A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.' <<<"$section" || fail "expected the skill to say a one-off proposes nothing"
-grep -qF '`ask` holds the comment' "$skill" || fail "expected the skill to name the fact that holds the comment"
+grep -qF '`ask` holds the comment' <<<"$section" || fail "expected the skill to name the fact that holds the comment"

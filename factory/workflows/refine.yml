@@ -8,6 +8,10 @@ on:
     types: [created]
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   ISSUE: ${{ github.event.issue.number }}
 
 jobs:
@@ -88,7 +92,7 @@ jobs:
       - name: Peta refines the idea
         id: agent
         if: steps.start.outputs.start == 'true'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # No background commands in a session with nobody in it (decisions A69f).
@@ -96,12 +100,12 @@ jobs:
           # `format`, so that a count of 0 is never taken for no count.
           prompt: |
             You are Peta. Read .claude/skills/refine/SKILL.md and follow it for idea #${{ env.ISSUE }} in this repository.
-            The idea, your earlier comments on it and the owner's answers are in .refine/idea.md. Write your own files in .refine/.
+            The idea, your earlier comments on it, the owner's answers and the product's usage by week are in .refine/idea.md. Write your own files in .refine/.
             Production's database, counted as this run started, holds an account for ${{ steps.users.outputs.count != '' && format('{0} people', steps.users.outputs.count) || 'a number of people that could not be read' }}.
           # She comments on this idea alone, files tickets only through file-slice.sh, and writes only in .refine/.
           # The mode denies what the list does not cover: the action's own default lets a review pass it (decisions A353b, A353e).
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
             --allowedTools "Read,Edit(.refine/**),Glob,Grep,Bash(factory/scripts/file-slice.sh ${{ env.ISSUE }}:*),Bash(factory/scripts/propose.sh ${{ env.ISSUE }}:*)"
 
       # Before Dara's session, which writes its result to the same file (decisions A418b).
@@ -130,7 +134,7 @@ jobs:
       - name: Dara designs the screens
         id: dara
         if: steps.start.outputs.start == 'true' && hashFiles('.refine/screens.md') != ''
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # No background commands in a session with nobody in it (decisions A69f).
@@ -140,7 +144,7 @@ jobs:
             The slices to design are in .refine/screens.md. Write your own files in .design/.
           # She writes only in .design/, and her one command shows her designs on this idea alone (decisions A571b).
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 60 --permission-mode default
             --allowedTools "Read,Edit(.design/**),Glob,Grep,Bash(factory/scripts/post-designs.sh ${{ env.ISSUE }})"
 
       # A session can end well with every design refused, and the idea would hear nothing (decisions A571d).

@@ -50,13 +50,13 @@ checks_failed() {
       "api repos/{owner}/{repo}/pulls/7/comments?per_page=100 --paginate --jq "*) json "$(cat "$T/review-comments.json")" "$@" ;;
       "api repos/{owner}/{repo}/pulls/7/files --paginate --jq "*) json "$(cat "$T/files.json")" "$@" ;;
       "pr edit 7 --remove-label needs-human" | "pr edit 7 --remove-label needs-human --remove-label waits-for-main" | "issue edit 12 --remove-label needs-human --add-label in-progress") echo "https://github.example/7" ;;
-      "run list --workflow ci.yml --commit $head --limit 20 --json databaseId,conclusion "* | "run list --workflow ci.yml --commit $head --limit 20 --json attempt,conclusion "*) json "$(cat "$T/runs")" "$@" ;;
-      "run list --workflow ci.yml --commit $head --limit 20 --json databaseId,status,conclusion "* | "run view 900 --json status "*)
-        case "$1 $2" in
-          "run list") json "$(jq --arg s "$(head -n 1 "$T/status")" "map(. + {status: \$s})" "$T/runs")" "$@" ;;
+      "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha=$head --jq "*"(.status)"* | "run view 900 --json status "*)
+        case "$1" in
+          api) ci_runs "$(jq --arg s "$(head -n 1 "$T/status")" "map(. + {status: \$s})" "$T/runs")" "$@" ;;
           *) json "{\"status\":\"$(head -n 1 "$T/status")\"}" "$@" ;;
         esac
         if [ "$(wc -l < "$T/status")" -gt 1 ]; then tail -n +2 "$T/status" > "$T/status.rest"; mv "$T/status.rest" "$T/status"; fi ;;
+      "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha=$head --jq "*) ci_runs "$(cat "$T/runs")" "$@" ;;
       "api repos/owner/myapp/actions/runs/900/jobs --paginate "* | "api repos/{owner}/{repo}/actions/runs/900/jobs --paginate "*) json "$(cat "$T/jobs")" "$@" ;;
       "run rerun --job "*) : ;;
       "api repos/owner/myapp/actions/jobs/"*"/logs" | "api repos/owner/myapp/actions/jobs/"*"/logs --allow-escape-sequences")

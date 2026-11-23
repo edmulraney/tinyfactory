@@ -14,7 +14,8 @@ export default defineConfig({
   use: {
     baseURL,
     screenshot: "on",
-    trace: "retain-on-failure",
+    // No trace while the bypass secret is sent (decisions S668b).
+    trace: bypass ? "off" : "retain-on-failure",
     extraHTTPHeaders: bypass ? { "x-vercel-protection-bypass": bypass } : undefined,
   },
   // Every test runs at both screens the app supports (DESIGN.md, "Supported screens").

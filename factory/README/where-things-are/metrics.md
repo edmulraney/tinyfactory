@@ -1,1 +1,1 @@
-| How the factory's delivery moves by week | `metrics.md` on the `sessions` branch: nine measures, each a chart and a table, which `factory/scripts/metrics.sh` writes each Friday ([H613a](../../decisions/613.md)) |
+| How the factory's delivery moves by week | `metrics.md` on the `sessions` branch: nine measures, each a chart and a table, then the product's usage beside the tickets deployed, which `factory/scripts/metrics.sh` writes each Friday ([H613a](../../decisions/613.md), [H666a](../../decisions/666.md)) |

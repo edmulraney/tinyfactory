@@ -63,13 +63,13 @@ expect_no_call "gh workflow run merge-group.yml"
 
 scenario "adds to those that wait to merge when reading the pull request fails twice and then answers"
 ready_to_ship
-printf '2 %s\n' "pr view 7 --json state,headRefOid,reviews" "run list --workflow ci.yml" > "$T/flaky"
+printf '2 %s\n' "pr view 7 --json state,headRefOid,reviews" "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs" > "$T/flaky"
 approve
 expect_status 0
 expect_calls 3 "gh pr view 7 --json state,headRefOid,reviews"
 expect_calls 1 "gh workflow run merge-group.yml"
 
-for words in "pr view 7 --json state,headRefOid,reviews" "run list --workflow ci.yml"; do
+for words in "pr view 7 --json state,headRefOid,reviews" "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs"; do
   scenario "fails with one comment naming the reason when GitHub never answers: gh $words"
   ready_to_ship
   echo "$words" > "$T/fail"

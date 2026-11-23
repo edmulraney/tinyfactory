@@ -208,6 +208,156 @@ limit wait 7 "a fix round"
 expect_status 1
 expect_output "GITHUB_RUN_ID names no run to run again then, so a fix round has no place."
 
+scenario "AC1: a job the first model's limit holds starts on the second when AGENT_MODEL_FALLBACK names one"
+github sessions
+: > "$T/env"
+export GITHUB_ENV="$T/env" AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5 MODEL=claude-fable-5-2
+limit hold "$ahead"
+expect_hold "$ahead claude-fable-5-2"
+unset MODEL
+limit wait 7 "a fix round"
+expect_status 0
+expect_silent
+expect_written ""
+limit held
+expect_status 0
+expect_silent
+[ ! -s "$T/env" ] || fail "expected no model to be given before the run is known to start, got: $(cat "$T/env")"
+[ ! -s "$T/posted" ] || fail "expected nobody to be told before the run is known to start"
+limit start 7 "a fix round"
+expect_status 0
+expect_output "a fix round runs on claude-opus-5-5, the second model"
+expect_posted "#7: Nothing to do: a fix round runs on \`claude-opus-5-5\`, the second model, because the Claude usage limit of \`claude-fable-5-2\` holds until $ahead_in_words."
+[ "$(cat "$T/env")" = "MODEL=claude-opus-5-5" ] || fail "expected the job's agents to be given claude-opus-5-5, got: $(cat "$T/env")"
+expect_hold "$ahead claude-fable-5-2"
+: > "$T/env"
+: > "$T/posted"
+limit start "" "the retro"
+expect_status 0
+expect_silent
+[ ! -s "$T/posted" ] || fail "expected nobody to be told when no number is given"
+[ "$(cat "$T/env")" = "MODEL=claude-opus-5-5" ] || fail "expected the retro's agents to be given claude-opus-5-5, got: $(cat "$T/env")"
+unset AGENT_MODEL AGENT_MODEL_FALLBACK GITHUB_ENV
+
+scenario "start: tells nobody when the job runs on the first model, or is held"
+github sessions
+export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5
+limit start 7 "a fix round"
+expect_status 0
+expect_silent
+hold_is "$ahead"
+limit start 7 "a fix round"
+expect_status 0
+expect_silent
+expect_no_call "gh issue comment"
+limit start x "a fix round"
+expect_status 1
+expect_output "Usage: usage-limit.sh"
+unset AGENT_MODEL AGENT_MODEL_FALLBACK
+
+scenario "a build and the queue each start on the second model while the first's limit holds"
+github sessions
+export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5 GITHUB_ENV="$T/env"
+hold_is "$ahead claude-fable-5-2"
+: > "$T/env"
+run "$scripts/start-build.sh" 12
+expect_status 0
+expect_written "start=true"
+[ "$(cat "$T/env")" = "MODEL=claude-opus-5-5" ] || fail "expected the build's agents to be given claude-opus-5-5, got: $(cat "$T/env")"
+expect_posted "#12: Nothing to do: its build runs on \`claude-opus-5-5\`, the second model"
+# As after a session on the first model, in flag-unfinished.sh: the waiting tickets still start, on the second one.
+export MODEL=claude-fable-5-2
+: > "$T/env"
+echo '[{"number":30}]' > "$T/ready"
+run "$scripts/start-waiting.sh"
+expect_status 0
+expect_call "gh workflow run implement.yml -f issue=30"
+[ ! -s "$T/env" ] || fail "expected the job's own model to stay as it was, got: $(cat "$T/env")"
+# As in claude.yml, whose job names the first model but no second one: the builds still start, on the second.
+unset AGENT_MODEL_FALLBACK MODEL
+: > "$T/calls"
+run "$scripts/start-waiting.sh"
+expect_status 0
+expect_call "gh workflow run implement.yml -f issue=30"
+unset AGENT_MODEL GITHUB_ENV
+
+scenario "AC1: a job the first model's limit holds is held as before when AGENT_MODEL_FALLBACK names no second model"
+github sessions
+: > "$T/env"
+export GITHUB_ENV="$T/env" AGENT_MODEL=claude-fable-5-2 MODEL=claude-fable-5-2
+limit hold "$ahead"
+expect_hold "$ahead"
+unset MODEL
+limit wait 7 "a fix round"
+expect_status 0
+expect_output "the Claude usage limit holds every agent until $ahead_in_words: a fix round starts after it"
+expect_written "held=true"$'\n'"kept=true"
+[ ! -s "$T/env" ] || fail "expected no model to be given to a job that is held, got: $(cat "$T/env")"
+limit held 12 "its build"
+expect_output "$ahead_in_words"
+unset AGENT_MODEL GITHUB_ENV
+
+scenario "hold: with no model named for the job, the hold is of every model"
+github sessions
+export AGENT_MODEL_FALLBACK=claude-opus-5-5
+limit hold "$ahead"
+expect_hold "$ahead"
+unset AGENT_MODEL_FALLBACK
+
+scenario "hold: the second model's limit, while the first's is ahead, holds every model until the later reset"
+github sessions
+export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5 MODEL=claude-opus-5-5
+hold_is "$ahead claude-fable-5-2" "run 44"
+limit hold 100000000000
+expect_status 0
+expect_hold "100000000000"$'\n'"run 44"
+unset MODEL
+limit held
+expect_output "5138-11-16 09:46 UTC"
+unset AGENT_MODEL AGENT_MODEL_FALLBACK MODEL
+
+scenario "hold: a hold of another model whose time has passed gives way to the new one"
+github sessions
+export AGENT_MODEL_FALLBACK=claude-opus-5-5 MODEL=claude-opus-5-5
+hold_is "$passed claude-fable-5-2"
+limit hold "$ahead"
+expect_hold "$ahead claude-opus-5-5"
+unset AGENT_MODEL_FALLBACK MODEL
+
+scenario "wait: after a session on the held model the run keeps its place, and one on the other model is not held"
+github sessions
+export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5 MODEL=claude-fable-5-2
+hold_is "$ahead claude-fable-5-2"
+limit wait 7 "a new fix round"
+expect_status 0
+expect_output "a new fix round starts after it"
+expect_hold "$ahead claude-fable-5-2"$'\n'"run 900"
+expect_posted "The limit holds \`claude-fable-5-2\`, which this run began on, and the runs that begin meanwhile run on the second model."
+export MODEL=claude-opus-5-5
+: > "$T/outputs"
+limit wait 7 "a new fix round"
+expect_status 0
+expect_silent
+expect_written ""
+unset AGENT_MODEL AGENT_MODEL_FALLBACK MODEL
+
+scenario "held: a hold of one model leaves a job that runs no agent free to start the waiting tickets"
+github sessions
+hold_is "$ahead claude-fable-5-2"
+limit held
+expect_status 0
+expect_silent
+
+scenario "start: stops when the pull request cannot be told that the run is on the second model"
+github sessions
+export AGENT_MODEL=claude-fable-5-2 AGENT_MODEL_FALLBACK=claude-opus-5-5
+hold_is "$ahead claude-fable-5-2"
+echo "issue comment" > "$T/fail"
+limit start 7 "a fix round"
+expect_status 1
+expect_output "a fix round runs on claude-opus-5-5, and #7 could not be told so."
+unset AGENT_MODEL AGENT_MODEL_FALLBACK
+
 # limit_ended [resets]: the saved result of a session the usage limit ended, which names that reset time, or none.
 limit_ended() {
   printf '[{"type":"rate_limit_event","rate_limit_info":{"status":"rejected","resetsAt":%s}},{"type":"result","subtype":"success","is_error":true,"terminal_reason":"api_error","api_error_status":429,"api_error":"usage_limit_reached","session_id":"c22ab626"}]\n' "${1:-null}" > "$T/session.json"

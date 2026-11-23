@@ -12,7 +12,7 @@ Read the pull request's text and its ticket's (`Closes #<n>`): the files your in
 ## What to judge
 
 - **The smallest standard route:** ask whether a standard tool, or a smaller design the scale allows, does what the change builds, and name it. The scale is `product/state.md` and the number of people your instructions give ([M605a](../../../factory/decisions/605.md)).
-- **Architecture:** the structure, boundaries and domain language of `ARCHITECTURE.md`.
+- **Architecture:** `ARCHITECTURE.md`'s structure and boundaries, and `GLOSSARY.md`'s terms.
 - **Structure and modules:** each breach of `ARCHITECTURE.md`'s "Structure" and "Modules" that lint cannot see: a rule in a page, a module of the wrong kind or reading another's tables, an export not in its module's types, state held too low, a forwarding use case, a copied helper, a test or row earning no place (`TASTE.md`).
 - **Design:** the principles of `DESIGN.md`. Lint checks colours and sizes; do not repeat it.
 - **Taste:** `TASTE.md`, a provider's number included.

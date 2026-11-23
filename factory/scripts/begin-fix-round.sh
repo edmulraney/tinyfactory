@@ -185,6 +185,8 @@ if [ -n "$requested" ] && [ -n "$issue" ]; then
     || not_begun "GitHub did not mark ticket #$issue as in progress again" "Could not mark issue #$issue as in progress again, so the owner's fix round on pull request #$pr was not begun."
 fi
 
+# Its agents run on the second model while the first's limit holds it; a run whose model cannot be read starts on the first (decisions A663a).
+"$script_dir/usage-limit.sh" start "$pr" "a fix round" >&2 || echo "#$pr: a fix round runs on the first model." >&2
 {
   echo "go=true"
   echo "counted=$counted"
