@@ -1,0 +1,1577 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "e8061ae4-f6ff-4fca-b649-a706b6d148a0",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2624.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrwFgsxkVVgJyem8Q5d",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MrbQTPKipAFgMEHCqujN5F",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9564,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9564
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "6954ac5e-b637-4114-b616-22307b515973",
+    "timestamp": "2026-11-23T12:29:55.018Z",
+    "request_id": "req_011ChKrwFYiCrFSo9Wc1Bh64",
+    "wire_tool_inputs": {
+      "toolu_01MrbQTPKipAFgMEHCqujN5F": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01MrbQTPKipAFgMEHCqujN5F",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it;\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run, or a request for help\n42\t\n43\tIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n44\t\n45\t## A defect met in use\n46\t\n47\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n48\t\n49\t## When to propose\n50\t\n51\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n52\t\n53\t- `cost.kind` is not empty;\n54\t- step 4 lists a lesson.\n55\t\n56\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n57\t\n58\t## Output\n59\t\n60\t- `summary`: one sentence a person can act on.\n61\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n62\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n63\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n64\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n65\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n66\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n67\t- `repeats`: the file names of step 4's lessons.\n68\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n69\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n70\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "42b59925-a001-438e-b839-31cbde3078dd",
+    "timestamp": "2026-11-23T12:29:55.043Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Where the fault has a standard engineering solution, that solution is the change. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it;\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run, or a request for help\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 70,
+        "startLine": 1,
+        "totalLines": 70
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01MrbQTPKipAFgMEHCqujN5F",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrwFgsxkVVgJyem8Q5d",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AMSGRcwWx98vERR5QHqe8U",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; cat facts.json; ls -R | head -50"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9564,
+        "cache_read_input_tokens": 15743,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9564
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "62a1fe87-5bdc-419b-bbd8-feb922d3f707",
+    "timestamp": "2026-11-23T12:29:55.741Z",
+    "request_id": "req_011ChKrwFYiCrFSo9Wc1Bh64",
+    "wire_tool_inputs": {
+      "toolu_01AMSGRcwWx98vERR5QHqe8U": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; cat facts.json; ls -R | head -50"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1796036400,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.04,
+          "resetsAt": 1796036400,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "63c75149-b84b-47c3-a549-30e6b4652c1c",
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01AMSGRcwWx98vERR5QHqe8U",
+          "type": "tool_result",
+          "content": "{\n  \"run\": 45173914856,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45173914856\",\n  \"conclusion\": \"success\",\n  \"pr\": 686,\n  \"issue\": 680,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-686/20261123T122500Z-adam-run45173914856.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.1783026,\n      \"turns\": 12,\n      \"seconds\": 26,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-686/20261123T122503Z-ryan-run45173914856.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.1869044,\n      \"turns\": 14,\n      \"seconds\": 30,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.37,\n  \"turns\": 26,\n  \"changed_by\": {\n    \"pr\": 685,\n    \"issue\": 681,\n    \"title\": \"chore: bring in the second model and the public repo skill\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": []\n}\n.:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nissue-680\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\npr-655\npr-658\npr-679\npr-685\npr-686\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./issue-680:\n20261123T122359Z-fred-run45173345441.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "a288b946-be6c-4613-be7d-d8b01bbdfcee",
+    "timestamp": "2026-11-23T12:29:56.107Z",
+    "tool_use_result": {
+      "stdout": "{\n  \"run\": 45173914856,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45173914856\",\n  \"conclusion\": \"success\",\n  \"pr\": 686,\n  \"issue\": 680,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-686/20261123T122500Z-adam-run45173914856.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.1783026,\n      \"turns\": 12,\n      \"seconds\": 26,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-686/20261123T122503Z-ryan-run45173914856.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.1869044,\n      \"turns\": 14,\n      \"seconds\": 30,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.37,\n  \"turns\": 26,\n  \"changed_by\": {\n    \"pr\": 685,\n    \"issue\": 681,\n    \"title\": \"chore: bring in the second model and the public repo skill\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": []\n}\n.:\napps\nfacts.json\nissue-564\nissue-567\nissue-626\nissue-627\nissue-680\nlessons\nmeasures.jsonl\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\npr-655\npr-658\npr-679\npr-685\npr-686\ntickets.json\n\n./apps:\nweb\n\n./apps/web:\nvercel.json\n\n./issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n./issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n./issue-626:\n20261122T181702Z-fred-run45052417798.json\n\n./issue-627:\n20261122T181129Z-fred-run45052415270.json\n\n./issue-680:\n20261123T122359Z-fred-run45173345441.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01AMSGRcwWx98vERR5QHqe8U",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrwXEHAj7rN8XRAiW1j",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MtvL5f8CbikYQdJGYzKvBP",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/first-run-and-help.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3336,
+        "cache_read_input_tokens": 25307,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3336
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b93bef69-c8f5-44c5-8849-ea4c1343a6aa",
+    "timestamp": "2026-11-23T12:30:00.007Z",
+    "request_id": "req_011ChKrwX6LKigL7X9Bni1LB",
+    "wire_tool_inputs": {
+      "toolu_01MtvL5f8CbikYQdJGYzKvBP": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/first-run-and-help.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01MtvL5f8CbikYQdJGYzKvBP",
+          "type": "tool_result",
+          "content": "1\t# The retro of a changed workflow's first run, or of a request for help\n2\t\n3\tIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n4\t\n5\t## A changed workflow's first run\n6\t\n7\tIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n8\t\n9\tCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n10\t\n11\t## A request for help\n12\t\n13\tIn the facts, `ask` holds the comment that asked `@claude` and its link.\n14\t\n15\tThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n16\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "097cafed-21cc-4a16-b67b-d4212a006585",
+    "timestamp": "2026-11-23T12:30:00.022Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/first-run-and-help.md",
+        "content": "# The retro of a changed workflow's first run, or of a request for help\n\nIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n\n## A changed workflow's first run\n\nIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n\nCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nIn the facts, `ask` holds the comment that asked `@claude` and its link.\n\nThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n",
+        "numLines": 16,
+        "startLine": 1,
+        "totalLines": 16
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01MtvL5f8CbikYQdJGYzKvBP",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrwoxrJ5Bn42m3HNPsT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSwgUKEAgUGAI4AUIIdGhpbmtpbmcSDNZn5LjyaxZF7n9KTRoMET4Z+Q91DCf5OxGYIjDlemAusvcEQuHRagitA6RPoJrZ+kLdNVasudb6zIBQDHPYeGNUrzDA9ZJcujMbDfYq3wTZgd7XYcdU/3Eu/5OG0yyE2VgyAMN84MXdlios7ptoWOBiAhDgtYowCYQyLNFRDzm9Ujg2zXf4ZfrPqAevi0Fe3hidCAd0nsOKNbSVHh7O1SGrpZOuibEIBKJyelvAXN9B+VTOAz6/AEdBeP6syNtmU9ZwQFUbSr8akxPs+qmtXapH9jBbRc9Mm+zCutOKdi2zRYQmpy9RFKYEf3lktmFdMIeAKHsDubAxm9/i1NMG4kH0WOiqzdv3Ol+eACaDeYQCXduJpJ/1hVvr9HXnhODmrZX5PAArCAGOFF4C/inzoDy3G6bH0MOaROOOZAJxsV0TbBWkAzbCR50E9xzFJI30G3fr6uBfAD1Z8hB5PgzSC2nZ738vH4pa1FfjFHILKHACQM3Gsorii5CdL2fs4YJOZcauVYGo6xstS+GtUXzbZsvu/6qOCue3lhzhQjdfi4Xtl92Sqfgz7AXTUFYTmmGzQz3Sd9010yxrDGBbX0C5/WTFhg+6Y2RQ/f2gIImLPVVwz70zfbEmNTO9HafQjMzgqDtHgzqrhVQZxVR9qufVov50pdWJix4SZLv0qBaFNB8heSegQbEYkLgCLsaZYDwUtioea2HjTELxKYlSyekBnkT8kXG+6pskH9ofqsbXwFHerD36USFgSM5Pmr7ggTdVAFMn68plSH+ZD3ZyEvRR0LXZZMaVnhGh4sgETE6dmP/ma319dPTC96I56i5VktrgspOHxeChEfufokRglaFLoXqHLFrjUQ9FSObSBSHC7ykMMuAh7FpQrKCcFKNa6MLHDH6voUItK3BtkA9Wjv4/GAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 551,
+        "cache_read_input_tokens": 28643,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 551
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "4bbd872f-a815-4f42-ad30-2a5c0b7e9527",
+    "timestamp": "2026-11-23T12:30:03.412Z",
+    "request_id": "req_011ChKrwopAj6UGd8S3bS1ds",
+    "thinking_duration_ms": 357,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrwoxrJ5Bn42m3HNPsT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MA8yn9cY5NexpG65MdR5Ro",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 --name-only; gh pr diff 685 | grep -A3 -B3 -n 'workflow' | head -80"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 551,
+        "cache_read_input_tokens": 28643,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 551
+        },
+        "output_tokens": 7,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "e482bd0a-cd2b-4175-8226-ed5267851f4f",
+    "timestamp": "2026-11-23T12:30:03.920Z",
+    "request_id": "req_011ChKrwopAj6UGd8S3bS1ds",
+    "wire_tool_inputs": {
+      "toolu_01MA8yn9cY5NexpG65MdR5Ro": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 --name-only; gh pr diff 685 | grep -A3 -B3 -n 'workflow' | head -80"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01MA8yn9cY5NexpG65MdR5Ro",
+          "type": "tool_result",
+          "content": ".claude/skills/publicize-repo/SKILL.md\nfactory/README/where-things-are/agent-instructions.md\nfactory/decisions/385.md\nfactory/decisions/567.md\nfactory/decisions/663.md\nfactory/decisions/668.md\nfactory/decisions/682.md\nfactory/decisions/683.md\nfactory/decisions/684.md\nfactory/free-tier/385.md\nfactory/free-tier/entry-13.md\nfactory/free-tier/entry-16.md\nfactory/owner-guide.md\nfactory/rule-files.txt\nfactory/scripts/check-factory.sh\nfactory/scripts/flag-public.sh\nfactory/scripts/publicize-repo.sh\nfactory/scripts/usage-limit.sh\nfactory/tests/agent-model.test.sh\nfactory/tests/check-factory.test.sh\nfactory/tests/flag-public.test.sh\nfactory/tests/helpers.sh\nfactory/tests/publicize-repo.test.sh\nfactory/tests/usage-limit.test.sh\nfactory/workflows/ci.yml\nfactory/workflows/claude.yml\nfactory/workflows/fix.yml\nfactory/workflows/implement.yml\nfactory/workflows/refine.yml\nfactory/workflows/retro.yml\n11-+\n12-+# Publicize the repo\n13-+\n14:+A public repository shows anyone every ticket, every decision, every workflow log and every agent transcript on the `sessions` branch, and lets anyone open an issue or a pull request. Setup keeps every repository private (`factory/decisions.md` [S3](../../../factory/decisions/setup.md)). `factory/scripts/publicize-repo.sh` is the only way the factory makes one public ([S385a](../../../factory/decisions/385.md)).\n15-+\n16:+1. **Only on the owner's word, given in this session.** Run it with the owner's own `gh` login, which holds the admin rights that no workflow token holds. Going public cannot be taken back: a fork or a copy made while the repository is public stays.\n17:+2. **Run `factory/scripts/publicize-repo.sh`.** It refuses, and changes nothing, while an action is not pinned by its commit id, a transcript is published without the token scrub, or a token from before the scrub would become readable. Then tell the owner what it listed. File a `factory` ticket for each fix to a script or workflow (the `ticket` skill), and never edit one yourself. Revoking a token and deleting the `sessions` branch's history or an artifact are the owner's calls, as neither can be undone.\n18-+3. **Show the owner the settings it prints.** It sets only what differs, then reads each setting back. When it fails it names the setting; run it again.\n19-diff --git a/factory/README/where-things-are/agent-instructions.md b/factory/README/where-things-are/agent-instructions.md\n20-index e409eab..fc3d4d4 100644\n--\n34--| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public by hand ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n35-+| S385a | `publicize-repo.sh`, run by the `publicize-repo` skill with the owner's login, is the only way the factory makes a repo public. | It sets the protections a public repo needs and refuses one that would publish a token, where GitHub's settings page checks neither. | Making it public by hand in GitHub's settings, as until #682: nothing is protected until `flag-public.sh`'s ticket is done. A `github.sh` flag: a command for the human to type ([S4](setup.md)). | #385, #639, #682 |\n36-+| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n37: | S385c | `workflow-app.sh` puts the project's workflow app on the bypass list of the ruleset `github.sh` sets on `main`, where GitHub allows that ruleset. | GitHub allows the ruleset on a public repo, and it would refuse the installer's push of a merged workflow change. | No ruleset on a public repo: `main` unlocked where GitHub locks it for nothing. In `github.sh`: the app does not exist until `workflow-app.sh` runs. A step by hand: principle 11. | #385 |\n38-diff --git a/factory/decisions/567.md b/factory/decisions/567.md\n39-index e8dc42f..901f297 100644\n40---- a/factory/decisions/567.md\n--\n43- | ID | Decision | Why | Rejected | Source |\n44- |---|---|---|---|---|\n45- | T567a | `flag-public.sh` files its ticket unless an open one with that title, opened by `github-actions[bot]`, exists. | A second `public` event then files none, and on a public repository anyone can open a ticket with that title. | Only a ticket labelled `needs-human`: an owner who takes the label off would be told twice. A closed ticket too: a repository made public again shows what was written meanwhile. | #567 |\n46:-| T567b | The ticket leaves private vulnerability reporting, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to switch reporting on: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n47:+| T567b | The ticket leaves the `publicize-repo` skill, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to set the protections: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n48- \n49- | ID | Decision | Why | Rejected | Source |\n50- |---|---|---|---|---|\n--\n55-@@ -1,7 +1,7 @@\n56- | ID | Decision | Why | Rejected | Source |\n57- |---|---|---|---|---|\n58:-| A663a | A job that its first model's usage limit holds starts on `AGENT_MODEL_FALLBACK` when the owner names one, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n59--| A663b | The hold names the model a session met the limit on only when a second model is named; otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n60:+| A663a | A job that its first model's usage limit holds starts on the second model, which `AGENT_MODEL_FALLBACK` names, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n61-+| A663b | The hold names the model a session met the limit on only when the second model is another one ([A683b](683.md)); otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n62- | A663c | The second model's limit, met while the first's still holds, makes the hold name no model, until the later of the two resets. | The hold keeps one time, and the later reset is the first moment at which both models are known to be free. | A time for each model: each reader would parse a list, to start a few hours sooner in a rare case. | #663 |\n63- | A663d | A run the usage limit ended part-way waits for the reset of the model it began on, even while the second model is free. | GitHub runs a run again only once it has ended, so only `resume` could start it sooner. | `resume` running it again while the second model is free: a second path through `resume`, for the few runs a limit cuts short. | #663 |\n64: | A663e | A job's first step writes `MODEL` to `GITHUB_ENV`; agents run on it, or on `AGENT_MODEL` without it, and the scripts after a session read it. | Each later step, each continued session and each writer of the hold then names the model the job began on, with nothing passed by hand. | A step output: each agent's line and each later script would name the step, whose id differs by workflow. Writing `AGENT_MODEL` to `GITHUB_ENV`: the workflow's `env` sets it too. | #663 |\n65-diff --git a/factory/decisions/668.md b/factory/decisions/668.md\n66-index 06016bd..5673331 100644\n67---- a/factory/decisions/668.md\n--\n69-@@ -1,6 +1,6 @@\n70- | ID | Decision | Why | Rejected | Source |\n71- |---|---|---|---|---|\n72: | M668a | `ci-run.sh` gives only a `ci` run this repository started, read from GitHub's REST list of the workflow's runs, which names each run's head repository. | A stranger's fork pull request on the same commit starts a `ci` run of its own, and a newer failed one would block the owner's approval. | `gh run list`: its JSON names no repository, so a fork's run looks like the owner's. Filtering on the event: both runs are `pull_request` runs. | #668 |\n73--| S668a | A third-party action is pinned by its 40-character commit id, with its version in a comment; GitHub's own `actions/` keep their tags. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own actions too: they come from the company running the runner, so a pin adds only upkeep. Dependabot moving the pins: its pull requests are not tickets. | #668 |\n74-+| S668a | A third-party action is pinned by its commit id, with its version in a comment; GitHub's own `actions/` keep their tags in a private repository. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own while private: they come from the runner's company, so a pin is only upkeep; a public repository needs it ([S682a](682.md)). Dependabot: its pull requests are not tickets. | #668, #682 |\n75- | S668b | Playwright keeps no trace while the bypass secret is set, and the e2e job redacts it from the test results and uploads no HTML report. | A failed request's call log and a trace both hold its headers, and anyone who can read the repository may download the artifact. | Redacting the HTML report and traces: both are zip archives, which a text replacement cannot reach. Uploading no test results: `post-screenshots.sh` reads their screenshots. | #668 |\n--\n82-@@ -0,0 +1,5 @@\n83-+| ID | Decision | Why | Rejected | Source |\n84-+|---|---|---|---|---|\n85:+| S682a | `publicize-repo.sh` refuses while any action but a local `./` one is not pinned by its commit id, GitHub's own included. | GitHub's rule that every action is pinned, which the script sets, fails each run of an action on a tag, such as `actions/checkout@v4`. | Refusing only third-party actions, as #682 asks: every workflow would fail on GitHub's own tags ([S668a](668.md)). No pinning rule: a moved tag reaches the factory's tokens. | #682 |\n86:+| S682b | `publicize-repo.sh` refuses unless `save-session.sh` and each workflow that uploads an artifact named `session-…` run `scrub-tokens.sh`. | Those are the two ways a transcript is published ([A667a](667.md)), and the names are what a script can check without running a workflow. | Checking that `scrub-tokens.sh` exists alone: a workflow added later could upload without it. Running each workflow to see: a run per check. | #682 |\n87:+| S682c | `publicize-repo.sh` refuses while the `sessions` branch's history, or an unexpired `session-…` artifact from a run on a commit before the workflows scrubbed, holds a token. | Transcripts pushed before #811's scrub stay readable in both once the repository is public. | The branch's tree alone: its history keeps deleted files. Rewriting history: the owner's irreversible call. An artifact's upload time: an old run's re-run uploads late. Downloading every artifact: costly. | #682 |\n88-diff --git a/factory/decisions/683.md b/factory/decisions/683.md\n89-new file mode 100644\n90-index 0000000..3057494\n--\n93-@@ -0,0 +1,4 @@\n94-+| ID | Decision | Why | Rejected | Source |\n95-+|---|---|---|---|---|\n96:+| A683a | Each workflow that reads `AGENT_MODEL_FALLBACK` takes `claude-opus-5-5` as the second model where the variable is unset. | Only this repository had the variable, set by hand, so a new project's agents all stopped at the first model's usage limit. | The bootstrap setting the variable: a project already set up would still have none, and the first model's default is in the workflow. | #683 |\n97:+| A683b | A second model that is the first model counts as none, so the hold is of every model. | An owner who moves `AGENT_MODEL` to the default second model would otherwise be told that held runs start on a second model. | A default the workflow computes to differ from the first: a list of models in each workflow's expression, for what one line of `usage-limit.sh` settles. | #683 |\n98-diff --git a/factory/decisions/684.md b/factory/decisions/684.md\n99-new file mode 100644\n100-index 0000000..918c564\n--\n145-+++ b/factory/owner-guide.md\n146-@@ -21,7 +21,7 @@ The `ready` label starts a build. Dragging a card starts nothing.\n147- 1. **Share a user interview** in a session: the `intake` skill files tickets only where the evidence is strong.\n148: 1. **When an agent run fails with no clear error,** run the `agent-check` workflow: it prints the API error.\n149: 1. **Move the agents to another model,** as when one model's usage limit holds them: `gh variable set AGENT_MODEL --body claude-opus-5-5` and `gh variable set AGENT_EFFORT --body xhigh`, with your own login, or in the repo's Settings → Secrets and variables → Actions → Variables. Every agent that starts afterwards runs with them, and no pull request is needed ([A504a](decisions/504.md)). Then run the `resume` workflow, which lifts the hold of a usage limit and starts again what waited. `gh variable delete AGENT_MODEL` and `gh variable delete AGENT_EFFORT` put back `claude-fable-5-2` and `medium`.\n150--1. **Name a second model** for the agents to start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-opus-5-5`. A job that the first model's limit would hold then starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). `gh variable delete AGENT_MODEL_FALLBACK` holds every job again while a limit holds.\n151-+1. **Change the second model,** which the agents start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-sonnet-5-5`. With no variable it is `claude-opus-5-5` ([A683a](decisions/683.md)). A job that the first model's limit would hold starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). Naming the first model as the second holds every job while a limit holds ([A683b](decisions/683.md)).\n152- 1. **Report a defect you meet using the product:** file it as a Bug. A retro finds the tickets that let it through, and proposes what would have caught it ([A574a](decisions/574.md)).\n--\n181-+  fi\n182-+done",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "fc566239-40f7-4558-afa3-b82509d0b8c2",
+    "timestamp": "2026-11-23T12:30:05.809Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/publicize-repo/SKILL.md\nfactory/README/where-things-are/agent-instructions.md\nfactory/decisions/385.md\nfactory/decisions/567.md\nfactory/decisions/663.md\nfactory/decisions/668.md\nfactory/decisions/682.md\nfactory/decisions/683.md\nfactory/decisions/684.md\nfactory/free-tier/385.md\nfactory/free-tier/entry-13.md\nfactory/free-tier/entry-16.md\nfactory/owner-guide.md\nfactory/rule-files.txt\nfactory/scripts/check-factory.sh\nfactory/scripts/flag-public.sh\nfactory/scripts/publicize-repo.sh\nfactory/scripts/usage-limit.sh\nfactory/tests/agent-model.test.sh\nfactory/tests/check-factory.test.sh\nfactory/tests/flag-public.test.sh\nfactory/tests/helpers.sh\nfactory/tests/publicize-repo.test.sh\nfactory/tests/usage-limit.test.sh\nfactory/workflows/ci.yml\nfactory/workflows/claude.yml\nfactory/workflows/fix.yml\nfactory/workflows/implement.yml\nfactory/workflows/refine.yml\nfactory/workflows/retro.yml\n11-+\n12-+# Publicize the repo\n13-+\n14:+A public repository shows anyone every ticket, every decision, every workflow log and every agent transcript on the `sessions` branch, and lets anyone open an issue or a pull request. Setup keeps every repository private (`factory/decisions.md` [S3](../../../factory/decisions/setup.md)). `factory/scripts/publicize-repo.sh` is the only way the factory makes one public ([S385a](../../../factory/decisions/385.md)).\n15-+\n16:+1. **Only on the owner's word, given in this session.** Run it with the owner's own `gh` login, which holds the admin rights that no workflow token holds. Going public cannot be taken back: a fork or a copy made while the repository is public stays.\n17:+2. **Run `factory/scripts/publicize-repo.sh`.** It refuses, and changes nothing, while an action is not pinned by its commit id, a transcript is published without the token scrub, or a token from before the scrub would become readable. Then tell the owner what it listed. File a `factory` ticket for each fix to a script or workflow (the `ticket` skill), and never edit one yourself. Revoking a token and deleting the `sessions` branch's history or an artifact are the owner's calls, as neither can be undone.\n18-+3. **Show the owner the settings it prints.** It sets only what differs, then reads each setting back. When it fails it names the setting; run it again.\n19-diff --git a/factory/README/where-things-are/agent-instructions.md b/factory/README/where-things-are/agent-instructions.md\n20-index e409eab..fc3d4d4 100644\n--\n34--| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public by hand ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n35-+| S385a | `publicize-repo.sh`, run by the `publicize-repo` skill with the owner's login, is the only way the factory makes a repo public. | It sets the protections a public repo needs and refuses one that would publish a token, where GitHub's settings page checks neither. | Making it public by hand in GitHub's settings, as until #682: nothing is protected until `flag-public.sh`'s ticket is done. A `github.sh` flag: a command for the human to type ([S4](setup.md)). | #385, #639, #682 |\n36-+| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n37: | S385c | `workflow-app.sh` puts the project's workflow app on the bypass list of the ruleset `github.sh` sets on `main`, where GitHub allows that ruleset. | GitHub allows the ruleset on a public repo, and it would refuse the installer's push of a merged workflow change. | No ruleset on a public repo: `main` unlocked where GitHub locks it for nothing. In `github.sh`: the app does not exist until `workflow-app.sh` runs. A step by hand: principle 11. | #385 |\n38-diff --git a/factory/decisions/567.md b/factory/decisions/567.md\n39-index e8dc42f..901f297 100644\n40---- a/factory/decisions/567.md\n--\n43- | ID | Decision | Why | Rejected | Source |\n44- |---|---|---|---|---|\n45- | T567a | `flag-public.sh` files its ticket unless an open one with that title, opened by `github-actions[bot]`, exists. | A second `public` event then files none, and on a public repository anyone can open a ticket with that title. | Only a ticket labelled `needs-human`: an owner who takes the label off would be told twice. A closed ticket too: a repository made public again shows what was written meanwhile. | #567 |\n46:-| T567b | The ticket leaves private vulnerability reporting, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to switch reporting on: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n47:+| T567b | The ticket leaves the `publicize-repo` skill, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to set the protections: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n48- \n49- | ID | Decision | Why | Rejected | Source |\n50- |---|---|---|---|---|\n--\n55-@@ -1,7 +1,7 @@\n56- | ID | Decision | Why | Rejected | Source |\n57- |---|---|---|---|---|\n58:-| A663a | A job that its first model's usage limit holds starts on `AGENT_MODEL_FALLBACK` when the owner names one, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n59--| A663b | The hold names the model a session met the limit on only when a second model is named; otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n60:+| A663a | A job that its first model's usage limit holds starts on the second model, which `AGENT_MODEL_FALLBACK` names, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n61-+| A663b | The hold names the model a session met the limit on only when the second model is another one ([A683b](683.md)); otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n62- | A663c | The second model's limit, met while the first's still holds, makes the hold name no model, until the later of the two resets. | The hold keeps one time, and the later reset is the first moment at which both models are known to be free. | A time for each model: each reader would parse a list, to start a few hours sooner in a rare case. | #663 |\n63- | A663d | A run the usage limit ended part-way waits for the reset of the model it began on, even while the second model is free. | GitHub runs a run again only once it has ended, so only `resume` could start it sooner. | `resume` running it again while the second model is free: a second path through `resume`, for the few runs a limit cuts short. | #663 |\n64: | A663e | A job's first step writes `MODEL` to `GITHUB_ENV`; agents run on it, or on `AGENT_MODEL` without it, and the scripts after a session read it. | Each later step, each continued session and each writer of the hold then names the model the job began on, with nothing passed by hand. | A step output: each agent's line and each later script would name the step, whose id differs by workflow. Writing `AGENT_MODEL` to `GITHUB_ENV`: the workflow's `env` sets it too. | #663 |\n65-diff --git a/factory/decisions/668.md b/factory/decisions/668.md\n66-index 06016bd..5673331 100644\n67---- a/factory/decisions/668.md\n--\n69-@@ -1,6 +1,6 @@\n70- | ID | Decision | Why | Rejected | Source |\n71- |---|---|---|---|---|\n72: | M668a | `ci-run.sh` gives only a `ci` run this repository started, read from GitHub's REST list of the workflow's runs, which names each run's head repository. | A stranger's fork pull request on the same commit starts a `ci` run of its own, and a newer failed one would block the owner's approval. | `gh run list`: its JSON names no repository, so a fork's run looks like the owner's. Filtering on the event: both runs are `pull_request` runs. | #668 |\n73--| S668a | A third-party action is pinned by its 40-character commit id, with its version in a comment; GitHub's own `actions/` keep their tags. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own actions too: they come from the company running the runner, so a pin adds only upkeep. Dependabot moving the pins: its pull requests are not tickets. | #668 |\n74-+| S668a | A third-party action is pinned by its commit id, with its version in a comment; GitHub's own `actions/` keep their tags in a private repository. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own while private: they come from the runner's company, so a pin is only upkeep; a public repository needs it ([S682a](682.md)). Dependabot: its pull requests are not tickets. | #668, #682 |\n75- | S668b | Playwright keeps no trace while the bypass secret is set, and the e2e job redacts it from the test results and uploads no HTML report. | A failed request's call log and a trace both hold its headers, and anyone who can read the repository may download the artifact. | Redacting the HTML report and traces: both are zip archives, which a text replacement cannot reach. Uploading no test results: `post-screenshots.sh` reads their screenshots. | #668 |\n--\n82-@@ -0,0 +1,5 @@\n83-+| ID | Decision | Why | Rejected | Source |\n84-+|---|---|---|---|---|\n85:+| S682a | `publicize-repo.sh` refuses while any action but a local `./` one is not pinned by its commit id, GitHub's own included. | GitHub's rule that every action is pinned, which the script sets, fails each run of an action on a tag, such as `actions/checkout@v4`. | Refusing only third-party actions, as #682 asks: every workflow would fail on GitHub's own tags ([S668a](668.md)). No pinning rule: a moved tag reaches the factory's tokens. | #682 |\n86:+| S682b | `publicize-repo.sh` refuses unless `save-session.sh` and each workflow that uploads an artifact named `session-…` run `scrub-tokens.sh`. | Those are the two ways a transcript is published ([A667a](667.md)), and the names are what a script can check without running a workflow. | Checking that `scrub-tokens.sh` exists alone: a workflow added later could upload without it. Running each workflow to see: a run per check. | #682 |\n87:+| S682c | `publicize-repo.sh` refuses while the `sessions` branch's history, or an unexpired `session-…` artifact from a run on a commit before the workflows scrubbed, holds a token. | Transcripts pushed before #811's scrub stay readable in both once the repository is public. | The branch's tree alone: its history keeps deleted files. Rewriting history: the owner's irreversible call. An artifact's upload time: an old run's re-run uploads late. Downloading every artifact: costly. | #682 |\n88-diff --git a/factory/decisions/683.md b/factory/decisions/683.md\n89-new file mode 100644\n90-index 0000000..3057494\n--\n93-@@ -0,0 +1,4 @@\n94-+| ID | Decision | Why | Rejected | Source |\n95-+|---|---|---|---|---|\n96:+| A683a | Each workflow that reads `AGENT_MODEL_FALLBACK` takes `claude-opus-5-5` as the second model where the variable is unset. | Only this repository had the variable, set by hand, so a new project's agents all stopped at the first model's usage limit. | The bootstrap setting the variable: a project already set up would still have none, and the first model's default is in the workflow. | #683 |\n97:+| A683b | A second model that is the first model counts as none, so the hold is of every model. | An owner who moves `AGENT_MODEL` to the default second model would otherwise be told that held runs start on a second model. | A default the workflow computes to differ from the first: a list of models in each workflow's expression, for what one line of `usage-limit.sh` settles. | #683 |\n98-diff --git a/factory/decisions/684.md b/factory/decisions/684.md\n99-new file mode 100644\n100-index 0000000..918c564\n--\n145-+++ b/factory/owner-guide.md\n146-@@ -21,7 +21,7 @@ The `ready` label starts a build. Dragging a card starts nothing.\n147- 1. **Share a user interview** in a session: the `intake` skill files tickets only where the evidence is strong.\n148: 1. **When an agent run fails with no clear error,** run the `agent-check` workflow: it prints the API error.\n149: 1. **Move the agents to another model,** as when one model's usage limit holds them: `gh variable set AGENT_MODEL --body claude-opus-5-5` and `gh variable set AGENT_EFFORT --body xhigh`, with your own login, or in the repo's Settings → Secrets and variables → Actions → Variables. Every agent that starts afterwards runs with them, and no pull request is needed ([A504a](decisions/504.md)). Then run the `resume` workflow, which lifts the hold of a usage limit and starts again what waited. `gh variable delete AGENT_MODEL` and `gh variable delete AGENT_EFFORT` put back `claude-fable-5-2` and `medium`.\n150--1. **Name a second model** for the agents to start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-opus-5-5`. A job that the first model's limit would hold then starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). `gh variable delete AGENT_MODEL_FALLBACK` holds every job again while a limit holds.\n151-+1. **Change the second model,** which the agents start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-sonnet-5-5`. With no variable it is `claude-opus-5-5` ([A683a](decisions/683.md)). A job that the first model's limit would hold starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). Naming the first model as the second holds every job while a limit holds ([A683b](decisions/683.md)).\n152- 1. **Report a defect you meet using the product:** file it as a Bug. A retro finds the tickets that let it through, and proposes what would have caught it ([A574a](decisions/574.md)).\n--\n181-+  fi\n182-+done",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01MA8yn9cY5NexpG65MdR5Ro",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrxEge4s35ut2HWrn2J",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01FLQZBVvUJNP4GexaxykktQ",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 -- 2>/dev/null | awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons | tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\""
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6120,
+        "cache_read_input_tokens": 29194,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 6120
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "7bb42d54-296d-46b7-af32-81bbaea559c6",
+    "timestamp": "2026-11-23T12:30:10.008Z",
+    "request_id": "req_011ChKrxEYiDG51kd6SRvWeH",
+    "wire_tool_inputs": {
+      "toolu_01FLQZBVvUJNP4GexaxykktQ": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 -- 2>/dev/null | awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons | tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\""
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01FLQZBVvUJNP4GexaxykktQ",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons, tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\"",
+    "uuid": "a24e3f46-0c78-4d5b-9356-c92b337cdfe5",
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons, tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\"",
+          "is_error": true,
+          "tool_use_id": "toolu_01FLQZBVvUJNP4GexaxykktQ"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "82869383-b15b-43ef-b902-fef76614d834",
+    "timestamp": "2026-11-23T12:30:10.029Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons, tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\"",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01FLQZBVvUJNP4GexaxykktQ",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrxYm5fSoCArayCKE98",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01H93PQzKygc2hyCXvJcKDrQ",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 > /tmp/pr685.diff; grep -n '^diff --git' /tmp/pr685.diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 374,
+        "cache_read_input_tokens": 35314,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 374
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b161728e-b24b-435a-85a5-e7945fab19be",
+    "timestamp": "2026-11-23T12:30:14.709Z",
+    "request_id": "req_011ChKrxYc9WU4TAXnqB1UjG",
+    "wire_tool_inputs": {
+      "toolu_01H93PQzKygc2hyCXvJcKDrQ": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 > /tmp/pr685.diff; grep -n '^diff --git' /tmp/pr685.diff"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01H93PQzKygc2hyCXvJcKDrQ",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 685, grep -n '^diff --git' /tmp/pr685.diff",
+    "uuid": "0d8d6d4b-9e4b-42b9-904e-ff62bba23b96",
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 685, grep -n '^diff --git' /tmp/pr685.diff",
+          "is_error": true,
+          "tool_use_id": "toolu_01H93PQzKygc2hyCXvJcKDrQ"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "cb3436dc-3942-42b0-8599-ee684de160ea",
+    "timestamp": "2026-11-23T12:30:14.724Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: gh pr diff 685, grep -n '^diff --git' /tmp/pr685.diff",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01H93PQzKygc2hyCXvJcKDrQ",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrxtobDXAsnGctZqS5T",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'm reading the CI workflow's part of pull request #685's diff, to compare it with what the run did."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 208,
+        "cache_read_input_tokens": 35688,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 208
+        },
+        "output_tokens": 56,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "638367be-ee82-4820-9bfa-f8286a28881b",
+    "timestamp": "2026-11-23T12:30:16.788Z",
+    "request_id": "req_011ChKrxtef81ADSAPifv2zW"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrxtobDXAsnGctZqS5T",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019mAjHo6a9e3QgS2DoPC2D3",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 685 --repo edmulraney/tinyfactory"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 208,
+        "cache_read_input_tokens": 35688,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 208
+        },
+        "output_tokens": 56,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "ea9c92b3-0620-471a-bc5b-065566d7811f",
+    "timestamp": "2026-11-23T12:30:17.105Z",
+    "request_id": "req_011ChKrxtef81ADSAPifv2zW",
+    "wire_tool_inputs": {
+      "toolu_019mAjHo6a9e3QgS2DoPC2D3": {
+        "command": "gh pr diff 685 --repo edmulraney/tinyfactory"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_019mAjHo6a9e3QgS2DoPC2D3",
+          "type": "tool_result",
+          "content": "<persisted-output>\nOutput too large (62.5KB). Full output saved to: /home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/c2dd5c35-7eab-442d-876c-240a96039200/tool-results/bukbthaxy.txt\n\nPreview (first 2KB):\ndiff --git a/.claude/skills/publicize-repo/SKILL.md b/.claude/skills/publicize-repo/SKILL.md\nnew file mode 100644\nindex 0000000..43a8a6d\n--- /dev/null\n+++ b/.claude/skills/publicize-repo/SKILL.md\n@@ -0,0 +1,12 @@\n+---\n+name: publicize-repo\n+description: Make the project's GitHub repository public, with secret scanning, push protection, approval of outside contributors' runs, private vulnerability reporting and pinned actions. Use when the owner asks to make the repository public or to open-source it.\n+---\n+\n+# Publicize the repo\n+\n+A public repository shows anyone every ticket, every decision, every workflow log and every agent transcript on the `sessions` branch, and lets anyone open an issue or a pull request. Setup keeps every repository private (`factory/decisions.md` [S3](../../../factory/decisions/setup.md)). `factory/scripts/publicize-repo.sh` is the only way the factory makes one public ([S385a](../../../factory/decisions/385.md)).\n+\n+1. **Only on the owner's word, given in this session.** Run it with the owner's own `gh` login, which holds the admin rights that no workflow token holds. Going public cannot be taken back: a fork or a copy made while the repository is public stays.\n+2. **Run `factory/scripts/publicize-repo.sh`.** It refuses, and changes nothing, while an action is not pinned by its commit id, a transcript is published without the token scrub, or a token from before the scrub would become readable. Then tell the owner what it listed. File a `factory` ticket for each fix to a script or workflow (the `ticket` skill), and never edit one yourself. Revoking a token and deleting the `sessions` branch's history or an artifact are the owner's calls, as neither can be undone.\n+3. **Show the owner the settings it prints.** It sets only what differs, then reads each setting back. When it fails it names the setting; run it again.\ndiff --git a/factory/README/where-things-are/agent-instructions.md b/factory/README/where-things-are/agent-instructions.md\n...\n</persisted-output>",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "8ba433d7-f173-4baf-917d-93749f55d2ca",
+    "timestamp": "2026-11-23T12:30:18.050Z",
+    "tool_use_result": {
+      "stdout": "diff --git a/.claude/skills/publicize-repo/SKILL.md b/.claude/skills/publicize-repo/SKILL.md\nnew file mode 100644\nindex 0000000..43a8a6d\n--- /dev/null\n+++ b/.claude/skills/publicize-repo/SKILL.md\n@@ -0,0 +1,12 @@\n+---\n+name: publicize-repo\n+description: Make the project's GitHub repository public, with secret scanning, push protection, approval of outside contributors' runs, private vulnerability reporting and pinned actions. Use when the owner asks to make the repository public or to open-source it.\n+---\n+\n+# Publicize the repo\n+\n+A public repository shows anyone every ticket, every decision, every workflow log and every agent transcript on the `sessions` branch, and lets anyone open an issue or a pull request. Setup keeps every repository private (`factory/decisions.md` [S3](../../../factory/decisions/setup.md)). `factory/scripts/publicize-repo.sh` is the only way the factory makes one public ([S385a](../../../factory/decisions/385.md)).\n+\n+1. **Only on the owner's word, given in this session.** Run it with the owner's own `gh` login, which holds the admin rights that no workflow token holds. Going public cannot be taken back: a fork or a copy made while the repository is public stays.\n+2. **Run `factory/scripts/publicize-repo.sh`.** It refuses, and changes nothing, while an action is not pinned by its commit id, a transcript is published without the token scrub, or a token from before the scrub would become readable. Then tell the owner what it listed. File a `factory` ticket for each fix to a script or workflow (the `ticket` skill), and never edit one yourself. Revoking a token and deleting the `sessions` branch's history or an artifact are the owner's calls, as neither can be undone.\n+3. **Show the owner the settings it prints.** It sets only what differs, then reads each setting back. When it fails it names the setting; run it again.\ndiff --git a/factory/README/where-things-are/agent-instructions.md b/factory/README/where-things-are/agent-instructions.md\nindex e409eab..fc3d4d4 100644\n--- a/factory/README/where-things-are/agent-instructions.md\n+++ b/factory/README/where-things-are/agent-instructions.md\n@@ -1 +1 @@\n-| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `design` (Dara), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `bootstrap` |\n+| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `design` (Dara), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `publicize-repo`, `bootstrap` |\ndiff --git a/factory/decisions/385.md b/factory/decisions/385.md\nindex f1ebb8d..c2d63ed 100644\n--- a/factory/decisions/385.md\n+++ b/factory/decisions/385.md\n@@ -1,5 +1,5 @@\n | ID | Decision | Why | Rejected | Source |\n |---|---|---|---|---|\n-| S385a | An owner who wants a public repo makes it public by hand in GitHub's settings; setup holds no setting for it. | GitHub shows there what the change does, and `flag-public.sh` then tells the owner what anyone can read ([T567a](567.md)). | A bullet in `PURPOSE.md` that `github.sh` reads, as until #639: [S3](setup.md). A flag to `github.sh`: a command for the human to type ([S4](setup.md)). | #385, #639 |\n-| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public by hand ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n+| S385a | `publicize-repo.sh`, run by the `publicize-repo` skill with the owner's login, is the only way the factory makes a repo public. | It sets the protections a public repo needs and refuses one that would publish a token, where GitHub's settings page checks neither. | Making it public by hand in GitHub's settings, as until #682: nothing is protected until `flag-public.sh`'s ticket is done. A `github.sh` flag: a command for the human to type ([S4](setup.md)). | #385, #639, #682 |\n+| S385b | `github.sh` makes a repo private only when it creates it; a repo that exists keeps the visibility it has. | An owner may have made the repo public ([S385a](385.md)), and a re-run of setup must not undo that. | Making it private on each run: it would undo the owner's choice. Stopping on a public repo: setup could not be re-run to repair anything else. | #385, #639 |\n | S385c | `workflow-app.sh` puts the project's workflow app on the bypass list of the ruleset `github.sh` sets on `main`, where GitHub allows that ruleset. | GitHub allows the ruleset on a public repo, and it would refuse the installer's push of a merged workflow change. | No ruleset on a public repo: `main` unlocked where GitHub locks it for nothing. In `github.sh`: the app does not exist until `workflow-app.sh` runs. A step by hand: principle 11. | #385 |\ndiff --git a/factory/decisions/567.md b/factory/decisions/567.md\nindex e8dc42f..901f297 100644\n--- a/factory/decisions/567.md\n+++ b/factory/decisions/567.md\n@@ -1,7 +1,7 @@\n | ID | Decision | Why | Rejected | Source |\n |---|---|---|---|---|\n | T567a | `flag-public.sh` files its ticket unless an open one with that title, opened by `github-actions[bot]`, exists. | A second `public` event then files none, and on a public repository anyone can open a ticket with that title. | Only a ticket labelled `needs-human`: an owner who takes the label off would be told twice. A closed ticket too: a repository made public again shows what was written meanwhile. | #567 |\n-| T567b | The ticket leaves private vulnerability reporting, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to switch reporting on: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n+| T567b | The ticket leaves the `publicize-repo` skill, and a `SECURITY.md` where the repository holds none, to the owner; `flag-public.yml` does neither. | A workflow's own token cannot change a repository's settings, and a change to `SECURITY.md` waits for the owner ([M563y](563.md)). | An admin token to set the protections: a credential kept for one call (principle 12). A seed `SECURITY.md` pushed by the workflow: a private project holds none ([U563r](563.md)). | #567 |\n \n | ID | Decision | Why | Rejected | Source |\n |---|---|---|---|---|\ndiff --git a/factory/decisions/663.md b/factory/decisions/663.md\nindex df4b61c..0948776 100644\n--- a/factory/decisions/663.md\n+++ b/factory/decisions/663.md\n@@ -1,7 +1,7 @@\n | ID | Decision | Why | Rejected | Source |\n |---|---|---|---|---|\n-| A663a | A job that its first model's usage limit holds starts on `AGENT_MODEL_FALLBACK` when the owner names one, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n-| A663b | The hold names the model a session met the limit on only when a second model is named; otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n+| A663a | A job that its first model's usage limit holds starts on the second model, which `AGENT_MODEL_FALLBACK` names, and its ticket is told. | The subscription may still have usage for another model, and on 22 November 2026 the owner planned a switch by hand at 94% of one model's usage. | Switching `AGENT_MODEL` itself: the workflow's token cannot write a variable ([A185b](185.md)). Starting on the first model and trying the second after a refusal: a session spent on the refusal. | #663 |\n+| A663b | The hold names the model a session met the limit on only when the second model is another one ([A683b](683.md)); otherwise it holds every model. | With no second model no job could run on another one, so every job holds as before. | Naming the model always: a job would start against the limit whenever `AGENT_MODEL` changed, which was the owner's switch by hand and needed `resume.yml`. | #663 |\n | A663c | The second model's limit, met while the first's still holds, makes the hold name no model, until the later of the two resets. | The hold keeps one time, and the later reset is the first moment at which both models are known to be free. | A time for each model: each reader would parse a list, to start a few hours sooner in a rare case. | #663 |\n | A663d | A run the usage limit ended part-way waits for the reset of the model it began on, even while the second model is free. | GitHub runs a run again only once it has ended, so only `resume` could start it sooner. | `resume` running it again while the second model is free: a second path through `resume`, for the few runs a limit cuts short. | #663 |\n | A663e | A job's first step writes `MODEL` to `GITHUB_ENV`; agents run on it, or on `AGENT_MODEL` without it, and the scripts after a session read it. | Each later step, each continued session and each writer of the hold then names the model the job began on, with nothing passed by hand. | A step output: each agent's line and each later script would name the step, whose id differs by workflow. Writing `AGENT_MODEL` to `GITHUB_ENV`: the workflow's `env` sets it too. | #663 |\ndiff --git a/factory/decisions/668.md b/factory/decisions/668.md\nindex 06016bd..5673331 100644\n--- a/factory/decisions/668.md\n+++ b/factory/decisions/668.md\n@@ -1,6 +1,6 @@\n | ID | Decision | Why | Rejected | Source |\n |---|---|---|---|---|\n | M668a | `ci-run.sh` gives only a `ci` run this repository started, read from GitHub's REST list of the workflow's runs, which names each run's head repository. | A stranger's fork pull request on the same commit starts a `ci` run of its own, and a newer failed one would block the owner's approval. | `gh run list`: its JSON names no repository, so a fork's run looks like the owner's. Filtering on the event: both runs are `pull_request` runs. | #668 |\n-| S668a | A third-party action is pinned by its 40-character commit id, with its version in a comment; GitHub's own `actions/` keep their tags. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own actions too: they come from the company running the runner, so a pin adds only upkeep. Dependabot moving the pins: its pull requests are not tickets. | #668 |\n+| S668a | A third-party action is pinned by its commit id, with its version in a comment; GitHub's own `actions/` keep their tags in a private repository. | Whoever owns an action can move its tag, and an agent's step holds the factory's tokens. | Pinning GitHub's own while private: they come from the runner's company, so a pin is only upkeep; a public repository needs it ([S682a](682.md)). Dependabot: its pull requests are not tickets. | #668, #682 |\n | S668b | Playwright keeps no trace while the bypass secret is set, and the e2e job redacts it from the test results and uploads no HTML report. | A failed request's call log and a trace both hold its headers, and anyone who can read the repository may download the artifact. | Redacting the HTML report and traces: both are zip archives, which a text replacement cannot reach. Uploading no test results: `post-screenshots.sh` reads their screenshots. | #668 |\n | M668b | `ci-run.sh` reads every page of a commit's runs. | A stranger can open fork pull requests on the commit until this repository's run is off the first page, which blocks the owner's approval. | One page of 100, the most GitHub gives: still a number a stranger can pass. | #668 |\ndiff --git a/factory/decisions/682.md b/factory/decisions/682.md\nnew file mode 100644\nindex 0000000..cb4fa26\n--- /dev/null\n+++ b/factory/decisions/682.md\n@@ -0,0 +1,5 @@\n+| ID | Decision | Why | Rejected | Source |\n+|---|---|---|---|---|\n+| S682a | `publicize-repo.sh` refuses while any action but a local `./` one is not pinned by its commit id, GitHub's own included. | GitHub's rule that every action is pinned, which the script sets, fails each run of an action on a tag, such as `actions/checkout@v4`. | Refusing only third-party actions, as #682 asks: every workflow would fail on GitHub's own tags ([S668a](668.md)). No pinning rule: a moved tag reaches the factory's tokens. | #682 |\n+| S682b | `publicize-repo.sh` refuses unless `save-session.sh` and each workflow that uploads an artifact named `session-…` run `scrub-tokens.sh`. | Those are the two ways a transcript is published ([A667a](667.md)), and the names are what a script can check without running a workflow. | Checking that `scrub-tokens.sh` exists alone: a workflow added later could upload without it. Running each workflow to see: a run per check. | #682 |\n+| S682c | `publicize-repo.sh` refuses while the `sessions` branch's history, or an unexpired `session-…` artifact from a run on a commit before the workflows scrubbed, holds a token. | Transcripts pushed before #811's scrub stay readable in both once the repository is public. | The branch's tree alone: its history keeps deleted files. Rewriting history: the owner's irreversible call. An artifact's upload time: an old run's re-run uploads late. Downloading every artifact: costly. | #682 |\ndiff --git a/factory/decisions/683.md b/factory/decisions/683.md\nnew file mode 100644\nindex 0000000..3057494\n--- /dev/null\n+++ b/factory/decisions/683.md\n@@ -0,0 +1,4 @@\n+| ID | Decision | Why | Rejected | Source |\n+|---|---|---|---|---|\n+| A683a | Each workflow that reads `AGENT_MODEL_FALLBACK` takes `claude-opus-5-5` as the second model where the variable is unset. | Only this repository had the variable, set by hand, so a new project's agents all stopped at the first model's usage limit. | The bootstrap setting the variable: a project already set up would still have none, and the first model's default is in the workflow. | #683 |\n+| A683b | A second model that is the first model counts as none, so the hold is of every model. | An owner who moves `AGENT_MODEL` to the default second model would otherwise be told that held runs start on a second model. | A default the workflow computes to differ from the first: a list of models in each workflow's expression, for what one line of `usage-limit.sh` settles. | #683 |\ndiff --git a/factory/decisions/684.md b/factory/decisions/684.md\nnew file mode 100644\nindex 0000000..918c564\n--- /dev/null\n+++ b/factory/decisions/684.md\n@@ -0,0 +1,3 @@\n+| ID | Decision | Why | Rejected | Source |\n+|---|---|---|---|---|\n+| H684 | `check-factory.sh` refuses what bash 3.2 lacks and a line's text shows: an associative array, `mapfile`, `readarray`, `coproc`, a case-changing expansion, `&>>`, `\\|&`. | `checks` runs bash 5, so only a reviewer's reading caught `declare -A` in pull request 871, and its fix round cost $1.54 and 16 minutes. | The factory's tests on a macOS runner: more billed Actions minutes, which is the owner's spending decision. A rule for an empty array: the text shows none ([H632a](632.md)). | #684 |\ndiff --git a/factory/free-tier/385.md b/factory/free-tier/385.md\nindex 5fa06c9..0ce7363 100644\n--- a/factory/free-tier/385.md\n+++ b/factory/free-tier/385.md\n@@ -1,6 +1,6 @@\n ### #385. A repository the owner makes public has no limit on Actions minutes\n \n-- **Set:** nothing by setup: `github.sh` creates every repo private (`decisions.md` [S3](../decisions/setup.md)). An owner who wants a public repo makes it public by hand, and a re-run of setup keeps it public ([S385a](../decisions/385.md), [S385b](../decisions/385.md)).\n+- **Set:** nothing by setup: `github.sh` creates every repo private (`decisions.md` [S3](../decisions/setup.md)). An owner who wants a public repo makes it public with the `publicize-repo` skill, and a re-run of setup keeps it public ([S385a](../decisions/385.md), [S385b](../decisions/385.md)).\n - **Protects:** Actions minutes.\n - **What happened:** this factory, in a private repo, used the month's 2,000 minutes and $30 more in the first 18 days of November 2026. Ticket #385 let the owner choose a public repo in the purpose interview; on 21 November 2026 the owner took the question out (ticket #639).\n - **Numbers:** a private repo has 2,000 minutes a month, and a public one has no limit, as ticket #385 gives them on 18 November 2026. On a public repo the per-ticket minutes in the table are counted against nothing, and Neon's branches bind first.\ndiff --git a/factory/free-tier/entry-13.md b/factory/free-tier/entry-13.md\nindex 03a6bf2..2dd2d1a 100644\n--- a/factory/free-tier/entry-13.md\n+++ b/factory/free-tier/entry-13.md\n@@ -1,6 +1,6 @@\n ### 13. A session cut short is continued on the runner it ran on\n \n-- **Set:** in `implement.yml`, `fix.yml` and `ci.yml` (job `review`), a session that ends before its work is handed over is continued in the same job, twice at most. One the Claude usage limit ended is not continued: its work is kept, its job passes, no retro starts, and no agent starts on the held model until the limit resets; with `AGENT_MODEL_FALLBACK` naming a second model, the runs that begin meanwhile start on it (`decisions.md` [A231a](../decisions/231.md), [A231c](../decisions/231.md), [A663a](../decisions/663.md); [entry #395](395.md)). The retro is not continued but started afresh, with waits of its own ([entry 11](entry-11.md)). After an API error the job waits first: 2 minutes before the first continuation, 5 before the second (ticket #69; `decisions.md` [A69a](../decisions/69.md) to [A69h](../decisions/69.md)).\n+- **Set:** in `implement.yml`, `fix.yml` and `ci.yml` (job `review`), a session that ends before its work is handed over is continued in the same job, twice at most. One the Claude usage limit ended is not continued: its work is kept, its job passes, no retro starts, and no agent starts on the held model until the limit resets; the runs that begin meanwhile start on the second model (`decisions.md` [A231a](../decisions/231.md), [A231c](../decisions/231.md), [A663a](../decisions/663.md); [entry #395](395.md)). The retro is not continued but started afresh, with waits of its own ([entry 11](entry-11.md)). After an API error the job waits first: 2 minutes before the first continuation, 5 before the second (ticket #69; `decisions.md` [A69a](../decisions/69.md) to [A69h](../decisions/69.md)).\n - **Protects:** Claude usage and Actions minutes.\n - **What happened:** on 16 November 2026 two builds finished their work and lost it with the runner. Ticket #57: 16 minutes and $5.44, ended by an overloaded API on the last step; building it again took 21 minutes and $6.82. Ticket #67: 15 minutes and $6.13, ended by the engineer's own early stop.\n - **Numbers:**\ndiff --git a/factory/free-tier/entry-16.md b/factory/free-tier/entry-16.md\nindex 327403d..cee975d 100644\n--- a/factory/free-tier/entry-16.md\n+++ b/factory/free-tier/entry-16.md\n@@ -6,5 +6,5 @@\n - **Numbers, Actions minutes for the test with `main`:** [entry #455](455.md). A ticket that merges while nothing else waits is not tested a second time, and pull requests that wait together share one test. A merge that leaves another pull request in conflict costs that one a fix round, about 7 minutes and $0.60 ([entry 14](entry-14.md)); the `promote` skill tells the owner when two tickets are likely to edit the same lines.\n - **Numbers, the check itself:** four reads from GitHub and one label change, a few seconds in a job that already runs, so no Actions minutes. A refused ticket ends its run in under a minute, billed as one, and starts no retro (`decisions.md` [T64f](../decisions/64.md)).\n   - Rejected, a job of its own holding one concurrency group, to settle two tickets labelled at the same moment: a billed minute on every ticket, 9 minutes becoming 10 (`decisions.md` [T64d](../decisions/64.md)).\n-- **Claude usage:** not a figure the factory can read. Three builds at once draw on one subscription's limits three times as fast as one; a session the limit cuts short is not continued: its work is kept, and no agent starts on the held model until the limit resets, though the runs that begin meanwhile start on a second model when `AGENT_MODEL_FALLBACK` names one ([entry 13](entry-13.md); [entry #395](395.md); `decisions.md` [A231b](../decisions/231.md), [A663a](../decisions/663.md)).\n+- **Claude usage:** not a figure the factory can read. Three builds at once draw on one subscription's limits three times as fast as one; a session the limit cuts short is not continued: its work is kept, and no agent starts on the held model until the limit resets, though the runs that begin meanwhile start on the second model ([entry 13](entry-13.md); [entry #395](395.md); `decisions.md` [A231b](../decisions/231.md), [A663a](../decisions/663.md)).\n - **Automated:** yes.\ndiff --git a/factory/owner-guide.md b/factory/owner-guide.md\nindex 421d426..581aecc 100644\n--- a/factory/owner-guide.md\n+++ b/factory/owner-guide.md\n@@ -21,7 +21,7 @@ The `ready` label starts a build. Dragging a card starts nothing.\n 1. **Share a user interview** in a session: the `intake` skill files tickets only where the evidence is strong.\n 1. **When an agent run fails with no clear error,** run the `agent-check` workflow: it prints the API error.\n 1. **Move the agents to another model,** as when one model's usage limit holds them: `gh variable set AGENT_MODEL --body claude-opus-5-5` and `gh variable set AGENT_EFFORT --body xhigh`, with your own login, or in the repo's Settings → Secrets and variables → Actions → Variables. Every agent that starts afterwards runs with them, and no pull request is needed ([A504a](decisions/504.md)). Then run the `resume` workflow, which lifts the hold of a usage limit and starts again what waited. `gh variable delete AGENT_MODEL` and `gh variable delete AGENT_EFFORT` put back `claude-fable-5-2` and `medium`.\n-1. **Name a second model** for the agents to start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-opus-5-5`. A job that the first model's limit would hold then starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). `gh variable delete AGENT_MODEL_FALLBACK` holds every job again while a limit holds.\n+1. **Change the second model,** which the agents start on while the first model's usage limit holds them: `gh variable set AGENT_MODEL_FALLBACK --body claude-sonnet-5-5`. With no variable it is `claude-opus-5-5` ([A683a](decisions/683.md)). A job that the first model's limit would hold starts on the second, and its ticket or pull request is told which model runs ([A663a](decisions/663.md)). A run that the limit ended part-way still waits for its own model's reset ([A663d](decisions/663.md)). Naming the first model as the second holds every job while a limit holds ([A683b](decisions/683.md)).\n 1. **Report a defect you meet using the product:** file it as a Bug. A retro finds the tickets that let it through, and proposes what would have caught it ([A574a](decisions/574.md)).\n 1. **Ask for help** in a comment that holds `@claude`, on a ticket or pull request that an account with write access opened: an agent replies ([A372a](decisions/372.md)), and a retro proposes what would have made the request unneeded ([A446a](decisions/446.md)).\n 1. **Open an Idea:** Peta says whether it should be built ([A610a](decisions/610.md)) and proposes slices, Dara shows each screen they add or change as pictures in a comment ([A571a](decisions/571.md)), and Peta files the slices unstarted once you add the `ready` label, which accepts the proposal and the designs ([A611a](decisions/611.md)); a comment changes a decision first ([A353a](decisions/353.md)). The idea stays open and lists its slices under \"Sub-issues\"; the factory closes it when the last of them closes ([T569b](decisions/569.md)).\ndiff --git a/factory/rule-files.txt b/factory/rule-files.txt\nindex 7c2c7e6..40d9912 100644\n--- a/factory/rule-files.txt\n+++ b/factory/rule-files.txt\n@@ -16,6 +16,7 @@\n 300 .claude/skills/intake/SKILL.md\n 1800 .claude/skills/operate/SKILL.md\n 500 .claude/skills/promote/SKILL.md\n+300 .claude/skills/publicize-repo/SKILL.md\n 600 .claude/skills/purpose/SKILL.md\n 1000 .claude/skills/refine/SKILL.md\n 1000 .claude/skills/research/SKILL.md\ndiff --git a/factory/scripts/check-factory.sh b/factory/scripts/check-factory.sh\nindex 840f278..4d805fe 100755\n--- a/factory/scripts/check-factory.sh\n+++ b/factory/scripts/check-factory.sh\n@@ -54,6 +54,14 @@ for script in $scripts; do\n     failed=1\n   fi\n done\n+# checks runs bash 5, so only this stops what a Mac's bash 3.2 lacks (decisions H684).\n+for script in $scripts; do\n+  if found=$(grep -nE '(^|[;&|({]|then|do|else)[[:space:]]*((declare|local)[[:space:]]+-[A-Za-z]*A|(mapfile|readarray|coproc)([[:space:]]|$))|\\$\\{[A-Za-z_0-9]+(\\[[^]]*\\])?(,|\\^)|(^|[[:space:]])(&>>|\\|&)' \"$script\"); then\n+    echo \"$script: a construct that the bash 3.2 of a Mac lacks and bash 5 runs: an associative array (\\`declare -A\\`, \\`local -A\\`), \\`mapfile\\`, \\`readarray\\`, \\`coproc\\`, an expansion that changes case with \\`,,\\` or \\`^^\\`, \\`&>>\\` or \\`|&\\`. Keep a list or a set of pairs in a newline-separated string and read it with grep; change case with tr; write \\`>> file 2>&1\\` or \\`2>&1 |\\`:\"\n+    sed 's/^/  /' <<<\"$found\"\n+    failed=1\n+  fi\n+done\n # A header that grows is read on every run that opens the file (decisions H176a).\n if ! workflows=$(git ls-files --cached --others --exclude-standard 'factory/workflows/*.yml'); then\n   echo \"check-factory.sh could not list the workflows with git ls-files, so no header was checked.\"\ndiff --git a/factory/scripts/flag-public.sh b/factory/scripts/flag-public.sh\nindex c0fa35b..bcfae19 100755\n--- a/factory/scripts/flag-public.sh\n+++ b/factory/scripts/flag-public.sh\n@@ -19,14 +19,14 @@ if [ -n \"$open\" ]; then\n fi\n \n add=\"**Add a \\`SECURITY.md\\`** at the root of the repository. It tells a stranger whom the factory acts for and how to report a vulnerability. File a Factory ticket for it: its pull request waits for your approval.\"\n-report=\"**Switch on private vulnerability reporting,** in the repository's settings, under Security. A report then reaches you without showing the fault to everyone.\"\n+protect=\"**Ask an assistant to run the \\`publicize-repo\\` skill,** unless it made the repository public. It switches on private vulnerability reporting, secret scanning and the other protections a public repository needs, and sets only what is missing.\"\n if [ -f SECURITY.md ]; then\n-  first=\"Switch on private vulnerability reporting, then close this ticket: the factory cannot.\"\n-  steps=\"1. $report\"\n+  first=\"Run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n+  steps=\"1. $protect\"\n else\n-  first=\"Add a \\`SECURITY.md\\` and switch on private vulnerability reporting, then close this ticket: the factory does neither.\"\n+  first=\"Add a \\`SECURITY.md\\`, and run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n   steps=\"1. $add\n-2. $report\"\n+2. $protect\"\n fi\n # The first line says what a person must do (decisions A371a).\n body=\"$first\ndiff --git a/factory/scripts/publicize-repo.sh b/factory/scripts/publicize-repo.sh\nnew file mode 100755\nindex 0000000..0f4cb01\n--- /dev/null\n+++ b/factory/scripts/publicize-repo.sh\n@@ -0,0 +1,127 @@\n+#!/usr/bin/env bash\n+# Makes this repository public with the protections a public one needs, or refuses and says why (decisions S385a).\n+# Usage: publicize-repo.sh   (from the repo root, with a `gh` login that has admin rights on the repository)\n+#        Sets only what differs, then reads each setting back and prints it. A call that fails stops it with exit 1.\n+set -euo pipefail\n+shopt -s nullglob\n+\n+die() { echo \"$1\" >&2; exit 1; }\n+\n+# GitHub's pinning rule fails a run of any action on a tag, its own included (decisions S682a).\n+files=(.github/workflows/*.yml .github/workflows/*.yaml .github/actions/*/action.yml)\n+unpinned=\"\"\n+if [ ${#files[@]} -gt 0 ]; then\n+  unpinned=$(grep -H -n -E '^[[:space:]]*(-[[:space:]]+)?uses:' \"${files[@]}\" \\\n+    | sed -E \"s/^([^:]*:[0-9]+):[[:space:]]*(-[[:space:]]+)?uses:[[:space:]]*[\\\"']?([^[:space:]\\\"']+).*/\\\\1: \\\\3/\" \\\n+    | grep -v -E ': \\./' | grep -v -E '@[0-9a-f]{40}$' || true)\n+fi\n+# A transcript reaches the public on the sessions branch and in artifacts named session-* (decisions A667a, S682b).\n+unscrubbed=\"\"\n+if [ ! -f factory/scripts/scrub-tokens.sh ]; then\n+  unscrubbed=\"  factory/scripts/scrub-tokens.sh is missing\"$'\\n'\n+elif [ -f factory/scripts/save-session.sh ] && ! grep -q 'scrub-tokens\\.sh' factory/scripts/save-session.sh; then\n+  unscrubbed=\"  factory/scripts/save-session.sh pushes a transcript without running scrub-tokens.sh\"$'\\n'\n+fi\n+for file in \"${files[@]}\"; do\n+  if grep -q -E '^[[:space:]]*name:[[:space:]]*session-' \"$file\" && ! grep -q 'scrub-tokens\\.sh' \"$file\"; then\n+    unscrubbed+=\"  $file uploads a transcript without running scrub-tokens.sh\"$'\\n'\n+  fi\n+done\n+# What was published before the scrub ran becomes readable too, the sessions branch's history included (decisions S682c).\n+published=\"\"\n+if [ -f factory/scripts/scrub-tokens.sh ]; then\n+  head",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false,
+      "persistedOutputPath": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/c2dd5c35-7eab-442d-876c-240a96039200/tool-results/bukbthaxy.txt",
+      "persistedOutputSize": 64039
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_019mAjHo6a9e3QgS2DoPC2D3",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKry94b3PCWKd5iwM7Jb",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RCv6EaFVGZ9zMMqpzk9A1P",
+          "name": "Grep",
+          "input": {
+            "pattern": "^(diff --git a/factory/workflows/ci.yml|@@|[-+] )",
+            "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/c2dd5c35-7eab-442d-876c-240a96039200/tool-results/bukbthaxy.txt",
+            "output_mode": "content",
+            "offset": 0,
+            "head_limit": 0,
+            "glob": "*",
+            "multiline": false
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 955,
+        "cache_read_input_tokens": 35896,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 955
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b69d4f60-99bf-4057-ba73-0b9cfc43d880",
+    "timestamp": "2026-11-23T12:30:24.266Z",
+    "request_id": "req_011ChKry8sux35tM33q3d4oy",
+    "wire_tool_inputs": {
+      "toolu_01RCv6EaFVGZ9zMMqpzk9A1P": {
+        "pattern": "^(diff --git a/factory/workflows/ci.yml|@@|[-+] )",
+        "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/c2dd5c35-7eab-442d-876c-240a96039200/tool-results/bukbthaxy.txt",
+        "output_mode": "content",
+        "offset": 0,
+        "head_limit": 0,
+        "glob": "*",
+        "multiline": false
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01RCv6EaFVGZ9zMMqpzk9A1P",
+          "type": "tool_result",
+          "content": "6:@@ -0,0 +1,12 @@\n23:@@ -1 +1 @@\n30:@@ -1,5 +1,5 @@\n42:@@ -1,7 +1,7 @@\n55:@@ -1,7 +1,7 @@\n69:@@ -1,6 +1,6 @@\n82:@@ -0,0 +1,5 @@\n93:@@ -0,0 +1,4 @@\n103:@@ -0,0 +1,3 @@\n111:@@ -1,6 +1,6 @@\n123:@@ -1,6 +1,6 @@\n135:@@ -6,5 +6,5 @@\n146:@@ -21,7 +21,7 @@ The `ready` label starts a build. Dragging a card starts nothing.\n159:@@ -16,6 +16,7 @@\n171:@@ -54,6 +54,14 @@ for script in $scripts; do\n177:+  if found=$(grep -nE '(^|[;&|({]|then|do|else)[[:space:]]*((declare|local)[[:space:]]+-[A-Za-z]*A|(mapfile|readarray|coproc)([[:space:]]|$))|\\$\\{[A-Za-z_0-9]+(\\[[^]]*\\])?(,|\\^)|(^|[[:space:]])(&>>|\\|&)' \"$script\"); then\n178:+    echo \"$script: a construct that the bash 3.2 of a Mac lacks and bash 5 runs: an associative array (\\`declare -A\\`, \\`local -A\\`), \\`mapfile\\`, \\`readarray\\`, \\`coproc\\`, an expansion that changes case with \\`,,\\` or \\`^^\\`, \\`&>>\\` or \\`|&\\`. Keep a list or a set of pairs in a newline-separated string and read it with grep; change case with tr; write \\`>> file 2>&1\\` or \\`2>&1 |\\`:\"\n179:+    sed 's/^/  /' <<<\"$found\"\n180:+    failed=1\n181:+  fi\n190:@@ -19,14 +19,14 @@ if [ -n \"$open\" ]; then\n197:-  first=\"Switch on private vulnerability reporting, then close this ticket: the factory cannot.\"\n198:-  steps=\"1. $report\"\n199:+  first=\"Run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n200:+  steps=\"1. $protect\"\n202:-  first=\"Add a \\`SECURITY.md\\` and switch on private vulnerability reporting, then close this ticket: the factory does neither.\"\n203:+  first=\"Add a \\`SECURITY.md\\`, and run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n215:@@ -0,0 +1,127 @@\n229:+  unpinned=$(grep -H -n -E '^[[:space:]]*(-[[:space:]]+)?uses:' \"${files[@]}\" \\\n230:+    | sed -E \"s/^([^:]*:[0-9]+):[[:space:]]*(-[[:space:]]+)?uses:[[:space:]]*[\\\"']?([^[:space:]\\\"']+).*/\\\\1: \\\\3/\" \\\n231:+    | grep -v -E ': \\./' | grep -v -E '@[0-9a-f]{40}$' || true)\n236:+  unscrubbed=\"  factory/scripts/scrub-tokens.sh is missing\"$'\\n'\n238:+  unscrubbed=\"  factory/scripts/save-session.sh pushes a transcript without running scrub-tokens.sh\"$'\\n'\n241:+  if grep -q -E '^[[:space:]]*name:[[:space:]]*session-' \"$file\" && ! grep -q 'scrub-tokens\\.sh' \"$file\"; then\n242:+    unscrubbed+=\"  $file uploads a transcript without running scrub-tokens.sh\"$'\\n'\n243:+  fi\n248:+  heads=$(git ls-remote --heads origin sessions) \\\n249:+    || die \"The repository was left as it is: whether it has a sessions branch could not be read from GitHub.\"\n250:+  if [ -n \"$heads\" ]; then\n251:+    history=$(mktemp)\n252:+    trap 'rm -f \"$history\" \"$history.scrubbed\"' EXIT\n253:+    git fetch --quiet origin sessions && git log -p --text --format= FETCH_HEAD > \"$history\" \\\n254:+      && cp \"$history\" \"$history.scrubbed\" && factory/scripts/scrub-tokens.sh \"$history.scrubbed\" \\\n255:+      || die \"The repository was left as it is: the sessions branch's history could not be read and checked for tokens.\"\n256:+    cmp -s \"$history\" \"$history.scrubbed\" || published+=\"  the sessions branch holds a token in its history\"$'\\n'\n257:+  fi\n258:+  # A run, and each re-run of it, uses the workflows of the commit it ran on, whenever it uploads.\n259:+  install=$(git log --format=%H -S scrub-tokens.sh -- .github/workflows | tail -n 1)\n260:+  artifacts=$(gh api 'repos/{owner}/{repo}/actions/artifacts?per_page=100' --paginate --jq '.artifacts[]\n261:+      | select((.expired | not) and (.name | startswith(\"session-\"))) | \"\\(.workflow_run.head_sha) \\(.name)\"') \\\n262:+    || die \"The repository was left as it is: its artifacts could not be read from GitHub.\"\n263:+  # Each commit is compared once, listed as \"<sha> yes|no\" lines (decisions H632a).\n264:+  judged=\"\"\n265:+  while read -r sha name; do\n266:+    [ -n \"$name\" ] || continue\n267:+    verdict=$(grep -m 1 \"^$sha \" <<<\"$judged\" || true)\n268:+    if [ -z \"$verdict\" ]; then\n269:+      status=none\n270:+      [ -z \"$install\" ] || status=$(gh api \"repos/{owner}/{repo}/compare/$install...$sha\" --jq .status) \\\n271:+        || die \"The repository was left as it is: whether the run that made artifact $name scrubbed tokens could not be read from GitHub.\"\n272:+      case \"$status\" in identical | ahead) verdict=\"$sha yes\" ;; *) verdict=\"$sha no\" ;; esac\n273:+      judged+=\"$verdict\"$'\\n'\n274:+    fi\n275:+    [ \"$verdict\" = \"$sha yes\" ] || published+=\"  artifact $name was made by a run of workflows from before they scrubbed tokens\"$'\\n'\n276:+  done <<<\"$artifacts\"\n279:+  echo \"The repository was left as it is. Fix what is listed, then run this again.\" >&2\n280:+  if [ -n \"$unpinned\" ]; then\n281:+    echo \"Each action must be pinned by its 40-character commit id: GitHub's pinning rule, set here, fails a run of one on a tag:\" >&2\n282:+    sed 's/^/  /' <<<\"$unpinned\" >&2\n283:+  fi\n284:+  if [ -n \"$unscrubbed\" ]; then\n285:+    echo \"Each transcript must be scrubbed of tokens before it is published (decisions A667a):\" >&2\n286:+    printf '%s' \"$unscrubbed\" >&2\n287:+  fi\n288:+  if [ -n \"$published\" ]; then\n289:+    echo \"What would be published holds tokens from before the scrub: revoke each token, then delete what is listed:\" >&2\n290:+    printf '%s' \"$published\" >&2\n291:+  fi\n292:+  exit 1\n296:+  local repo\n297:+  repo=$(gh api 'repos/{owner}/{repo}' --jq '[.visibility,\n298:+      (.security_and_analysis.secret_scanning.status // \"disabled\"),\n299:+      (.security_and_analysis.secret_scanning_push_protection.status // \"disabled\")] | @tsv') \\\n300:+    && IFS=$'\\t' read -r visibility scanning protection <<<\"$repo\" \\\n301:+    && approval=$(gh api 'repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval' --jq .approval_policy) \\\n302:+    && reporting=$(gh api 'repos/{owner}/{repo}/private-vulnerability-reporting' --jq .enabled) \\\n303:+    && actions=$(gh api 'repos/{owner}/{repo}/actions/permissions' --jq '[.allowed_actions, .sha_pinning_required] | @tsv') \\\n304:+    && IFS=$'\\t' read -r allowed pinning <<<\"$actions\"\n311:+  local now=\"$1\" wanted=\"$2\" what=\"$3\"\n312:+  shift 3\n313:+  [ \"$now\" != \"$wanted\" ] || return 0\n314:+  \"$@\" >/dev/null || die \"GitHub refused to set $what, so it and every setting after it were left as they were.\"\n315:+  changed=$((changed + 1))\n320:+  <<<'{\"security_and_analysis\":{\"secret_scanning\":{\"status\":\"enabled\"}}}'\n322:+  <<<'{\"security_and_analysis\":{\"secret_scanning_push_protection\":{\"status\":\"enabled\"}}}'\n324:+  gh api -X PUT 'repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval' -f approval_policy=all_external_contributors\n327:+  gh api -X PUT 'repos/{owner}/{repo}/actions/permissions' -F enabled=true -f allowed_actions=\"$allowed\" -F sha_pinning_required=true\n332:+  echo \"$1: $2\"\n333:+  [ \"$2\" = \"$3\" ] || { echo \"  expected $3\" >&2; wrong=1; }\n347:@@ -26,7 +26,7 @@\n356:@@ -35,6 +35,8 @@ set -euo pipefail\n369:@@ -11,7 +11,7 @@ effort='--effort ${{ vars.AGENT_EFFORT || '\\''medium'\\'' }}'\n382:@@ -113,6 +113,46 @@ run \"$scripts/check-factory.sh\"\n393:+    'coproc cat' \"echo \\\"${open}name,,}\\\"\" \"echo \\\"${open}names[@]^^}\\\"\" \"echo \\\"${open}name^}\\\"\" \"make ${amp}>> log\" \"make |${amp} tee log\"; do\n394:+  repo_with one.test.sh 'echo \"ok - first\"'\n395:+  printf '%s\\n' '#!/usr/bin/env bash' \"$line\" > factory/scripts/new.sh\n396:+  git add .\n397:+  run \"$scripts/check-factory.sh\"\n398:+  expect_status 1\n399:+  expect_output \"factory/scripts/new.sh: a construct that the bash 3.2 of a Mac lacks and bash 5 runs\"\n400:+  expect_output \"a newline-separated string and read it with grep\"\n401:+  expect_output \"  2:$line\"\n402:+  expect_no_output \"factory scripts ok\"\n403:+  rm -rf .git factory\n419:+  'echo \"use tr, not readarray or coproc\"' 'echo \"${1:-a,b}\" \"${list[0]}, ^\"' 'tr \"[:upper:]\" \"[:lower:]\" <<<\"$1\"' \\\n420:+  'make >> log 2>&1' \"make ${amp}> log\" 'make 2>&1 | tee log' \"sed 's|old|${amp}, new|' \\\"\\$1\\\"\" 'true || make &' > factory/scripts/plain.sh\n433:@@ -32,7 +32,7 @@ run \"$scripts/flag-public.sh\"\n442:@@ -48,16 +48,16 @@ expect_part \"What the factory still refuses\" \"only for an account with write acc\n456:-  || fail \"expected the first line to ask only for private vulnerability reporting, got: $(sed -n 1p \"$T/body\")\"\n459:+  || fail \"expected the first line to ask only for the publicize-repo skill, got: $(sed -n 1p \"$T/body\")\"\n468:@@ -25,6 +25,7 @@ replaced=\"\"\n481:@@ -0,0 +1,262 @@\n489:+  mkdir -p .github/workflows .github/actions/setup factory/scripts\n490:+  cp \"$scripts/scrub-tokens.sh\" factory/scripts/\n491:+  printf 'cp \"$file\" \"$clean\" && \"$(dirname \"$0\")/scrub-tokens.sh\" \"$clean\"\\n' > factory/scripts/save-session.sh\n492:+  cat > .github/workflows/ci.yml <<EOF\n494:+  statuses: read\n496:+  checks:\n497:+    steps:\n498:+      - uses: actions/checkout@$pin # v4\n499:+      - uses: ./.github/actions/setup\n500:+      - run: factory/scripts/scrub-tokens.sh \"\\$RUNNER_TEMP/reviews\"\n501:+      - uses: actions/upload-artifact@$pin # v4\n502:+        with:\n503:+          name: session-review-\\${{ github.run_id }}\n505:+  printf 'runs:\\n  steps:\\n    - uses: \"pnpm/action-setup@%s\" # v4\\n' \"$pin\" > .github/actions/setup/action.yml\n506:+  git init --quiet --bare \"$T/remote.git\"\n507:+  git init --quiet --initial-branch main && git remote add origin \"$T/remote.git\"\n508:+  git add -A && TZ=UTC0 GIT_COMMITTER_DATE=2026-11-22T12:00:00Z git commit --quiet -m scrub\n513:+  local text\n514:+  git init --quiet --initial-branch sessions \"$T/seed\"\n515:+  for text in \"$@\"; do\n516:+    printf '%s\\n' \"$text\" > \"$T/seed/pr-7.json\"\n517:+    git -C \"$T/seed\" add -A && git -C \"$T/seed\" commit --quiet -m session\n518:+  done\n519:+  git -C \"$T/seed\" push --quiet \"$T/remote.git\" sessions\n526:+  mkdir -p \"$T/s\"\n527:+  echo private > \"$T/s/visibility\"; echo disabled > \"$T/s/scanning\"; echo disabled > \"$T/s/protection\"\n528:+  echo first_time_contributors > \"$T/s/approval\"; echo false > \"$T/s/reporting\"; echo false > \"$T/s/pinning\"\n529:+  echo selected > \"$T/s/allowed\"\n530:+  echo none > \"$T/fail\"; echo none > \"$T/ignore\"; echo '[]' > \"$T/artifacts\"\n531:+  stub gh '\n532:+    if grep -qF -- \"$(cat \"$T/fail\")\" <<<\"$*\"; then echo \"gh: HTTP 403\" >&2; exit 1; fi\n533:+    case \"$*\" in\n534:+      *\" -X \"*) touch \"$T/written\" ;;\n535:+      *) if [ -e \"$T/written\" ] && [ -e \"$T/reads-fail-after-write\" ]; then echo \"gh: HTTP 502\" >&2; exit 1; fi ;;\n536:+    esac\n537:+    s() { cat \"$T/s/$1\"; }\n538:+    put() { grep -qF -- \"$(cat \"$T/ignore\")\" <<<\"$*\" || echo \"$2\" > \"$T/s/$1\"; }\n539:+    case \"$*\" in\n540:+      \"api repos/{owner}/{repo}/actions/artifacts?per_page=100 --paginate --jq \"*)\n541:+        json \"{\\\"artifacts\\\":$(cat \"$T/artifacts\")}\" \"$@\" ;;\n542:+      \"api repos/{owner}/{repo}/compare/\"*)\n543:+        range=${2#repos/\\{owner\\}/\\{repo\\}/compare/}\n544:+        if [ \"${range%...*}\" = \"${range#*...}\" ]; then status=identical\n545:+        elif git merge-base --is-ancestor \"${range%...*}\" \"${range#*...}\"; then status=ahead\n546:+        else status=diverged; fi\n547:+        json \"{\\\"status\\\":\\\"$status\\\"}\" \"$@\" ;;\n548:+      \"api repos/{owner}/{repo} --jq \"*)\n549:+        json \"{\\\"visibility\\\":\\\"$(s visibility)\\\",\\\"security_and_analysis\\\":{\\\"secret_scanning\\\":{\\\"status\\\":\\\"$(s scanning)\\\"},\n550:+          \\\"secret_scanning_push_protection\\\":{\\\"status\\\":\\\"$(s protection)\\\"}}}\" \"$@\" ;;\n551:+      \"api repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval --jq \"*)\n552:+        json \"{\\\"approval_policy\\\":\\\"$(s approval)\\\"}\" \"$@\" ;;\n553:+      \"api repos/{owner}/{repo}/private-vulnerability-reporting --jq \"*) json \"{\\\"enabled\\\":$(s reporting)}\" \"$@\" ;;\n554:+      \"api repos/{owner}/{repo}/actions/permissions --jq \"*)\n555:+        json \"{\\\"enabled\\\":true,\\\"allowed_actions\\\":\\\"$(s allowed)\\\",\\\"sha_pinning_required\\\":$(s pinning)}\" \"$@\" ;;\n556:+      \"api -X PATCH repos/{owner}/{repo} -f visibility=public\") put visibility public ;;\n557:+      \"api -X PATCH repos/{owner}/{repo} --input -\")\n558:+        input=$(cat); printf \"%s\\n\" \"$input\" >> \"$T/calls\"\n559:+        case \"$input\" in\n560:+          *secret_scanning_push_protection*enabled*) put protection enabled \"$* push\" ;;\n561:+          *secret_scanning*enabled*) put scanning enabled \"$* scanning\" ;;\n562:+          *) exit 1 ;;\n563:+        esac ;;\n564:+      \"api -X PUT repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval -f approval_policy=all_external_contributors\")\n565:+        put approval all_external_contributors \"$*\" ;;\n566:+      \"api -X PUT repos/{owner}/{repo}/private-vulnerability-reporting\") put reporting true \"$*\" ;;\n567:+      \"api -X PUT repos/{owner}/{repo}/actions/permissions -F enabled=true -f allowed_actions=selected -F sha_pinning_required=true\")\n568:+        put pinning true \"$*\" ;;\n569:+      *) echo \"unexpected call: gh $*\" >&2; exit 1 ;;\n570:+    esac'\n591:+  || fail \"expected the visibility to be set before secret scanning, which GitHub gives a public repository for free\"\n627:+  > .github/workflows/claude.yml\n748:@@ -239,6 +239,40 @@ expect_silent\n756:+  scenario \"in a repository that sets no variable, a job of ${file##*/} starts on the second model while the first's limit holds\"\n757:+  github sessions\n758:+  : > \"$T/env\"\n759:+  AGENT_MODEL=$(unset_default \"$file\" AGENT_MODEL) AGENT_MODEL_FALLBACK=$(unset_default \"$file\" AGENT_MODEL_FALLBACK)\n760:+  export GITHUB_ENV=\"$T/env\" AGENT_MODEL AGENT_MODEL_FALLBACK\n761:+  hold_is \"$ahead $AGENT_MODEL\"\n762:+  limit wait 7 \"a fix round\"\n763:+  expect_status 0\n764:+  expect_written \"\"\n765:+  limit start 7 \"a fix round\"\n766:+  expect_status 0\n767:+  [ \"$(cat \"$T/env\")\" = \"MODEL=claude-opus-5-5\" ] || fail \"expected the agents of ${file##*/} to be given claude-opus-5-5, got: $(cat \"$T/env\")\"\n768:+  expect_posted \"#7: Nothing to do: a fix round runs on \\`claude-opus-5-5\\`, the second model, because the Claude usage limit of \\`claude-fable-5-2\\` holds\"\n789:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n793:@@ -12,7 +12,7 @@ env:\n797:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n798:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n806:@@ -11,7 +11,7 @@ env:\n810:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n811:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n819:@@ -16,7 +16,7 @@ env:\n823:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n824:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n832:@@ -18,7 +18,7 @@ env:\n836:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n837:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n845:@@ -11,7 +11,7 @@ env:\n849:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n850:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n858:@@ -22,7 +22,7 @@ env:\n862:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n863:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "12032562-2be0-413e-b165-3cbd9ff8cba3",
+    "timestamp": "2026-11-23T12:30:24.288Z",
+    "tool_use_result": {
+      "mode": "content",
+      "numFiles": 0,
+      "filenames": [],
+      "content": "6:@@ -0,0 +1,12 @@\n23:@@ -1 +1 @@\n30:@@ -1,5 +1,5 @@\n42:@@ -1,7 +1,7 @@\n55:@@ -1,7 +1,7 @@\n69:@@ -1,6 +1,6 @@\n82:@@ -0,0 +1,5 @@\n93:@@ -0,0 +1,4 @@\n103:@@ -0,0 +1,3 @@\n111:@@ -1,6 +1,6 @@\n123:@@ -1,6 +1,6 @@\n135:@@ -6,5 +6,5 @@\n146:@@ -21,7 +21,7 @@ The `ready` label starts a build. Dragging a card starts nothing.\n159:@@ -16,6 +16,7 @@\n171:@@ -54,6 +54,14 @@ for script in $scripts; do\n177:+  if found=$(grep -nE '(^|[;&|({]|then|do|else)[[:space:]]*((declare|local)[[:space:]]+-[A-Za-z]*A|(mapfile|readarray|coproc)([[:space:]]|$))|\\$\\{[A-Za-z_0-9]+(\\[[^]]*\\])?(,|\\^)|(^|[[:space:]])(&>>|\\|&)' \"$script\"); then\n178:+    echo \"$script: a construct that the bash 3.2 of a Mac lacks and bash 5 runs: an associative array (\\`declare -A\\`, \\`local -A\\`), \\`mapfile\\`, \\`readarray\\`, \\`coproc\\`, an expansion that changes case with \\`,,\\` or \\`^^\\`, \\`&>>\\` or \\`|&\\`. Keep a list or a set of pairs in a newline-separated string and read it with grep; change case with tr; write \\`>> file 2>&1\\` or \\`2>&1 |\\`:\"\n179:+    sed 's/^/  /' <<<\"$found\"\n180:+    failed=1\n181:+  fi\n190:@@ -19,14 +19,14 @@ if [ -n \"$open\" ]; then\n197:-  first=\"Switch on private vulnerability reporting, then close this ticket: the factory cannot.\"\n198:-  steps=\"1. $report\"\n199:+  first=\"Run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n200:+  steps=\"1. $protect\"\n202:-  first=\"Add a \\`SECURITY.md\\` and switch on private vulnerability reporting, then close this ticket: the factory does neither.\"\n203:+  first=\"Add a \\`SECURITY.md\\`, and run the \\`publicize-repo\\` skill unless it made the repository public, then close this ticket.\"\n215:@@ -0,0 +1,127 @@\n229:+  unpinned=$(grep -H -n -E '^[[:space:]]*(-[[:space:]]+)?uses:' \"${files[@]}\" \\\n230:+    | sed -E \"s/^([^:]*:[0-9]+):[[:space:]]*(-[[:space:]]+)?uses:[[:space:]]*[\\\"']?([^[:space:]\\\"']+).*/\\\\1: \\\\3/\" \\\n231:+    | grep -v -E ': \\./' | grep -v -E '@[0-9a-f]{40}$' || true)\n236:+  unscrubbed=\"  factory/scripts/scrub-tokens.sh is missing\"$'\\n'\n238:+  unscrubbed=\"  factory/scripts/save-session.sh pushes a transcript without running scrub-tokens.sh\"$'\\n'\n241:+  if grep -q -E '^[[:space:]]*name:[[:space:]]*session-' \"$file\" && ! grep -q 'scrub-tokens\\.sh' \"$file\"; then\n242:+    unscrubbed+=\"  $file uploads a transcript without running scrub-tokens.sh\"$'\\n'\n243:+  fi\n248:+  heads=$(git ls-remote --heads origin sessions) \\\n249:+    || die \"The repository was left as it is: whether it has a sessions branch could not be read from GitHub.\"\n250:+  if [ -n \"$heads\" ]; then\n251:+    history=$(mktemp)\n252:+    trap 'rm -f \"$history\" \"$history.scrubbed\"' EXIT\n253:+    git fetch --quiet origin sessions && git log -p --text --format= FETCH_HEAD > \"$history\" \\\n254:+      && cp \"$history\" \"$history.scrubbed\" && factory/scripts/scrub-tokens.sh \"$history.scrubbed\" \\\n255:+      || die \"The repository was left as it is: the sessions branch's history could not be read and checked for tokens.\"\n256:+    cmp -s \"$history\" \"$history.scrubbed\" || published+=\"  the sessions branch holds a token in its history\"$'\\n'\n257:+  fi\n258:+  # A run, and each re-run of it, uses the workflows of the commit it ran on, whenever it uploads.\n259:+  install=$(git log --format=%H -S scrub-tokens.sh -- .github/workflows | tail -n 1)\n260:+  artifacts=$(gh api 'repos/{owner}/{repo}/actions/artifacts?per_page=100' --paginate --jq '.artifacts[]\n261:+      | select((.expired | not) and (.name | startswith(\"session-\"))) | \"\\(.workflow_run.head_sha) \\(.name)\"') \\\n262:+    || die \"The repository was left as it is: its artifacts could not be read from GitHub.\"\n263:+  # Each commit is compared once, listed as \"<sha> yes|no\" lines (decisions H632a).\n264:+  judged=\"\"\n265:+  while read -r sha name; do\n266:+    [ -n \"$name\" ] || continue\n267:+    verdict=$(grep -m 1 \"^$sha \" <<<\"$judged\" || true)\n268:+    if [ -z \"$verdict\" ]; then\n269:+      status=none\n270:+      [ -z \"$install\" ] || status=$(gh api \"repos/{owner}/{repo}/compare/$install...$sha\" --jq .status) \\\n271:+        || die \"The repository was left as it is: whether the run that made artifact $name scrubbed tokens could not be read from GitHub.\"\n272:+      case \"$status\" in identical | ahead) verdict=\"$sha yes\" ;; *) verdict=\"$sha no\" ;; esac\n273:+      judged+=\"$verdict\"$'\\n'\n274:+    fi\n275:+    [ \"$verdict\" = \"$sha yes\" ] || published+=\"  artifact $name was made by a run of workflows from before they scrubbed tokens\"$'\\n'\n276:+  done <<<\"$artifacts\"\n279:+  echo \"The repository was left as it is. Fix what is listed, then run this again.\" >&2\n280:+  if [ -n \"$unpinned\" ]; then\n281:+    echo \"Each action must be pinned by its 40-character commit id: GitHub's pinning rule, set here, fails a run of one on a tag:\" >&2\n282:+    sed 's/^/  /' <<<\"$unpinned\" >&2\n283:+  fi\n284:+  if [ -n \"$unscrubbed\" ]; then\n285:+    echo \"Each transcript must be scrubbed of tokens before it is published (decisions A667a):\" >&2\n286:+    printf '%s' \"$unscrubbed\" >&2\n287:+  fi\n288:+  if [ -n \"$published\" ]; then\n289:+    echo \"What would be published holds tokens from before the scrub: revoke each token, then delete what is listed:\" >&2\n290:+    printf '%s' \"$published\" >&2\n291:+  fi\n292:+  exit 1\n296:+  local repo\n297:+  repo=$(gh api 'repos/{owner}/{repo}' --jq '[.visibility,\n298:+      (.security_and_analysis.secret_scanning.status // \"disabled\"),\n299:+      (.security_and_analysis.secret_scanning_push_protection.status // \"disabled\")] | @tsv') \\\n300:+    && IFS=$'\\t' read -r visibility scanning protection <<<\"$repo\" \\\n301:+    && approval=$(gh api 'repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval' --jq .approval_policy) \\\n302:+    && reporting=$(gh api 'repos/{owner}/{repo}/private-vulnerability-reporting' --jq .enabled) \\\n303:+    && actions=$(gh api 'repos/{owner}/{repo}/actions/permissions' --jq '[.allowed_actions, .sha_pinning_required] | @tsv') \\\n304:+    && IFS=$'\\t' read -r allowed pinning <<<\"$actions\"\n311:+  local now=\"$1\" wanted=\"$2\" what=\"$3\"\n312:+  shift 3\n313:+  [ \"$now\" != \"$wanted\" ] || return 0\n314:+  \"$@\" >/dev/null || die \"GitHub refused to set $what, so it and every setting after it were left as they were.\"\n315:+  changed=$((changed + 1))\n320:+  <<<'{\"security_and_analysis\":{\"secret_scanning\":{\"status\":\"enabled\"}}}'\n322:+  <<<'{\"security_and_analysis\":{\"secret_scanning_push_protection\":{\"status\":\"enabled\"}}}'\n324:+  gh api -X PUT 'repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval' -f approval_policy=all_external_contributors\n327:+  gh api -X PUT 'repos/{owner}/{repo}/actions/permissions' -F enabled=true -f allowed_actions=\"$allowed\" -F sha_pinning_required=true\n332:+  echo \"$1: $2\"\n333:+  [ \"$2\" = \"$3\" ] || { echo \"  expected $3\" >&2; wrong=1; }\n347:@@ -26,7 +26,7 @@\n356:@@ -35,6 +35,8 @@ set -euo pipefail\n369:@@ -11,7 +11,7 @@ effort='--effort ${{ vars.AGENT_EFFORT || '\\''medium'\\'' }}'\n382:@@ -113,6 +113,46 @@ run \"$scripts/check-factory.sh\"\n393:+    'coproc cat' \"echo \\\"${open}name,,}\\\"\" \"echo \\\"${open}names[@]^^}\\\"\" \"echo \\\"${open}name^}\\\"\" \"make ${amp}>> log\" \"make |${amp} tee log\"; do\n394:+  repo_with one.test.sh 'echo \"ok - first\"'\n395:+  printf '%s\\n' '#!/usr/bin/env bash' \"$line\" > factory/scripts/new.sh\n396:+  git add .\n397:+  run \"$scripts/check-factory.sh\"\n398:+  expect_status 1\n399:+  expect_output \"factory/scripts/new.sh: a construct that the bash 3.2 of a Mac lacks and bash 5 runs\"\n400:+  expect_output \"a newline-separated string and read it with grep\"\n401:+  expect_output \"  2:$line\"\n402:+  expect_no_output \"factory scripts ok\"\n403:+  rm -rf .git factory\n419:+  'echo \"use tr, not readarray or coproc\"' 'echo \"${1:-a,b}\" \"${list[0]}, ^\"' 'tr \"[:upper:]\" \"[:lower:]\" <<<\"$1\"' \\\n420:+  'make >> log 2>&1' \"make ${amp}> log\" 'make 2>&1 | tee log' \"sed 's|old|${amp}, new|' \\\"\\$1\\\"\" 'true || make &' > factory/scripts/plain.sh\n433:@@ -32,7 +32,7 @@ run \"$scripts/flag-public.sh\"\n442:@@ -48,16 +48,16 @@ expect_part \"What the factory still refuses\" \"only for an account with write acc\n456:-  || fail \"expected the first line to ask only for private vulnerability reporting, got: $(sed -n 1p \"$T/body\")\"\n459:+  || fail \"expected the first line to ask only for the publicize-repo skill, got: $(sed -n 1p \"$T/body\")\"\n468:@@ -25,6 +25,7 @@ replaced=\"\"\n481:@@ -0,0 +1,262 @@\n489:+  mkdir -p .github/workflows .github/actions/setup factory/scripts\n490:+  cp \"$scripts/scrub-tokens.sh\" factory/scripts/\n491:+  printf 'cp \"$file\" \"$clean\" && \"$(dirname \"$0\")/scrub-tokens.sh\" \"$clean\"\\n' > factory/scripts/save-session.sh\n492:+  cat > .github/workflows/ci.yml <<EOF\n494:+  statuses: read\n496:+  checks:\n497:+    steps:\n498:+      - uses: actions/checkout@$pin # v4\n499:+      - uses: ./.github/actions/setup\n500:+      - run: factory/scripts/scrub-tokens.sh \"\\$RUNNER_TEMP/reviews\"\n501:+      - uses: actions/upload-artifact@$pin # v4\n502:+        with:\n503:+          name: session-review-\\${{ github.run_id }}\n505:+  printf 'runs:\\n  steps:\\n    - uses: \"pnpm/action-setup@%s\" # v4\\n' \"$pin\" > .github/actions/setup/action.yml\n506:+  git init --quiet --bare \"$T/remote.git\"\n507:+  git init --quiet --initial-branch main && git remote add origin \"$T/remote.git\"\n508:+  git add -A && TZ=UTC0 GIT_COMMITTER_DATE=2026-11-22T12:00:00Z git commit --quiet -m scrub\n513:+  local text\n514:+  git init --quiet --initial-branch sessions \"$T/seed\"\n515:+  for text in \"$@\"; do\n516:+    printf '%s\\n' \"$text\" > \"$T/seed/pr-7.json\"\n517:+    git -C \"$T/seed\" add -A && git -C \"$T/seed\" commit --quiet -m session\n518:+  done\n519:+  git -C \"$T/seed\" push --quiet \"$T/remote.git\" sessions\n526:+  mkdir -p \"$T/s\"\n527:+  echo private > \"$T/s/visibility\"; echo disabled > \"$T/s/scanning\"; echo disabled > \"$T/s/protection\"\n528:+  echo first_time_contributors > \"$T/s/approval\"; echo false > \"$T/s/reporting\"; echo false > \"$T/s/pinning\"\n529:+  echo selected > \"$T/s/allowed\"\n530:+  echo none > \"$T/fail\"; echo none > \"$T/ignore\"; echo '[]' > \"$T/artifacts\"\n531:+  stub gh '\n532:+    if grep -qF -- \"$(cat \"$T/fail\")\" <<<\"$*\"; then echo \"gh: HTTP 403\" >&2; exit 1; fi\n533:+    case \"$*\" in\n534:+      *\" -X \"*) touch \"$T/written\" ;;\n535:+      *) if [ -e \"$T/written\" ] && [ -e \"$T/reads-fail-after-write\" ]; then echo \"gh: HTTP 502\" >&2; exit 1; fi ;;\n536:+    esac\n537:+    s() { cat \"$T/s/$1\"; }\n538:+    put() { grep -qF -- \"$(cat \"$T/ignore\")\" <<<\"$*\" || echo \"$2\" > \"$T/s/$1\"; }\n539:+    case \"$*\" in\n540:+      \"api repos/{owner}/{repo}/actions/artifacts?per_page=100 --paginate --jq \"*)\n541:+        json \"{\\\"artifacts\\\":$(cat \"$T/artifacts\")}\" \"$@\" ;;\n542:+      \"api repos/{owner}/{repo}/compare/\"*)\n543:+        range=${2#repos/\\{owner\\}/\\{repo\\}/compare/}\n544:+        if [ \"${range%...*}\" = \"${range#*...}\" ]; then status=identical\n545:+        elif git merge-base --is-ancestor \"${range%...*}\" \"${range#*...}\"; then status=ahead\n546:+        else status=diverged; fi\n547:+        json \"{\\\"status\\\":\\\"$status\\\"}\" \"$@\" ;;\n548:+      \"api repos/{owner}/{repo} --jq \"*)\n549:+        json \"{\\\"visibility\\\":\\\"$(s visibility)\\\",\\\"security_and_analysis\\\":{\\\"secret_scanning\\\":{\\\"status\\\":\\\"$(s scanning)\\\"},\n550:+          \\\"secret_scanning_push_protection\\\":{\\\"status\\\":\\\"$(s protection)\\\"}}}\" \"$@\" ;;\n551:+      \"api repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval --jq \"*)\n552:+        json \"{\\\"approval_policy\\\":\\\"$(s approval)\\\"}\" \"$@\" ;;\n553:+      \"api repos/{owner}/{repo}/private-vulnerability-reporting --jq \"*) json \"{\\\"enabled\\\":$(s reporting)}\" \"$@\" ;;\n554:+      \"api repos/{owner}/{repo}/actions/permissions --jq \"*)\n555:+        json \"{\\\"enabled\\\":true,\\\"allowed_actions\\\":\\\"$(s allowed)\\\",\\\"sha_pinning_required\\\":$(s pinning)}\" \"$@\" ;;\n556:+      \"api -X PATCH repos/{owner}/{repo} -f visibility=public\") put visibility public ;;\n557:+      \"api -X PATCH repos/{owner}/{repo} --input -\")\n558:+        input=$(cat); printf \"%s\\n\" \"$input\" >> \"$T/calls\"\n559:+        case \"$input\" in\n560:+          *secret_scanning_push_protection*enabled*) put protection enabled \"$* push\" ;;\n561:+          *secret_scanning*enabled*) put scanning enabled \"$* scanning\" ;;\n562:+          *) exit 1 ;;\n563:+        esac ;;\n564:+      \"api -X PUT repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval -f approval_policy=all_external_contributors\")\n565:+        put approval all_external_contributors \"$*\" ;;\n566:+      \"api -X PUT repos/{owner}/{repo}/private-vulnerability-reporting\") put reporting true \"$*\" ;;\n567:+      \"api -X PUT repos/{owner}/{repo}/actions/permissions -F enabled=true -f allowed_actions=selected -F sha_pinning_required=true\")\n568:+        put pinning true \"$*\" ;;\n569:+      *) echo \"unexpected call: gh $*\" >&2; exit 1 ;;\n570:+    esac'\n591:+  || fail \"expected the visibility to be set before secret scanning, which GitHub gives a public repository for free\"\n627:+  > .github/workflows/claude.yml\n748:@@ -239,6 +239,40 @@ expect_silent\n756:+  scenario \"in a repository that sets no variable, a job of ${file##*/} starts on the second model while the first's limit holds\"\n757:+  github sessions\n758:+  : > \"$T/env\"\n759:+  AGENT_MODEL=$(unset_default \"$file\" AGENT_MODEL) AGENT_MODEL_FALLBACK=$(unset_default \"$file\" AGENT_MODEL_FALLBACK)\n760:+  export GITHUB_ENV=\"$T/env\" AGENT_MODEL AGENT_MODEL_FALLBACK\n761:+  hold_is \"$ahead $AGENT_MODEL\"\n762:+  limit wait 7 \"a fix round\"\n763:+  expect_status 0\n764:+  expect_written \"\"\n765:+  limit start 7 \"a fix round\"\n766:+  expect_status 0\n767:+  [ \"$(cat \"$T/env\")\" = \"MODEL=claude-opus-5-5\" ] || fail \"expected the agents of ${file##*/} to be given claude-opus-5-5, got: $(cat \"$T/env\")\"\n768:+  expect_posted \"#7: Nothing to do: a fix round runs on \\`claude-opus-5-5\\`, the second model, because the Claude usage limit of \\`claude-fable-5-2\\` holds\"\n789:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n793:@@ -12,7 +12,7 @@ env:\n797:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n798:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n806:@@ -11,7 +11,7 @@ env:\n810:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n811:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n819:@@ -16,7 +16,7 @@ env:\n823:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n824:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n832:@@ -18,7 +18,7 @@ env:\n836:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n837:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n845:@@ -11,7 +11,7 @@ env:\n849:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n850:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}\n858:@@ -22,7 +22,7 @@ env:\n862:-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}\n863:+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}",
+      "numLines": 226,
+      "totalLines": 226
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01RCv6EaFVGZ9zMMqpzk9A1P",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b9d1847d-5224-473d-ac51-dcde07a0b3e7"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 303,
+    "estimated_tokens_delta": 253,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "434fd222-0dbb-484c-a24c-5c3457a0b946"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrybgxwY5mD34cmPDwf",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSsQkKEAgUGAI4AUIIdGhpbmtpbmcSDNpPE4l5B39YQgpjvBoMGr1tUHDDpOVdo9vHIjDGgZ/eq+bHDRyFZvxX/ljYHkQ6wCv8Dv4bpVN+RGK/e5iWqYai4eiZ056hjd85f/0qzgi/taaDq/oEqSXUicisnBuPUMzhN0k0B8CkbEwWuL/nuvHPp/Qc/ClUBtLfnzsLmccyfLVvQ59RhkBYTkyQAXvgxbzEYOOo6By+AJWVqEFaKiLRw5FfIqYvXPpfqwq47Sc7E9OG4jGzhXmnbxn1zC1hKuZ7jcbcBv79p8/Y1KXgb/TX7SUJpwWubv04bXD/z+IxIp09SJBoX5WqhFRJYSnvAcvbVfob9cYGXE8jj3Vy3HFShY50D60TAoJyZVv26swACJ/ORJQC6i2nTN6rH9FAoNC2DyiBdljpW0T4hiHfOrX2VX99BBQx77nd0bMI0Y0ip2PS6NLBSvsxPQn5W/9uhLWKkf53j8qhjASEXNe9ay/0LuRRSafxFA5xq+Gpt/4ncq8KEqCV24F7JQ8UDipYseJgcChRtyxYSS74k5ew7lPyVMms/jkPlDH81//Ma222TOCVPNcWDIOlM2l7E/i5f217ONWWF8yGsN/aPWfR34D6PwQXL5RCRDtpSnp3pBk2O4PRh938eijCGtjKnEJRuZojeidci3IIpmHflNRMD5ifsg+w/XhIquLNL4rWeQxdrNLzGs5sPsJ0iV1tVqycKtbWr9SlDQfcgA/k8DsK3HODsGwhuMz6I3q5y/D5yeZW7E1D3L5jmjhnRn/qy74yKuAeKp0ySrYkrA3Wuh74KXB+rqG3SdFLFzj9bT0AoaMw2QPZIdVxhYv1QAOPVuY685+3RqaLEj9s1AtT7c7NyIL+Azc3f0EXLw2yTWEJSsfibpUHVCUpA9Rkv2vd63iKVAsc8cVryQXXuw+IQh3m1TYoS9ii9gmEOAYlUo+/AAGlSIlfZWJvtWGJwuy8HiiL+51I1ttEaVcwgaEOywOpaA5LZze4j+JZ9ptWeVPszSaRUm7eINGJ3ETJrouGUHuRPzfBIwM8Eb2jQZ9hGPCNk6I/f6z7yc5Tps1nA9FjJkr+Ott4/kVHeHgil/SDJ3RgPwbrz/6fqu6MBA9I6qVPWCYcjh3sKw6SFD3rztrBuZoLc4Eu1ldoDbXnoAk/4/rX2VTrecukGfYwgKKjmuSzlM/GGArXtf23/O+kczOlCc0/l7aaH/D46AmCSKWBV3hSBauRdgHxcAKdh/LliRYf1pGjofL85ZOuvE8go53l9MhoaWsiqWtigFVi8MO/jt7LJ46hscbed2X2GITnfa7CEPoxdvvF8DvmAJdN+IwWR1sMfpju9LmRLlGykptBPShGxPdKOdJlrgzOcpEDTkwkbRu0+4ti868CuF7Kw3KXnX09Rqb7w/SNW+NeD4mP6Sokv61hEcOrWptX3jkVUnzufovgtW67XDv7X3EeFkS97MzXg3cGwQ79jnZqDTCiXTm8UsBilhbI+6jt1yQtfXZG9QY1d3y9EaxeCdWQ/w1f/KAXWi61rNY5cmtbDt1om3nyCY814XiTTEIV/ICmB/RRnJIKQ4N8Tyd/w1Qecbe4GAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7968,
+        "cache_read_input_tokens": 36851,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 7968
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "edb89474-c042-4bd7-bdca-d5353b58cd19",
+    "timestamp": "2026-11-23T12:30:30.500Z",
+    "request_id": "req_011ChKrybXncQp5eEY7dYzp5",
+    "thinking_duration_ms": 1353,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrybgxwY5mD34cmPDwf",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01KfVFEjFhk22oHwfMBwb9MJ",
+          "name": "Bash",
+          "input": {
+            "command": "gh run view 45173914856 --repo edmulraney/tinyfactory --log | grep -iE 'MODEL|usage limit|second model' | head -20"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7968,
+        "cache_read_input_tokens": 36851,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 7968
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "c455d066-f261-44eb-8b4d-119dca0f08b3",
+    "timestamp": "2026-11-23T12:30:30.995Z",
+    "request_id": "req_011ChKrybXncQp5eEY7dYzp5",
+    "wire_tool_inputs": {
+      "toolu_01KfVFEjFhk22oHwfMBwb9MJ": {
+        "command": "gh run view 45173914856 --repo edmulraney/tinyfactory --log | grep -iE 'MODEL|usage limit|second model' | head -20"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01KfVFEjFhk22oHwfMBwb9MJ",
+          "type": "tool_result",
+          "content": "e2e\tRun actions/checkout@v4\t2026-11-23T12:24:00.2545611Z   AGENT_MODEL: claude-opus-5-5\ne2e\tRun actions/checkout@v4\t2026-11-23T12:24:00.2546194Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tDo the end-to-end tests need to run?\t2026-11-23T12:24:01.5146256Z   AGENT_MODEL: claude-opus-5-5\ne2e\tDo the end-to-end tests need to run?\t2026-11-23T12:24:01.5147608Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tIs this commit worth a review?\t2026-11-23T12:24:01.5513488Z   AGENT_MODEL: claude-opus-5-5\ne2e\tIs this commit worth a review?\t2026-11-23T12:24:01.5514724Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tSay that the end-to-end tests were skipped\t2026-11-23T12:24:02.2850771Z   AGENT_MODEL: claude-opus-5-5\ne2e\tSay that the end-to-end tests were skipped\t2026-11-23T12:24:02.2851064Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tTake the bypass secret out of the test results\t2026-11-23T12:24:04.0253775Z   AGENT_MODEL: claude-opus-5-5\ne2e\tTake the bypass secret out of the test results\t2026-11-23T12:24:04.0254064Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tUpload screenshots and the test results\t2026-11-23T12:24:04.0450723Z   AGENT_MODEL: claude-opus-5-5\ne2e\tUpload screenshots and the test results\t2026-11-23T12:24:04.0451246Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun actions/checkout@v4\t2026-11-23T12:24:00.0226429Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun actions/checkout@v4\t2026-11-23T12:24:00.0226969Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4490200Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4491354Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4712713Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4713831Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:02.6925407Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:02.6925672Z   AGENT_MODEL_FALLBACK: claude-opus-5-5",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "6474945c-e173-49e1-88cf-5c027fe31e64",
+    "timestamp": "2026-11-23T12:30:33.505Z",
+    "tool_use_result": {
+      "stdout": "e2e\tRun actions/checkout@v4\t2026-11-23T12:24:00.2545611Z   AGENT_MODEL: claude-opus-5-5\ne2e\tRun actions/checkout@v4\t2026-11-23T12:24:00.2546194Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tDo the end-to-end tests need to run?\t2026-11-23T12:24:01.5146256Z   AGENT_MODEL: claude-opus-5-5\ne2e\tDo the end-to-end tests need to run?\t2026-11-23T12:24:01.5147608Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tIs this commit worth a review?\t2026-11-23T12:24:01.5513488Z   AGENT_MODEL: claude-opus-5-5\ne2e\tIs this commit worth a review?\t2026-11-23T12:24:01.5514724Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tSay that the end-to-end tests were skipped\t2026-11-23T12:24:02.2850771Z   AGENT_MODEL: claude-opus-5-5\ne2e\tSay that the end-to-end tests were skipped\t2026-11-23T12:24:02.2851064Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tTake the bypass secret out of the test results\t2026-11-23T12:24:04.0253775Z   AGENT_MODEL: claude-opus-5-5\ne2e\tTake the bypass secret out of the test results\t2026-11-23T12:24:04.0254064Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\ne2e\tUpload screenshots and the test results\t2026-11-23T12:24:04.0450723Z   AGENT_MODEL: claude-opus-5-5\ne2e\tUpload screenshots and the test results\t2026-11-23T12:24:04.0451246Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun actions/checkout@v4\t2026-11-23T12:24:00.0226429Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun actions/checkout@v4\t2026-11-23T12:24:00.0226969Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4490200Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4491354Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4712713Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:01.4713831Z   AGENT_MODEL_FALLBACK: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:02.6925407Z   AGENT_MODEL: claude-opus-5-5\nchecks\tRun ./.github/actions/setup\t2026-11-23T12:24:02.6925672Z   AGENT_MODEL_FALLBACK: claude-opus-5-5",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01KfVFEjFhk22oHwfMBwb9MJ",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "746fde6a-c50b-4947-9a34-16f1e64772d5"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 310,
+    "estimated_tokens_delta": 260,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "6eab6f9e-efc6-4f10-b348-95d27679e3ae"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrzH4KCyZxm2LrUyczT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSzwkKEAgUGAI4AUIIdGhpbmtpbmcSDO9Ck1Pblxk9H2yUHhoMsAVbyFnROUdV6h6CIjAPFHlbsjYC4mjSqK1lwgJOXHkXYByHh7Z4LCqmhw79xZMbT1VjkbuxcAu4/jTDchcq7Ajaet5ZxrWHBFusyY2DYWIHpddK9SFC0yETx1iznFaJ4mhTKkqKmcn+c9YCsCdhZlXJJji6qZgX2JVBaD9Yo8hHB2Zm2/GSsFtHadtz9M8sJheRyxdO2hY2aI5qNMNAQa1g2nIFSIOYGFKVSQycnTGH/aNRDeObx12pfvCoTCVbZ/JpcESU9bBOODV6HDNiAy3WBI1mYMmPv+ryhgs8XR4zl2affYFdnQvCcxfOIcqszc71EvWnZX1iiF4AlCChdR4r0tD9Qat59U14Xm+DaDcOEJJBJymbFrfxUPNBfXl9FtSdnexoBnwHLwKTTxjUdVMMWXER6Tu3sgsfNHESGPNMoUt4dIF++T/Sv+1cHu6Kqwr3fyDeCayLsUcY49K/I2p2FtAFd3M/MO5lYEHryoWGk5gonTkrKAWnFMK/idTo+AJbjinLPeR6YzrYF5JeLMLuek1J5XM9aM5wzkH3z4ZFElMXl/qWTpb5p4o17RLqfoBE6cTndWGHVgjRYsjKRBvhOw7tlpWPvBpujn65S+OWvIW7AdLwQR/zWRCEhXw7xVluWSJh+1ODIfrxtKtsiInkK+6IL6J6LOsP/pGdchWGHtm45mFgLYN7+CZiVyecxQ2jqKePcjHpvDNHTwRSJSQitKvcbVtDrFfknKt4sWWiV73MM9d6QWGl9YLKDGto0gvgBMZ/UeX/WBaNKLuVSQegmqHoexatbvUdZ1P/c6i6Yl+B+oyaMV+CP9ACoP4gcqKS86rnJdkOlj9pIDa24iSdKfoZRMXgXYg/fRBv900tTC98onFaj+Jfrl+Xy0+Nsi31EYo6WTuJemJqxACUPphfUxeBrv4ZG5iWcLBXK6CU3iBAvp9WfrZNDxnox1OpuAdqfWQvC0RYfynY7ce+5kg6qwfhN6pi3BGiigiKEACJp/zw8rqRjKIDRSlrxYyUvUTXPeaTwJQwRPwf3YYpzOejv49JF/HTpkuTwgp3wGOmcLo4KH8vyLmut42i8QF8APQJTt4gV7ie00nsTeAOsLnKePdj/MXo+qKeXoDXcoEhJIuZOgMS0KA6WUaU4mVvwrLz6VUZ8MRKtOGk1UYJY1KAoMnfjQ8LEXEIA1nqmK1ZR+DJ959StxQux1fu7GlFCHMT7HUmSM3Ilv1pSVgPZAoEPIVsdpZakc3fcp5tbm4ecL7E0aSIlkIavDood8QYsXOYwpEDj2DSaxqweeetJHjHLrg85q4/YkjMqwsRz8NWdv8G2/3is74ehYJ+/gkgeSpfrwK1IHCt4mroE883q/XiGX9RIV8aUtifwl92P8Ry4p9+41IijOo9jq6Hluy64poEyU/HOUfQ42nicB5FIfWwsGC0hrcpuTxRp8eeQxEtrLc+Fu5YnZNDvEJ3TZm6xA0st2rA9GuI2RREJYGnvBDkaIENKCypwa6I5B8SlO9tDn4YqUDsOaMuXf1hxC2h0vxWvZ6uF67ncGQmJ4c7nBBHFo4wOh3ZDG1fIXqRJptQOOnSJHiZsdxTM1UQGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1447,
+        "cache_read_input_tokens": 44819,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1447
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b832d9b9-717f-4ea6-9368-21ef4dac49b4",
+    "timestamp": "2026-11-23T12:30:37.551Z",
+    "request_id": "req_011ChKrzGue98axzc1TnSMuA",
+    "thinking_duration_ms": 1727,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChKrzH4KCyZxm2LrUyczT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LCRzT3vTE3vkHKqkK5AS1x",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first ci run after #685 did what the change claimed: every step's environment named `claude-opus-5-5` as AGENT_MODEL_FALLBACK, and both reviewers finished, so nothing needs doing.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "Pull request #685 changed one line of `factory/workflows/ci.yml`. The line makes AGENT_MODEL_FALLBACK fall back to `claude-opus-5-5` when the repository variable is unset (A683a). The facts name no changed step, because the change is to the workflow's `env`. The run's log shows `AGENT_MODEL_FALLBACK: claude-opus-5-5` in each step of the `checks` and `e2e` jobs. Adam and Ryan both completed with no error and no API retries. No usage limit held during the run. The second model was therefore never started on, which is the expected path. Neither reviewer of #685 recorded an assumption.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45173914856",
+              "https://github.com/edmulraney/tinyfactory/pull/685",
+              "https://github.com/edmulraney/tinyfactory/pull/686"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing was lost: the two review sessions cost $0.37 over 56 seconds, and both did their work.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: the run had no fault, so no change would have saved anything on it ($0 of the $0.37 the run spent).",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1447,
+        "cache_read_input_tokens": 44819,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1447
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "25279935-602e-496b-940b-daad75739e3e",
+    "timestamp": "2026-11-23T12:30:43.284Z",
+    "request_id": "req_011ChKrzGue98axzc1TnSMuA",
+    "wire_tool_inputs": {
+      "toolu_01LCRzT3vTE3vkHKqkK5AS1x": {
+        "summary": "The first ci run after #685 did what the change claimed: every step's environment named `claude-opus-5-5` as AGENT_MODEL_FALLBACK, and both reviewers finished, so nothing needs doing.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "Pull request #685 changed one line of `factory/workflows/ci.yml`. The line makes AGENT_MODEL_FALLBACK fall back to `claude-opus-5-5` when the repository variable is unset (A683a). The facts name no changed step, because the change is to the workflow's `env`. The run's log shows `AGENT_MODEL_FALLBACK: claude-opus-5-5` in each step of the `checks` and `e2e` jobs. Adam and Ryan both completed with no error and no API retries. No usage limit held during the run. The second model was therefore never started on, which is the expected path. Neither reviewer of #685 recorded an assumption.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45173914856",
+          "https://github.com/edmulraney/tinyfactory/pull/685",
+          "https://github.com/edmulraney/tinyfactory/pull/686"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing was lost: the two review sessions cost $0.37 over 56 seconds, and both did their work.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: the run had no fault, so no change would have saved anything on it ($0 of the $0.37 the run spent).",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01LCRzT3vTE3vkHKqkK5AS1x",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "uuid": "b9e50428-eda4-40c1-b4a7-f9e9665328b4",
+    "timestamp": "2026-11-23T12:30:43.289Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01LCRzT3vTE3vkHKqkK5AS1x",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 46414,
+    "stop_reason": "tool_use",
+    "session_id": "c2dd5c35-7eab-442d-876c-240a96039200",
+    "total_cost_usd": 0.34919399999999995,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 30523,
+      "cache_read_input_tokens": 287455,
+      "output_tokens": 2359,
+      "output_tokens_details": {
+        "thinking_tokens": 351
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 30523,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 982,
+          "cache_read_input_tokens": 44819,
+          "cache_creation_input_tokens": 1447,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1447
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 272,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000267,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 253,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2359,
+        "cacheReadInputTokens": 287455,
+        "cacheCreationInputTokens": 30523,
+        "webSearchRequests": 0,
+        "costUSD": 0.34892699999999993,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 351,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 30523,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01FLQZBVvUJNP4GexaxykktQ",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 -- 2>/dev/null | awk '/^diff --git a\\/factory\\/workflows\\/ci.yml/,/^diff --git a\\/factory\\/workflows\\/claude.yml/'; ls .sessions/lessons | tail -5; python3 -c \"import json;t=json.load(open('.sessions/tickets.json'));print([ (x.get('number'),x.get('title')) for x in t][:40])\""
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01H93PQzKygc2hyCXvJcKDrQ",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 685 > /tmp/pr685.diff; grep -n '^diff --git' /tmp/pr685.diff"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 11,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first ci run after #685 did what the change claimed: every step's environment named `claude-opus-5-5` as AGENT_MODEL_FALLBACK, and both reviewers finished, so nothing needs doing.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"Pull request #685 changed one line of `factory/workflows/ci.yml`. The line makes AGENT_MODEL_FALLBACK fall back to `claude-opus-5-5` when the repository variable is unset (A683a). The facts name no changed step, because the change is to the workflow's `env`. The run's log shows `AGENT_MODEL_FALLBACK: claude-opus-5-5` in each step of the `checks` and `e2e` jobs. Adam and Ryan both completed with no error and no API retries. No usage limit held during the run. The second model was therefore never started on, which is the expected path. Neither reviewer of #685 recorded an assumption.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45173914856\",\"https://github.com/edmulraney/tinyfactory/pull/685\",\"https://github.com/edmulraney/tinyfactory/pull/686\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing was lost: the two review sessions cost $0.37 over 56 seconds, and both did their work.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: the run had no fault, so no change would have saved anything on it ($0 of the $0.37 the run spent).\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first ci run after #685 did what the change claimed: every step's environment named `claude-opus-5-5` as AGENT_MODEL_FALLBACK, and both reviewers finished, so nothing needs doing.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "Pull request #685 changed one line of `factory/workflows/ci.yml`. The line makes AGENT_MODEL_FALLBACK fall back to `claude-opus-5-5` when the repository variable is unset (A683a). The facts name no changed step, because the change is to the workflow's `env`. The run's log shows `AGENT_MODEL_FALLBACK: claude-opus-5-5` in each step of the `checks` and `e2e` jobs. Adam and Ryan both completed with no error and no API retries. No usage limit held during the run. The second model was therefore never started on, which is the expected path. Neither reviewer of #685 recorded an assumption.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45173914856",
+        "https://github.com/edmulraney/tinyfactory/pull/685",
+        "https://github.com/edmulraney/tinyfactory/pull/686"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing was lost: the two review sessions cost $0.37 over 56 seconds, and both did their work.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: the run had no fault, so no change would have saved anything on it ($0 of the $0.37 the run spent).",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 2743,
+    "type": "result",
+    "duration_ms": 51020,
+    "uuid": "88d81ff9-d704-42b8-b9a6-a73243147e65",
+    "ttft_stream_ms": 2194,
+    "time_to_request_ms": 197,
+    "first_content_frame_ms": 2195,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 272,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000267,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 253,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2359,
+        "cacheReadInputTokens": 287455,
+        "cacheCreationInputTokens": 30523,
+        "webSearchRequests": 0,
+        "costUSD": 0.34892699999999993,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 351,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 30523,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
