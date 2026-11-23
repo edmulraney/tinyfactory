@@ -1,0 +1,76 @@
+{
+  "pr": 679,
+  "issue": 659,
+  "facts": {
+    "pr": 679,
+    "issue": 659,
+    "title": "chore: bring in the factory changes of 23 November",
+    "branch": "chore/659-changes-of-23-november",
+    "outcome": "merged",
+    "merged_at": "2026-11-23T10:58:17Z",
+    "fix_rounds": 0,
+    "owner_rounds": 0,
+    "failed_jobs": [
+      {
+        "job": "checks",
+        "times": 4
+      },
+      {
+        "job": "review",
+        "times": 3
+      }
+    ],
+    "reviews": {
+      "adam": {
+        "pass": 2,
+        "carried": 0,
+        "fail": 3,
+        "assumptions": []
+      },
+      "ryan": {
+        "pass": 2,
+        "carried": 0,
+        "fail": 3,
+        "assumptions": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "cost_usd": 7.94,
+    "turns": 170
+  },
+  "lesson": {
+    "summary": "Nothing to change: the hand-made sync in #679 was pushed before `scaffold.sh demo` and `pnpm lint` were run on it, so three review rounds caught a missing template folder and an unwired lint script, and the factory handled it well.",
+    "title": "",
+    "cause": "agent-ignored",
+    "detail": "The owner filed #659 (labelled `needs-human`) to bring in the source project's changes and opened #679 by hand. The first commit, d22963c, listed `apps/web/src/lib/query` in the bootstrap manifest but did not copy that folder into `templates/`, so `scaffold.sh` exits 1. It also installed zizmor for `check-action-pins.sh` without adding that script to the root `lint` script. CLAUDE.md asks for `pnpm lint`, `pnpm test`, `pnpm typecheck`, `pnpm build` and `scaffold.sh demo` to pass before a pull request is ready, and these failures show they were not run on that commit. Adam and Ryan failed d22963c, b8b0b64 and c909ddb with the same findings each time. b8b0b64 was pushed 11 seconds after the first verdicts, before anyone could act on them. The `checks` job failed 4 times. The template folder landed in c909ddb and the lint wiring in 32b1d7c, and both reviewers passed 32b1d7c and fcc507b. The ticket stayed under its Claude budget, at $7.94 of $12.00. It went over its Actions budget by one minute, at 61 of 60 minutes over 12 runs, because each of the five pushes ran CI again. The `review` job needs only `e2e`, so it runs alongside `checks`, and part of the review spend went on commits that were already failing their checks. Gating reviews on `checks` would not have saved the third round, though: c909ddb failed review only for the lint wiring. No earlier lesson has the same cause. Ryan's assumption about Drizzle's `__drizzle_migrations` columns concerns the preview-database step in ci.yml, and no earlier lesson's assumptions concern it.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/pull/679",
+      "https://github.com/edmulraney/tinyfactory/issues/659"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing. Gating the review job on `checks` would have saved at most the first two rounds, because the third failed only for a gap the checks did not catch. The proof CLAUDE.md already asks for would have caught the missing template folder on this one hand-made pull request. With no lost work, no stop and no repeat, the rule in the retro skill gives no grounds to propose a check.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Three failed review rounds took 11 sessions, about $6.58 and 360 seconds. The ticket used 61 Actions minutes against a budget of 60, in 12 runs, with 0 fix rounds.",
+      "minutes": 6,
+      "kind": []
+    },
+    "saves": "Running `scaffold.sh demo` and `pnpm lint` before the first push would have saved the three failed review rounds, about $6.58, and the CI runs on the three failing commits, enough to keep the ticket under its 60-minute Actions budget.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
