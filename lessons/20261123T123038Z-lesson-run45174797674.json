@@ -1,0 +1,55 @@
+{
+  "pr": 679,
+  "issue": 659,
+  "facts": {
+    "run": 45173360070,
+    "workflow": "retro",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45173360070",
+    "conclusion": "success",
+    "pr": 679,
+    "issue": 659,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.6,
+    "turns": 12,
+    "changed_by": {
+      "pr": 685,
+      "issue": 681,
+      "title": "chore: bring in the second model and the public repo skill",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first retro run after #685 did what the pull request claimed: with no AGENT_MODEL_FALLBACK variable set, its env gave the second model as claude-opus-5-5, and nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #685 changed one line in `factory/workflows/retro.yml`: `AGENT_MODEL_FALLBACK` now falls back to `claude-opus-5-5` when the repository sets no variable. Before, it was empty. Retro run 45173360070 logged `AGENT_MODEL_FALLBACK: claude-opus-5-5` in every step. The earlier CI and review runs for #685, quoted in this run's facts, still showed it empty. The diff touched no step, so `changed_steps` is empty. The usage-limit check found no limit, so the retro ran on its first model, claude-opus-5-5, and finished in 46 seconds for $0.60. No limit was in force, so the switch to the second model was not used. The change itself is only the default value, and that value took effect.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173360070",
+      "https://github.com/edmulraney/tinyfactory/pull/685"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "nothing: the retro completed in 46 seconds for $0.60, as intended",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "nothing: there was no fault to prevent",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
