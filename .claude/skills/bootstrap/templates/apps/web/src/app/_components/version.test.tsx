@@ -1,27 +1,28 @@
-import { dehydrate, HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
-import { renderToString } from "react-dom/server";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { prerender } from "react-dom/static";
 import { describe, expect, it, vi } from "vitest";
 
+import { getHealth } from "@/domain/health";
 import { getQueryClient } from "@/lib/query";
 
-import { readHealth } from "../actions";
-import { healthQuery } from "./health-query";
-import { Version } from "./version";
+import { PrefetchedVersion } from "./prefetched-version";
 
-vi.mock("../actions", () => ({ readHealth: vi.fn() }));
+vi.mock("next/server", () => ({ connection: async () => {} }));
+vi.mock("@/domain/health", () => ({ getHealth: vi.fn() }));
 
-// As `PrefetchedVersion` does: the health is read on the server and handed to the browser, which renders it from the cache.
+// The server component starts the read and hands it over still pending; the page, rendered to the end
+// as the browser receives it, shows what the read answered.
 async function renderWithCommit(commit: string) {
-  vi.mocked(readHealth).mockResolvedValue({ status: "ok", commit });
-  const server = getQueryClient();
-  await server.prefetchQuery(healthQuery);
-  return renderToString(
+  let answer!: (health: { status: "ok"; commit: string }) => void;
+  vi.mocked(getHealth).mockReturnValue(new Promise((resolve) => (answer = resolve)));
+  const page = prerender(
     <QueryClientProvider client={getQueryClient()}>
-      <HydrationBoundary state={dehydrate(server)}>
-        <Version />
-      </HydrationBoundary>
+      <Suspense>{await PrefetchedVersion()}</Suspense>
     </QueryClientProvider>,
   );
+  answer({ status: "ok", commit });
+  return new Response((await page).prelude).text();
 }
 
 describe("Version", () => {
@@ -30,6 +31,6 @@ describe("Version", () => {
   });
 
   it("shows nothing where the platform gives no commit", async () => {
-    expect(await renderWithCommit("unknown")).toBe("");
+    expect(await renderWithCommit("unknown")).not.toContain("Version");
   });
 });

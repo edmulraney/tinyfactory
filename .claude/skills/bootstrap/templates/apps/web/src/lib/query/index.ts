@@ -1,8 +1,18 @@
-import { isServer, QueryClient } from "@tanstack/react-query";
+import { defaultShouldDehydrateQuery, environmentManager, QueryClient } from "@tanstack/react-query";
 
 function makeQueryClient() {
-  // An answer the server read ahead is fresh when the page arrives, so the browser does not ask again at once.
-  return new QueryClient({ defaultOptions: { queries: { staleTime: 60_000 } } });
+  return new QueryClient({
+    defaultOptions: {
+      // An answer the server read ahead is fresh when the page arrives, so the browser does not ask again at once.
+      queries: { staleTime: 60_000 },
+      dehydrate: {
+        // A server component starts a read and does not wait for it, so the read is handed to the browser still pending.
+        shouldDehydrateQuery: (query) => defaultShouldDehydrateQuery(query) || query.state.status === "pending",
+        // Next.js reads its own errors to tell a dynamic page, and redacts what it shows the browser itself.
+        shouldRedactErrors: () => false,
+      },
+    },
+  });
 }
 
 let browserQueryClient: QueryClient | undefined;
@@ -13,7 +23,7 @@ let browserQueryClient: QueryClient | undefined;
  * open, so an answer read once is not read again by the next component that asks.
  */
 export function getQueryClient(): QueryClient {
-  if (isServer) return makeQueryClient();
+  if (environmentManager.isServer()) return makeQueryClient();
   browserQueryClient ??= makeQueryClient();
   return browserQueryClient;
 }
