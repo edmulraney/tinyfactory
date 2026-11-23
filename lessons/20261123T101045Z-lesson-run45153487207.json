@@ -1,0 +1,63 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45065373419,
+    "workflow": "flag-public",
+    "event": "public",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45065373419",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 568,
+      "issue": 567,
+      "title": "feat: Tell the owner when the repository becomes public",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "flag",
+        "step": "Tell the owner what the public repository shows",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "Nothing needs doing for #568: its first flag-public run filed #656 to tell the owner the repository is public. In the same run, close-duplicate.sh could not find #656 in the list of open tickets it had just been added to, so the check for a second copy filed at the same moment did not happen.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #568 made flag-public.sh file one needs-human ticket when the repository becomes public. On its first run, \"Tell the owner what the public repository shows\" found no open ticket with that title. It filed #656, printed \"told the owner that the repository is public: …/issues/656\" and succeeded, so the change did what it claimed. A later change, not #568, added a call to close-duplicate.sh (decisions T620). That script lists open tickets newest first, and on this run the list did not hold #656 seconds after it was filed: jq stopped with \"the list does not hold the ticket\". The ticket stayed open, as flag-public.sh intends when that step fails. This run had no second copy, so nothing was lost. The same delay can make the duplicate step fail every time it runs, in flag-public.sh, cut-rule-files.sh and revert.sh. That belongs to open ticket #620, \"Stop two runs filing the same ticket at once\", not to this pull request.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45065373419",
+      "https://github.com/edmulraney/tinyfactory/pull/568",
+      "https://github.com/edmulraney/tinyfactory/issues/656",
+      "https://github.com/edmulraney/tinyfactory/issues/620"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run cost $0 and 0 turns, and it filed the one ticket it was meant to.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the change of #568 worked, and this run filed no second copy of the ticket.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
