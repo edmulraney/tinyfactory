@@ -1,0 +1,55 @@
+{
+  "pr": null,
+  "issue": 680,
+  "facts": {
+    "run": 45173345441,
+    "workflow": "implement",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45173345441",
+    "conclusion": "success",
+    "pr": null,
+    "issue": 680,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.63,
+    "turns": 12,
+    "changed_by": {
+      "pr": 685,
+      "issue": 681,
+      "title": "chore: bring in the second model and the public repo skill",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first implement run after #685 worked as #685 intended, so nothing needs changing: Fred ran on claude-opus-5-5, the model `MODEL || AGENT_MODEL` resolves to, and finished issue #680 in 12 turns.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #685 changed implement.yml's workflow-level env. AGENT_MODEL_FALLBACK now defaults to claude-opus-5-5 where the variable is unset (decision A683a). A second model that is the same as the first counts as none (A683b). The facts list no changed_steps, because the change is to the `env:` block and not to a named step, so no step's log could be checked against it. The transcript shows Fred's session ran on claude-opus-5-5 on every turn. That matches this repository's AGENT_MODEL, which an earlier retro on the same day saw set to claude-opus-5-5. Here the second model equals the first, so A683b applies and no switch to a second model was expected. The session completed and published its change in 169 seconds for $0.63, with no API errors or retries. The run did not exercise a real switch to a second model, because no usage limit held. Neither reviewer of #685 recorded an assumption.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173345441",
+      "https://github.com/edmulraney/tinyfactory/pull/685"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "$0: the run succeeded, and Fred's $0.63 over 169 seconds was the normal build of #680, not a fault",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: no fault cost anything on this run ($0, 0 minutes).",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
