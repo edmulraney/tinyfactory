@@ -13,7 +13,7 @@ SETUP_NEEDS_OWNER=$(mktemp)
 export SETUP_NEEDS_OWNER
 trap 'rm -f "$SETUP_NEEDS_OWNER"' EXIT
 
-steps=(preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token)
+steps=(preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token deploy)
 number=0
 for step in "${steps[@]}"; do
   number=$((number + 1))
