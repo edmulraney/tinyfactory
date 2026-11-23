@@ -55,7 +55,7 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
         run: factory/scripts/button-merge.sh tested "$PR" >> "$GITHUB_OUTPUT"
       # Not the shared setup action: an install the merge broke is a failed test of main, not a failed job.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
         if: steps.tested.outputs.tested != 'true'
       - uses: actions/setup-node@v4
         if: steps.tested.outputs.tested != 'true'

@@ -1,4 +1,4 @@
-# Each Friday, starts the build of the ticket that holds the week's review notes, and writes the delivery numbers.
+# Each Friday, starts the build of the ticket that holds the week's review notes, and writes the weekly numbers.
 name: review-notes
 
 on:
@@ -30,8 +30,49 @@ jobs:
       issues: read          # to read when each ticket was labelled, and the tickets labelled bug
       pull-requests: read   # to list the merged pull requests
     steps:
+      # In no script, and before the checkout, as the steps of ci.yml that hold the key (decisions M15). One fixed query
+      # reads whatever events the table holds, so a project's own appear unconfigured (decisions H666a).
+      - name: Read production's usage by week
+        if: vars.NEON_PROJECT_ID != ''
+        # Usage that could not be read leaves no file, which the page says, and must not stop the page being written.
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
+          # One fetch a line so a failed request stops the step. Production's branch is Neon's default one.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
+          branch=$(jq -er '.branches[] | select(.default) | .id' <<<"$branches")
+          databases=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches/$branch/databases")
+          database=$(jq -er '.databases[0] | "database_name=\(.name | @uri)&role_name=\(.owner_name | @uri)"' <<<"$databases")
+          connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$branch&$database")
+          uri=$(jq -er .uri <<<"$connection")
+          echo "::add-mask::$uri"
+          # A project with no usage table gets an empty file, and a page with no usage on it.
+          table=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c "select to_regclass('public.usage_events') is not null")
+          rows=""
+          if [ "$table" = t ]; then
+            # Each of the 12 weeks that have ended, as metrics.sh counts them (decisions H613b): a line for the week, then one
+            # for each event in it, as week, event, times and people.
+            rows=$(psql "$uri" -X -At -F $'\t' -v ON_ERROR_STOP=1 <<'SQL'
+          with weeks as (
+            select generate_series(date_trunc('week', now() at time zone 'UTC') - interval '12 weeks',
+              date_trunc('week', now() at time zone 'UTC') - interval '1 week', interval '1 week') as week),
+          events as (select date_trunc('week', occurred_at at time zone 'UTC') as week, event, account_id from usage_events)
+          select to_char(weeks.week, 'IYYY-"W"IW'), coalesce(events.event, ''), count(events.event), count(distinct events.account_id)
+          from weeks left join events on events.week = weeks.week
+          group by grouping sets ((weeks.week), (weeks.week, events.event))
+          having grouping(events.event) = 1 or events.event is not null
+          order by 1, 2
+          SQL
+            )
+          fi
+          printf '%s' "$rows" > "$RUNNER_TEMP/usage.tsv"
+
       - uses: actions/checkout@v4
-      - name: Write the page of the factory's delivery numbers by week
+      - name: Write the page of the factory's delivery numbers and the product's usage by week
         env:
           GH_TOKEN: ${{ github.token }}
+          USAGE_ROWS: ${{ vars.NEON_PROJECT_ID != '' && format('{0}/usage.tsv', runner.temp) || '' }}
         run: factory/scripts/metrics.sh

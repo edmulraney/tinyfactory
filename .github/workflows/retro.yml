@@ -19,6 +19,10 @@ on:
     types: [labeled]
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   DEFECT: ${{ github.event.issue.number }}
   PR: ${{ inputs.pr }}
   RUN: ${{ inputs.run }}
@@ -82,6 +86,8 @@ jobs:
             echo "go=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # A retro whose model cannot be read starts on the first (decisions A663a).
+          factory/scripts/usage-limit.sh start "" "the retro" || echo "the retro runs on the first model"
           if [ -n "$PR" ] && [ -n "$RUN" ]; then
             # The first run of a workflow that pull request changed (decisions A185a).
             factory/scripts/run-facts.sh --first-run "$PR" "$RUN" .sessions > .sessions/facts.json
@@ -134,7 +140,7 @@ jobs:
         id: first
         if: steps.facts.outputs.go == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # The session's token reads a run's jobs and logs, which it otherwise may not (decisions A259, A406).
@@ -149,7 +155,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(factory/scripts/thread.sh:*),Bash(gh pr diff:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -165,7 +171,7 @@ jobs:
         id: second
         if: steps.wait1.outputs.retry == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the first try
@@ -178,7 +184,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(factory/scripts/thread.sh:*),Bash(gh pr diff:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -195,7 +201,7 @@ jobs:
         if: steps.wait2.outputs.retry == 'true'
         # Its failure is not the job's: the save step fails the job when there is no lesson (decisions A141).
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the first try
@@ -208,7 +214,7 @@ jobs:
             Earlier lessons are the JSON files in .sessions/lessons/.
             The open tickets are in .sessions/tickets.json, unless they could not be listed.
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(factory/scripts/thread.sh:*),Bash(gh pr diff:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 
@@ -258,7 +264,7 @@ jobs:
         if: steps.propose.outputs.rewrite == 'true'
         # Its failure is not the job's: the next step files the proposal for a person.
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the first try
@@ -268,7 +274,7 @@ jobs:
           prompt: ${{ steps.propose.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.propose.outputs.session }}
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40
             --allowedTools "Read,Glob,Grep,Bash(factory/scripts/thread.sh:*),Bash(gh pr diff:*),Bash(gh run view:*)"
             --json-schema '${{ env.LESSON_SCHEMA }}'
 

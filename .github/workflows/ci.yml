@@ -9,9 +9,31 @@ concurrency:
   group: ci-${{ github.event.pull_request.number }}
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   PR: ${{ github.event.pull_request.number }}
   # No background commands in a session with nobody in it (decisions A69f).
   AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'
+  # Deletes the people a preview's database branch copied from production's (decisions M660a, M660b).
+  DELETE_PEOPLE: |
+    do $$
+    declare
+      tables text;
+      name text;
+    begin
+      select string_agg(format('%I.%I', schemaname, tablename), ', ') into tables from pg_tables where schemaname = 'public';
+      if tables is not null then
+        execute 'truncate ' || tables;
+      end if;
+      -- Those that point at a user come before the user.
+      foreach name in array array['session', 'account', 'verification', 'member', 'invitation', 'user'] loop
+        if to_regclass(format('neon_auth.%I', name)) is not null then
+          execute format('delete from neon_auth.%I', name);
+        end if;
+      end loop;
+    end $$;
 
 jobs:
   checks:
@@ -24,8 +46,9 @@ jobs:
       pull-requests: read
       issues: read
     steps:
-      # Before any checkout, and in no script, which an agent can change (decisions M15, factory/free-tier.md entry 8).
-      - name: Delete the database branches of pull requests that are gone
+      # Before any checkout, and in no script, which an agent can change (decisions M15). Before the next step, which then sets
+      # the sign-in link on the branch it resets as on a new one (decisions M665a).
+      - name: Reset this preview's database branch from production's when it has had a migration this commit lacks
         if: vars.NEON_PROJECT_ID != ''
         # Housekeeping must not fail a pull request's checks.
         continue-on-error: true
@@ -33,21 +56,72 @@ jobs:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
           GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
-          # One fetch a line so a failed request stops the step: an empty list would read as every pull request gone.
-          previews=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api")
-          alive=$(gh api "repos/$GITHUB_REPOSITORY/branches" --paginate --jq '.[].name')
-          [ -n "$alive" ]
-          jq -r '.branches[] | select(.name | startswith("preview/")) | [.id, .name] | @tsv' <<<"$previews" \
-            | while IFS=$'\t' read -r id name; do
-                if grep -qxF -- "${name#preview/}" <<<"$alive"; then
-                  echo "kept $name"
-                else
-                  curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$id" >/dev/null
-                  echo "deleted $name: its git branch is gone"
-                fi
-              done
+          # A failure inside $(…) or a pipe stops the step too, so an unread answer never reads as "no migrations"
+          # or as a changed file.
+          shopt -s inherit_errexit
+          set -o pipefail
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
+          migrations="repos/$GITHUB_REPOSITORY/contents/apps/web/src/db/migrations"
+          # One fetch a line so a failed request stops the step. Production's branch is Neon's default one.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
+          production=$(jq -er '.branches[] | select(.default) | .id' <<<"$branches")
+          preview=$(jq -r --arg name "preview/$BRANCH" '.branches[] | select(.name == $name) | .id' <<<"$branches")
+          if [ -z "$preview" ]; then
+            echo "preview/$BRANCH does not exist yet"
+            exit 0
+          fi
+          # uri <branch id>: the address of that branch's database, masked in the log.
+          uri() {
+            local databases database connection uri
+            databases=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches/$1/databases")
+            database=$(jq -er '.databases[0] | "database_name=\(.name | @uri)&role_name=\(.owner_name | @uri)"' <<<"$databases")
+            connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$1&$database")
+            uri=$(jq -er .uri <<<"$connection")
+            echo "::add-mask::$uri" >&2
+            echo "$uri"
+          }
+          # applied <branch id>: a line `<created_at> <hash>` for each migration Drizzle recorded on that branch.
+          applied() {
+            local uri table
+            uri=$(uri "$1")
+            table=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c "select to_regclass('drizzle.__drizzle_migrations') is not null")
+            if [ "$table" = t ]; then
+              psql "$uri" -X -At -F ' ' -v ON_ERROR_STOP=1 -c 'select created_at, hash from drizzle.__drizzle_migrations'
+            fi
+          }
+          had=$(applied "$preview")
+          shipped=$(applied "$production")
+          # The pull request's own: a migration production has had came with the branch, and need not be in the commit.
+          own=$(comm -23 <(sort <<<"$had") <(sort <<<"$shipped") | sed '/^$/d')
+          stale=""
+          if [ -n "$own" ]; then
+            journal=$(gh api -H "Accept: application/vnd.github.raw+json" "$migrations/meta/_journal.json?ref=$HEAD_SHA")
+            # Drizzle knows a migration by its date and by the SHA-256 of its file, and runs none it has a date for.
+            while read -r when hash; do
+              tag=$(jq -r --argjson when "$when" '.entries[] | select(.when == $when) | .tag' <<<"$journal")
+              if [ -z "$tag" ]; then
+                stale+=" the migration dated $when, which this commit no longer holds;"
+                continue
+              fi
+              sum=$(gh api -H "Accept: application/vnd.github.raw+json" "$migrations/$tag.sql?ref=$HEAD_SHA" </dev/null | sha256sum)
+              [ "${sum%% *}" = "$hash" ] || stale+=" $tag as it was before it changed;"
+            done <<<"$own"
+          fi
+          if [ -z "$stale" ]; then
+            echo "preview/$BRANCH has had no migration this commit lacks"
+            exit 0
+          fi
+          # A reset keeps the branch's address, so a build that has not migrated yet migrates the reset branch (decisions M665a).
+          # One that already has is not built again (decisions M665b).
+          curl -fsS -X POST -H "Authorization: Bearer $NEON_API_KEY" -H "Content-Type: application/json" \
+            -d "{\"source_branch_id\": \"$production\"}" "$api/branches/$preview/restore" >/dev/null
+          # The reset copied production's people back (decisions M660a).
+          address=$(uri "$preview")
+          psql "$address" -X -q -v ON_ERROR_STOP=1 -c "$DELETE_PEOPLE"
+          echo "reset preview/$BRANCH from production's branch, without its people: it had${stale%;}. A preview of ${HEAD_SHA:0:7} built before the reset fails or lacks the migration; the next build of the app applies it."
       # Before any checkout and in no script, as the step above (decisions M15, M342). People sign in by an emailed
       # link (S342a), and a preview's branch keeps the settings production had when it was made.
       - name: Switch the emailed sign-in link on for production's database branch and this preview's
@@ -88,7 +162,12 @@ jobs:
       - name: Which checks can this change affect?
         id: needed
         run: factory/scripts/checks-needed.sh HEAD^1 >> "$GITHUB_OUTPUT"
+      # check-action-pins.sh runs zizmor, which asks GitHub where each pinned commit comes from (decisions S676a, S676b).
+      - name: Install zizmor
+        run: pipx install zizmor==1.33.1
       - run: pnpm lint
+        env:
+          GH_TOKEN: ${{ github.token }}
       - if: steps.needed.outputs.app != 'false'
         run: pnpm typecheck
       - if: steps.needed.outputs.factory != 'false'
@@ -165,6 +244,54 @@ jobs:
           count=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c 'select count(*) from neon_auth."user"')
           [[ "$count" =~ ^[0-9]+$ ]]
           echo "count=$count" >> "$GITHUB_OUTPUT"
+      # Before any checkout and in no script, as the step above (decisions M15). After Vercel's build, and a failure
+      # fails the job (decisions M660a, M660c).
+      - name: Delete the people production holds from this preview's database branch
+        if: vars.NEON_PROJECT_ID != ''
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # A failure inside $(…) or a pipe stops the step too, so an unread answer never reads as "no branch".
+          shopt -s inherit_errexit
+          set -o pipefail
+          # Vercel's newest status on the commit, as wait-for-preview.sh reads it. A commit it skips is `success` too
+          # (decisions M33), and a build that failed may still have made the branch.
+          state=none
+          for _ in $(seq 1 60); do   # up to 10 minutes, as wait-for-preview.sh waits
+            state=$(gh api "repos/$GITHUB_REPOSITORY/commits/$HEAD_SHA/statuses" \
+              --jq '[.[] | select(.context == "Vercel")][0].state // "none"')
+            [ "$state" = none ] || [ "$state" = pending ] || break
+            sleep 10
+          done
+          if [ "$state" = none ] || [ "$state" = pending ]; then
+            echo "Vercel has not finished with ${HEAD_SHA:0:7} after 10 minutes (state: $state), so its database branch may still be made with production's people"
+            exit 1
+          fi
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID"
+          # One fetch a line, as above.
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches")
+          preview=$(jq -r --arg name "preview/$BRANCH" '.branches[] | select(.name == $name) | .id' <<<"$branches")
+          if [ -z "$preview" ]; then
+            echo "preview/$BRANCH does not exist, so it holds nobody"
+            exit 0
+          fi
+          databases=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/branches/$preview/databases")
+          database=$(jq -er '.databases[0] | "database_name=\(.name | @uri)&role_name=\(.owner_name | @uri)"' <<<"$databases")
+          connection=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api/connection_uri?branch_id=$preview&$database")
+          uri=$(jq -er .uri <<<"$connection")
+          echo "::add-mask::$uri"
+          psql "$uri" -X -q -v ON_ERROR_STOP=1 -c "$DELETE_PEOPLE"
+          auth=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c "select to_regclass('neon_auth.\"user\"') is not null")
+          if [ "$auth" = t ]; then
+            accounts=$(psql "$uri" -X -At -v ON_ERROR_STOP=1 -c 'select count(*) from neon_auth."user"')
+            echo "emptied the app's tables of preview/$BRANCH, which now holds $accounts accounts"
+          else
+            echo "emptied the app's tables of preview/$BRANCH, which has no Neon Auth"
+          fi
       - uses: actions/checkout@v4
         with:
           # The commit Vercel built the preview from, not GitHub's merge with main (decisions M442).
@@ -174,6 +301,7 @@ jobs:
         id: needed
         env:
           GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: factory/scripts/needs-e2e.sh "$PR" >> "$GITHUB_OUTPUT"
       # It never fails: needs-review.sh answers `true` when unsure (decisions A266b).
       - name: Is this commit worth a review?
@@ -207,21 +335,28 @@ jobs:
           url=$(factory/scripts/wait-for-preview.sh "$PR" "$HEAD_SHA")
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Playwright against the preview
+        id: playwright
         if: steps.needed.outputs.run != 'false'
         env:
           BASE_URL: ${{ steps.preview.outputs.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         # Every test, four files at a time (decisions M640a, M640b).
         run: pnpm test:e2e --workers=4
-      - name: Upload screenshots and the test report
-        id: proof
+      # The artifact holds no copy of the bypass secret (decisions S668b).
+      - name: Take the bypass secret out of the test results
+        id: redacted
         if: always()
+        env:
+          SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: factory/scripts/redact-secret.sh apps/web/test-results
+      - name: Upload screenshots and the test results
+        id: proof
+        if: always() && steps.redacted.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: playwright-${{ github.event.pull_request.head.sha }}
-          path: |
-            apps/web/playwright-report
-            apps/web/test-results
+          # The wildcard keeps test-results/ as the artifact's top folder, which post-screenshots.sh reads.
+          path: apps/web/test-results*
           retention-days: 30
           if-no-files-found: ignore
       - name: Link the visual proof on the pull request
@@ -230,7 +365,51 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PREVIEW: ${{ steps.preview.outputs.url }}
           PROOF: ${{ steps.proof.outputs.artifact-url }}
-        run: gh pr comment "$PR" --body "End-to-end tests ran against $PREVIEW. Screenshots and report - $PROOF"
+          PASSED: ${{ steps.playwright.outcome == 'success' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        # needs-e2e.sh reads the commit a "passed" comment names (decisions M672c).
+        run: |
+          if [ "$PASSED" = true ]; then said="passed for $HEAD_SHA"; else said="ran"; fi
+          gh pr comment "$PR" --body "End-to-end tests $said against $PREVIEW. Screenshots and test results - $PROOF"
+
+  delete-preview:
+    # In a job of its own and with no checkout: `e2e` has run the pull request's code by then (decisions M15, M672a).
+    needs: e2e
+    # No status function, so only once the tests ran and passed.
+    if: needs.e2e.outputs.run == 'true' && vars.NEON_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Delete this preview's database branch once its end-to-end tests have run
+        # Housekeeping must not fail a pull request's checks; flag-idle.yml deletes what this leaves (decisions M672b).
+        continue-on-error: true
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # A failure inside $(…) or a pipe stops the step too, so an unread answer never reads as "no branch".
+          shopt -s inherit_errexit
+          set -o pipefail
+          # A newer push's build uses the branch, and that push's own run deletes it (decisions M672a).
+          head=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .head.sha)
+          if [ "$head" != "$HEAD_SHA" ]; then
+            echo "kept preview/$BRANCH: ${head:0:7} was pushed after ${HEAD_SHA:0:7}, and its run deletes the branch"
+            exit 0
+          fi
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          branches=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api")
+          preview=$(jq -r --arg name "preview/$BRANCH" '.branches[] | select(.name == $name) | .id' <<<"$branches")
+          if [ -z "$preview" ]; then
+            echo "preview/$BRANCH does not exist, so there is nothing to delete"
+            exit 0
+          fi
+          curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$preview" >/dev/null
+          echo "deleted preview/$BRANCH: its end-to-end tests have run, and the next build of the app makes it again"
 
   review:
     # Not `checks`: the reviews start beside it (decisions A2). A failed `e2e` skips it, and a draft's skipped one (A50c).
@@ -306,7 +485,10 @@ jobs:
         if: steps.carry-adam.outputs.carried != 'true' || steps.carry-ryan.outputs.carried != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: factory/scripts/usage-limit.sh wait "$PR" "the review" failed
+        # A review whose model cannot be read starts on the first (decisions A663a).
+        run: |
+          factory/scripts/usage-limit.sh wait "$PR" "the review" failed
+          factory/scripts/usage-limit.sh start "$PR" "the review" || echo "#$PR: the review runs on the first model."
       # Marked held, the failed job starts no fix round, and with no place kept nothing runs it again (decisions A69e, A395b).
       - name: Ask for a person when the reviews did not start and nothing starts them again
         if: failure() && steps.limit.outcome == 'failure' && steps.limit.outputs.kept != 'true'
@@ -374,7 +556,7 @@ jobs:
             ${{ steps.scope-ryan.outputs.brief }}
         run: |
           factory/scripts/review.sh sessions "$PR" "$HEAD_SHA" ${{ steps.carry-adam.outputs.carried != 'true' && 'adam' || '' }} ${{ steps.carry-ryan.outputs.carried != 'true' && 'ryan' || '' }} -- \
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40 \
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 40 \
             --allowedTools "Read,Glob,Grep,WebSearch,WebFetch,Bash(git diff:*),Bash(git log:*)" \
             --settings "$AGENT_SETTINGS"
       # Also after a sessions' step that failed: each review is then said to be unfinished. No verdict is not a
@@ -387,8 +569,13 @@ jobs:
           # Each verdict names its commit, so a later push can carry it (decisions A160c).
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: factory/scripts/review.sh verdicts "$PR" ${{ steps.carry-adam.outputs.carried != 'true' && 'adam' || '' }} ${{ steps.carry-ryan.outputs.carried != 'true' && 'ryan' || '' }}
-      - name: Keep a second copy of the transcripts on this run
+      # An artifact is public on a public repository, and GitHub masks secrets only in logs (decisions A667a).
+      - name: Scrub the tokens from the transcripts
+        id: scrub
         if: always()
+        run: factory/scripts/scrub-tokens.sh "$RUNNER_TEMP/reviews"
+      - name: Keep a second copy of the transcripts on this run
+        if: always() && steps.scrub.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: session-review-${{ github.run_id }}-${{ github.run_attempt }}

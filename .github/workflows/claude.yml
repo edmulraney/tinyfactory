@@ -8,6 +8,10 @@ on:
     types: [created]
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
 
 jobs:
@@ -43,9 +47,24 @@ jobs:
       # The session runs these copies, which it cannot write (decisions A372f).
       - name: Set the scripts aside as they are on main
         run: cp -R factory/scripts "$RUNNER_TEMP/factory-scripts"
+      # No session starts while the Claude usage limit holds its model, and one held on the first starts on the second (decisions A231b, A673a).
+      - name: Stop while the Claude usage limit holds every agent
+        id: limit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # A hold that cannot be read starts the session on the first model (decisions A663a).
+          when=$(factory/scripts/usage-limit.sh held) || when=""
+          if [ -n "$when" ]; then
+            gh issue comment "$NUMBER" --body "Ask again after $when: the Claude usage limit holds every agent until then, so nothing answered this request."
+            echo "held=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          factory/scripts/usage-limit.sh start "" "the reply" || echo "the reply runs on the first model"
       - name: The agent does what the owner asked
         id: session
-        uses: anthropics/claude-code-action@v1
+        if: steps.limit.outputs.held != 'true'
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
@@ -72,7 +91,7 @@ jobs:
           # No command that prints what a stranger opened, a fork's diff, or a fork run's title, check names or log, unfiltered (decisions A654a).
           # `Edit(...)` is the rule a `Write` is checked against, and start-waiting.sh takes no argument (decisions A372c, A372d, A372f).
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }}
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }}
             --allowedTools "Read,Edit(.reply/**),Glob,Grep,Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh label list:*),Bash(gh label create:*),Bash(gh run rerun:*),Bash(gh workflow run fix.yml:*),Bash(${{ runner.temp }}/factory-scripts/thread.sh:*),Bash(${{ runner.temp }}/factory-scripts/check-ticket.sh:*),Bash(${{ runner.temp }}/factory-scripts/in-flight.sh:*),Bash(${{ runner.temp }}/factory-scripts/open-issues.sh:*),Bash(${{ runner.temp }}/factory-scripts/start-waiting.sh)"
       # The reply is the session's own, so a session that fails leaves none (decisions A372e).
       # Nothing is said in a run an account that is not trusted started (decisions W563c).
@@ -84,9 +103,15 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh issue comment "$NUMBER" --body "The run that was to answer the owner's request here failed, and may have acted before it did. Its log says how far it got: $RUN_URL"
+      # An artifact is public on a public repository, and GitHub masks secrets only in logs (decisions A667a).
+      - name: Scrub the tokens from the transcript
+        id: scrub
+        if: always() && steps.session.outputs.execution_file != ''
+        run: |
+          "$RUNNER_TEMP/factory-scripts/scrub-tokens.sh" "${{ steps.session.outputs.execution_file }}"
       # This job may not write the sessions branch (decisions A372b), so the retro reads the transcript from this run (decisions A446b).
       - name: Keep the transcript on this run
-        if: always() && steps.session.outputs.execution_file != ''
+        if: always() && steps.session.outputs.execution_file != '' && steps.scrub.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: session-claude-${{ github.run_id }}-${{ github.run_attempt }}
