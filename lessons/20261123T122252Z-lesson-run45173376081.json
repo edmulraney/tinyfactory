@@ -1,0 +1,90 @@
+{
+  "pr": 655,
+  "issue": 652,
+  "facts": {
+    "run": 45160932050,
+    "workflow": "retro",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45160932050",
+    "conclusion": "success",
+    "pr": 655,
+    "issue": 652,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.25,
+    "turns": 8,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson, second try",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "retro",
+        "step": "Find the cause and write the lesson, third try",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "retro",
+        "step": "Gather the run's facts",
+        "conclusion": "success"
+      },
+      {
+        "job": "retro",
+        "step": "Rewrite a proposal the ticket template refuses",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first run of retro.yml after #679 did what that pull request claimed, so nothing needs changing: the facts step ran usage-limit.sh start and wrote MODEL, and the pinned claude-code-action ran the retro on that model to a saved lesson.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #679 changed retro.yml in three ways. It added AGENT_MODEL and AGENT_MODEL_FALLBACK to the workflow's env. It made the \"Gather the run's facts\" step run `factory/scripts/usage-limit.sh start` so that MODEL is written. It made every agent step pass `--model ${{ env.MODEL || env.AGENT_MODEL }}` and pinned anthropics/claude-code-action to v1.0.286 by its SHA. In run 45160932050 the facts step succeeded. Every later step's env shows AGENT_MODEL and MODEL as claude-opus-5-5, with AGENT_MODEL_FALLBACK empty. The pinned action's first try completed in 8 turns and 33 seconds for $0.25 on claude-opus-5-5. The lesson was saved, and the second and third tries were skipped. With no fallback model set and no usage limit met, this run never exercised the switch to a second model. Ryan's one assumption on #679, about the columns of Drizzle's `__drizzle_migrations` table, concerns ci.yml's preview-database step. This run cannot check it. The only other lesson that holds it is the retro of the same pull request, so it is not an earlier repeat.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45160932050",
+      "https://github.com/edmulraney/tinyfactory/pull/679"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the changed steps succeeded on their first run, and the retro session cost $0.25 over 33 seconds.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run had no fault to prevent and spent 0 minutes on one.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
