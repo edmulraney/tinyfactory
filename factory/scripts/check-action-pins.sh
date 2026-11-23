@@ -22,7 +22,7 @@ if [ -z "$token" ] && command -v gh >/dev/null; then
   token=$(gh auth token 2>/dev/null || true)
 fi
 if [ -z "$token" ]; then
-  echo "check-action-pins.sh needs a GitHub token to ask GitHub where each pinned commit comes from: set GH_TOKEN or GITHUB_TOKEN, or log in with \`gh auth login\`. No pin was checked."
+  echo "check-action-pins.sh needs a GitHub token to ask GitHub where each pinned commit comes from: set GH_TOKEN or GITHUB_TOKEN, or log in to the GitHub CLI. No pin was checked."
   exit 1
 fi
 

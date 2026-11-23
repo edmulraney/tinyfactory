@@ -298,6 +298,43 @@ run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
 
+# says <line>...: a script of the factory's that holds these lines.
+says() {
+  [ -d .git ] || repo_with one.test.sh 'true'
+  { echo '#!/usr/bin/env bash'; echo '# Tells a pull request what happened.'; printf '%s\n' "$@"; } > factory/scripts/tell.sh
+  git add .
+}
+
+scenario "fails on a script whose comment to the owner holds a gh command, naming the line"
+says 'gh pr comment "$pr" --body "Run \`gh workflow run fix.yml -f pr=$pr\`: a new fix round starts."'
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/scripts/tell.sh: words the factory writes hold a \`gh\` command in backticks"
+expect_output '  3:gh pr comment "$pr" --body "Run \`gh workflow run fix.yml -f pr=$pr\`: a new fix round starts."'
+expect_no_output "factory scripts ok"
+
+scenario "fails on a workflow step that writes a gh command for a person, and passes the commands an agent's prompt names"
+repo_with one.test.sh 'true'
+mkdir -p factory/workflows
+printf '%s\n' '# Fixes a pull request.' 'jobs:' '  fix:' '    steps:' '      - uses: anthropics/claude-code-action@v1' '        with:' \
+  '          prompt: |' '            Read the pull request with `gh pr view <n>`.' '' '            Then reply with `gh issue comment <n>`.' \
+  '          claude_args: --max-turns 5' '      - run: |' \
+  "          printf 'Start it again: \`gh workflow run fix.yml -f pr=%s\`' \"\$PR\" > body.md" > factory/workflows/fix.yml
+git add .
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/workflows/fix.yml: words the factory writes hold a \`gh\` command in backticks"
+expect_output "  13:          printf 'Start it again: \`gh workflow run fix.yml -f pr=%s\`'"
+expect_no_output "gh pr view <n>"
+expect_no_output "gh issue comment <n>"
+
+scenario "passes a script that runs gh itself, links a workflow's page, and names a gh command only in a comment of its own"
+says 'set -euo pipefail' '# The files endpoint, not `gh pr diff` (decisions H7).' 'gh workflow run fix.yml -f pr="$pr"' \
+  'page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr")' 'gh pr comment "$pr" --body "Start the fix round on $page. Its tools begin \`gh \` or \`git \`."'
+run "$scripts/check-factory.sh"
+expect_status 0
+expect_output "factory scripts ok"
+
 # started_by <on>... -- <job line>...: a workflow those lines of `on:` start, with one job, build, of these lines.
 started_by() {
   [ -d .git ] || repo_with one.test.sh 'true'

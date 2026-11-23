@@ -91,7 +91,8 @@ limit=$("$script_dir/usage-limit.sh" held) \
   || die "Issue #$issue was not started: whether the Claude usage limit holds every agent could not be read from GitHub. It keeps the ready label; take it off and add it again to start the build."
 if [ -n "$limit" ]; then
   if [ "${GITHUB_EVENT_NAME:-}" != workflow_dispatch ]; then
-    gh issue comment "$issue" --body "Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $limit. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once." >/dev/null \
+    resume_page=$("$script_dir/workflow-page.sh" resume.yml)
+    gh issue comment "$issue" --body "Waiting: the Claude usage limit covers the whole account, and no agent starts until it resets on $limit. This ticket keeps the \`ready\` label, and its build starts after that. If the limit was lifted sooner, start everything that waits at once on $resume_page." >/dev/null \
       || die "Issue #$issue waits, because the Claude usage limit holds every agent until $limit, but it could not be told so. It keeps the ready label, and is started after the limit resets."
   fi
   refuse "the Claude usage limit holds every agent until $limit, so issue #$issue waits with ready"

@@ -472,7 +472,7 @@ expect_status 1
 expect_calls 3 "gh workflow run install-workflows.yml -f pr=8 -f then=9"
 expect_call "gh pr comment 8 --body-file $T/not-started.md"
 expect_call "gh pr edit 8 --add-label needs-human"
-[ "$(head -1 "$T/not-started.md")" = 'Start the `install-workflows` workflow from the Actions tab, with `pr` set to `8` and `then` to `9`: that run installs the workflow changes this pull request merged.' ] \
+[ "$(head -1 "$T/not-started.md")" = 'Start the installer on the [`install-workflows` workflow'"'"'s page](https://github.example/owner/myapp/actions/workflows/install-workflows.yml), where "Run workflow" starts it with `pr` set to `8` and `then` set to `9`. That run installs the workflow changes this pull request merged.' ] \
   || fail "expected the first line to say what a person must do, got: $(head -1 "$T/not-started.md")"
 
 scenario "the step runs whatever became of the run, and only when a pull request merged after this one"

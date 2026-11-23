@@ -154,11 +154,12 @@ The build ended with no pull request ready for review: $cause. $message$run_link
   exit 1
 fi
 
+fix_page=$("$script_dir/workflow-page.sh" fix.yml pr="$number")
 # Work kept on the branch has no failed check for a round to begin from, so that ending still asks for a person.
 if [ -n "$until" ] && [ "$kept" != branch ]; then
   # It tells the pull request, and exits 0 only if the limit no longer holds (decisions A395c).
   waits=$("$script_dir/usage-limit.sh" wait "$number" "a new fix round") \
-    || die "The fix round on pull request #$number pushed nothing ($cause), and its place could not be kept: run \`gh workflow run fix.yml -f pr=$number\` after $until."
+    || die "The fix round on pull request #$number pushed nothing ($cause), and its place could not be kept: after $until, start a new fix round on $fix_page."
   if [ -n "$waits" ]; then
     echo "the fix round pushed nothing: $cause; $waits"
     # Work lost is the factory's failure (decisions A20, A231c).
@@ -167,7 +168,7 @@ if [ -n "$until" ] && [ "$kept" != branch ]; then
   fi
 fi
 after="${until:+ after $until}"
-again="Run \`gh workflow run fix.yml -f pr=$number\`$after: a new fix round starts."
+again="Start a new fix round$after on $fix_page."
 asks_person=true
 case "$kept" in
   branch)

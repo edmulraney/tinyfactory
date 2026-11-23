@@ -62,8 +62,9 @@ GitHub runs no workflow for a review of a pull request in conflict with \`main\`
     echo "started $what for pull request #$pr, which the owner reviewed while it was in conflict"
     started=$((started + 1))
   else
+    page=$("$script_dir/workflow-page.sh" "$workflow" pr="$pr")
     # The first line says what a person must do (decisions A371a).
-    gh api "repos/{owner}/{repo}/issues/$pr/comments" -f body="Start $what: \`gh workflow run $workflow -f pr=$pr\`
+    gh api "repos/{owner}/{repo}/issues/$pr/comments" -f body="Start $what on $page.
 
 GitHub did not start it, though the comment before this one says the factory was starting it." >/dev/null \
       || echo "Could not say on pull request #$pr that $what was not started." >&2

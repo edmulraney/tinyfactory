@@ -113,6 +113,23 @@ expect_count 0
 run "$scripts/fix-rounds.sh" 7 conflict "$a"
 expect_count 0
 
+scenario "the rounds flag-idle.sh started for a conflict are counted for the commit asked about, from the factory's own record, and are in no other count"
+a=5555555555555555555555555555555555555555; b=6666666666666666666666666666666666666666
+comments "$round" \
+  "$(comment 'github-actions[bot]' "<!-- factory:conflict-started $a -->Nothing to do: the factory is starting a fix round.")" \
+  "$(comment 'repo-owner' "<!-- factory:conflict-started $a -->Not the factory's record.")" \
+  "$(comment 'github-actions[bot]' "**Ryan (correctness): PASS**"$'\n'"<!-- factory:conflict-started $a --> is quoted here.")"
+run "$scripts/fix-rounds.sh" 7 conflict-started "$a"
+expect_count 1
+run "$scripts/fix-rounds.sh" 7 conflict-started "$b"
+expect_count 0
+run "$scripts/fix-rounds.sh" 7
+expect_count 1
+run "$scripts/fix-rounds.sh" 7 conflict "$a"
+expect_count 0
+run "$scripts/fix-rounds.sh" 7 conflict-started '55") or true or ("'
+expect_status 2
+
 scenario "the starts of the checks are counted for the commit asked about, from the factory's own record, and are in no other count"
 a=5555555555555555555555555555555555555555; b=6666666666666666666666666666666666666666
 comments "$round" \
@@ -130,7 +147,7 @@ scenario "anything else asked for is refused, and nothing is read"
 comments "$round"
 run "$scripts/fix-rounds.sh" 7 everyone
 expect_status 2
-expect_output "Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head> | review-started <review-id>]"
+expect_output "Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head> | review-started <review-id> | conflict-started <head>]"
 run "$scripts/fix-rounds.sh" 7 start-checks
 expect_status 2
 run "$scripts/fix-rounds.sh" 7 start-checks '55") or true or ("'

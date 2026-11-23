@@ -1,13 +1,17 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { catchError } from "next/error";
 
-import { healthQuery } from "./health-query";
+import { Commit } from "./commit";
+
+// A visitor has no use for the version, so a health that cannot be read shows nothing (decisions S692a).
+const NothingOnError = catchError(() => null);
 
 /** The commit this deployment was built from, so the owner can see that a merge is live. */
 export function Version() {
-  const { data } = useSuspenseQuery(healthQuery);
-
-  if (data.commit === "unknown") return null;
-  return <p className="text-xs text-muted-foreground">{`Version ${data.commit.slice(0, 7)}`}</p>;
+  return (
+    <NothingOnError>
+      <Commit />
+    </NothingOnError>
+  );
 }

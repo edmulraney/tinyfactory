@@ -2,6 +2,7 @@
 # Tests for factory/scripts/merge-gate.sh: ship a passed pull request, or hold one only the owner may decide.
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/ready-to-ship.sh"
+export GITHUB_REPOSITORY=owner/myapp
 
 # Pull request #7 in git: the directory a scenario runs in is the gate's checkout of main, and GitHub keeps the pull
 # request's last commit. main_holds and pull_request_holds each commit what the directory holds then.
@@ -1010,7 +1011,7 @@ ready_to_ship
 echo "workflow run merge-group.yml" > "$T/fail"
 gate
 expect_failure
-expect_first_line "gh pr comment 7 --body Start the \`merge-group\` workflow from the Actions tab: this pull request waits to merge, and that run tests and merges" "it."
+expect_first_line "gh pr comment 7 --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request waits to merge, and that run tests and merges it."
 expect_calls 6 "gh workflow run merge-group.yml"
 expect_no_call "Approve this pull request again"
 expect_call "gh pr edit 7 --add-label needs-human"

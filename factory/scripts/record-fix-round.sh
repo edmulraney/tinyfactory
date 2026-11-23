@@ -70,8 +70,9 @@ fi
 # The Claude action can skip itself and exit 0, so a round with no session fails and asks for a person (decisions A89d).
 run_link=""
 [ -z "${GITHUB_RUN_ID:-}" ] || run_link=" The log says which: ${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY:-}/actions/runs/$GITHUB_RUN_ID"
+fix_page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr")
 # The first line says what a person must do (decisions A371a).
-message="Run \`gh workflow run fix.yml -f pr=$pr\`: a new fix round starts.
+message="Start a new fix round on $fix_page.
 
 The fix round did not run: no engineer's session began, so nothing was fixed and the round is not counted. The Claude action skipped itself, or it or a step before it failed.$run_link"
 echo "$message" >&2

@@ -278,7 +278,7 @@ found passed "7:$head"
 run env TRY=3 "$scripts/ship.sh" "$T/result.json" "7:$head"
 expect_failure
 expect_no_call "gh workflow run merge-group.yml"
-expect_first_line "gh pr comment 7 --body Start the \`merge-group\` workflow from the Actions tab: this pull request still waits to merge, and that run tests and merges" "it."
+expect_first_line "gh pr comment 7 --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request still waits to merge, and that run tests and merges it."
 expect_call "Its last answer was: gh: failed: pr merge 7 --squash --delete-branch --match-head-commit $head, on each of three tries."
 expect_call "gh pr edit 7 --add-label needs-human"
 expect_no_call "factory:merge-queue removed"
@@ -726,7 +726,7 @@ TRY=3 not_begun
 expect_status 0
 expect_no_call "gh workflow run"
 for number in 7 8; do
-  expect_call "gh pr comment $number --body Start the \`merge-group\` workflow from the Actions tab"
+  expect_call "gh pr comment $number --body Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it."
   expect_call "gh pr edit $number --add-label needs-human"
 done
 expect_call "Not merged: the group it waits in could not be begun, on each of three tries."
@@ -739,7 +739,7 @@ found passed "7:$head" "8:$head_8"
 echo "workflow run merge-group.yml" > "$T/fail"
 run "$scripts/ship.sh" --not-begun
 expect_status 0
-expect_call "gh pr comment 7 --body Start the \`merge-group\` workflow from the Actions tab"
+expect_call "gh pr comment 7 --body Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it."
 expect_call "Not merged: the group it waits in could not be begun, and \`merge-group.yml\` could not be started to test its group again."
 expect_call "gh pr edit 8 --add-label needs-human"
 
@@ -1207,7 +1207,7 @@ expect_failure
 expect_no_call "gh pr merge"
 expect_calls 6 "gh workflow run merge-group.yml"
 for number in 7 8; do
-  expect_first_line "gh pr comment $number --body Start the \`merge-group\` workflow from the Actions tab: this pull request still waits to merge, and that run tests and merges" "it."
+  expect_first_line "gh pr comment $number --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request still waits to merge, and that run tests and merges it."
   expect_call "gh pr edit $number --add-label needs-human"
 done
 expect_no_call "factory:merge-queue removed"
@@ -1307,7 +1307,7 @@ run "$scripts/ship.sh" "$T/result.json" "7:$head" "8:$head_8"
 expect_failure
 expect_call "gh pr merge 7 "
 expect_calls 6 "gh workflow run fix.yml -f pr=8"
-expect_call "gh pr comment 8 --body Start the \`fix\` workflow from the Actions tab, with this pull request's number, 8: the fix round the comment before this one names could not be started."
+expect_call "gh pr comment 8 --body Start the fix round on the [\`fix\` workflow's page](https://github.com/owner/myapp/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`8\`. The fix round the comment before this one names could not be started."
 expect_no_call "\`gh workflow run"
 expect_call "gh pr edit 8 --add-label needs-human"
 expect_call "gh issue edit 12 --add-label deployed"
@@ -1356,7 +1356,7 @@ expect_failure
 expect_no_call "gh pr merge"
 expect_no_call "gh workflow run"
 for number in 7 8; do
-  expect_first_line "gh pr comment $number --body Start the \`merge-group\` workflow from the Actions tab: this pull request still waits to merge, and that run tests and merges" "it."
+  expect_first_line "gh pr comment $number --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request still waits to merge, and that run tests and merges it."
   expect_call "gh pr edit $number --add-label needs-human"
 done
 expect_call "Not merged: the test of its group with \`main\` ended with no result, on each of three tries."

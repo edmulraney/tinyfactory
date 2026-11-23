@@ -157,7 +157,7 @@ expect_output "the Claude usage limit holds every agent until $ahead_in_words: a
 expect_written "held=true"$'\n'"kept=true"
 expect_hold "$ahead"$'\n'"run 900"
 expect_first_line "gh issue comment 7 --body" "Nothing to do: a fix round starts after the Claude usage limit resets on $ahead_in_words."
-expect_posted "If the limit was lifted sooner, run \`gh workflow run resume.yml\`: everything that waits starts at once."
+expect_posted "If the limit was lifted sooner, start everything that waits at once on the [\`resume\` workflow's page](https://github.com/owner/repo/actions/workflows/resume.yml), where \"Run workflow\" starts it."
 limit wait 7 "a fix round"
 expect_hold "$ahead"$'\n'"run 900"
 

@@ -3,7 +3,7 @@
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/ready-to-ship.sh"
 
-approve() { run env GH_TOKEN=workflow-token "$scripts/approve-merge.sh" 7 repo-owner; }
+approve() { run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp "$scripts/approve-merge.sh" 7 repo-owner; }
 # The owner's review, and any before it: <state> <commit> pairs, oldest first.
 reviews() {
   local list="[]"
@@ -217,7 +217,7 @@ echo "workflow run fix.yml" > "$T/fail"
 approve
 expect_failure
 [ "$(grep -c '^gh workflow run fix.yml' "$T/calls")" = 1 ] || fail "expected fix.yml to be asked for once"
-expect_first_line "gh pr comment 7 --body" "Start the fix round: \`gh workflow run fix.yml -f pr=7\`. It starts the checks, and this pull request merges when they pass."
+expect_first_line "gh pr comment 7 --body" "Start the fix round on the [\`fix\` workflow's page](https://github.com/owner/myapp/actions/workflows/fix.yml), where \"Run workflow\" starts it with \`pr\` set to \`7\`. It starts the checks, and this pull request merges when they pass."
 expect_call "Not merged: no ci run of 5555555 ran its jobs, and GitHub did not start \`fix.yml\`, the fix round that starts them."
 expect_call "gh pr edit 7 --add-label needs-human"
 
@@ -262,7 +262,7 @@ ready_to_ship
 echo "workflow run merge-group.yml" > "$T/fail"
 approve
 expect_failure
-expect_first_line "gh pr comment 7 --body Start the \`merge-group\` workflow from the Actions tab: this pull request waits to merge, and that run tests and merges" "it."
+expect_first_line "gh pr comment 7 --body" "Start the test of this pull request's group on the [\`merge-group\` workflow's page](https://github.com/owner/myapp/actions/workflows/merge-group.yml), where \"Run workflow\" starts it. This pull request waits to merge, and that run tests and merges it."
 expect_calls 6 "gh workflow run merge-group.yml"
 expect_no_call "Approve this pull request again"
 expect_call "gh pr edit 7 --add-label needs-human"

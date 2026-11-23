@@ -15,7 +15,7 @@ die() { echo "go=false" >> "$outputs"; echo "$1" >&2; exit 1; }
 # not_begun <what GitHub did not do> <message>: the pull request was told a round began, so it is told that none did (decisions A433).
 not_begun() {
   # The first line says what a person must do (decisions A371a).
-  retry gh pr comment "$pr" --body "Start the fix round again: \`gh workflow run fix.yml -f pr=$pr\`
+  retry gh pr comment "$pr" --body "Start the fix round again on $fix_page.
 
 No fix round began, though the comment before this one says one did: $1.$(run_log)" >/dev/null \
     || echo "Could not say on pull request #$pr that no fix round began." >&2
@@ -24,6 +24,7 @@ No fix round began, though the comment before this one says one did: $1.$(run_lo
 
 # The number goes into a prompt and into calls, and no caller is taken on trust (decisions A89f).
 [[ "$pr" =~ ^[0-9]+$ ]] || die "\"$pr\" is not a pull request number."
+fix_page=$("$script_dir/workflow-page.sh" fix.yml pr="$pr")
 
 # Read on a line of its own (decisions H7). gh writes the app that opens the factory's pull requests as `app/claude`.
 pull=$(retry gh pr view "$pr" --json state,author,headRefOid,headRefName,labels,isDraft \
