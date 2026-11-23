@@ -65,7 +65,8 @@ while IFS= read -r path; do
     labels.sh)
       # The workflow's own token is enough, so the board token is kept from it.
       run "$script" env -u BOARD_TOKEN bash -c 'cd "$1" && "$2" "$3"' _ "$tree" "$tree/$path" "$repo" ;;
-    preflight.sh | scaffold.sh | purpose.sh | bootstrap.sh | present.sh)
+    # deploy.sh has nothing to do in a project already set up (decisions S677c).
+    preflight.sh | scaffold.sh | purpose.sh | bootstrap.sh | present.sh | deploy.sh)
       echo "$script changed; it has nothing to apply to a project that is already set up" ;;
     *)
       # Also a script added later that nobody listed: the factory stores no credential for it (decisions U2).

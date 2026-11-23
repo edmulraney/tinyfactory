@@ -5,6 +5,7 @@
 . "$(dirname "$0")/trusted-on-github.sh"
 
 # github: issue 12 is an open idea the owner opened, with Peta's proposal, the owner's answer and a stranger's comment.
+# $T/metrics.md is the weekly page on the sessions branch, and none when absent.
 # $T/fail holds a word of the call to fail, $T/writers the accounts that may write to the repo, and $T/events its label events.
 github() {
   echo '{"number":12,"title":"Onboard a new runner","body":"Step 1: which race.","state":"open","labels":[{"name":"idea"}],"user":{"login":"owner","type":"User"}}' > "$T/issue"
@@ -18,6 +19,9 @@ github() {
     if grep -qF -- "$(cat "$T/fail")" <<<"$*"; then echo "gh: could not connect" >&2; exit 1; fi
     case "$*" in
       "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*) hold_on_github ;;
+      "api repos/{owner}/{repo}/contents/metrics.md?ref=sessions "*)
+        [ -e "$T/metrics.md" ] || { echo "gh: Not Found (HTTP 404)" >&2; exit 1; }
+        cat "$T/metrics.md" ;;
       "api repos/{owner}/{repo}/issues/12") cat "$T/issue" ;;
       "api repos/{owner}/{repo}/collaborators/"*) permission_on_github "$@" ;;
       "api repos/{owner}/{repo}/issues/comments/"*) all="$*"; id=${all#*comments/}; id=${id%% *}
@@ -66,6 +70,39 @@ grep -qxF "===== comment by claude[bot], 2026-11-17T09:00:00Z =====" .refine/ide
 grep -qxF "A: after the race. Go." .refine/idea.md || fail "expected the file to hold the owner's answer"
 [ "$(grep -n 'How I read it' .refine/idea.md | cut -d: -f1)" -lt "$(grep -n 'after the race' .refine/idea.md | cut -d: -f1)" ] \
   || fail "expected the comments in the order they were written"
+
+scenario "Peta is given the product's usage by week from the weekly page, and nothing else of the page"
+github
+printf '%s\n' "# The factory's delivery numbers by week" "" "## Claude cost for each pull request" "" "| 2026-W46 | 1.5 |" "" \
+  "## Usage by week" "" "| Week | People active | \`race added\` | Tickets deployed |" "| 2026-W46 | 2 | 3 times by 2 people | None |" > "$T/metrics.md"
+start 3
+expect_status 0
+expect_written true
+grep -qxF "===== the product's usage, from metrics.md on the sessions branch =====" .refine/idea.md || fail "expected the file to say where the usage is from"
+grep -qxF "| 2026-W46 | 2 | 3 times by 2 people | None |" .refine/idea.md || fail "expected the file to hold the usage table"
+! grep -qF "1.5" .refine/idea.md || fail "expected the file to hold none of the factory's own measures"
+
+scenario "Peta is given no usage when the weekly page holds none, or there is no page yet"
+github
+printf '%s\n' "# The factory's delivery numbers by week" "" "## Merges a day" "" "| 2026-W46 | 0.4 |" > "$T/metrics.md"
+start 3
+expect_status 0
+! grep -qF "usage" .refine/idea.md || fail "expected no usage from a page that holds none"
+! grep -qF "0.4" .refine/idea.md || fail "expected nothing of a page that holds no usage"
+rm "$T/metrics.md"
+start 3
+expect_status 0
+expect_written true
+! grep -qF "usage" .refine/idea.md || fail "expected no usage with no page"
+
+scenario "stops when the weekly page cannot be read, and leaves no file"
+github
+echo "contents/metrics.md" > "$T/fail"
+start 3
+expect_status 1
+expect_written false
+expect_output "Could not read metrics.md on the sessions branch from GitHub"
+expect_no_file
 
 scenario "Peta is given Dara's designs, so a slice she files after the owner's go can link its design"
 github

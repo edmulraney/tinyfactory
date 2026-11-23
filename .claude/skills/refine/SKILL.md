@@ -25,7 +25,7 @@ Your only commands are `factory/scripts/file-slice.sh` and `factory/scripts/prop
 
 `propose.sh` refuses more than 250 words beside the map.
 
-Size the slices to `product/state.md` and the number of people your instructions give ([M605a](../../../factory/decisions/605.md)): what pays only with more people is left out. You keep that file true: a slice that changes what it says names it under "Docs to update".
+Size the slices to the number of people your instructions give, the usage by week in `.refine/idea.md` and `product/state.md` ([M605a](../../../factory/decisions/605.md)): what pays only with more people is left out. You keep that file true: a slice that changes what it says names it under "Docs to update".
 
 Decide everything you can, from what `product/` holds. A choice is the owner's only when it changes who the product is for or what it will not do (`PURPOSE.md`), spends money, or cannot be undone once people use it. "Needs you" is usually "None", and `propose.sh` refuses more than three lines ([A583a](../../../factory/decisions/583.md), [A585](../../../factory/decisions/585.md)).
 
@@ -65,6 +65,4 @@ Post `.refine/proposal.md` with `propose.sh`, and stop.
 
 ## File
 
-1. **Change the slices** as the owner answered.
-2. **File each slice, in order.** Pick its type and write its title and body as steps 1, 2, 4, 5 and 6 of the `ticket` skill say, in `.refine/<slice>.md`. File each criterion as you believe it should read: you cannot change a filed ticket ([A634](../../../factory/decisions/634.md)). Its "States" rows are the map's and the journey file's for its screens, worded as there; a row another slice builds says "unchanged" ([T606a](../../../factory/decisions/606.md)). The first slice writes the journey to `product/journeys/<name>.md`, and later ones update it. The body holds a line `After #<n>` on its own for each earlier slice whose code, table, screen, behaviour or finding it needs; slices that only change the same file get none ([T353c](../../../factory/decisions/353.md)). A slice whose screen Dara designed says in its body that it builds that design, with the address of its HTML file from her latest comment ([A571c](../../../factory/decisions/571.md)). `factory/scripts/file-slice.sh <idea> <type> "<title>" .refine/<slice>.md` files it, says so on the idea and prints its number. Never file a slice the idea already says was filed ([A353g](../../../factory/decisions/353.md)).
-3. **Say what you filed,** with `propose.sh`: one comment listing the tickets in order, what the owner answered and what that changed, and each criterion you corrected and why. Only where you cannot tell what a criterion should say, file your best reading and ask the owner to answer in a comment on that ticket, which its engineer reads.
+Follow `.claude/skills/refine/file.md`.

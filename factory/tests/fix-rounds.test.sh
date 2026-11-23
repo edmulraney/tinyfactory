@@ -130,7 +130,7 @@ scenario "anything else asked for is refused, and nothing is read"
 comments "$round"
 run "$scripts/fix-rounds.sh" 7 everyone
 expect_status 2
-expect_output "Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head>]"
+expect_output "Usage: fix-rounds.sh <pr-number> [owner [review-id] | conflict <head|all> | fresh-run <ci.yml-id> | start-checks <head> | review-started <review-id>]"
 run "$scripts/fix-rounds.sh" 7 start-checks
 expect_status 2
 run "$scripts/fix-rounds.sh" 7 start-checks '55") or true or ("'

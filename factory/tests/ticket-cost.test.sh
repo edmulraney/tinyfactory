@@ -30,7 +30,7 @@ github() {
       "pr view "*" --json body "*) json "$(jq "{body}" "$T/pr-$3")" "$@" ;;
       "pr view "*" --json number,"*) json "$(cat "$T/pr-$3")" "$@" ;;
       "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 "*) json "$(cat "$T/rounds")" "$@" ;;
-      "run list --workflow ci.yml --branch "*) json "[]" "$@" ;;
+      "api --method GET repos/{owner}/{repo}/actions/workflows/ci.yml/runs -f branch="*) json "{\"workflow_runs\":[]}" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs -f branch=feat/"*"-test-with-main -f per_page=100 "*) json "$(cat "$T/runs")" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs/"*"/jobs -f filter=all -f per_page=100 "*)
         n=${4#*/runs/}; json "$(cat "$T/jobs/${n%/jobs}")" "$@" ;;

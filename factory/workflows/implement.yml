@@ -15,6 +15,10 @@ concurrency:
   group: implement-${{ github.event.issue.number || inputs.issue }}
 
 env:
+  # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
+  # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
+  AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
   ISSUE: ${{ github.event.issue.number || inputs.issue }}
   # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A550).
   AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\" \"$RUNNER_TEMP/ticket-text.txt\""}]}]}}'
@@ -141,7 +145,7 @@ jobs:
         if: steps.place.outputs.start == 'true'
         # A session cut short is continued below; the last step decides whether the job failed.
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # The session's token reads the runs' jobs, timings and logs, which it otherwise may not (decisions A259).
@@ -154,7 +158,7 @@ jobs:
             You are ${{ steps.engineer.outputs.name }}. Read ${{ steps.engineer.outputs.skill }} and follow its "Implementing an issue" section for issue #${{ env.ISSUE }} in this repository.
             ${{ steps.earlier.outputs.note }}
           claude_args: |
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
 
       # Continued twice at most, with a wait first when the model's API failed (decisions A69a, A69b).
@@ -170,7 +174,7 @@ jobs:
         id: resume1
         if: steps.place.outputs.start == 'true' && steps.cut1.outputs.continue == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the step it continues
@@ -180,7 +184,7 @@ jobs:
           prompt: ${{ steps.cut1.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut1.outputs.session }}
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
       - name: Was the session cut short again? Second and last look
         id: cut2
@@ -194,7 +198,7 @@ jobs:
         id: resume2
         if: steps.place.outputs.start == 'true' && steps.cut2.outputs.continue == 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |   # as for the step it continues
@@ -204,7 +208,7 @@ jobs:
           prompt: ${{ steps.cut2.outputs.prompt }}
           claude_args: |
             --resume ${{ steps.cut2.outputs.session }}
-            --model ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
+            --model ${{ env.MODEL || env.AGENT_MODEL }} --effort ${{ vars.AGENT_EFFORT || 'medium' }} --max-turns 200
             --allowedTools "${{ steps.engineer.outputs.tools }}"
 
       # Every run of the action writes the same file, so only the last session that began names it: one the time
@@ -215,8 +219,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           "$RUNNER_TEMP/factory-scripts/save-session.sh" "${{ steps.engineer.outputs.role }}" "issue-$ISSUE" "${{ steps.cut1.outputs.continue != 'true' && steps.agent.outputs.execution_file || steps.cut2.outputs.continue != 'true' && steps.resume1.outputs.execution_file || steps.resume2.outputs.execution_file }}"
-      - name: Keep a second copy of the transcript on this run
+      # An artifact is public on a public repository, and GitHub masks secrets only in logs (decisions A667a).
+      - name: Scrub the tokens from the transcripts
+        id: scrub
         if: always() && steps.place.outputs.start == 'true' && steps.agent.outputs.execution_file != ''
+        run: |
+          "$RUNNER_TEMP/factory-scripts/scrub-tokens.sh" "${{ steps.agent.outputs.execution_file }}" "$RUNNER_TEMP/cut-short-sessions"
+      - name: Keep a second copy of the transcript on this run
+        if: always() && steps.place.outputs.start == 'true' && steps.agent.outputs.execution_file != '' && steps.scrub.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: session-${{ steps.engineer.outputs.role }}-${{ github.run_id }}-${{ github.run_attempt }}

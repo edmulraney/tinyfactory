@@ -545,8 +545,8 @@ grep -qxF '          HEAD_SHA: ${{ github.event.pull_request.head.sha }}' <<<"$p
   || fail "expected the verdicts posted after the sessions"
 
 scenario "ci.yml starts no session while the usage limit holds every agent, and keeps the run's place"
-limit=$(job review | grep -B2 -A4 -xF '        id: limit')
-grep -qxF '        run: factory/scripts/usage-limit.sh wait "$PR" "the review" failed' <<<"$limit" || fail "expected the job to wait for the usage limit, failing so that it is run again"
+limit=$(job review | grep -B2 -A8 -xF '        id: limit')
+grep -qxF '          factory/scripts/usage-limit.sh wait "$PR" "the review" failed' <<<"$limit" || fail "expected the job to wait for the usage limit, failing so that it is run again"
 grep -qxF "$unless_both_carried" <<<"$limit" || fail "expected no wait when both passes were carried: no session starts then"
 [ "$(job review | grep -n -xF '        id: limit' | cut -d: -f1)" -lt "$(job review | grep -n -xF '        id: reviews' | cut -d: -f1)" ] \
   || fail "expected the wait before the sessions"
@@ -571,7 +571,7 @@ job start-fix | grep -qF "(needs.review.result == 'failure' && needs.review.outp
 
 scenario "ci.yml keeps a second copy of the transcripts, also when the review failed its job"
 kept=$(job review | grep -B2 -A6 -F 'uses: actions/upload-artifact@v4')
-grep -qxF '        if: always()' <<<"$kept" || fail "expected the transcripts kept when a review failed its job"
+grep -qxF "        if: always() && steps.scrub.outcome == 'success'" <<<"$kept" || fail "expected the transcripts kept when a review failed its job, once their tokens were scrubbed"
 grep -qxF '          path: ${{ runner.temp }}/reviews' <<<"$kept" || fail "expected the folder review.sh keeps the transcripts in"
 grep -qxF '          name: session-review-${{ github.run_id }}-${{ github.run_attempt }}' <<<"$kept" || fail "expected a name of its own for each attempt, so that a job run again keeps both"
 

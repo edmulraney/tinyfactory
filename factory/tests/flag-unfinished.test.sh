@@ -41,7 +41,7 @@ ended() {
       "issue view 12 --json labels "*) json "$(cat "$T/labels.json")" "$@" ;;
       "pr view 7 --json headRefOid,labels "*) json "{\"headRefOid\":\"$(cat "$T/head")\",\"labels\":$(cat "$T/pr-labels.json" 2>/dev/null || echo "[]")}" "$@" ;;
       "pr view 7 --json body "*) json "{\"body\":\"Closes #12\"}" "$@" ;;
-      "run list --workflow ci.yml --commit "*) json "$(cat "$T/runs.json" 2>/dev/null || echo "[]")" "$@" ;;
+      "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha="*) ci_runs "$(cat "$T/runs.json" 2>/dev/null || echo "[]")" "$@" ;;
       "issue comment 12 --body "*|"pr comment 7 --body "*|"issue comment 7 --body "*) printf "%s\n" "$5" >> "$T/posted" ;;
       "api repos/{owner}/{repo}/contents/usage-limit?ref=sessions "*)
         git -C "$T/github.git" show sessions:usage-limit 2>/dev/null || { echo "gh: Not Found (HTTP 404)" >&2; exit 1; } ;;
@@ -632,11 +632,11 @@ echo '[{"databaseId":902,"conclusion":"failure"}]' > "$T/runs.json"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" true
 expect_status 0
 expect_posted "The fix round pushed nothing"
-expect_no_call "gh run list"
+expect_no_call "gh api repos/{owner}/{repo}/actions/workflows/ci.yml/runs"
 
 scenario "a round to start the checks stops with a message when the ci runs cannot be listed"
 fix_ended completed
-echo "run list" > "$T/fail"
+echo "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs" > "$T/fail"
 run "$scripts/flag-unfinished.sh" fix 7 "$T/session.json" "$before" start-checks
 expect_status 1
 expect_output "The ci runs for ${before:0:7}, the head of pull request #7, could not be listed, so it is not known whether its checks were started."

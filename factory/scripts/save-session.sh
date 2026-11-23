@@ -26,6 +26,13 @@ if [ -n "$written" ]; then
 fi
 [ -f "$file" ] || { echo "no transcript to save for $role"; exit 0; }
 
+# A copy is scrubbed, as the caller may still read the file it gave (decisions A667a).
+clean=$(mktemp) || { echo "could not save the $role session (no temporary file)"; exit 0; }
+trap 'rm -f "${array:-}" "$clean"' EXIT
+cp "$file" "$clean" && "$(dirname "$0")/scrub-tokens.sh" "$clean" \
+  || { echo "could not save the $role session (its tokens could not be scrubbed)"; exit 0; }
+file="$clean"
+
 # A file each, so two retros that save a lesson together never edit the same file.
 name="$(date -u +%Y%m%dT%H%M%SZ)-$role-run${GITHUB_RUN_ID:-local}.json"
 

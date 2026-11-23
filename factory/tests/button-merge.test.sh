@@ -267,7 +267,7 @@ tested
 expect_status 0
 [ "$(grep -x 'tested=.*' <<<"$out")" = "tested=false" ] || fail "expected tested=false, alone on a line"
 
-for words in "pr view 7 --json headRefOid,mergeCommit" "api repos/{owner}/{repo}/commits/$merged" "run list --workflow ci.yml --commit" "api repos/{owner}/{repo}/actions/runs/900/artifacts"; do
+for words in "pr view 7 --json headRefOid,mergeCommit" "api repos/{owner}/{repo}/commits/$merged" "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs" "api repos/{owner}/{repo}/actions/runs/900/artifacts"; do
   scenario "has main tested, and says why, when GitHub does not answer: $words"
   ready_to_ship
   echo "$words" > "$T/fail"

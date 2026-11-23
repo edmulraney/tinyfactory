@@ -111,7 +111,7 @@ ready_to_ship() {
       "pr view 7 --json state,headRefOid,reviews,isDraft,author") cat "$T/view.json" ;;
       "pr view 7 --json reviews") cat "$T/view.json" ;;
       "pr view 7 --json number,"*) json "{\"number\":7,\"title\":\"feat: export forecast as CSV\",\"headRefName\":\"feat/12-export-forecast-csv\",\"state\":\"MERGED\",\"mergedAt\":\"2026-11-16T09:00:00Z\",\"labels\":[],\"comments\":[]}" "$@" ;;
-      "run list --workflow ci.yml --branch "*) json "[]" "$@" ;;
+      "api --method GET repos/{owner}/{repo}/actions/workflows/ci.yml/runs -f branch="*) json "{\"workflow_runs\":[]}" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs -f branch=feat/12-export-forecast-csv "*) json "{\"workflow_runs\":[{\"id\":900}]}" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/runs/900/jobs -f filter=all "*)
         json "{\"jobs\":[{\"run_id\":900,\"conclusion\":\"success\",\"started_at\":\"2026-11-16T08:40:00Z\",\"completed_at\":\"2026-11-16T08:43:30Z\",\"runner_id\":1000000001}]}" "$@" ;;
@@ -155,7 +155,7 @@ ready_to_ship() {
       "pr view "*" --json headRefOid "*) json "{\"headRefOid\":\"$(cat "$T/heads/$3")\"}" "$@" ;;
       "pr view "*" --json isDraft,labels "*) json "{\"isDraft\":$(grep -qx "$3" "$T/drafts" 2>/dev/null && echo true || echo false),\"labels\":$(jq -c --argjson n "$3" "[.[] | select(.number == \$n) | .labels[]]" "$T/marked.json" 2>/dev/null || echo "[]")}" "$@" ;;
       "api repos/{owner}/{repo}/commits/main "*) json "{\"sha\":\"$(cat "$T/main")\"}" "$@" ;;
-      "run list --workflow ci.yml --commit "*) json "$(cat "$T/runs/$6" 2>/dev/null || echo "[]")" "$@" ;;
+      "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha="*) ci_runs "$(cat "$T/runs/${2##*=}" 2>/dev/null || echo "[]")" "$@" ;;
       "api repos/{owner}/{repo}/actions/runs/"*"/artifacts "*) n=${2#*/runs/}; json "$(cat "$T/artifacts/${n%/artifacts}")" "$@" ;;
       "api repos/{owner}/{repo}/actions/runs/"*"/jobs "*) n=${2#*/runs/}; json "$(cat "$T/jobs/${n%/jobs}")" "$@" ;;
       "pr list --state open --base main "*)

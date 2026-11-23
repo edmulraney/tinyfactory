@@ -830,7 +830,7 @@ rm "$T/runs/$(cat "$T/heads/8")"
 ship
 expect_status 0
 expect_call "gh workflow run fix.yml -f pr=8"
-expect_no_call "gh run list --workflow ci.yml --commit 8888"
+expect_no_call "gh api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha=8888"
 expect_call "gh pr comment 7 --body Deployed:"
 expect_call "gh issue edit 12 --add-label deployed"
 

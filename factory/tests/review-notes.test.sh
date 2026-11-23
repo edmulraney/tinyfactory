@@ -336,7 +336,7 @@ grep -qF 'ISSUE: ${{ github.event.issue.number || inputs.issue }}' "$workflow" |
 grep -A1 -xF '    if: >-' "$workflow" | grep -qF "      github.event_name == 'workflow_dispatch' || (github.event.label.name == 'ready' &&" \
   || fail "implement.yml's job does not run when it is started with an issue"
 # review-notes.sh starts the build with the workflow's own token, and the action refuses a bot it was not told to allow.
-steps=$(grep -cF 'uses: anthropics/claude-code-action@v1' "$workflow")
+steps=$(grep -cF 'uses: anthropics/claude-code-action@' "$workflow")
 allowed=$(grep -cF "allowed_bots: \${{ github.event_name == 'workflow_dispatch' && '*' || '' }}" "$workflow")
 [ "$steps" -gt 0 ] && [ "$steps" = "$allowed" ] \
   || fail "implement.yml has $steps engineer steps and $allowed that allow a build started by a bot"

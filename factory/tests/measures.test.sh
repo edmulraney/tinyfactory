@@ -224,7 +224,11 @@ expect_output "The seven measures for 2026-11, over 4 merged tickets:"
 expect_output "| Passing with no fix round | 2 of 4 (50%) |"
 expect_output "| Time to merge | 7 h 8 min: "
 
-a_cut() { jq -cn --argjson n "$1" --arg at "$2" --arg title "Cut \`$3\` to budget" '{number: $n, created_at: $at, title: $title}' >> "$T/cuts"; }
+# a_cut <number> <opened at> <file>: a ticket cut-rule-files.sh filed, by the workflows' own token.
+a_cut() {
+  jq -cn --argjson n "$1" --arg at "$2" --arg title "Cut \`$3\` to budget" \
+    '{number: $n, created_at: $at, title: $title, user: {login: "github-actions[bot]", type: "Bot"}}' >> "$T/cuts"
+}
 
 scenario "a month: under the table, how many tickets were opened in it to cut each rule file to its budget"
 github; three_tickets

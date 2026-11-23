@@ -83,7 +83,8 @@ if [ ! -d apps/web ]; then
   rm -f apps/web/pnpm-workspace.yaml apps/web/README.md apps/web/src/app/page.tsx
   # create-next-app titles every page "Create Next App", which a visitor reads in the tab and in a shared link.
   # Every page also renders Vercel's Analytics component, which reports each visit to the Web
-  # Analytics that vercel.sh switches on (decisions S644a).
+  # Analytics that vercel.sh switches on (decisions S644a), inside the provider of the cache that
+  # client components read data through (ARCHITECTURE.md, "Structure").
   python3 - "$name" apps/web/src/app/layout.tsx <<'PY'
 import json, pathlib, re, sys
 name, layout = sys.argv[1], pathlib.Path(sys.argv[2])
@@ -94,9 +95,9 @@ for old, new in (
 ):
     assert text.count(old) == 1, f"create-next-app's `{old}` was not found in {layout}"
     text = text.replace(old, new)
-text, found = re.subn(r">\s*\{children\}\s*</body>", ">\n        {children}\n        <Analytics />\n      </body>", text)
+text, found = re.subn(r">\s*\{children\}\s*</body>", ">\n        <QueryProvider>{children}</QueryProvider>\n        <Analytics />\n      </body>", text)
 assert found == 1, f"create-next-app's `{{children}}</body>` was not found in {layout}"
-layout.write_text('import { Analytics } from "@vercel/analytics/next";\n' + text)
+layout.write_text('import { Analytics } from "@vercel/analytics/next";\nimport { QueryProvider } from "@/lib/query/query-provider";\n' + text)
 PY
 
   (
@@ -129,7 +130,7 @@ if [ ! -f package.json ]; then
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
-    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-reference-feature.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh && pnpm -r lint",
+    "lint": "factory/scripts/check-inventory.sh && factory/scripts/check-decisions.sh && factory/scripts/check-free-tier.sh && factory/scripts/check-citations.sh && factory/scripts/check-rule-files.sh && factory/scripts/check-reference-feature.sh && factory/scripts/readme.sh > /dev/null && factory/scripts/check-factory.sh && factory/scripts/check-action-pins.sh && pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "factory/scripts/test-factory.sh && pnpm -r test",
     "test:e2e": "pnpm --filter web test:e2e"
@@ -222,10 +223,12 @@ if [ "$fresh" = yes ]; then
   # @shadcn/lint at the version the copied eslint.config.mjs was tested with (decisions S649).
   pnpm --filter web add -D vitest @playwright/test "@types/node@^24" \
     eslint-plugin-better-tailwindcss "@shadcn/lint@0.2.5" @axe-core/playwright drizzle-kit
-  pnpm --filter web add drizzle-orm @neondatabase/serverless @vercel/analytics server-only
+  pnpm --filter web add drizzle-orm @neondatabase/serverless @vercel/analytics server-only @tanstack/react-query
   rm "$unfinished"
 else
   install_factory_files
+  # An app scaffolded before src/lib/query was copied lacks the package that folder imports.
+  grep -q '"@tanstack/react-query"' apps/web/package.json || pnpm --filter web add @tanstack/react-query
 fi
 
 pnpm install

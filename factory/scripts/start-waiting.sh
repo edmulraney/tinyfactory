@@ -47,7 +47,8 @@ ready=$(cut -d' ' -f1 <<<"$listed")
 [ -n "$ready" ] || none "no ticket waits with ready: nothing was started"
 
 # start-build.sh would refuse each build while the Claude usage limit holds every agent (decisions A231b).
-limit=$("$script_dir/usage-limit.sh" held) \
+# Asked as a job that runs no agent, so a hold of one model starts the builds, and start-build.sh asks for each (decisions A663a).
+limit=$(MODEL="" AGENT_MODEL="" "$script_dir/usage-limit.sh" held) \
   || die "No waiting ticket was started: whether the Claude usage limit holds every agent could not be read from GitHub."
 [ -z "$limit" ] || none "the Claude usage limit holds every agent until $limit: no waiting ticket was started"
 

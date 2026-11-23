@@ -80,10 +80,21 @@ json() {
   done
   if [ -n "$filter" ]; then jq -r "$filter" <<<"$data"; else printf '%s\n' "$data"; fi
 }
+# ci_runs '<runs>' "$@": answers as GitHub lists a workflow's runs. Each run is written with ci-run.sh's field names,
+# and with "repository" naming the fork it came from, if it came from one.
+ci_runs() {
+  local data="$1"
+  shift
+  json "$(jq -c '{workflow_runs: map({id: .databaseId, status, conclusion: (if (.conclusion // "") == "" then null else .conclusion end),
+    run_attempt: .attempt, repository: {full_name: "owner/repo"}, head_repository: {full_name: (.repository // "owner/repo")}})}' <<<"$data")" "$@"
+}
 EOF
     printf '%s\n' "$2"
   } > "$T/bin/$1"
   chmod +x "$T/bin/$1"
+  # A stand-in that does not parse fails every call, so a failure scenario would pass whatever the script does (decisions H674).
+  local error
+  error=$(bash -n "$T/bin/$1" 2>&1) || fail "the stand-in for $1 does not parse: $error"
 }
 
 # sessions_on_github "$@": answers a gh stand-in's git/trees and git/blobs calls from the folders of $T/sessions.

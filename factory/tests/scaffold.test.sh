@@ -10,6 +10,7 @@ probe=apps/web/src/app/import-past-index.tsx
 a_project() {
   mkdir -p apps/web/src/app
   echo '{}' > package.json
+  echo '{}' > apps/web/package.json
   echo "$1" > "$T/lint"
   stub pnpm '
     [ "$*" = lint ] && [ -e '"$probe"' ] || exit 0
@@ -56,6 +57,28 @@ expect_status 0
 [ ! -e apps/web/src/domain/usage ] || fail "expected no usage module in an app this run did not make"
 [ ! -e apps/web/src/app/actions.ts ] || fail "expected no server action in an app this run did not make"
 [ ! -e apps/web/src/db ] || fail "expected no database folder in an app this run did not make"
+
+scenario "installs TanStack Query into an app made before the manifest copied src/lib/query, which imports it"
+a_project fails
+run "$scaffold" demo
+expect_status 0
+expect_call "pnpm --filter web add @tanstack/react-query"
+
+scenario "installs no TanStack Query into an app that has it"
+a_project fails
+echo '{"dependencies": {"@tanstack/react-query": "5"}}' > apps/web/package.json
+run "$scaffold" demo
+expect_status 0
+expect_no_call "pnpm --filter web add"
+
+scenario "stops when TanStack Query cannot be installed into an app made before"
+a_project fails
+stub pnpm '[ "$*" != "--filter web add @tanstack/react-query" ] || { echo "ERR_PNPM_FETCH_404"; exit 1; }'
+run "$scaffold" demo
+expect_failure
+expect_output "ERR_PNPM_FETCH_404"
+expect_no_output "scaffold ok"
+expect_no_call "pnpm install"
 
 # The package manager the factory's own package.json names: its version, and its checksum as the registry gives it.
 package_manager=$(jq -r .packageManager "$root/package.json")

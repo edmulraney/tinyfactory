@@ -351,11 +351,14 @@ expect_call "gh issue edit 64 --add-label needs-human --remove-label in-progress
 expect_output "Ticket #64 was flagged needs-human, with nothing working on it, but it could not be told why."
 
 workflow="$root/factory/workflows/flag-idle.yml"
-scenario "the workflow runs rerun-refused.sh first, and flag-idle.sh even when that failed"
+scenario "the workflow runs rerun-refused.sh first, then missed-reviews.sh and flag-idle.sh, each even when a step before it failed"
 steps=$(grep -n 'run: factory/scripts/' "$workflow" | sed 's/.*run: //' | tr '\n' ';')
-[ "$steps" = "factory/scripts/rerun-refused.sh;factory/scripts/flag-idle.sh;" ] || fail "expected rerun-refused.sh then flag-idle.sh, got: $steps"
-grep -B4 'run: factory/scripts/flag-idle.sh' "$workflow" | grep -qF 'if: ${{ !cancelled() }}' \
-  || fail "expected the flag-idle.sh step to run after a failed step"
+[ "$steps" = "factory/scripts/rerun-refused.sh;factory/scripts/missed-reviews.sh;factory/scripts/flag-idle.sh;" ] \
+  || fail "expected rerun-refused.sh, missed-reviews.sh, then flag-idle.sh, got: $steps"
+for script in missed-reviews flag-idle; do
+  grep -B4 "run: factory/scripts/$script.sh" "$workflow" | grep -qF 'if: ${{ !cancelled() }}' \
+    || fail "expected the $script.sh step to run after a failed step"
+done
 
 scenario "the workflow's token may do what the two scripts need"
 for permission in "issues: write" "pull-requests: read" "actions: write" "checks: read" "contents: write"; do

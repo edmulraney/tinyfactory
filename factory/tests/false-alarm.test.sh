@@ -73,7 +73,7 @@ alarm
 expect_status 0
 expect_result false
 
-for words in "pr view 7 --json headRefOid" "run list --workflow ci.yml"; do
+for words in "pr view 7 --json headRefOid" "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs"; do
   scenario "stops with a message, and answers nothing, when this fails: gh $words"
   checks_failed; not_settled
   GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp "$scripts/collect-failures.sh" "$T/failed.txt" 7 >/dev/null 2>&1

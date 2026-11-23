@@ -604,7 +604,7 @@ scenario "stops with a message, and begins no round, when the ci runs cannot be 
 checks_failed; only_skipped_run
 # collect-failures.sh lists them first, and is answered: every later listing fails.
 mv "$T/bin/gh" "$T/bin/github"
-stub gh 'case "$*" in "run list "*) [ "$(grep -c "^gh run list " "$T/calls")" -le 2 ] || { echo "gh: failed: $*" >&2; exit 1; } ;; esac; exec "$T/bin/github" "$@"'
+stub gh 'case "$*" in *"/actions/workflows/ci.yml/runs?"*) [ "$(grep -c "/actions/workflows/ci.yml/runs?" "$T/calls")" -le 2 ] || { echo "gh: failed: $*" >&2; exit 1; } ;; esac; exec "$T/bin/github" "$@"'
 begin
 expect_status 1
 expect_written "go=false"
@@ -656,18 +656,23 @@ expect_written "counted=false"
 expect_no_call "gh run rerun"
 
 # The head's read failing is covered by false-alarm.test.sh: owner-review.sh makes that read first.
-for words in "run list --workflow ci.yml --commit $head --limit 20 --json attempt,conclusion" "run rerun --job 30"; do
-  scenario "workflows not settled: stops with a message, and begins no round, when this fails: gh $words"
-  checks_failed; not_settled
-  echo "$words" > "$T/fail"
-  begin
-  expect_status 1
-  expect_no_round
-  case "$words" in
-    "run rerun"*) expect_output "and could not be run again" ;;
-    *) expect_output "Whether an engineer can fix what failed on pull request #7 is not known, so no fix round was begun."; expect_no_call "gh run rerun" ;;
-  esac
-done
+scenario "workflows not settled: stops with a message, and begins no round, when the attempt of the ci run cannot be read"
+checks_failed; not_settled
+mv "$T/bin/gh" "$T/bin/github"
+stub gh 'case "$*" in *"/actions/workflows/ci.yml/runs?"*"(.attempt)"*) echo "gh: failed: $*" >&2; exit 1 ;; esac; exec "$T/bin/github" "$@"'
+begin
+expect_status 1
+expect_no_round
+expect_output "Whether an engineer can fix what failed on pull request #7 is not known, so no fix round was begun."
+expect_no_call "gh run rerun"
+
+scenario "workflows not settled: stops with a message, and begins no round, when this fails: gh run rerun --job 30"
+checks_failed; not_settled
+echo "run rerun --job 30" > "$T/fail"
+begin
+expect_status 1
+expect_no_round
+expect_output "and could not be run again"
 
 while IFS='|' read -r words message; do
   scenario "stops with a message, and begins no round, when this fails: gh $words"
@@ -684,7 +689,7 @@ pr view 7 --json state|Could not read pull request #7 from GitHub, so no fix rou
 api repos/{owner}/{repo}/pulls/7/reviews|What repo-owner asked for on pull request #7 could not be read, so no fix round was begun.
 api repos/{owner}/{repo}/issues/7/comments?per_page=100 --paginate --jq .[] |The fix rounds of pull request #7 could not be counted, so no fix round was begun.
 pr view 7 --json headRefOid,baseRefName|What failed on pull request #7 could not be read, so no fix round was begun.
-run list|What failed on pull request #7 could not be read, so no fix round was begun.
+api repos/{owner}/{repo}/actions/workflows/ci.yml/runs|What failed on pull request #7 could not be read, so no fix round was begun.
 api repos/owner/myapp/actions/runs/900/jobs|What failed on pull request #7 could not be read, so no fix round was begun.
 pr view 7 --json body|The ticket pull request #7 closes could not be read, so who built it is not known.
 issue view 12|Issue #12 could not be read from GitHub, so who built pull request #7 is not known.

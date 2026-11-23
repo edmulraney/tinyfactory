@@ -16,7 +16,7 @@ expect_in_file "src/page.tsx: unused variable"
 expect_not_in_file "the end-to-end log"
 expect_not_in_file "conflict"
 expect_no_call "jobs/31/logs"
-expect_call "gh run list --workflow ci.yml --commit $head --limit 20"
+expect_call "gh api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha=$head"
 
 scenario "strips the timestamps and the group lines, and keeps the last 150 lines of a log"
 checks_failed
@@ -137,7 +137,7 @@ stub gh '
     *"/jobs/30/logs "*) echo "gh: error $(grep -c "jobs/30/logs" "$T/calls")" >&2; exit 1 ;;
     *"/runs/900/jobs "*) json "$(cat "$T/jobs")" "$@" ;;
     "pr view 7 "*) json "{\"headRefOid\":\"$head\",\"baseRefName\":\"main\",\"mergeable\":\"MERGEABLE\"}" "$@" ;;
-    "run list "*) json "$(cat "$T/runs")" "$@" ;;
+    *"/actions/workflows/ci.yml/runs?"*) ci_runs "$(cat "$T/runs")" "$@" ;;
     *"/pulls/7/files "* | *"/issues/7/comments"*) json "[]" "$@" ;;
     *) exit 1 ;;
   esac'
@@ -175,7 +175,7 @@ while IFS='|' read -r words message; do
   [ -z "$(find "$T/tmp" -mindepth 1)" ] || fail "expected no temporary file to be left"
 done <<'CALLS'
 pr view 7|Could not read pull request #7 from GitHub, so what failed on it is not known.
-run list|Could not list the ci runs for 5555555, the head of pull request #7
+api repos/{owner}/{repo}/actions/workflows/ci.yml/runs|Could not list the ci runs for 5555555, the head of pull request #7
 api repos/owner/myapp/actions/runs/900/jobs|Could not list the jobs of workflow run 900, so which of them failed is not known.
 CALLS
 

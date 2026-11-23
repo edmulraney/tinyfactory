@@ -37,7 +37,7 @@ github() {
       # One list on GitHub, asked for twice: $T/comments answers the read of the verdicts, and $T/rounds fix-rounds.sh.
       "api repos/{owner}/{repo}/issues/72/comments?per_page=100 --paginate --jq "*"{body: "*) json "$(cat "$T/comments")" "$@" ;;
       "api repos/{owner}/{repo}/issues/72/comments?per_page=100 "*) json "$(cat "$T/rounds")" "$@" ;;
-      "run list --workflow ci.yml --branch feat/57-test-with-current-main "*) json "$(cat "$T/ci-runs")" "$@" ;;
+      "api --method GET repos/{owner}/{repo}/actions/workflows/ci.yml/runs -f branch=feat/57-test-with-current-main "*) json "$(cat "$T/ci-runs")" "$@" ;;
       "run view 801 --json jobs "*) json "{\"jobs\":[{\"name\":\"checks\",\"conclusion\":\"success\"},{\"name\":\"review\",\"conclusion\":\"failure\"}]}" "$@" ;;
       "run view 802 --json jobs "*) json "{\"jobs\":[{\"name\":\"review\",\"conclusion\":\"failure\"},{\"name\":\"e2e\",\"conclusion\":\"failure\"}]}" "$@" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
@@ -488,7 +488,10 @@ a_pull_request() {
   comment "<!-- factory:fix-round -->Fix round 1 of 3"
   comment "**Ryan (code): PASS**"
   comment "**Adam (architecture): PASS**"
-  echo '[{"databaseId":801,"conclusion":"failure"},{"databaseId":802,"conclusion":"failure"},{"databaseId":803,"conclusion":"success"}]' > "$T/ci-runs"
+  # Run 804 is a fork's, on a branch of the same name.
+  jq -n '{workflow_runs: [{id: 801, conclusion: "failure"}, {id: 802, conclusion: "failure"}, {id: 803, conclusion: "success"},
+          {id: 804, conclusion: "failure", head_repository: {full_name: "stranger/myapp"}}]}
+          | .workflow_runs |= map({head_repository: {full_name: "owner/myapp"}} + . + {repository: {full_name: "owner/myapp"}})' > "$T/ci-runs"
   a_session_that_finished issue-57 fred 800 6.82
   a_session_that_finished pr-72 ryan 801 1.84
   a_session_that_finished pr-72 fred-fix 801 1.55
@@ -515,6 +518,7 @@ expect_fact .owner_rounds 0
 expect_fact '.reviews | "\(.adam.pass) \(.adam.fail) \(.ryan.pass) \(.ryan.fail)"' "2 0 1 1"
 expect_fact '.failed_jobs | map("\(.job) \(.times)") | join(", ")' "e2e 1, review 2"
 expect_no_call "gh run view 803"
+expect_no_call "gh run view 804"
 
 scenario "a pull request: a pass carried forward is counted apart from the passes a reviewer gave"
 github; a_pull_request
@@ -648,7 +652,7 @@ expect_fact '.agents | map(select(.role == "fred"))[0].model' null
 
 scenario "a pull request with no failed run and no sessions folder"
 github; a_pull_request
-echo '[]' > "$T/ci-runs"
+echo '{"workflow_runs":[]}' > "$T/ci-runs"
 run env GH_TOKEN=workflow-token "$scripts/run-facts.sh" 72
 expect_status 0
 expect_fact '.failed_jobs | length' 0
@@ -674,7 +678,7 @@ done <<'READS'
 pr view 72 --json number|Could not read pull request #72 from GitHub, so its facts are not known.
 pr view 72 --json body|Could not read pull request #72 from GitHub, so the issue it closes is not known.
 api repos/{owner}/{repo}/issues/72/comments|Could not count the fix rounds of pull request #72, so its facts are not known.
-run list|Could not list the ci runs of feat/57-test-with-current-main
+api --method GET repos/{owner}/{repo}/actions/workflows/ci.yml/runs|Could not list the ci runs of feat/57-test-with-current-main
 run view 802|Could not read the jobs of ci run 802
 READS
 

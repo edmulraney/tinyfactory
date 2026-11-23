@@ -17,8 +17,11 @@ if [ ! -t 0 ] || [ ! -t 1 ]; then
   exit 0
 fi
 
-echo "Opening the purpose interview for $name. When PURPOSE.md is written, type /exit to carry on with setup."
-claude "Run the purpose skill for the project '$name' in this directory. When PURPOSE.md is written, tell me to type /exit so setup can continue." || true
+echo "Opening the purpose interview for $name. Setup carries on by itself once PURPOSE.md is written."
+# `exec` turns the shell whose PID is $$ into Claude Code, the process the Stop hook stops to end the session (decisions S671).
+settings='{"hooks":{"Stop":[{"hooks":[{"type":"command","command":"[ ! -f \"$CLAUDE_PROJECT_DIR/PURPOSE.md\" ] || kill \"$PURPOSE_SESSION\""}]}]}}'
+sh -c 'export PURPOSE_SESSION=$$; exec claude "$@"' purpose --settings "$settings" \
+  "Run the purpose skill for the project '$name' in this directory." || true
 
 if [ -f PURPOSE.md ]; then
   mark done "purpose ok: wrote PURPOSE.md"

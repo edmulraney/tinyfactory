@@ -18,7 +18,7 @@ github() {
     done < "$T/fail"
     case "$*" in
       "workflow run merge-group.yml" | "workflow run merge-group.yml -f try="*) ;;
-      "run list --workflow ci.yml --commit "*) json "$(cat "$T/runs/$6" 2>/dev/null || echo "[]")" "$@" ;;
+      "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs?per_page=100&head_sha="*) ci_runs "$(cat "$T/runs/${2##*=}" 2>/dev/null || echo "[]")" "$@" ;;
       "api repos/{owner}/{repo}/actions/runs/"*"/artifacts "*) n=${2#*/runs/}; json "$(cat "$T/artifacts/${n%/artifacts}")" "$@" ;;
       *) queue_on_github "$@" ;;
     esac'
@@ -107,7 +107,7 @@ cp "$T/runs/$(head_of 7)" "$T/runs/$(head_of 8)"
 begin
 expect_written "test=true"
 
-for words in "run list --workflow ci.yml" "api repos/{owner}/{repo}/actions/runs/900/artifacts"; do
+for words in "api repos/{owner}/{repo}/actions/workflows/ci.yml/runs" "api repos/{owner}/{repo}/actions/runs/900/artifacts"; do
   scenario "unsure whether its checks passed with this main, the group of one is tested: gh $words fails"
   github
   pull 7 apps/web/seven.txt

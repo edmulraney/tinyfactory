@@ -432,7 +432,7 @@ expect_not_written "continue=true"
 # Each run of the action gets a token of its own, so a continued session must ask for the same read (decisions A259, A406).
 scenario "every agent step of implement.yml, fix.yml and retro.yml asks for a token that reads Actions runs"
 for workflow in implement.yml fix.yml retro.yml; do
-  steps=$(grep -cF 'uses: anthropics/claude-code-action@v1' "$root/factory/workflows/$workflow")
+  steps=$(grep -cF 'uses: anthropics/claude-code-action@' "$root/factory/workflows/$workflow")
   reads=$(grep -A1 -E '^          additional_permissions: \|( +#.*)?$' "$root/factory/workflows/$workflow" | grep -cxF '            actions: read')
   [ "$steps" -gt 0 ] && [ "$steps" = "$reads" ] \
     || fail "$workflow has $steps agent steps and $reads that ask for actions: read"

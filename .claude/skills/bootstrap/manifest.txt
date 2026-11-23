@@ -1,6 +1,6 @@
 # Files the factory owns. scaffold.sh copies them from the factory's repo into a new project.
 # They are the same in every project and are replaced by factory upgrades, unlike the seeds in
-# templates/ (CLAUDE.md, ARCHITECTURE.md, DESIGN.md, TASTE.md), which each project edits after creation.
+# templates/ (CLAUDE.md, ARCHITECTURE.md, GLOSSARY.md, DESIGN.md, TASTE.md), which each project edits after creation.
 # One path per line, as it is in a project; a directory means everything under it.
 # A path under apps/ is copied from this repo where it holds the app, and from templates/ where it
 # holds none, over whatever a generator wrote there.
@@ -36,3 +36,4 @@ apps/web/e2e/test.ts
 apps/web/e2e/acceptance/README.md
 apps/web/src/app/api/health/route.ts
 apps/web/src/lib/outbound
+apps/web/src/lib/query

@@ -5,6 +5,7 @@
 #        A `ready` label the owner added to the idea is their "go" to Peta's proposal, whatever started the run (decisions
 #        A611a): it comes off the idea, and the file ends with it. On an idea with no proposal it accepts nothing, and
 #        the idea is told so.
+#        The file holds the usage section of the weekly page too, when the page has one.
 #        Writes start=true or start=false to GITHUB_OUTPUT. Needs GH_TOKEN (issues and contents: write) and GITHUB_REPOSITORY.
 set -euo pipefail
 
@@ -91,12 +92,24 @@ The label accepted nothing, because this idea holds no proposal yet. It was take
   fi
 fi
 
+# Peta reads the product's usage as the latest weekly page shows the owner, which usage.sh wrote under this heading (decisions H666b).
+weekly=""
+if page=$(gh api "repos/{owner}/{repo}/contents/metrics.md?ref=sessions" -H "Accept: application/vnd.github.raw" 2>&1); then
+  weekly=$(awk '/^## / { inside = ($0 == "## Usage by week") } inside' <<<"$page")
+# No page yet is no usage to read.
+elif [[ "$page" != *"HTTP 404"* ]]; then
+  die "Could not read metrics.md on the sessions branch from GitHub, so the product's usage by week is not known and Peta did not run."
+fi
+
 # Written in one go, once everything is read: a failed read leaves no file.
 mkdir -p "$(dirname "$file")"
 {
   jq -r '"# Idea #\(.number): \(.title)\n\n\(.body // "")\n"' <<<"$idea"
+  [ -z "$weekly" ] || printf "===== the product's usage, from metrics.md on the sessions branch =====\n%s\n\n" "$weekly"
   [ -z "$comments" ] || jq -r '"===== comment by \(.login), \(.at) =====\n\(.body)\n"' <<<"$comments"
   [ "$go" != true ] || printf '===== the `ready` label, added by %s =====\ngo\n' "$owner"
 } > "$file"
+# Its agents run on the second model while the first's limit holds it; a run whose model cannot be read starts on the first (decisions A663a).
+"$script_dir/usage-limit.sh" start "$issue" "Peta's run on this idea" >&2 || echo "#$issue: Peta's run on this idea runs on the first model." >&2
 echo "start=true" >> "$outputs"
 echo "started: the idea and $(grep -c '^===== comment by ' "$file" || true) comments are in $file"
