@@ -1,0 +1,132 @@
+{
+  "pr": 685,
+  "issue": 681,
+  "facts": {
+    "run": 45172033039,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45172033039",
+    "conclusion": "success",
+    "pr": 685,
+    "issue": 681,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 1.82,
+    "turns": 49,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": null,
+        "step": "Delete this preview's database branch once its end-to-end tests have run",
+        "conclusion": null
+      },
+      {
+        "job": "e2e",
+        "step": "Delete the people production holds from this preview's database branch",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "e2e",
+        "step": "Do the end-to-end tests need to run?",
+        "conclusion": "success"
+      },
+      {
+        "job": "e2e",
+        "step": "Link the visual proof on the pull request",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "e2e",
+        "step": "Playwright against the preview",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "e2e",
+        "step": "Take the bypass secret out of the test results",
+        "conclusion": "success"
+      },
+      {
+        "job": "e2e",
+        "step": "Upload screenshots and the test results",
+        "conclusion": "success"
+      },
+      {
+        "job": "checks",
+        "step": "Install zizmor",
+        "conclusion": "success"
+      },
+      {
+        "job": "checks",
+        "step": "Reset this preview's database branch from production's when it has had a migration this commit lacks",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "review",
+        "step": "Adam reviews architecture and taste, and Ryan correctness, at the same time",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Keep a second copy of the transcripts on this run",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Scrub the tokens from the transcripts",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Wait while the Claude usage limit holds every agent",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first ci run after #679 did what #679 changed on every step it reached, including the model choice, zizmor and lint, the secret redaction and the transcript scrub; it never reached the Neon database steps, because this repository has no Neon project, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #679 changed several parts of ci.yml. It set AGENT_MODEL and AGENT_MODEL_FALLBACK in the workflow env. It installed zizmor and gave `pnpm lint` a GH_TOKEN. It passed HEAD_SHA to needs-e2e.sh. It added a step that takes the bypass secret out of the test results before upload, and it changed the artifact path to `test-results*`. It made usage-limit.sh `start` choose the review's model, and it scrubbed tokens from the transcripts before keeping them. It also added three Neon steps: a reset of the preview's branch when that branch has had a migration the commit lacks, a deletion of production's people, and a `delete-preview` job.\n\nRun 45172033039 on #685 reached every non-Neon change, and each one worked. The `env` block showed AGENT_MODEL=claude-opus-5-5. zizmor 1.33.1 installed, and lint ran with the token. needs-e2e.sh got HEAD_SHA and said there was no apps folder. The redaction step passed with no results to clean, and the upload found no files without failing. The review ran with `--model claude-opus-5-5` read from MODEL. The scrub passed, and the transcript artifact uploaded after it.\n\nThe run skipped every Neon step, because `vars.NEON_PROJECT_ID` is empty in this repository. For the same reason `delete-preview` never ran. Ryan's unchecked assumption has therefore not been tested in a real run. That assumption is that Drizzle's `created_at` equals the journal's `when` in milliseconds, and that its `hash` is the SHA-256 of the migration file's raw text. The first project with Neon and its own migration will be the first test. If the assumption is wrong, every such preview's branch is reset on each push.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45172033039",
+      "https://github.com/edmulraney/tinyfactory/pull/679",
+      "https://github.com/edmulraney/tinyfactory/pull/685",
+      "https://github.com/edmulraney/tinyfactory/pull/685#issuecomment-7100651603"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "Nothing to change. Every changed step the run reached did what #679 claimed. The Neon steps need a project that has a Neon database, so this repository cannot test them.",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "$0: the run succeeded, and the $1.82 that Adam (72 seconds) and Ryan (145 seconds) cost was the normal review of #685, not a fault",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: no fault cost anything on this run ($0, 0 minutes).",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
