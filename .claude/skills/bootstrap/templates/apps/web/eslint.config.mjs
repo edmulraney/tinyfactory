@@ -27,7 +27,39 @@ const misplaced = (files, ignores, message) => ({
   rules: { "no-restricted-syntax": ["error", { selector: "Program", message }] },
 });
 
-const useTheClient = "Call outboundFetch in src/lib/outbound, which sets a time limit.";
+const useTheClient =
+  "Call outboundFetch in src/lib/outbound, which sets a time limit. fetch itself may only ask one of the app's own routes, by a path such as /api/races.";
+
+// A path that starts with one slash, as "/api/races" or `/api/races?query=${text}` does, asks the
+// app's own server. "//host" asks another host.
+const ownRoute = (node) => {
+  const start = node?.type === "Literal" ? node.value : node?.type === "TemplateLiteral" ? node.quasis[0].value.cooked : null;
+  return typeof start === "string" && start.startsWith("/") && !start.startsWith("//");
+};
+
+// ARCHITECTURE.md, "Outside services": only the client may call fetch for an outside service, so
+// none can be asked without its time limit; a component asks the app's own route with fetch
+// (decisions S688a). A selector cannot tell the global fetch from a variable of that name, so this
+// rule reads where each use of the name was declared.
+const outboundOnly = {
+  rules: {
+    "fetch-own-routes-only": {
+      meta: { type: "problem", schema: [], messages: { outbound: useTheClient } },
+      create: (context) => ({
+        "Program:exit"(program) {
+          const global = context.sourceCode.getScope(program);
+          // A global the config declares, as the browser's are, resolves to it; one it does not stays unresolved.
+          const references = [...(global.set.get("fetch")?.references ?? []), ...global.through.filter(({ identifier }) => identifier.name === "fetch")];
+          for (const { identifier } of references) {
+            const call = identifier.parent;
+            if (call.type === "CallExpression" && call.callee === identifier && ownRoute(call.arguments[0])) continue;
+            context.report({ node: identifier, messageId: "outbound" });
+          }
+        },
+      }),
+    },
+  },
+};
 
 // ARCHITECTURE.md, "Types are the contract": an exported function of a module takes and returns
 // types that have a name. A type written inline in a signature is one a caller cannot name.
@@ -166,13 +198,12 @@ const eslintConfig = defineConfig([
     files: ["src/components/ui/**"],
     rules: { "shadcn/no-restyle": "off", "shadcn/no-arbitrary-values": "off", "shadcn/no-inline-styles": "off" },
   },
-  // ARCHITECTURE.md, "Outside services": only the client may call fetch, so no request to an
-  // outside service can be made without its time limit.
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: ["src/lib/outbound/index.ts"],
+    plugins: { outbound: outboundOnly },
     rules: {
-      "no-restricted-globals": ["error", { name: "fetch", message: useTheClient }],
+      "outbound/fetch-own-routes-only": "error",
       "no-restricted-properties": [
         "error",
         ...["globalThis", "window", "self"].map((object) => ({ object, property: "fetch", message: useTheClient })),
