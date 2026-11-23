@@ -54,6 +54,14 @@ for script in $scripts; do
     failed=1
   fi
 done
+# checks runs bash 5, so only this stops what a Mac's bash 3.2 lacks (decisions H684).
+for script in $scripts; do
+  if found=$(grep -nE '(^|[;&|({]|then|do|else)[[:space:]]*((declare|local)[[:space:]]+-[A-Za-z]*A|(mapfile|readarray|coproc)([[:space:]]|$))|\$\{[A-Za-z_0-9]+(\[[^]]*\])?(,|\^)|(^|[[:space:]])(&>>|\|&)' "$script"); then
+    echo "$script: a construct that the bash 3.2 of a Mac lacks and bash 5 runs: an associative array (\`declare -A\`, \`local -A\`), \`mapfile\`, \`readarray\`, \`coproc\`, an expansion that changes case with \`,,\` or \`^^\`, \`&>>\` or \`|&\`. Keep a list or a set of pairs in a newline-separated string and read it with grep; change case with tr; write \`>> file 2>&1\` or \`2>&1 |\`:"
+    sed 's/^/  /' <<<"$found"
+    failed=1
+  fi
+done
 # A header that grows is read on every run that opens the file (decisions H176a).
 if ! workflows=$(git ls-files --cached --others --exclude-standard 'factory/workflows/*.yml'); then
   echo "check-factory.sh could not list the workflows with git ls-files, so no header was checked."

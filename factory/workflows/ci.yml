@@ -12,7 +12,7 @@ env:
   # The model each agent runs on, and the second one a job starts on while the first's usage limit holds it; the job's
   # first step writes MODEL, the one its agents run on (decisions A504a, A663a).
   AGENT_MODEL: ${{ vars.AGENT_MODEL || 'claude-fable-5-2' }}
-  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}
+  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}
   PR: ${{ github.event.pull_request.number }}
   # No background commands in a session with nobody in it (decisions A69f).
   AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"}}'

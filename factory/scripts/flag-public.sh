@@ -19,14 +19,14 @@ if [ -n "$open" ]; then
 fi
 
 add="**Add a \`SECURITY.md\`** at the root of the repository. It tells a stranger whom the factory acts for and how to report a vulnerability. File a Factory ticket for it: its pull request waits for your approval."
-report="**Switch on private vulnerability reporting,** in the repository's settings, under Security. A report then reaches you without showing the fault to everyone."
+protect="**Ask an assistant to run the \`publicize-repo\` skill,** unless it made the repository public. It switches on private vulnerability reporting, secret scanning and the other protections a public repository needs, and sets only what is missing."
 if [ -f SECURITY.md ]; then
-  first="Switch on private vulnerability reporting, then close this ticket: the factory cannot."
-  steps="1. $report"
+  first="Run the \`publicize-repo\` skill unless it made the repository public, then close this ticket."
+  steps="1. $protect"
 else
-  first="Add a \`SECURITY.md\` and switch on private vulnerability reporting, then close this ticket: the factory does neither."
+  first="Add a \`SECURITY.md\`, and run the \`publicize-repo\` skill unless it made the repository public, then close this ticket."
   steps="1. $add
-2. $report"
+2. $protect"
 fi
 # The first line says what a person must do (decisions A371a).
 body="$first

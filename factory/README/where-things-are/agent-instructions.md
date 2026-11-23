@@ -1,1 +1,1 @@
-| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `design` (Dara), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `bootstrap` |
+| Agent instructions | `.claude/skills/`: `implement` (Esme), `factory-engineer` (Fred), `research` (Rosa), `refine` (Peta), `design` (Dara), `review-architecture` (Adam), `review-code` (Ryan), `retro`, `ticket`, `intake`, `purpose`, `promote`, `operate`, `publicize-repo`, `bootstrap` |

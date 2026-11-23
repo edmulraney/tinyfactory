@@ -11,7 +11,7 @@ effort='--effort ${{ vars.AGENT_EFFORT || '\''medium'\'' }}'
 # shellcheck disable=SC2016
 first='  AGENT_MODEL: ${{ vars.AGENT_MODEL || '\''claude-fable-5-2'\'' }}'
 # shellcheck disable=SC2016
-second='  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK }}'
+second='  AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || '\''claude-opus-5-5'\'' }}'
 
 lines() { grep -n -v '^[[:space:]]*#' "$root"/factory/workflows/*.yml | sed "s|^$root/||"; }
 agents() { grep -c -E 'uses: anthropics/claude-code-action@|^[[:space:]]*(claude -p|factory/scripts/review\.sh sessions) ' "$1" || true; }
