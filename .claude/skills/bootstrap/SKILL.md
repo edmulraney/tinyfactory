@@ -9,7 +9,7 @@ Ask the human nothing about setup: they only answer the purpose interview, agree
 
 ## Steps
 
-From the project root, `scripts/bootstrap.sh` runs every step in order. Each is a script in `scripts/` that is safe to re-run; run them one at a time to handle a failure or an approval in between: `preflight.sh`, `scaffold.sh`, `purpose.sh`, `github.sh`, `vercel.sh`, `database.sh`, `database-key.sh`, `sign-in.sh`, `preview-access.sh`, `board.sh`, `board-token.sh`, `workflow-app.sh`, `agent-token.sh`.
+From the project root, `scripts/bootstrap.sh` runs every step in order. Each is a script in `scripts/` that is safe to re-run; run them one at a time to handle a failure or an approval in between: `preflight.sh`, `scaffold.sh`, `purpose.sh`, `github.sh`, `vercel.sh`, `database.sh`, `database-key.sh`, `sign-in.sh`, `preview-access.sh`, `board.sh`, `board-token.sh`, `workflow-app.sh`, `agent-token.sh`, `deploy.sh`.
 
 Run a script that waits for the human in the background, and pass on the code, URL or clicks it prints word for word. Never hand the human a command to type, but the one `database.sh` prints.
 

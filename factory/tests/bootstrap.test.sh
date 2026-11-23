@@ -11,7 +11,7 @@ setup() {
   : > "$T/fails"
   : > "$T/asks"
   local step
-  for step in preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token; do
+  for step in preflight scaffold purpose github vercel database database-key sign-in preview-access board board-token workflow-app agent-token deploy; do
     cat > "$T/setup/$step.sh" <<EOF
 #!/usr/bin/env bash
 . "\$(dirname "\$0")/present.sh"
@@ -39,6 +39,7 @@ run "$T/setup/bootstrap.sh" shop
 expect_status 0
 ran scaffold
 ran agent-token
+ran deploy
 expect_output "bootstrap complete: shop"
 
 scenario "skips the scaffold where the first commit holds the app and the factory's scripts"
@@ -66,14 +67,14 @@ expect_output "Setup stopped at vercel."
 ran github
 did_not_run database
 
-scenario "in a terminal, heads each step in bold with its number out of thirteen, and marks each end in its colour"
+scenario "in a terminal, heads each step in bold with its number out of fourteen, and marks each end in its colour"
 setup
 echo vercel > "$T/fails"
 echo purpose > "$T/asks"
 run in_terminal "$T/setup/bootstrap.sh" shop
 expect_status 1
-expect_output $'\033[1m[1/13] preflight\033[0m'
-expect_output $'\033[1m[5/13] vercel\033[0m'
+expect_output $'\033[1m[1/14] preflight\033[0m'
+expect_output $'\033[1m[5/14] vercel\033[0m'
 expect_output $'\033[32m✓\033[0m preflight ok'
 expect_output $'\033[33m!\033[0m purpose: a click is left for you'
 expect_output $'\033[31m✗\033[0m Setup stopped at vercel.'
@@ -82,7 +83,7 @@ scenario "ends a run that left nothing to the owner by saying what to do next"
 setup
 run "$T/setup/bootstrap.sh" shop
 expect_status 0
-expect_output "$(printf '\n\n[13/13] agent-token\n')"
+expect_output "$(printf '\n\n[13/14] agent-token\n')"
 expect_output "File a ticket, then add the \`ready\` label to it"
 expect_no_output "run the same command again"
 
