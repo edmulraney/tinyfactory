@@ -1,0 +1,56 @@
+{
+  "pr": 686,
+  "issue": 680,
+  "facts": {
+    "run": 45173914856,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45173914856",
+    "conclusion": "success",
+    "pr": 686,
+    "issue": 680,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.37,
+    "turns": 26,
+    "changed_by": {
+      "pr": 685,
+      "issue": 681,
+      "title": "chore: bring in the second model and the public repo skill",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first ci run after #685 did what the change claimed: every step's environment named `claude-opus-5-5` as AGENT_MODEL_FALLBACK, and both reviewers finished, so nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #685 changed one line of `factory/workflows/ci.yml`. The line makes AGENT_MODEL_FALLBACK fall back to `claude-opus-5-5` when the repository variable is unset (A683a). The facts name no changed step, because the change is to the workflow's `env`. The run's log shows `AGENT_MODEL_FALLBACK: claude-opus-5-5` in each step of the `checks` and `e2e` jobs. Adam and Ryan both completed with no error and no API retries. No usage limit held during the run. The second model was therefore never started on, which is the expected path. Neither reviewer of #685 recorded an assumption.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173914856",
+      "https://github.com/edmulraney/tinyfactory/pull/685",
+      "https://github.com/edmulraney/tinyfactory/pull/686"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing was lost: the two review sessions cost $0.37 over 56 seconds, and both did their work.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run had no fault, so no change would have saved anything on it ($0 of the $0.37 the run spent).",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
