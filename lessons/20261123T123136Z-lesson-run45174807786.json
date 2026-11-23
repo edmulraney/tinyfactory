@@ -1,0 +1,65 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45173277223,
+    "workflow": "approve-merge",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45173277223",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": []
+  },
+  "lesson": {
+    "summary": "The first approve-merge run after #679 never reached that pull request's only change to the workflow, the pinned pnpm/action-setup in the test-main job, because test-main was skipped; the ship job finished #685's merge cleanly, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "Pull request #679 made one change to factory/workflows/approve-merge.yml. It replaced `pnpm/action-setup@v4` in the test-main job with commit SHA b906affcce14559ad1aafd4ab0e942779e9f58b1 (v4.3.0). Run 45173277223 followed the button merge of #685. It skipped test-main, so the ship job got empty MAIN and BEFORE, and the log never downloaded pnpm/action-setup. The facts list no changed_steps because the pinned step has no `name:`. The ship job succeeded in 1 minute 3 seconds: it closed out #685, started #680's build, started three retros of first runs and recorded the measures. The scaffold workflow's first run already ran the same pin at the same SHA and passed (lesson 20261123T122152Z). Ryan's assumption about Drizzle's `__drizzle_migrations` columns concerns ci.yml, which this run does not touch.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173277223",
+      "https://github.com/edmulraney/tinyfactory/pull/679",
+      "https://github.com/edmulraney/tinyfactory/pull/685"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded in about 1 minute with no agent, $0 and 0 turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: no fault cost anything on this run ($0, 0 minutes).",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
