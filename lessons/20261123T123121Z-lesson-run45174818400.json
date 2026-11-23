@@ -1,0 +1,91 @@
+{
+  "pr": null,
+  "issue": 680,
+  "facts": {
+    "run": 45173345441,
+    "workflow": "implement",
+    "event": "workflow_dispatch",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45173345441",
+    "conclusion": "success",
+    "pr": null,
+    "issue": 680,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.63,
+    "turns": 12,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "implement",
+        "step": "Continue the session",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "implement",
+        "step": "Continue the session a second time",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "implement",
+        "step": "Keep a second copy of the transcript on this run",
+        "conclusion": "success"
+      },
+      {
+        "job": "implement",
+        "step": "Scrub the tokens from the transcripts",
+        "conclusion": "success"
+      },
+      {
+        "job": "implement",
+        "step": "The engineer builds the ticket",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "This first run of implement.yml after PR #679 did what the pull request claimed, so nothing needs to change.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #679 made four changes to factory/workflows/implement.yml. It added the AGENT_MODEL and AGENT_MODEL_FALLBACK variables and ran every session on MODEL or AGENT_MODEL. It pinned claude-code-action to v1.0.286. It added a step that scrubs tokens from the transcript before the transcript is uploaded as an artifact. It made the upload wait until that scrub succeeds. In run 45173345441, the session ran with MODEL set to claude-opus-5-5, the model the variables gave. The pinned action finished Fred's session for issue #680 in 12 turns, 169 seconds and $0.63. Next, \"Scrub the tokens from the transcripts\" succeeded, and only after that did the upload of artifact session-fred-45173345441-1 succeed. The two \"Continue the session\" steps were skipped correctly, because continue-session.sh reported that a pull request was already ready for review. Ryan's unchecked assumptions are about ci.yml's reading of the migrations table, and this run did not reach that code.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173345441",
+      "https://github.com/edmulraney/tinyfactory/pull/679",
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45173345441/artifacts/14817148760"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "None: the run succeeded and the session spent $0.63 over 169 seconds building its ticket.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing, because there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
