@@ -1,0 +1,75 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45296306794,
+    "workflow": "flag-idle",
+    "event": "schedule",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45296306794",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "look",
+        "step": "Delete the preview database branches of pull requests that are closed",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "look",
+        "step": "Start what the owner's review of a pull request in conflict asks for",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first scheduled flag-idle run after #679 did what the pull request claimed: the new missed-reviews step ran and found nothing to start, and the preview-database cleanup was skipped by its own condition because this repository sets no NEON_PROJECT_ID, so nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #679 added two steps to flag-idle.yml. The first, \"Delete the preview database branches of pull requests that are closed\", runs only when vars.NEON_PROJECT_ID is set. tinyfactory has no app and no Neon project, so the step was skipped as designed, and it can only be exercised in a project. The second, \"Start what the owner's review of a pull request in conflict asks for\", ran factory/scripts/missed-reviews.sh. It succeeded and logged \"no factory pull request in conflict holds an owner's review that GitHub ran nothing for: nothing was started\". The later flag-idle.sh step still ran. The run concluded success. Ryan's unverified assumptions on #679 are about ci.yml's drizzle migration check, not this workflow, so this run neither confirms nor refutes them.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45296306794",
+      "https://github.com/edmulraney/tinyfactory/pull/679"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded with no agent session, at $0 and 0 turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run cost $0 and had no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
