@@ -5,7 +5,7 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 ## Approach
 
 - **The smallest standard route.** The scale is a startup idea being validated as fast as possible, without slop. Take the smallest standard engineering solution that does the job at that scale; anything heavier is over-engineering. A general problem is solved once, where that solution puts it, not at each call site. Depart only for a reason that serves the business, the product or the user, such as testing a hypothesis before building the whole thing, and record it as a decision.
-- **React to the event that changes the state.** Do not poll for it. A schedule is only for what has no event, such as time passing.
+- **A check names the failure it prevents.** A rule with a script behind it links to where that failure happened. A check that refuses good work is loosened or deleted, never given an exception.
 
 ## Code
 
@@ -35,14 +35,14 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 
 - **A file holds what stays true until someone edits it.** A ticket's state, a date or "for now" is wrong by the next merge. What happened goes in the ticket or a decision row.
 - **A decision row stays only when it stops a rejected path being tried again, or changes how the next change is built.**
-- **A reason is given in one place.** Every other place still says the fact in a full sentence and names where its reason is: "The factory stores no Vercel token (decisions [M9](factory/decisions/setup.md))", never "([M9](factory/decisions/setup.md))" alone.
+- **A reason is given in one place.** Every other place still says the fact and names where its reason is: "The factory stores no Vercel token (decisions [M9](factory/decisions/setup.md))", never "([M9](factory/decisions/setup.md))" alone.
 
 ## Writing
 
 These rules apply to everything written, code comments and commit messages included.
 
-- **A written line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens.** A fact that only some tasks need goes in the document those tasks read, not in a file every agent reads.
-- **Write for a reader who has read neither the ticket nor the code.**
+- **The shortest text that lets the next reader act.** A list or a table before a paragraph, one line for each thing a file lists. Leave out filler and a reason given elsewhere.
+- **A written line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens.** A fact that only some tasks need goes in the document those tasks read.
 - **Say the thing itself.** Do not point at it.
 - **Name a thing by what it is, and keep that name.**
 - **One idea in each sentence, in the active voice, with its articles.**

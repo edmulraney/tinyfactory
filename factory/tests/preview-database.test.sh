@@ -249,12 +249,13 @@ e2e_line() { job e2e | grep -n -F -- "$1" | head -n 1 | cut -d: -f1; }
 
 # The SQL itself, on a PostgreSQL server of its own, with tables as Neon Auth and the app make them.
 # Debian and Ubuntu keep it off the PATH, one folder for each version.
-server=$(command -v initdb || true)
+server=$(PATH="$_path" command -v initdb || true)
 for found in /usr/lib/postgresql/*/bin/initdb; do [ -n "$server" ] || [ ! -x "$found" ] || server=$found; done
 if [ -z "$server" ]; then
   echo "skipped - the SQL that deletes the people: no PostgreSQL server is installed here (GitHub's runner has one)"
 else
   scenario "the SQL deletes every row of the app's tables and every person in Neon Auth, keeps its keys, and runs twice"
+  real psql
   bin=$(dirname "$server")
   "$bin/initdb" -D "$T/pg" -U test --auth=trust >/dev/null 2>&1 || fail "expected initdb to make a database cluster"
   "$bin/pg_ctl" -D "$T/pg" -l "$T/pg.log" -w -o "-k $T -c listen_addresses=''" start >/dev/null 2>&1 \

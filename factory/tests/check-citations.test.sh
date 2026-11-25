@@ -114,6 +114,24 @@ expect_status 0
 [ "$(cat .claude/skills/bootstrap/templates/product/README.md)" = 'One number ([D7](decisions/7.md)).' ] \
   || fail "the product seed was left as: $(cat .claude/skills/bootstrap/templates/product/README.md)"
 
+scenario "leaves the ID that a seed's row defines, in a project that holds the seed's copy, and links what the row cites"
+repo
+mkdir -p .claude/skills/bootstrap/templates/product/decisions
+printf '%s\n' '| ID | Decision | Why | Rejected | Source |' '|---|---|---|---|---|' \
+  '| D7 | The forecast is one number. | A range reads as doubt (A62a). | A range: as above. | #7 |' > .claude/skills/bootstrap/templates/product/decisions/7.md
+check --fix
+expect_status 0
+[ "$(sed -n 3p .claude/skills/bootstrap/templates/product/decisions/7.md)" = '| D7 | The forecast is one number. | A range reads as doubt ([A62a](../../factory/decisions/62.md)). | A range: as above. | #7 |' ] \
+  || fail "the seed's row was left as: $(sed -n 3p .claude/skills/bootstrap/templates/product/decisions/7.md)"
+
+scenario "leaves the ID that a seed's row defines once a later ticket has moved the project's row to its own file"
+repo
+mkdir -p .claude/skills/bootstrap/templates/product/decisions
+cp product/decisions/7.md .claude/skills/bootstrap/templates/product/decisions/7.md
+mv product/decisions/7.md product/decisions/12.md
+check
+expect_status 0
+
 scenario "refuses an ID that both records hold, which a citation could not tell apart"
 repo
 printf '%s\n' '| ID | Decision | Why | Rejected | Source |' '|---|---|---|---|---|' \

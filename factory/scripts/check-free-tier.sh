@@ -20,10 +20,10 @@ if git rev-parse --git-dir >/dev/null 2>&1 \
   # shellcheck disable=SC2086
   git fetch --quiet $depth origin "$branch" 2>/dev/null && tip=$(git rev-parse FETCH_HEAD) || tip=""
 fi
-# The log main holds, in its own file or the folder: one that holds no numbered entry makes all of them new.
+# The numbers of the entries main holds, in its own file or the folder: a log that holds none makes all of them new.
 held=""
 if [ -n "$tip" ]; then
-  held=$(git grep -h -E '^### [1-9][0-9]*\. ' "$tip" -- "$file" "$folder" 2>/dev/null | awk 'END { print NR }' || true)
+  held=$(git grep -h -o -E '^### [1-9][0-9]*\. ' "$tip" -- "$file" "$folder" 2>/dev/null | tr -cd '0-9\n' || true)
 else
   echo "origin/$branch could not be read, so the numbered entries were not checked for a new one"
 fi
@@ -49,7 +49,8 @@ if [ -d "$folder" ]; then
   done
 fi
 
-awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
+HELD="$held" awk -v file="$file" -v folder="$folder" -v main_read="${tip:+1}" -v failed="$failed" '
+  BEGIN { split(ENVIRON["HELD"], numbers, "\n"); for (i in numbers) on_main[numbers[i]] = 1 }
   function problem(line, text) { print FILENAME ":" line ": " text; bad = 1 }
   # Closes the entry being read; `next_entry` is the name of the one that follows it, if any.
   function close_entry(next_entry) {
@@ -64,7 +65,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     entry = ""
   }
   function open_entry(name) {
-    if (blank != FNR - 1) problem(FNR, "the heading of entry " name " needs a blank line above it")
     entry = name
     entry_file = FILENAME
     start = FNR
@@ -79,7 +79,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
   FNR == 1 {
     close_file()
     previous_file = FILENAME
-    blank = 0
     entries = 0
     # A file of the folder is named for what it holds: a ticket, a numbered entry, or a section.
     name = FILENAME == file ? "" : substr(FILENAME, length(folder) + 2)
@@ -87,11 +86,8 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     gsub(/[^0-9]/, "", owner)
     if (name == "") kind = "frame"
     else if (name ~ /^[1-9][0-9]*\.md$/) kind = "ticket"
-    else if (name ~ /^entry-[1-9][0-9]*\.md$/) {
-      kind = "numbered"
-      numbered[owner + 0] = 1
-      if (owner + 0 > highest) highest = owner + 0
-    } else {
+    else if (name ~ /^entry-[1-9][0-9]*\.md$/) kind = "numbered"
+    else {
       kind = "section"
       if (!($0 in sections) || $0 == "## Log")
         problem(FNR, "a file named for no ticket (\"62.md\") and no numbered entry (\"entry-8.md\") holds a section of the log other than Log, and starts with its heading, as it is in " file)
@@ -137,14 +133,14 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
     else {
       used[id] = FILENAME ":" FNR
       # An entry main does not hold is named after the ticket that adds it (decisions H132b).
-      if (kind == "numbered" && held != "" && number + 0 > held + 0)
+      if (kind == "numbered" && main_read && !(number in on_main))
         problem(FNR, "entry " number " is new, and a new entry is named after the ticket that adds it: it goes in " folder "/<ticket>.md, headed \"### #<ticket>. <title>\"; decisions H132a")
     }
     open_entry(id)
     next
   }
 
-  /^[ \t]*$/ { blank = FNR; next }
+  /^[ \t]*$/ { next }
   entry != "" {
     last = $0
     if ($0 ~ /^- \*\*Automated:\*\*/) automated++
@@ -154,8 +150,6 @@ awk -v file="$file" -v folder="$folder" -v held="$held" -v failed="$failed" '
   END {
     close_file()
     if (!("## Log" in sections)) { print file ": there is no \"## Log\" section"; bad = 1 }
-    for (number = 1; number < highest; number++)
-      if (!(number in numbered)) { print folder "/entry-" number ".md: there is no such file, and the numbered entries count 1, 2, 3 with no gap"; bad = 1 }
     if (!bad && !failed) print "free-tier log ok: " (count + 0) " entries"
     exit bad
   }' "$@" || failed=1

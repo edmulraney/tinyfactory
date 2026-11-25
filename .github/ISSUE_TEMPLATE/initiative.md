@@ -4,7 +4,7 @@ about: A feature or experiment. Every initiative states a hypothesis and how we 
 labels: initiative
 ---
 
-<!-- Title: an imperative verb, then what changes, e.g. "Export forecast as CSV". One clause: no reason, no colon, no comma. 60 characters or fewer, no full stop at the end. -->
+<!-- Title: an imperative verb, then what changes, e.g. "Export forecast as CSV". 60 characters or fewer. -->
 
 ## Problem
 <!-- Who has this problem, and what is it costing them? Link the research in product/ if there is any. -->
@@ -17,13 +17,14 @@ labels: initiative
 <!-- The number or observation that proves or disproves the hypothesis, and when we will look. -->
 
 ## Scope
-<!-- What is in. What is explicitly out. -->
+<!-- What is in. What is explicitly out. Each decision the engineer cannot read from the criteria. -->
+<!-- It restates no criterion: a rule a criterion tests is written once, in the criterion. -->
 
 ## Acceptance criteria
 <!-- One per line, numbered. Each becomes an executable test titled with its id. -->
 <!-- Each says what a person using the product sees or does, in their words. It never names how the product is built: a class, a token, a colour, an element's id, a function. The check: if the code were rewritten and the product behaved the same, the criterion would still hold. How something looks is shown by a screenshot, not by a criterion. -->
 <!-- Bad: "then its text is in the `destructive` colour." Good: "then I see a message that says the password is wrong." -->
-<!-- None names a screen's width or any size in pixels, which `check-ticket.sh` fails: every end-to-end test already runs at both supported widths, mobile and desktop (`DESIGN.md`, "Supported screens"). -->
+<!-- None names a screen's width or any size in pixels: every end-to-end test already runs at both supported widths, mobile and desktop (`DESIGN.md`, "Supported screens"). -->
 - **AC1:** Given …, when …, then …
 
 ## States

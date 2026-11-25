@@ -176,6 +176,7 @@ ready_to_ship() {
       "api repos/{owner}/{repo}/check-runs/"*"/annotations?per_page=100 "*) n=${2#*/check-runs/}; json "$(jq -Rs "[{message: .}]" "$T/annotations/${n%/annotations*}")" "$@" ;;
       "run rerun "*" --failed") ;;
       "pr list --state merged --label proof "*) json "$(cat "$T/waiting.json" 2>/dev/null || echo "[]")" "$@" ;;
+      "api repos/{owner}/{repo}/contents/.github/workflows "*) json "[{\"name\":\"ci.yml\"}]" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/workflows/"*"/runs "*) json "{\"workflow_runs\":$(cat "$T/first-runs.json" 2>/dev/null || echo "[]")}" "$@" ;;
       "repo view "*) json "{\"nameWithOwner\":\"owner/myapp\"}" "$@" ;;
       "api repos/owner/myapp/pulls/7/files "* | "api repos/{owner}/{repo}/pulls/7/files "*) json "$(cat "$T/files.json")" "$@" ;;

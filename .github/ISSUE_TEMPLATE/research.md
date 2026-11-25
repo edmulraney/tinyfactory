@@ -4,7 +4,7 @@ about: A question answered from public sources. Its output is knowledge in produ
 labels: research
 ---
 
-<!-- Title: an imperative verb, then what changes, e.g. "Export forecast as CSV". One clause: no reason, no colon, no comma. 60 characters or fewer, no full stop at the end. -->
+<!-- Title: an imperative verb, then what changes, e.g. "Export forecast as CSV". 60 characters or fewer. -->
 
 ## Question
 <!-- What we want to know, about whom, and what we will do with the answer. -->
@@ -18,5 +18,5 @@ labels: research
 
 ## Checks
 <!-- What a script can verify in those files, one line each. The first text in backticks is a path under product/, where * stands for any run of characters in a file name; a number before it is the fewest files that must match (one if left out); each later text in backticks is a line every matching file must hold. -->
-- 5 files `product/research/*-profile.md`, each with `## Situation` and `## Sources`
+- 5 files `product/research/*-profile.md`, each with `## Findings` and `## Sources`
 - `product/signals.md`

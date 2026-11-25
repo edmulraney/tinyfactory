@@ -76,9 +76,12 @@ for file in $tests; do
   number=$((number + 1))
   numbered+="$number $file"$'\n'
 done
+# Each file's result goes to standard error as it finishes, so a run that is cut off names what failed (decisions H699).
 # shellcheck disable=SC2016
 if [ -n "$numbered" ] && ! printf '%s' "$numbered" | xargs -P "$processors" -n 2 \
-  bash -c 'status=0; bash "$2" > "$0/$1.report" 2>&1 || status=$?; echo "$status" > "$0/$1.status"' "$results"; then
+  bash -c 'status=0; bash "$2" > "$0/$1.report" 2>&1 || status=$?; echo "$status" > "$0/$1.status"
+    if [ "$status" -eq 0 ] && grep -q "^ok - " "$0/$1.report" && ! grep -q "^not ok - " "$0/$1.report"; then
+      echo "ok $2" >&2; else echo "FAILED $2" >&2; fi' "$results"; then
   echo "test-factory.sh could not run the test files with xargs, so their tests are not counted as passed."
   exit 1
 fi

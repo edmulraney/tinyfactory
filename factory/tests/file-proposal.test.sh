@@ -369,13 +369,13 @@ expect_no_call "needs-human"
 expect_output "It proposes a change to the factory: https://github.example/50"
 
 scenario "a title the template refuses asks the session too"
-saved '.lesson.title = "Retro: fail a build, early"'
+saved '.lesson.title = "Fail a build that pushes untyped code before its checks begin"'
 session completed
 github
 ask
 expect_status 0
 expect_no_call "gh issue create"
-grep -q '^prompt=.*has a colon.*has a comma' "$T/outputs" || fail "expected the prompt to give each problem"
+grep -q '^prompt=.*is 61 characters long' "$T/outputs" || fail "expected the prompt to give the problem"
 
 scenario "a rewrite that passes is filed as any proposal, with the rewritten words and its build started"
 saved "$long | $repeated"

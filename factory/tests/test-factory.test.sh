@@ -106,6 +106,20 @@ expect_output "FAILED factory/tests/a.test.sh: slow
 FAILED factory/tests/b.test.sh: quick
     quick detail"
 
+scenario "prints each file's result to standard error as it finishes: a slow file sees a quick one's result"
+# shellcheck disable=SC2016
+slow='for _ in $(seq 100); do grep -q "^FAILED factory/tests/b.test.sh$" "$PROGRESS" && echo "ok - saw it" && exit 0; sleep 0.1; done; echo "not ok - no result of the quick file while this one ran"'
+repo_with a.test.sh "$slow" b.test.sh 'echo "not ok - quick"' c.test.sh 'echo "ok - early"; exit 3' d.test.sh 'exit 0'
+stub getconf 'echo 4'
+status=0
+PROGRESS="$T/progress" "$scripts/test-factory.sh" > "$T/report" 2> "$T/progress" || status=$?
+expect_status 1
+[ "$(sort "$T/progress")" = "FAILED factory/tests/b.test.sh
+FAILED factory/tests/c.test.sh
+FAILED factory/tests/d.test.sh
+ok factory/tests/a.test.sh" ] || fail "expected one line for each file on standard error, got: $(cat "$T/progress")"
+[ "$(grep -c 'factory/tests/' "$T/report")" = 3 ] || fail "expected the report to name only the three failed files, once each, got: $(cat "$T/report")"
+
 scenario "leaves nothing behind, passing or failing"
 repo_with one.test.sh 'echo "ok - first"' two.test.sh 'echo "not ok - second"'
 run "$scripts/test-factory.sh"

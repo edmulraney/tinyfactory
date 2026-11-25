@@ -1,8 +1,7 @@
 # Acceptance tests
 
-One file per ticket, named `<issue-number>-<slug>.spec.ts` with the same slug as the ticket's branch
-(`feat/12-not-found-page` → `12-not-found-page.spec.ts`), so this folder reads as a list of what
-the product does. One test per acceptance criterion, titled with its id:
+A ticket's tests are in `<issue-number>-<slug>.spec.ts`, the slug naming the outcome
+(`12-not-found-page.spec.ts`), so this folder reads as a list of what the product does. One test per acceptance criterion, titled with its id:
 
 ```ts
 import { expect, test } from "../test";
@@ -23,5 +22,5 @@ screenshot taken at the end of each test, captioned with the test's title
 
 CI fails a pull request if any `AC<n>` in its ticket has no plain `test(…)` with that title prefix
 (`test.skip`, `test.fixme`, `test.only`, `test.fail` and `test.describe` do not count), if anything
-in the file is skipped, or if the file is misnamed (`factory/scripts/check-acceptance.sh`). Write
+in the ticket's files is skipped (`factory/scripts/check-acceptance.sh`). Write
 the test first and watch it fail.

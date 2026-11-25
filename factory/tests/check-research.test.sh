@@ -2,7 +2,7 @@
 # Tests for factory/scripts/check-research.sh: a ticket's checks hold and its pull request changes only product/.
 . "$(dirname "$0")/helpers.sh"
 
-# ticket <label> <checks>: issue #12 with this label and these Checks lines; #7 changes the files in $T/changed.
+# ticket <label> <checks>: issue #12 with this label and these Checks lines; #7 adds the files in $T/changed.
 ticket() {
   jq -n --arg label "$1" --arg body "## Question
 What goes wrong?
@@ -16,7 +16,7 @@ $2
   printf 'product/research/a-profile.md\nproduct/signals.md\n' > "$T/changed"
   stub gh 'case "$*" in
     "issue view 12 --json body,labels") cat "$T/issue.json" ;;
-    "api repos/owner/myapp/pulls/7/files --paginate --jq"*) json "$(jq -R "{filename: .}" "$T/changed" | jq -s .)" "$@" ;;
+    "api repos/owner/myapp/pulls/7/files --paginate --jq"*) json "$(jq -R --arg status added "{filename: .} + \$ARGS.named" "$T/changed" | jq -s .)" "$@" ;;
     *) echo "unexpected call: gh $*" >&2; exit 1 ;;
   esac'
 }
@@ -137,7 +137,8 @@ expect_no_call "gh api"
 
 scenario "passes a pull request that changes only product/"
 ticket research '- `product/signals.md`'
-mkdir -p product && echo "# Signals" > product/signals.md
+profile a-profile.md "## Sources"
+echo "# Signals" > product/signals.md
 check 12 7
 expect_status 0
 expect_call "gh api repos/owner/myapp/pulls/7/files --paginate"
@@ -152,6 +153,47 @@ expect_output "Pull request #7 changes apps/web/src/app/page.tsx. A research tic
 expect_output "Pull request #7 changes factory/scripts/ship.sh."
 expect_output "Pull request #7 changes product-notes.md."
 expect_no_output "changes product/signals.md"
+expect_no_output "is as its ticket's checks say"
+
+# research_file <words>: a research file of this many words, which #7 adds.
+research_file() {
+  mkdir -p product/research
+  { echo "# Finding"; yes finding | head -n "$(($1 - 2))"; } > product/research/a-profile.md
+}
+
+scenario "passes a research file the pull request adds that is at the word limit"
+ticket research '- `product/research/a-profile.md`'
+research_file 500
+check 12 7
+expect_status 0
+expect_output "The research output of #12 is as its ticket's checks say."
+
+scenario "fails a research file the pull request adds that is over the word limit, with its count"
+ticket research '- `product/research/a-profile.md`'
+research_file 501
+check 12 7
+expect_status 1
+expect_output "product/research/a-profile.md is 501 words long, and a research file holds 500 at most."
+expect_no_output "is as its ticket's checks say"
+
+scenario "sets no limit on a file outside product/research/, or on a research file the pull request only changes"
+ticket research '- `product/research/a-profile.md`'
+research_file 501
+cp product/research/a-profile.md product/signals.md
+stub gh 'case "$*" in
+  "issue view 12 --json body,labels") cat "$T/issue.json" ;;
+  "api repos/owner/myapp/pulls/7/files --paginate --jq"*) json "[{\"filename\":\"product/research/a-profile.md\",\"status\":\"modified\"},{\"filename\":\"product/signals.md\",\"status\":\"added\"}]" "$@" ;;
+  *) echo "unexpected call: gh $*" >&2; exit 1 ;;
+esac'
+check 12 7
+expect_status 0
+
+scenario "stops when a research file the pull request adds is not in this checkout"
+ticket research '- `product/signals.md`'
+mkdir -p product && echo "# Signals" > product/signals.md
+check 12 7
+expect_failure
+expect_output "Pull request #7 adds product/research/a-profile.md, and it could not be read here"
 expect_no_output "is as its ticket's checks say"
 
 scenario "counts the old name of a file moved into product/"

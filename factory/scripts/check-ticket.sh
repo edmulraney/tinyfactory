@@ -26,12 +26,6 @@ title_problem() { echo "- The title \"$title\" $1"; problems=1; }
 if [ "${#title}" -gt 60 ]; then
   title_problem "is ${#title} characters long, and the limit is 60. Name the change in one clause; the reason belongs in the body."
 fi
-case "$title" in *:*) title_problem "has a colon. A title is one clause: an imperative verb, then what changes." ;; esac
-case "$title" in *,*) title_problem "has a comma. A title is one clause: an imperative verb, then what changes." ;; esac
-case "$title" in *.) title_problem "ends in a full stop. Take it off." ;; esac
-if ! [[ "$title" =~ ^[[:upper:]] ]]; then
-  title_problem "does not start with a capital letter. Start with an imperative verb, in sentence case (\"Add a ticket queue\")."
-fi
 
 # A proof ticket is never built, so the gate refuses it without asking for a type (decisions T85g).
 case "$labels" in
@@ -78,6 +72,7 @@ section() {
     | sed 's/<!--.*-->//g' | grep -v '^[[:space:]]*$' || true
 }
 
+# A ticket that does not follow its template is refused before a build (decisions T11, T9).
 for heading in "${required[@]}"; do
   if [ -z "$(section "$heading")" ]; then
     echo "- Section \"## $heading\" is missing or empty."
@@ -95,11 +90,6 @@ if [[ " ${required[*]} " == *" Acceptance criteria "* ]] && ! section "Acceptanc
   echo "- No numbered acceptance criteria. Write each as \"- **AC1:** Given …, when …, then …\"."
   problems=1
 fi
-# Every end-to-end test already runs at both supported widths, so no criterion asks for one (decisions T607).
-while read -r criterion; do
-  echo "- The criterion \"$criterion\" gives a size in pixels. Every end-to-end test already runs at both supported widths, mobile and desktop (DESIGN.md, \"Supported screens\"), so a criterion names no width. Say what the person sees or does."
-  problems=1
-done < <(section "Acceptance criteria" | grep -iE '[0-9][ -]?(px|pixels?)([^[:alnum:]]|$)' || true)
 # Each row names a criterion the ticket has, or says "unchanged" (decisions T575b, T575c).
 rows=$(section "States")
 if $states && [ -n "$rows" ] && ! [[ "$rows" =~ ^[[:space:]]*[Nn]o\ screen\.?[[:space:]]*$ ]]; then

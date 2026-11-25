@@ -51,11 +51,11 @@ A new project starts with one feature, a waitlist on its home page, shaped as it
 - **A page that only shows.** `.claude/skills/bootstrap/templates/apps/web/src/app/page.tsx`
 - **A component that shows a state.** `.claude/skills/bootstrap/templates/apps/web/src/app/_components/waitlist-form.tsx`
 - **A server action.** `.claude/skills/bootstrap/templates/apps/web/src/app/actions.ts`
-- **A module's door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.ts`
+- **A module's interface.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.ts`
 - **The module's types.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/types.ts`
 - **A use case deciding a rule.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/join.ts`
 - **The file that owns a table.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/repository.ts`, for the table `.claude/skills/bootstrap/templates/apps/web/src/db/schema.ts` defines
 - **A migration.** `.claude/skills/bootstrap/templates/apps/web/src/db/migrations/0000_waitlist.sql`
-- **A unit test through the door.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts`
+- **A unit test through the module's interface.** `.claude/skills/bootstrap/templates/apps/web/src/domain/waitlist/index.test.ts`
 - **An acceptance test.** `.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/0-join-waitlist.spec.ts`
 - **A route handler that only answers.** `.claude/skills/bootstrap/templates/apps/web/src/app/api/health/route.ts`

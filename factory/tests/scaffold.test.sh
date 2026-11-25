@@ -58,6 +58,18 @@ expect_status 0
 [ ! -e apps/web/src/app/actions.ts ] || fail "expected no server action in an app this run did not make"
 [ ! -e apps/web/src/db ] || fail "expected no database folder in an app this run did not make"
 
+scenario "gives a new project's product record the sign-in decision, which its decision checks pass"
+a_project fails
+run "$scaffold" demo
+expect_status 0
+run factory/scripts/decisions.sh product/decisions.md
+expect_status 0
+expect_output "| D705 | People sign in by an emailed link and never by a password, unless \`PURPOSE.md\` says the product has no accounts. |"
+run factory/scripts/check-decisions.sh
+expect_status 0
+run factory/scripts/check-citations.sh
+expect_status 0
+
 scenario "installs TanStack Query into an app made before the manifest copied src/lib/query, which imports it"
 a_project fails
 run "$scaffold" demo

@@ -15,6 +15,7 @@ unlisted() {
 factory_files=$(git ls-files factory) || unlisted "files in factory/"
 documents=$(git ls-files '*.md') || unlisted "Markdown files"
 
+# A factory file the manifest lists, and a root document that is a seed (decisions H1).
 strays=""
 while IFS= read -r file; do
   [ -n "$file" ] || continue

@@ -37,7 +37,7 @@ const ownRoute = (node) => {
   return typeof start === "string" && start.startsWith("/") && !start.startsWith("//");
 };
 
-// ARCHITECTURE.md, "Outside services": only the client may call fetch for an outside service, so
+// ARCHITECTURE.md, "External services": only the client may call fetch for an external service, so
 // none can be asked without its time limit; a component asks the app's own route with fetch
 // (decisions S688a). A selector cannot tell the global fetch from a variable of that name, so this
 // rule reads where each use of the name was declared.

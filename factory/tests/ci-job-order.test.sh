@@ -45,6 +45,7 @@ grep -qE -- '(^| )--workers=4( |$)' <<<"$command" || fail "expected the end-to-e
 # Playwright lists what the command would run, and needs no browser or preview to do it.
 # The repository the factory is published from has no app to list (decisions S420h).
 if [ -f "$root/apps/web/package.json" ]; then
+  real pnpm node
   listed=$(cd "$root" && $command --list 2>&1) || fail "expected Playwright to list the tests of: $command, got: $listed"
   total=$(cd "$root/apps/web" && pnpm exec playwright test --list 2>&1 | sed -n 's/^Total: //p')
   [ -n "$total" ] && grep -qxF "Total: $total" <<<"$listed" || fail "expected $command to run all $total, got: $(grep '^Total:' <<<"$listed")"
