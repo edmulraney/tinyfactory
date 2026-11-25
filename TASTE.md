@@ -37,9 +37,9 @@ What "good" means here. Reviewers reject work that breaks these, and nothing els
 
 ## Writing
 
-These rules apply to everything written: code comments, commit messages, tickets, pull request descriptions, comments on tickets and pull requests, decision rows and documents.
+These rules apply to everything written, code comments and commit messages included.
 
-- **Every written line earns its place.** A line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens. A fact that only some tasks need goes in the document those tasks read, not in a file every agent reads.
+- **Every written line earns its place.** A line stays only when an agent needs it to do its work well, to avoid a mistake or to save tokens. A fact that only some tasks need goes in the document those tasks read.
 - **The shortest text that lets the next reader act.** A list or a table before a paragraph, one line for each thing a file lists. Leave out filler and a reason given elsewhere.
 - **Say the thing itself.** Do not point at it.
 - **Name a thing by what it is, and keep that name.**
