@@ -245,44 +245,6 @@ run "$scripts/check-ticket.sh" 12
 expect_status 1
 expect_output "No numbered acceptance criteria"
 
-scenario "refuses a criterion that gives a width in pixels, and says every test already runs at both widths"
-printf '%s\n' "## Change
-Fit the dashboard to a phone.
-
-## Acceptance criteria
-- **AC1:** Given I have a race, when I open my dashboard on a screen 375px wide, then I read all of it.
-- **AC2:** Given I have a race, when I open my dashboard, then I see the race.
-- **AC3:** Given I have a race, when my screen is 1280 pixels wide, then I see the chart beside it.
-- **AC4:** Given I have a race, when I open my dashboard on a 375-pixel-wide screen, then I see the race first.
-
-## States
-No screen
-
-## Docs to update
-None." > draft.md
-run "$scripts/check-ticket.sh" --draft tweak "$name" draft.md
-expect_status 1
-expect_output 'The criterion "- **AC1:** Given I have a race, when I open my dashboard on a screen 375px wide, then I read all of it." gives a size in pixels.'
-expect_output "Every end-to-end test already runs at both supported widths, mobile and desktop"
-expect_output '- **AC3:**'
-expect_output '- **AC4:**'
-[ "$(wc -l <<<"$out")" -eq 3 ] || fail "expected the three criteria that give a size to be its only problems, found: $out"
-
-scenario "passes a criterion that holds a number or the letters px with no size in pixels"
-printf '%s\n' "## Change
-Fit the dashboard to a phone.
-
-## Acceptance criteria
-- **AC1:** Given I ran 375 km, when I open my dashboard on a phone, then I see 12 weeks of runs as a .gpx file.
-
-## States
-No screen
-
-## Docs to update
-None." > draft.md
-run "$scripts/check-ticket.sh" --draft tweak "$name" draft.md
-expect_status 0
-
 scenario "refuses a factory ticket with no way to know it works"
 ticket factory "## Change
 Add a check."
@@ -311,65 +273,20 @@ ticket factory "$factory_body"
 run "$scripts/check-ticket.sh" 12
 expect_status 1
 expect_output "is 61 characters long, and the limit is 60"
-expect_no_output "colon"
-expect_no_output "comma"
-expect_no_output "full stop"
-expect_no_output "capital"
 
-scenario "refuses a title with a colon"
-name="A queue: line up tickets"
-ticket factory "$factory_body"
-run "$scripts/check-ticket.sh" 12
-expect_status 1
-expect_output 'The title "A queue: line up tickets" has a colon.'
-expect_no_output "comma"
-
-scenario "refuses a title with a comma"
-name="Factory tests run in pnpm test, where a person looks"
-ticket factory "$factory_body"
-run "$scripts/check-ticket.sh" 12
-expect_status 1
-expect_output "has a comma."
-expect_no_output "colon"
-
-scenario "refuses a title that ends in a full stop"
-name="Add a ticket queue."
-ticket factory "$factory_body"
-run "$scripts/check-ticket.sh" 12
-expect_status 1
-expect_output "ends in a full stop."
-
-scenario "passes a title with a full stop inside it"
-name="Run ship.sh once per merge"
-ticket factory "$factory_body"
-run "$scripts/check-ticket.sh" 12
-expect_status 0
-
-scenario "refuses a title that does not start with a capital letter"
-name="add a ticket queue"
-ticket factory "$factory_body"
-run "$scripts/check-ticket.sh" 12
-expect_status 1
-expect_output "does not start with a capital letter."
-
-scenario "names every rule a title breaks, and the sections that are missing too"
-name="a queue: line up tickets, one at a time."
+scenario "names a title too long, and the sections that are missing too"
 ticket factory "## Change
 Add a check."
 run "$scripts/check-ticket.sh" 12
 expect_status 1
-expect_output "has a colon."
-expect_output "has a comma."
-expect_output "ends in a full stop."
-expect_output "does not start with a capital letter."
+expect_output "is 61 characters long"
 expect_output 'Section "## How we will know it works" is missing or empty.'
 
 scenario "names the title's problem on a ticket with no type label"
-name="add a ticket queue"
 ticket question "$factory_body"
 run "$scripts/check-ticket.sh" 12
 expect_status 1
-expect_output "does not start with a capital letter."
+expect_output "is 61 characters long"
 expect_output "No ticket type"
 
 
@@ -454,12 +371,23 @@ expect_status 0
 [ -z "$out" ] || fail "expected it to print nothing"
 [ ! -s "$T/calls" ] || fail "expected no outside call"
 
-scenario "refuses a draft with a section missing, a title too long or a type that is none of the six"
+scenario "passes a draft whose title has a colon, a comma, a full stop at the end and a small first letter"
+printf '%s\n' "$factory_body" > draft.md
+run "$scripts/check-ticket.sh" --draft factory "a queue: line up tickets, one at a time." draft.md
+expect_status 0
+[ -z "$out" ] || fail "expected it to print nothing"
+
+scenario "refuses a draft with a title of 61 characters"
+printf '%s\n' "$factory_body" > draft.md
+run "$scripts/check-ticket.sh" --draft factory "Move the factory tests from pnpm lint to pnpm test for 2 runs" draft.md
+expect_status 1
+expect_output "is 61 characters long, and the limit is 60"
+
+scenario "refuses a draft with a section missing or a type that is none of the six"
 printf '## Change\nAdd a check.\n' > draft.md
-run "$scripts/check-ticket.sh" --draft factory "$name, and a second clause" draft.md
+run "$scripts/check-ticket.sh" --draft factory "$name" draft.md
 expect_status 1
 expect_output 'Section "## How we will know it works" is missing or empty.'
-expect_output "has a comma"
 run "$scripts/check-ticket.sh" --draft ready "$name" draft.md
 expect_status 1
 expect_output "No ticket type"

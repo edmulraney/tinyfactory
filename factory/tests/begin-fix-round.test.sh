@@ -8,7 +8,7 @@ round='{"id":2,"user":{"login":"github-actions[bot]"},"body":"<!-- factory:fix-r
 
 begin() {
   : > "$T/outputs"
-  run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_OUTPUT="$T/outputs" "$scripts/begin-fix-round.sh" "${1:-7}" "$T/failed.txt" repo-owner
+  run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_OUTPUT="$T/outputs" "$scripts/begin-fix-round.sh" "${1:-7}" "$T/failed.txt" repo-owner "$T/owner-review.txt"
 }
 expect_written() { grep -qxF -- "$1" "$T/outputs" || fail "expected it to write: $1"; }
 expect_no_round() {
@@ -324,6 +324,31 @@ expect_written "name=Fred"
 grep -qxF "Not like this: keep the old column order." "$T/failed.txt" || fail "expected what the owner asked for to be in the file the engineer is given"
 expect_call "gh pr comment 7 --body The owner's fix round: Fred is making the changes the owner asked for. It is not one of the three fix rounds."
 expect_output "the owner's fix round for pull request #7"
+
+scenario "the owner's round leaves what the owner asked for, and no log, in a file of its own: allow-skill-write.sh reads it"
+checks_failed; sent_back
+echo "what an earlier run left" > "$T/owner-review.txt"
+begin
+expect_written "label=the owner's fix round"
+grep -qxF "Not like this: keep the old column order." "$T/owner-review.txt" || fail "expected the review's summary in the file"
+grep -qxF "Dates first, as before." "$T/owner-review.txt" || fail "expected the owner's comment on a line in the file"
+! grep -qF "src/page.tsx: unused variable" "$T/owner-review.txt" || fail "expected no failed job's log in the file"
+! grep -qF "what an earlier run left" "$T/owner-review.txt" || fail "expected what an earlier run left to be gone"
+[ "$(grep -cxF "Not like this: keep the old column order." "$T/failed.txt")" = 1 ] || fail "expected what the owner asked for once in the file the engineer is given"
+
+scenario "a counted round leaves no such file, also where an earlier run left one"
+checks_failed
+echo "what an earlier run left" > "$T/owner-review.txt"
+begin
+expect_written "counted=true"
+[ ! -e "$T/owner-review.txt" ] || fail "expected no file of what the owner asked for"
+
+scenario "the owner's round started with no such file named, as fix.yml did before it named one, still gives the engineer what the owner asked for"
+checks_failed; nothing_failed; sent_back
+: > "$T/outputs"
+run env GH_TOKEN=workflow-token GITHUB_REPOSITORY=owner/myapp GITHUB_OUTPUT="$T/outputs" "$scripts/begin-fix-round.sh" 7 "$T/failed.txt" repo-owner
+expect_written "label=the owner's fix round"
+grep -qxF "Not like this: keep the old column order." "$T/failed.txt" || fail "expected what the owner asked for to be in the file the engineer is given"
 
 scenario "the owner's round goes ahead for a pull request that has used its three rounds"
 checks_failed; sent_back

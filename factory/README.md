@@ -17,7 +17,7 @@ One cost remains today: the agents run on a Claude subscription, which most foun
 Every decision in the record (`decisions.md`) should follow from one of these. When two pull in different directions, the earlier one wins.
 
 1. **Free until the idea is proven.** Use the free plans of services that can also carry a real product: GitHub, Vercel, Neon. When an idea works, the plan is upgraded, not the stack. Leave a free plan only when validated demand requires it. The free-tier log has every limit and what stretches it.
-2. **A script before an agent.** If a linter, a test or a script can decide something, it does, every time and for nothing. Agents are for judgement. Their tokens are the factory's only real cost, so each agent run has to earn its place.
+2. **A script before an agent.** If a linter, a test or a script can decide something, it does, every time and for nothing. A check refuses only what would break something: a build, a merge, money, a reader misled. It never refuses work over style. Agents are for judgement. Their tokens are the factory's only real cost, so each agent run has to earn its place.
 3. **One opinionated stack.** The stack is chosen once, for speed of prototyping, and a founder is not asked to choose. It is picked for how much is already built: shadcn/ui for the interface, and its AI elements when a product has AI features.
 4. **Stand on giants, and build the least that tests the hypothesis.** Take proven tools at their defaults and do not rebuild what exists. This is not a Ferrari. Minimal does not mean sloppy: tests, review and design rules are what keep quick work from becoming slop.
 5. **Done means proven.** A ticket carries acceptance criteria, each becomes a test written first, and nothing merges or counts as deployed on trust.
@@ -31,6 +31,7 @@ Every decision in the record (`decisions.md`) should follow from one of these. W
 13. **Build what the evidence supports.** A feature carries a hypothesis and a measure of success, and a problem heard once is watched, not built.
 14. **Every decision is written down with its reason.** For two reasons. A decision can then be traced and understood later: otherwise nobody, person or agent, can tell a choice from an accident. And an agent starts every task cold: what is written is the only context it has, and it is what lets it make fewer mistakes and see the wider goal its task serves.
 15. **A person's decision makes the agents' next decision more accurate.** A correction, an answer or an approval withheld is recorded with its reason where the next agent reads it, so that no person is asked the same thing twice. It is the reason for the decision records, and for the retro on a change the owner sends back.
+16. **React to the event that changes the state.** Do not poll for it: a poll spends Actions minutes when nothing has changed. A schedule is only for what has no event, such as time passing.
 
 ## Where things are
 

@@ -65,6 +65,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 done < "$list"
 [ "$only_over" = false ] || exit "$failed"
 
+# Every skill is a rule file with a budget (decisions H172b).
 while IFS= read -r skill; do
   [ -n "$skill" ] || continue
   if ! grep -qxF "$skill" <<<"$rule_files"; then

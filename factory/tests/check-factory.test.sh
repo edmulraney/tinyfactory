@@ -153,6 +153,46 @@ run "$scripts/check-factory.sh"
 expect_status 0
 expect_output "factory scripts ok"
 
+# Put together from two halves for the same reason (decisions H696).
+perl='P'
+long='--perl'
+
+scenario "fails on each grep called with the Perl flag a Mac's BSD grep lacks, naming the file, the line and the replacement"
+for line in "grep -$perl 'a(?=b)' \"\$1\"" "x=\$(grep -o$perl 'a\\Kb' \"\$1\")" "cat \"\$1\" | grep -${perl}o 'a'" "if ! grep -q -$perl 'a' \"\$1\"; then true; fi" \
+    "grep -m 1 -c$perl 'a' \"\$1\"" "grep $long-regexp 'a' \"\$1\"" "ls | xargs grep -l $long-regexp 'a'" \
+    "LC_ALL=C grep -o$perl 'a' \"\$1\"" "find . -print0 | xargs -0 -n 1 grep -l$perl 'a'" "command grep -$perl 'a' \"\$1\"" "grep -e 'a b' -$perl \"\$1\"" "grep -E \"a\" -$perl \"\$1\""; do
+  repo_with one.test.sh 'echo "ok - first"'
+  printf '%s\n' '#!/usr/bin/env bash' "$line" > factory/scripts/new.sh
+  git add .
+  run "$scripts/check-factory.sh"
+  expect_status 1
+  expect_output "factory/scripts/new.sh: a grep called with \`-P\` or \`--perl-regexp\`, which the BSD grep of a Mac lacks and GNU grep runs"
+  expect_output "use \`grep -E\` with the following character inside the match, and strip that character with sed"
+  expect_output "  2:$line"
+  expect_no_output "factory scripts ok"
+  rm -rf .git factory
+done
+
+scenario "fails on a grep with the Perl flag in a test file too, and names only the lines that hold one"
+repo_with one.test.sh "true
+grep -oE 'a' file
+grep -o$perl 'a' file"
+run "$scripts/check-factory.sh"
+expect_status 1
+expect_output "factory/tests/one.test.sh: a grep called with"
+expect_output "  4:grep -oP 'a' file"
+expect_no_output "grep -oE"
+
+scenario "passes the grep flags both greps have, another command's -P, and a comment or a message that names the flag"
+repo_with one.test.sh 'echo "ok - first"'
+printf '%s\n' '#!/usr/bin/env bash' "grep -oE 'a' \"\$1\"" "grep -E 'a' \"\$1\" | sort -$perl" "grep -c 'PATH' \"\$1\"" \
+  "grep -q -- '-$perl' \"\$1\"" "# BSD grep has no grep -$perl." "echo \"write grep -E, not grep -$perl or grep $long-regexp\"" \
+  "mkdir -p out && cp -$perl \"\$1\" out" "pgrep -$perl 1 bash" > factory/scripts/plain.sh
+git add .
+run "$scripts/check-factory.sh"
+expect_status 0
+expect_output "factory scripts ok"
+
 scenario "stops with a message outside a git repository: that is not a repo with no script in it"
 mkdir -p factory/scripts
 printf '#!/usr/bin/env bash\nif true; then\n' > factory/scripts/broken.sh

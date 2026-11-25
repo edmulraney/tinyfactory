@@ -33,7 +33,7 @@ All five must pass before a pull request is marked ready for review.
 
 Use Conventional Commits. Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `ci`.
 
-- **Ticket title:** an imperative verb, then what changes, e.g. `Export forecast as CSV`. One clause: no reason, no colon, no comma. 60 characters or fewer, sentence case, no full stop at the end. `factory/scripts/check-ticket.sh` checks it.
+- **Ticket title:** an imperative verb, then what changes, e.g. `Export forecast as CSV`. 60 characters or fewer, which `factory/scripts/check-ticket.sh` checks.
 - **Commit and PR title:** `<type>: <imperative summary>`, e.g. `feat: export forecast as CSV`. The summary is the ticket's title in the same words, and the whole title is 72 characters or fewer. PRs are squash-merged, so the PR title becomes the commit on `main`.
 - **Both say what changes, not where:** `Fix scaffold in an empty directory` could be any fix; `Fix scaffold failing lint in an empty directory` says which.
 - **Branch:** `<type>/<issue-number>-<slug>`, e.g. `feat/12-export-forecast-csv`. Work with no issue omits the number.

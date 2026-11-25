@@ -126,9 +126,11 @@ given=$(sed -E 's/=.*//' "$T/browser-env" | grep -v -x -E 'PWD|SHLVL|_|T' | sort
 [ "$given" = "HOME PATH " ] || fail "expected the browser to be given only PATH and HOME, got: $given"
 
 # Chrome itself draws these: each frame names a file of the machine, by each kind of path a design can hold.
-# real_browser: no stand-in for pnpm, and the session's token where actions/checkout leaves it, beside .design/.
+# real_browser: the machine's own pnpm and node, and the session's token where actions/checkout leaves it, beside .design/.
 real_browser() {
-  rm -f "$T/bin/pnpm"
+  real pnpm node
+  # Playwright keeps its browser under the HOME of whoever installed it (decisions H698b).
+  export HOME="$_home"
   mkdir -p .git && printf '[http "https://github.com/"]\n\textraheader = AUTHORIZATION: basic %s\n' "$1" > .git/config
 }
 # framed <path>: a design whose frame shows the file at that path, if the browser reads it. No path leaves the frame empty.

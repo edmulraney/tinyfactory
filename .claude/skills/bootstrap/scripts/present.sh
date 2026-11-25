@@ -5,6 +5,9 @@
 #        mark done|needs-owner|failed "<what happened>"
 #        owner_block   (stdin: the action on the first line, then the link and any one-time code on lines of their own)
 
+# No setup step's gh opens a pager, run by bootstrap.sh or by itself (decisions S697).
+export GH_PAGER=cat
+
 # Decided once, where the script's output is still the terminal: a block made inside $( ) is styled the same (decisions S421b).
 present_styled=""
 [ ! -t 1 ] || [ -n "${NO_COLOR:-}" ] || present_styled=1

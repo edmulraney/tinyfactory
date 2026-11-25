@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Checks a research ticket's output: the files its "Checks" section names exist and hold the lines it asks for.
+# Checks a research ticket's output: its files hold the lines "Checks" asks for, under product/ and the word limit.
 # Usage: check-research.sh <issue-number> [pr-number]   (from the repo root; needs GH_TOKEN or a gh login)
 #        check-research.sh --runnable < the "- " lines of a "Checks" section
 set -euo pipefail
@@ -67,8 +67,9 @@ if [ -n "$pr" ]; then
   # GitHub lists at most this many of a pull request's files, so a list this long may be cut short.
   max_files=3000
   # A renamed file is listed under both its names: one moved out of another folder changes that folder.
-  changed=$(gh api "repos/$repo/pulls/$pr/files" --paginate --jq '.[] | .filename, (.previous_filename // empty)') \
+  listed=$(gh api "repos/$repo/pulls/$pr/files" --paginate --jq '.[] | [.status, .filename], (select(.previous_filename) | ["renamed", .previous_filename]) | @tsv') \
     || { echo "Could not read the files pull request #$pr changes from GitHub, so its research output was not checked. Run this check again." >&2; exit 1; }
+  changed=$(cut -f 2- <<<"$listed")
   if [ "$(grep -c . <<<"$changed" || true)" -ge "$max_files" ]; then
     problem "Pull request #$pr changes $max_files files or more, and GitHub lists no more than that, so it cannot be shown to change only product/."
   fi
@@ -76,6 +77,18 @@ if [ -n "$pr" ]; then
     [ -n "$file" ] || continue
     problem "Pull request #$pr changes $file. A research ticket's pull request changes only files under product/."
   done < <(grep -vE '^product/' <<<"$changed" || true)
+
+  # Only a file the pull request adds has a limit (decisions T707).
+  max_words=500
+  while IFS= read -r file; do
+    [ -n "$file" ] || continue
+    [ -f "$file" ] \
+      || { echo "Pull request #$pr adds $file, and it could not be read here, so its length was not checked. Run this check from that pull request's branch." >&2; exit 1; }
+    words=$(wc -w < "$file" | tr -d ' ')
+    if [ "$words" -gt "$max_words" ]; then
+      problem "$file is $words words long, and a research file holds $max_words at most. Keep the findings as a table of claim and source, and cut until it fits."
+    fi
+  done < <(awk -F '\t' '$1 == "added" && $2 ~ /^product\/research\// { print $2 }' <<<"$listed")
 fi
 
 [ "$problems" -eq 0 ] && echo "The research output of #$issue is as its ticket's checks say."

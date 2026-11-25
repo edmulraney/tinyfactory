@@ -62,6 +62,14 @@ for script in $scripts; do
     failed=1
   fi
 done
+# checks runs GNU grep, so only this stops the flag a Mac's BSD grep lacks (decisions H696).
+for script in $scripts; do
+  if found=$(grep -nE '(^|[;&|({!]|then|do|else|if|while|until)[[:space:]]*((command|exec|[A-Za-z_][A-Za-z_0-9]*=[^[:space:]]*)[[:space:]]+)*(xargs([[:space:]]+(-[^[:space:]]+|[0-9]+))*[[:space:]]+)?grep([[:space:]]+(-[^[:space:]]+|[0-9]+|'"'"'[^'"'"']*'"'"'|"[^"]*"))*[[:space:]]+(-[A-Za-z]*P[A-Za-z]*|--perl-regexp)([[:space:]]|$)' "$script"); then
+    echo "$script: a grep called with \`-P\` or \`--perl-regexp\`, which the BSD grep of a Mac lacks and GNU grep runs. Where the pattern looks ahead, use \`grep -E\` with the following character inside the match, and strip that character with sed:"
+    sed 's/^/  /' <<<"$found"
+    failed=1
+  fi
+done
 # A header that grows is read on every run that opens the file (decisions H176a).
 if ! workflows=$(git ls-files --cached --others --exclude-standard 'factory/workflows/*.yml'); then
   echo "check-factory.sh could not list the workflows with git ls-files, so no header was checked."

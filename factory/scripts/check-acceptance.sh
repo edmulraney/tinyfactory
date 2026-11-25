@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Checks that every acceptance criterion in a ticket has a test in the ticket's one acceptance file.
-# Usage: check-acceptance.sh <issue-number> [branch]
+# Checks that every acceptance criterion in a ticket has a test in the ticket's acceptance files.
+# Usage: check-acceptance.sh <issue-number>
 set -euo pipefail
 
-issue="$1"; branch="${2:-}"
+issue="$1"
 dir="apps/web/e2e/acceptance"
 # Read on a line of its own: piped into the filters below, a failed read would pass as "no acceptance criteria".
 body=$(gh issue view "$issue" --json body --jq '.body // ""') \
@@ -14,38 +14,41 @@ criteria=$(tr -d '\r' <<<"$body" \
 
 [ -n "$criteria" ] || { echo "Issue #$issue has no acceptance criteria to check."; exit 0; }
 
+# A criterion with no test is not proven (decisions T9).
 specs=$(find "$dir" -maxdepth 1 -name "$issue-*.spec.ts" | sort)
 [ -n "$specs" ] || { echo "Missing $dir/$issue-<slug>.spec.ts: issue #$issue has acceptance criteria but no acceptance tests."; exit 1; }
-[ "$(wc -l <<<"$specs")" -eq 1 ] || { printf 'Issue #%s must have exactly one acceptance file, found:\n%s\n' "$issue" "$specs"; exit 1; }
-spec="$specs"
+files=()
+while IFS= read -r spec; do files+=("$spec"); done <<<"$specs"
+named=$(paste -sd, - <<<"$specs" | sed 's/,/, /g')
 
 missing=0
-if [ -n "$branch" ] && [ "$(basename "$spec")" != "${branch#*/}.spec.ts" ]; then
-  echo "$spec should be named ${branch#*/}.spec.ts, after the branch $branch"
-  missing=1
-fi
-if ! grep -qE "from [\"']\.\./test[\"']" "$spec"; then
-  echo "$spec must import test and expect from \"../test\", not from @playwright/test"
-  missing=1
-fi
+# The scan e2e/test.ts adds is what proves a page accessible (decisions D6).
+for spec in "${files[@]}"; do
+  if ! grep -qE "from [\"']\.\./test[\"']" "$spec"; then
+    echo "$spec must import test and expect from \"../test\", not from @playwright/test"
+    missing=1
+  fi
+done
 for ac in $criteria; do
   # Only a plain test(...) counts (decisions T12).
-  if grep -qE "test\([[:space:]]*[\"'\`]$ac:" "$spec"; then
+  if grep -qE "test\([[:space:]]*[\"'\`]$ac:" "${files[@]}"; then
     continue
   fi
-  other=$(grep -oE "test(\.[a-z]+)+\([[:space:]]*[\"'\`]$ac:" "$spec" | sed -E 's/\(.*/(…)/' | sort -u | paste -sd, - | sed 's/,/, /g' || true)
+  other=$(grep -ohE "test(\.[a-z]+)+\([[:space:]]*[\"'\`]$ac:" "${files[@]}" | sed -E 's/\(.*/(…)/' | sort -u | paste -sd, - | sed 's/,/, /g' || true)
   if [ -n "$other" ]; then
-    echo "$ac has no test that counts in $spec: \"$ac: …\" is declared with $other, which does not prove it. Declare it with a plain test(\"$ac: …\")."
+    echo "$ac has no test that counts in $named: \"$ac: …\" is declared with $other, which does not prove it. Declare it with a plain test(\"$ac: …\")."
   else
-    echo "No test titled \"$ac: …\" in $spec"
+    echo "No test titled \"$ac: …\" in $named"
   fi
   missing=1
 done
-# Nothing in the file is skipped, whatever its title (decisions T13).
-if skipped=$(grep -nE '\.(skip|fixme)\(' "$spec"); then
-  echo "$spec must not skip anything: a skipped test never runs, so it proves no criterion. Remove:"
-  sed 's/^/  /' <<<"$skipped"
-  missing=1
-fi
-[ "$missing" -eq 0 ] && echo "All acceptance criteria of #$issue have a test in $spec."
+# Nothing in a file is skipped, whatever its title (decisions T13).
+for spec in "${files[@]}"; do
+  if skipped=$(grep -nE '\.(skip|fixme)\(' "$spec"); then
+    echo "$spec must not skip anything: a skipped test never runs, so it proves no criterion. Remove:"
+    sed 's/^/  /' <<<"$skipped"
+    missing=1
+  fi
+done
+[ "$missing" -eq 0 ] && echo "All acceptance criteria of #$issue have a test in $named."
 exit "$missing"

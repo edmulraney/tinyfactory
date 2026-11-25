@@ -115,7 +115,6 @@ entries=$(grep -E '^factory/free-tier/[^/]+\.md$' <<<"$present" || true)
   phase == "rows" {
     sub(/\r$/, "")
     if (!/^\|/ || /^\| ID \|/ || /^\|---/) next
-    row_files[FILENAME] = 1
     split($0, cell, "|")
     id = trim(cell[2])
     if (id !~ /^[A-Z][1-9][0-9]*[a-z]?$/) next
@@ -134,6 +133,7 @@ entries=$(grep -E '^factory/free-tier/[^/]+\.md$' <<<"$present" || true)
     # A seed is linked from the place scaffold.sh copies it to (decisions H531c).
     place = FILENAME
     sub(/^\.claude\/skills\/bootstrap\/templates\//, "", place)
+    holds_rows = place ~ /^(factory|product|architecture)\/decisions\/[^\/]+\.md$/
   }
   {
     ending = ""
@@ -142,8 +142,8 @@ entries=$(grep -E '^factory/free-tier/[^/]+\.md$' <<<"$present" || true)
     if (line ~ /^[ \t]*(```|~~~)/) fence = !fence
     else if (!fence) {
       start = ""
-      # The first cell of a row is the ID it defines, and cites nothing.
-      if ((FILENAME in row_files) && match(line, /^\|[^|]*\|/)) {
+      # The first cell of a row is the ID it defines, and cites nothing; so is that of a seed copied to a folder of rows (decisions H705).
+      if (holds_rows && match(line, /^\|[^|]*\|/)) {
         start = substr(line, 1, RLENGTH - 1)
         line = substr(line, RLENGTH)
       }

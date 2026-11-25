@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for bootstrap's sign-in.sh: Neon Auth on, by emailed link alone, its variables in Vercel.
+# Tests for bootstrap's sign-in.sh: Neon Auth on, by emailed link alone, the app's address trusted, variables in Vercel.
 . "$(dirname "$0")/helpers.sh"
 
 sign_in="$root/.claude/skills/bootstrap/scripts/sign-in.sh"
@@ -8,7 +8,8 @@ secret="c2VjcmV0LW9mLXRoaXJ0eS10d28tY2hhcmFjdGVycw=="
 # a_product: has accounts; Vercel lists the variables in $T/vercel as `KEY target` lines; $T/fail holds a word of the call to fail.
 # Neon holds each branch's two settings as `<Magic Link on> <email and password on>` in $T/settings-<branch id>, and a
 # branch with no such file has Neon's own: no link, a password. $T/branches, when there, is the list of branches Neon
-# answers, and $T/no-auth holds the id of each branch that has no Neon Auth, one a line.
+# answers, and $T/no-auth holds the id of each branch that has no Neon Auth, one a line. $T/domains holds the addresses
+# production's branch trusts, one a line.
 a_product() {
   echo "# Purpose" > PURPOSE.md
   echo "DATABASE_URL production" > "$T/vercel"
@@ -16,6 +17,7 @@ a_product() {
   echo none > "$T/fail"
   : > "$T/posted"
   : > "$T/no-auth"
+  : > "$T/domains"
   touch "$T/signed-in"
   stub openssl '
     if grep -qF -- "$(cat "$T/fail")" <<<"openssl $*"; then exit 1; fi
@@ -26,6 +28,7 @@ a_product() {
     case "$*" in
       "api user "*) json "{\"login\":\"owner\"}" "$@" ;;
       "variable get NEON_PROJECT_ID -R owner/myapp") echo "quiet-wood-1" ;;
+      "variable get PRODUCTION_URL -R owner/myapp") [ -f "$T/no-address" ] || echo "https://myapp.example" ;;
       *) echo "unexpected call: gh $*" >&2; exit 1 ;;
     esac'
   stub npx '
@@ -63,6 +66,12 @@ a_product() {
         read -r link password < <(cat "$T/settings-$id" 2>/dev/null || echo "false true")
         [ -f "$T/neon-keeps-settings" ] || echo "$link false" > "$T/settings-$id"
         echo "{\"enabled\":false,\"email_verification_method\":\"otp\"}" ;;
+      "--yes neonctl@latest api /projects/quiet-wood-1/branches/br-main-1/auth/domains")
+        if [ -f "$T/domains-read-back-fails" ] && grep -q "auth/domains -X POST" "$T/calls"; then echo "could not connect" >&2; exit 1; fi
+        jq -Rc "{domain: ., auth_provider: \"better_auth\"}" "$T/domains" | jq -sc "{domains: .}" ;;
+      "--yes neonctl@latest api /projects/quiet-wood-1/branches/br-main-1/auth/domains -X POST -f domain="*" -f auth_provider=better_auth")
+        domain=${8#domain=}
+        [ -f "$T/neon-forgets-domain" ] || echo "$domain" >> "$T/domains" ;;
       "--yes neonctl@latest me") [ -f "$T/signed-in" ] ;;
       "--yes neonctl@latest auth") touch "$T/signed-in" ;;
       "--yes neonctl@latest branches list --project-id quiet-wood-1 --output json")
@@ -128,6 +137,7 @@ run "$sign_in" myapp
 expect_status 0
 [ ! -s "$T/posted" ] || fail "expected nothing to be sent to Vercel on the second run"
 expect_no_call "PATCH"
+expect_no_call "auth/domains -X POST"
 expect_output "the production branch already signs people in by an emailed link and takes no password"
 expect_output "the preview's branch preview/feat/12-export already signs people in by an emailed link and takes no password"
 expect_output "NEON_AUTH_COOKIE_SECRET is already set for production"
@@ -232,7 +242,7 @@ expect_no_output "sign-in ok"
 
 scenario "stops when Vercel refuses a variable"
 a_product
-echo "-X POST" > "$T/fail"
+echo "env -X POST" > "$T/fail"
 run "$sign_in" myapp
 expect_failure
 expect_output "Vercel refused NEON_AUTH_BASE_URL for production"
@@ -379,4 +389,77 @@ echo "br-preview-9/auth/plugins" > "$T/fail"
 run "$sign_in" myapp
 expect_failure
 expect_output "Neon would not show the sign-in settings of the preview's branch preview/feat/9-last (br-preview-9)"
+expect_no_output "sign-in ok"
+
+scenario "adds the production address to the addresses Neon Auth trusts when the list lacks it, and reads the list back"
+a_product
+echo "https://other.example" > "$T/domains"
+run "$sign_in" myapp
+expect_status 0
+expect_call "api /projects/quiet-wood-1/branches/br-main-1/auth/domains -X POST -f domain=https://myapp.example -f auth_provider=better_auth"
+expect_calls 1 "auth/domains -X POST"
+[ "$(grep -cxF -- "npx --yes neonctl@latest api /projects/quiet-wood-1/branches/br-main-1/auth/domains" "$T/calls")" = 2 ] \
+  || fail "expected the list to be read before the address is added, and again after"
+[ "$(cat "$T/domains")" = "$(printf 'https://other.example\nhttps://myapp.example')" ] || fail "expected Neon to trust the production address beside the one it held"
+expect_output "Neon Auth now trusts the production address https://myapp.example"
+expect_output "sign-in ok"
+
+scenario "leaves alone a list that holds the production address"
+a_product
+printf 'https://other.example\nhttps://myapp.example\n' > "$T/domains"
+run "$sign_in" myapp
+expect_status 0
+expect_no_call "auth/domains -X POST"
+expect_output "Neon Auth already trusts the production address https://myapp.example"
+expect_output "sign-in ok"
+
+scenario "stops before switching anything on when the production address cannot be read"
+a_product
+echo "variable get PRODUCTION_URL" > "$T/fail"
+run "$sign_in" myapp
+expect_failure
+expect_output "cannot read the variable PRODUCTION_URL of owner/myapp; run vercel.sh first"
+expect_no_call "neonctl"
+
+scenario "stops before switching anything on when there is no production address yet"
+a_product
+touch "$T/no-address"
+run "$sign_in" myapp
+expect_failure
+expect_output "the variable PRODUCTION_URL of owner/myapp is empty; run vercel.sh first"
+expect_no_call "neonctl"
+
+scenario "stops, with nothing added and no variable set, when Neon will not show the addresses it trusts"
+a_product
+echo "auth/domains" > "$T/fail"
+run "$sign_in" myapp
+expect_failure
+expect_output "Neon would not show the addresses the production branch (br-main-1) trusts"
+expect_no_call "auth/domains -X POST"
+[ ! -s "$T/posted" ] || fail "expected nothing to be sent to Vercel"
+expect_no_output "sign-in ok"
+
+scenario "stops, and says nobody can sign in, when Neon refuses the production address"
+a_product
+echo "auth/domains -X POST" > "$T/fail"
+run "$sign_in" myapp
+expect_failure
+expect_output "Neon refused to trust the production address https://myapp.example, so nobody can sign in there"
+[ ! -s "$T/posted" ] || fail "expected nothing to be sent to Vercel"
+expect_no_output "sign-in ok"
+
+scenario "does not take Neon's word that the address was added"
+a_product
+touch "$T/neon-forgets-domain"
+run "$sign_in" myapp
+expect_failure
+expect_output "Neon does not list the production address https://myapp.example as trusted after it was added"
+expect_no_output "sign-in ok"
+
+scenario "stops when the addresses Neon trusts cannot be read back"
+a_product
+touch "$T/domains-read-back-fails"
+run "$sign_in" myapp
+expect_failure
+expect_output "cannot read the addresses the production branch (br-main-1) trusts back from Neon"
 expect_no_output "sign-in ok"

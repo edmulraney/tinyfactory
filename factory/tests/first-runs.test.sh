@@ -3,17 +3,19 @@
 . "$(dirname "$0")/helpers.sh"
 . "$(dirname "$0")/trusted-on-github.sh"
 
-# $T/waiting, $T/comments-<n> and $T/runs-<file> answer gh; $T/fail lists the gh calls, by their first words, that fail.
+# $T/waiting, $T/installed, $T/comments-<n> and $T/runs-<file> answer gh; $T/fail lists the gh calls, by their first words, that fail.
 # $T/writers lists the accounts that may write to the repo.
 github() {
   : > "$T/fail"; : > "$T/waiting"
   echo owner > "$T/writers"
+  printf '%s\n' ci.yml fix.yml claude.yml flag-idle.yml > "$T/installed"
   stub gh '
     while IFS= read -r words; do
       case "$*" in "$words"*) echo "gh: failed: $*" >&2; exit 1 ;; esac
     done < "$T/fail"
     case "$*" in
       "pr list --state merged --label proof --limit 100 --json number "*) json "$(jq -Rn "[inputs | {number: tonumber}]" "$T/waiting")" "$@" ;;
+      "api repos/{owner}/{repo}/contents/.github/workflows "*) json "$(jq -Rn "[inputs | {name: .}]" "$T/installed")" "$@" ;;
       "api repos/{owner}/{repo}/issues/"*"/comments?per_page=100 --paginate "*) n=${2#*/issues/}; json "$(cat "$T/comments-${n%/comments*}")" "$@" ;;
       "api --method GET repos/{owner}/{repo}/actions/workflows/"*"/runs -f status=completed -f created=>=2026-11-16T10:00:00Z -f per_page=100 --paginate "*)
         file=${4#*/workflows/}; json "{\"workflow_runs\":$(cat "$T/runs-${file%/runs}" 2>/dev/null || echo "[]")}" "$@" ;;
@@ -145,6 +147,35 @@ expect_status 0
 expect_no_call "run=901"
 expect_call "gh workflow run retro.yml -f pr=40 -f run=950"
 expect_call "gh pr edit 40 --remove-label proof"
+
+scenario "a workflow removed since the pull request changed it has no first run: its runs are not asked for, and the label comes off"
+github; waits 40 "$(installed ci.yml fix.yml)" "$(looked_at ci.yml)"
+echo ci.yml > "$T/installed"
+first_runs
+expect_status 0
+expect_output "pull request #40 changed fix.yml, which has since been removed: no first run to look for"
+expect_no_call "actions/workflows/fix.yml"
+expect_no_call "workflow run"
+expect_call "gh pr edit 40 --remove-label proof"
+
+scenario "a removed workflow does not end the wait for one still installed"
+github; waits 40 "$(installed fix.yml ci.yml)"
+echo ci.yml > "$T/installed"
+first_runs
+expect_status 0
+expect_output "no run of ci.yml has finished since pull request #40 changed it"
+expect_no_call "gh pr edit"
+
+scenario "installed workflows that could not be listed are not taken for removed: it fails, having started nothing, and keeps the label"
+github; waits 40 "$(installed ci.yml)"
+runs_of ci.yml "$(a_run 901 10:05 success)"
+echo "api repos/{owner}/{repo}/contents/.github/workflows" > "$T/fail"
+first_runs
+expect_failure
+expect_output "Could not list the installed workflows"
+expect_no_output "has since been removed"
+expect_no_call "gh workflow run"
+expect_no_call "gh pr edit"
 
 scenario "only the workflow's own account counts, for the record of an install and for a retro already started"
 github

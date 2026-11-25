@@ -340,3 +340,20 @@ post
 expect_status 1
 expect_output "The screenshots are on the sessions branch under $folder, but the comment showing them could not be posted on pull request #7."
 expect_nothing_left
+
+scenario "ci.yml fetches the screenshots of the attempt whose end-to-end tests the review follows, not an earlier attempt's"
+job() { awk -v job="  $1:" '$0 == job { on = 1; next } /^  [a-z0-9-]+:$/ { on = 0 } on' "$root/factory/workflows/ci.yml"; }
+# name_after <job> <action>: the name that step of the job gives the artifact.
+name_after() { job "$1" | sed -n "/^        uses: actions\/$2@/,/^      - /p" | sed -n 's/^          name: //p'; }
+uploaded=$(name_after e2e upload-artifact)
+fetched=$(name_after review download-artifact)
+# shellcheck disable=SC2016
+[ "$uploaded" = 'playwright-${{ github.event.pull_request.head.sha }}-${{ github.run_attempt }}' ] \
+  || fail "expected the artifact's name to hold the attempt that uploads it, got \"$uploaded\""
+# The attempt as `e2e` hands it on: a review run again alone is in a later attempt than the tests it follows (decisions P703).
+attempt=$(job e2e | sed -n '/^    outputs:$/,/^    steps:$/p' | sed -n 's/^      attempt: \(\${{ [a-z._]* }}\).*/\1/p')
+[ -n "$attempt" ] || fail "expected the e2e job to hand on the attempt it ran in"
+# shellcheck disable=SC2016
+replace_first "$fetched" '${{ needs.e2e.outputs.attempt }}' "$attempt"
+[ "$replaced" = "$uploaded" ] \
+  || fail "expected the review to fetch the artifact of the attempt e2e ran in, got \"$fetched\""

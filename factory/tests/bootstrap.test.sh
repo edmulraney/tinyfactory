@@ -2,7 +2,8 @@
 # Tests for .claude/skills/bootstrap/scripts/bootstrap.sh: which steps a setup runs, and where it stops.
 . "$(dirname "$0")/helpers.sh"
 
-# setup: a copy of bootstrap.sh beside stand-ins for its steps. Each writes its name to $T/steps; the one named in $T/fails exits 1,
+# setup: a copy of bootstrap.sh beside stand-ins for its steps. Each writes its name to $T/steps and the pager gh
+# would use to $T/pagers; the one named in $T/fails exits 1,
 # the one named in $T/asks leaves a click to the owner, and deploy gives the closing summary production's address.
 setup() {
   mkdir -p "$T/setup"
@@ -16,6 +17,7 @@ setup() {
 #!/usr/bin/env bash
 . "\$(dirname "\$0")/present.sh"
 echo "$step" >> "\$T/steps"
+echo "\${GH_PAGER-unset}" >> "\$T/pagers"
 if grep -qx "$step" "\$T/asks"; then mark needs-owner "$step: a click is left for you"; else mark done "$step ok"; fi
 [ "$step" != deploy ] || [ -s "\$SETUP_NEEDS_OWNER" ] || echo https://shop.example > "\$SETUP_PRODUCTION"
 ! grep -qx "$step" "\$T/fails"
@@ -117,3 +119,21 @@ run in_terminal env NO_COLOR=1 "$T/setup/bootstrap.sh" shop
 expect_no_output $'\033'
 expect_no_output "┌"
 [ "$(tr -d '\r' <<<"$out")" = "$piped" ] || fail "expected NO_COLOR to print what a pipe gets, which was: $piped"
+
+scenario "starts each of the fourteen steps with gh told never to page, also where the owner's shell names a pager"
+setup
+run env GH_PAGER=less "$T/setup/bootstrap.sh" shop
+expect_status 0
+[ "$(sort "$T/pagers" | uniq -c | tr -s ' ')" = " 14 cat" ] || fail "expected GH_PAGER=cat in all fourteen steps, got: $(tr '\n' ' ' < "$T/pagers")"
+
+# purpose.sh, scaffold.sh and database.sh call no gh, so they have nothing to page.
+for step in preflight github vercel database-key sign-in preview-access board board-token workflow-app agent-token deploy; do
+  scenario "$step.sh, run by itself, calls gh told never to page"
+  stub gh 'echo "${GH_PAGER-unset}" >> "$T/pagers"; exit 1'
+  # sign-in.sh reads PURPOSE.md and the Vercel project's variables before it calls gh.
+  echo "A shop." > PURPOSE.md
+  stub npx 'echo "{\"envs\": []}"'
+  run env GH_PAGER=less "$root/.claude/skills/bootstrap/scripts/$step.sh" shop
+  touch "$T/pagers"
+  [ "$(sort -u "$T/pagers")" = cat ] || fail "expected GH_PAGER=cat at each call of gh, got: $(tr '\n' ' ' < "$T/pagers")"
+done

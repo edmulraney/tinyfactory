@@ -76,14 +76,6 @@ expect_no_output "a merge often puts"
 expect_no_output "entry 1 "
 expect_no_output "free-tier log ok"
 
-scenario "refuses a gap in the numbers"
-log 1 2 4 6
-check
-refuses "free-tier/entry-3.md: there is no such file, and the numbered entries count 1, 2, 3 with no gap"
-expect_output "free-tier/entry-5.md: there is no such file"
-expect_no_output "entry-2.md"
-expect_no_output "entry-6.md: there is"
-
 scenario "refuses a numbered entry in the file of another number, a second entry in its file, and a heading that is no numbered entry"
 log 1
 part entry-2 "$(entry 3)"
@@ -248,7 +240,6 @@ $(named 140b)
 check
 refuses "free-tier/132.md:1: entry #132 does not end with its Automated line"
 expect_output "free-tier/140.md:1: entry #140a does not end with its Automated line (a merge often puts the next entry, #140b, in front of it)"
-expect_output "free-tier/140.md:5: the heading of entry #140b needs a blank line above it"
 expect_output "free-tier/140.md:5: entry #140b has 2 Automated lines, and an entry has one"
 expect_no_output "entry 1 "
 
@@ -311,6 +302,16 @@ check
 refuses "entry 10 $is_new"
 expect_no_output "entry 9 is new"
 
+scenario "passes the numbered entries main holds with a gap between them, and refuses a new one in the gap"
+on_main 1 2 4
+check
+expect_status 0
+expect_output "free-tier log ok: 3 entries"
+part entry-3 "$(entry 3)"
+check
+refuses "free-tier/entry-3.md:1: entry 3 $is_new"
+expect_no_output "entry 4 is new"
+
 scenario "takes every numbered entry of a log main does not hold as new"
 on_main 1 2
 mkdir other
@@ -345,9 +346,9 @@ check
 expect_status 0
 expect_output "origin/main could not be read, so the numbered entries were not checked for a new one"
 expect_output "free-tier log ok: 3 entries"
-log 1 2 4
+part entry-3 "$(entry 3 "")"
 check
-refuses "free-tier/entry-3.md: there is no such file"
+refuses "entry 3 does not end with its Automated line"
 rm -rf .git
 log 1 2
 check

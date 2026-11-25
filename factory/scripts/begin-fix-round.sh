@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Decides, as the first step of a fix round (fix.yml), whether the round goes ahead and for whom.
-# Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login]
+# Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login] [owner-review-file]
+#        owner-review-file  Left holding what the owner asked for, in the owner's round alone: allow-skill-write.sh reads it.
 #        Needs GH_TOKEN (pull-requests, issues, actions and contents: write) and GITHUB_REPOSITORY.
 set -euo pipefail
 
-usage="Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login]"
-pr="${1:?$usage}"; failures="${2:?$usage}"; owner="${3:-}"
+usage="Usage: begin-fix-round.sh <pr-number> <failures-file> [owner-login] [owner-review-file]"
+pr="${1:?$usage}"; failures="${2:?$usage}"; owner="${3:-}"; review_file="${4:-}"
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 outputs="${GITHUB_OUTPUT:-/dev/null}"
 . "$script_dir/shipping.sh"
@@ -44,8 +45,12 @@ limit=$("$script_dir/usage-limit.sh" wait "$pr" "a fix round") \
 requested=""
 if [ -n "$owner" ]; then
   # The file is deleted when the owner's review cannot be read: the engineer must not get half the evidence.
-  requested=$("$script_dir/owner-review.sh" "$pr" "$owner" "$failures") \
+  # A file an earlier run left would read as this round's.
+  [ -z "$review_file" ] || rm -f "$review_file"
+  # Written apart from the log tails, which the owner did not write, then given to the engineer with them (decisions A695b).
+  requested=$("$script_dir/owner-review.sh" "$pr" "$owner" "${review_file:-$failures}") \
     || { rm -f "$failures"; die "What $owner asked for on pull request #$pr could not be read, so no fix round was begun."; }
+  [ -z "$requested" ] || [ -z "$review_file" ] || cat "$review_file" >> "$failures"
 fi
 if [ -n "$requested" ]; then
   # A request gets one owner's round, refused here as a round started while that one ran is queued behind it (decisions A396b).

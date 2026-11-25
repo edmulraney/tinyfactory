@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Switches Neon Auth on for the database's production branch, and sets on Vercel what the app needs to use it.
-# Usage: sign-in.sh [name]   (name defaults to the directory name; run after database-key.sh)
+# Switches Neon Auth on for production's branch, has it trust the app's address, and sets on Vercel what the app needs.
+# Usage: sign-in.sh [name]   (name defaults to the directory name; run after vercel.sh and database-key.sh)
 #        Sets NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET on the Vercel project.
 #        Does nothing for a product whose PURPOSE.md says it has no accounts.
-#        Safe to re-run: a branch that has auth, a variable Vercel lists and settings already so are left alone.
+#        Safe to re-run: a branch that has auth, an address Neon trusts, a variable Vercel lists and settings
+#        already so are left alone.
 set -euo pipefail
 . "$(dirname "$0")/present.sh"
 
@@ -31,6 +32,9 @@ owner=$(gh api user --jq .login) || { echo "cannot ask GitHub who is signed in: 
 project=$(gh variable get NEON_PROJECT_ID -R "$owner/$name") \
   || { echo "cannot read the variable NEON_PROJECT_ID of $owner/$name; run database-key.sh first"; exit 1; }
 [ -n "$project" ] || { echo "the variable NEON_PROJECT_ID of $owner/$name is empty; run database-key.sh first"; exit 1; }
+address=$(gh variable get PRODUCTION_URL -R "$owner/$name") \
+  || { echo "cannot read the variable PRODUCTION_URL of $owner/$name; run vercel.sh first"; exit 1; }
+[ -n "$address" ] || { echo "the variable PRODUCTION_URL of $owner/$name is empty; run vercel.sh first"; exit 1; }
 
 # As database-key.sh does: `me` is the one command that never starts the sign-in itself.
 if ! neon me >/dev/null 2>&1; then
@@ -83,6 +87,22 @@ by_link_only() {
 }
 # Before the variables, so that a product whose address is set already takes no password.
 by_link_only "$branch" "the production branch"
+
+# Neon Auth refuses a sign-in from an address production's branch does not trust, and trusts none
+# until told. The one address is added, and no pattern (decisions S704).
+# trusted: the addresses the production branch trusts, one a line.
+trusted() { neon api "/projects/$project/branches/$branch/auth/domains" | jq -r '.domains[].domain'; }
+domains=$(trusted) || { echo "Neon would not show the addresses the production branch ($branch) trusts; run this script again"; exit 1; }
+if grep -qxF -- "$address" <<<"$domains"; then
+  echo "Neon Auth already trusts the production address $address"
+else
+  neon api "/projects/$project/branches/$branch/auth/domains" -X POST -f "domain=$address" -f auth_provider=better_auth >/dev/null \
+    || { echo "Neon refused to trust the production address $address, so nobody can sign in there; run this script again"; exit 1; }
+  domains=$(trusted) || { echo "cannot read the addresses the production branch ($branch) trusts back from Neon; run this script again"; exit 1; }
+  grep -qxF -- "$address" <<<"$domains" \
+    || { echo "Neon does not list the production address $address as trusted after it was added, so nobody can sign in there; run this script again"; exit 1; }
+  echo "Neon Auth now trusts the production address $address"
+fi
 
 # Read again: once auth is on, Neon's integration may add the address itself, and Vercel refuses
 # a variable it already lists.
@@ -144,4 +164,4 @@ while IFS=$'\t' read -r id preview <&3; do
   fi
   by_link_only "$id" "the preview's branch $preview"
 done 3< <(jq -r '.[] | select(.name // "" | startswith("preview/")) | [.id, .name] | @tsv' <<<"$branches")
-mark done "sign-in ok: Neon Auth on, by emailed link and no password, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name'"
+mark done "sign-in ok: Neon Auth on, by emailed link and no password, the production address trusted, NEON_AUTH_BASE_URL and NEON_AUTH_COOKIE_SECRET set on Vercel project '$name'"

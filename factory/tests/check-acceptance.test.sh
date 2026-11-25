@@ -35,20 +35,14 @@ spec() {
 scenario "passes when every criterion has a test"
 ticket "$two_criteria"
 spec 12-export-forecast-csv.spec.ts ../test "AC1: a CSV downloads" "AC2: Export is disabled"
-run "$scripts/check-acceptance.sh" 12 feat/12-export-forecast-csv
-expect_status 0
-expect_output "All acceptance criteria of #12 have a test in $dir/12-export-forecast-csv.spec.ts."
-
-scenario "passes without a branch name to compare the file with"
-ticket "$two_criteria"
-spec 12-anything.spec.ts ../test "AC1: a CSV downloads" "AC2: Export is disabled"
 run "$scripts/check-acceptance.sh" 12
 expect_status 0
+expect_output "All acceptance criteria of #12 have a test in $dir/12-export-forecast-csv.spec.ts."
 
 scenario "names the criterion that has no test"
 ticket "$two_criteria"
 spec 12-export-forecast-csv.spec.ts ../test "AC1: a CSV downloads"
-run "$scripts/check-acceptance.sh" 12 feat/12-export-forecast-csv
+run "$scripts/check-acceptance.sh" 12
 expect_status 1
 expect_output 'No test titled "AC2: …"'
 expect_no_output 'No test titled "AC1: …"'
@@ -79,7 +73,7 @@ for modifier in skip fixme only fail describe; do
   spec 12-export-forecast-csv.spec.ts ../test "AC2: Export is disabled"
   printf 'test.%s("AC1: a CSV downloads", async ({ page }) => { await page.goto("/"); });\n' "$modifier" \
     >> "$dir/12-export-forecast-csv.spec.ts"
-  run "$scripts/check-acceptance.sh" 12 feat/12-export-forecast-csv
+  run "$scripts/check-acceptance.sh" 12
   expect_status 1
   expect_output "AC1 has no test that counts"
   expect_output "test.$modifier("
@@ -127,25 +121,36 @@ run "$scripts/check-acceptance.sh" 12
 expect_status 1
 expect_output "Missing $dir/12-<slug>.spec.ts"
 
-scenario "fails when the ticket has two acceptance files"
+scenario "finds a criterion's test in either of a ticket's two files, and names both when one has none"
 ticket "$two_criteria"
-spec 12-export-forecast-csv.spec.ts ../test "AC1: a CSV downloads" "AC2: Export is disabled"
-spec 12-second-file.spec.ts ../test "AC1: a CSV downloads"
+spec 12-export-forecast-csv.spec.ts ../test "AC1: a CSV downloads"
+spec 12-export-disabled.spec.ts ../test "AC2: Export is disabled"
+run "$scripts/check-acceptance.sh" 12
+expect_status 0
+expect_output "have a test in $dir/12-export-disabled.spec.ts, $dir/12-export-forecast-csv.spec.ts."
+ticket '## Acceptance criteria
+- **AC1:** One.
+- **AC2:** Two.
+- **AC3:** Three.'
 run "$scripts/check-acceptance.sh" 12
 expect_status 1
-expect_output "must have exactly one acceptance file"
+expect_output 'No test titled "AC3: …" in '"$dir/12-export-disabled.spec.ts, $dir/12-export-forecast-csv.spec.ts"
+expect_no_output 'No test titled "AC1: …"'
 
-scenario "fails a file that is not named after the branch"
+scenario "fails a skipped call and a Playwright import in a ticket's second file"
 ticket "$two_criteria"
-spec 12-csv.spec.ts ../test "AC1: a CSV downloads" "AC2: Export is disabled"
-run "$scripts/check-acceptance.sh" 12 feat/12-export-forecast-csv
+spec 12-export-forecast-csv.spec.ts ../test "AC1: a CSV downloads" "AC2: Export is disabled"
+spec 12-second-file.spec.ts @playwright/test "AC1: a CSV downloads"
+echo 'test.skip("later", () => {});' >> "$dir/12-second-file.spec.ts"
+run "$scripts/check-acceptance.sh" 12
 expect_status 1
-expect_output "should be named 12-export-forecast-csv.spec.ts"
+expect_output "$dir/12-second-file.spec.ts must import test and expect"
+expect_output "$dir/12-second-file.spec.ts must not skip anything"
 
 scenario "fails a file that takes test from Playwright, skipping the accessibility scan"
 ticket "$two_criteria"
 spec 12-export-forecast-csv.spec.ts @playwright/test "AC1: a CSV downloads" "AC2: Export is disabled"
-run "$scripts/check-acceptance.sh" 12 feat/12-export-forecast-csv
+run "$scripts/check-acceptance.sh" 12
 expect_status 1
 expect_output 'must import test and expect from "../test"'
 

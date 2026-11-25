@@ -6,6 +6,7 @@
 #        run "$scripts/ship.sh" 7 abc123                         # sets $out and $status
 #        expect_status 0
 #        expect_call "gh pr merge 7 --squash --delete-branch --match-head-commit abc123"
+#        real pnpm node                                          # only for a scenario that needs the machine's own
 set -u
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
@@ -15,6 +16,7 @@ scripts="$root/factory/scripts"
 # Its real path, which is what git prints for a repo inside it: a Mac's temporary folder is reached through a link.
 _base=$(cd "$(mktemp -d)" && pwd -P)
 _path="$PATH"
+_home="$HOME"
 _count=0
 _failed=0
 _name=""
@@ -50,15 +52,40 @@ _close() {
 # A test file that broke half-way (an unset variable, a typo) keeps its exit code, so it does not read as passed.
 trap '_code=$?; _close; cd /; rm -rf "$_base"; [ "$_code" -eq 0 ] || exit "$_code"; exit "$_failed"' EXIT
 
-# The stand-ins refuse every call, so that no test reaches the network because it forgot one.
+# The only real commands a scenario reaches unasked (decisions H698a): none opens a window, signs in or calls a
+# service when a script gives it no address.
+_tools=" awk basename bash cat chmod cmp comm cp cut date diff dirname echo env expr false find getconf git grep gzip head jq ln locale ls mkdir mktemp mv od paste perl printf python3 readlink rm rmdir sed seq sh sha256sum shasum shellcheck sleep sort tail tar tee touch tr true uname uniq wc xargs yes "
+mkdir "$_base/tools" "$_base/refused"
+# Any other command the machine has says that it was refused, where bash would say only that it was not found.
+printf '#!/bin/sh\necho "no stand-in was given for: ${0##*/} $*" >&2\nexit 97\n' > "$_base/refuse"
+chmod +x "$_base/refuse"
+# One process makes every link (decisions H698c). The first of a name on the machine's PATH is the one a script would have run.
+python3 -c '
+import os, sys
+base, tools = sys.argv[1], sys.argv[2].split()
+for folder in os.environ["PATH"].split(":"):
+    try:
+        names = os.listdir(folder or ".")
+    except OSError:
+        continue
+    for name in names:
+        file = os.path.join(folder or ".", name)
+        if os.path.isfile(file) and os.access(file, os.X_OK):
+            link = os.path.join(base, "tools" if name in tools else "refused", name)
+            if not os.path.lexists(link):
+                os.symlink(file if name in tools else os.path.join(base, "refuse"), link)
+' "$_base" "$_tools" || { echo "helpers.sh could not list the machine's commands with python3, so no test was run."; exit 1; }
+
+# The stand-ins of gh, curl and npx refuse every call and record it, so that a test shows a call it gave no answer for.
 scenario() {
   _close
   _name="$1"; _problems=""; out=""; status=""
   _count=$((_count + 1))
   T="$_base/$_count"
-  mkdir -p "$T/bin" "$T/work" "$T/tmp"
+  mkdir -p "$T/bin" "$T/work" "$T/tmp" "$T/home"
   : > "$T/calls"
-  export T TMPDIR="$T/tmp" PATH="$T/bin:$_path"
+  # An empty HOME, so that no command reads a real login or key (decisions H698b).
+  export T TMPDIR="$T/tmp" HOME="$T/home" PATH="$T/bin:$_base/tools:$_base/refused"
   cd "$T/work" || exit 1
   local command
   for command in gh curl npx; do
@@ -157,6 +184,20 @@ waiting_on_github() {
   json "$(cat "$T/$file")" "$@"
 }
 export -f waiting_on_github
+
+# real <command>...: lets this scenario run the machine's own command, which is outside the list above (decisions H698a).
+real() {
+  local command found
+  for command in "$@"; do
+    if found=$(PATH="$_path" type -P "$command"); then
+      # Not a link: pnpm's own script finds its files by the folder it was called from.
+      printf '#!/bin/sh\nexec "%s" "$@"\n' "$found" > "$T/bin/$command"
+      chmod +x "$T/bin/$command"
+    else
+      fail "real found no $command on this machine"
+    fi
+  done
+}
 
 run() {
   status=0
