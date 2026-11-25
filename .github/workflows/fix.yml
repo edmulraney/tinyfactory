@@ -19,8 +19,8 @@ env:
   AGENT_MODEL_FALLBACK: ${{ vars.AGENT_MODEL_FALLBACK || 'claude-opus-5-5' }}
   PR: ${{ inputs.pr }}
   OWNER: ${{ github.repository_owner }}
-  # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A475b).
-  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\""}]}]}}'
+  # No background commands in a session with nobody in it (decisions A69f). The hook answers a write to a skill file (decisions A475b, A695a).
+  AGENT_SETTINGS: '{"env":{"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS":"1"},"hooks":{"PermissionRequest":[{"matcher":"Edit|Write","hooks":[{"type":"command","command":"\"$RUNNER_TEMP/factory-scripts/allow-skill-write.sh\" --owner-review \"$RUNNER_TEMP/owner-review.txt\""}]}]}}'
 
 jobs:
   fix:
@@ -53,7 +53,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          "$RUNNER_TEMP/factory-scripts/begin-fix-round.sh" "$PR" "$RUNNER_TEMP/failed-checks.txt" "$OWNER"
+          "$RUNNER_TEMP/factory-scripts/begin-fix-round.sh" "$PR" "$RUNNER_TEMP/failed-checks.txt" "$OWNER" "$RUNNER_TEMP/owner-review.txt"
       # A status that could not be set does not stop the round (decisions A124e).
       - name: Show in the pull request's checks that the round is running
         if: steps.round.outputs.go == 'true'

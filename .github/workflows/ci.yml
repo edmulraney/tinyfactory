@@ -179,11 +179,10 @@ jobs:
       - name: Every acceptance criterion has a test, and research output is as its ticket says
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ github.head_ref }}
         run: |
           issue=$(factory/scripts/linked-issue.sh "$PR")
           if [ -n "$issue" ]; then
-            factory/scripts/check-acceptance.sh "$issue" "$BRANCH"
+            factory/scripts/check-acceptance.sh "$issue"
             # Any ticket that is not research passes (decisions T33c to T33e).
             factory/scripts/check-research.sh "$issue" "$PR"
           else
@@ -219,6 +218,7 @@ jobs:
       run: ${{ steps.needed.outputs.run }}   # `false` when no app code changed (decisions M75a)
       review: ${{ steps.reviewable.outputs.review }}   # `false` for a build's empty first commit alone (decisions A266a)
       users: ${{ steps.users.outputs.count }}   # the accounts in production's database, or nothing when they could not be counted
+      attempt: ${{ github.run_attempt }}   # the attempt whose tests these are, which names their artifact (decisions P703)
     steps:
       # Before any checkout and in no script, as the steps of `checks` that hold the key (decisions M15). Adam judges
       # scale by the number. Here and not in `review`, which may run on the owner's machine (decisions M605a).
@@ -354,7 +354,7 @@ jobs:
         if: always() && steps.redacted.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-${{ github.event.pull_request.head.sha }}
+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ github.run_attempt }}
           # The wildcard keeps test-results/ as the artifact's top folder, which post-screenshots.sh reads.
           path: apps/web/test-results*
           retention-days: 30
@@ -445,7 +445,8 @@ jobs:
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
-          name: playwright-${{ github.event.pull_request.head.sha }}
+          # The attempt `e2e` last ran in, which is an earlier one when this job alone is run again (decisions P703).
+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ needs.e2e.outputs.attempt }}
           path: ${{ runner.temp }}/playwright
       - name: Show the acceptance tests' screenshots on the pull request
         if: steps.screenshots.outcome == 'success'
