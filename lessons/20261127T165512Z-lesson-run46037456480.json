@@ -1,0 +1,63 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 46035662846,
+    "workflow": "review-notes",
+    "event": "schedule",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/46035662846",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 625,
+      "issue": 604,
+      "title": "chore: bring in the factory changes of 22 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": null,
+        "step": "Write the page of the factory's delivery numbers by week",
+        "conclusion": null
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first scheduled run of review-notes.yml after #625 did what #625 claimed: its new `metrics` job ran `metrics.sh` and wrote metrics.md on the sessions branch, so nothing needs changing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "#625 added a second job, `metrics`, to review-notes.yml. The job has `contents: write` and runs `factory/scripts/metrics.sh` to write the weekly delivery numbers to `metrics.md` on the `sessions` branch (H613g). In run 46035662846 both jobs succeeded. `start` took 16 seconds. In `metrics`, the step that ran `metrics.sh` took about 9 seconds and logged `wrote https://github.com/edmulraney/tinyfactory/blob/sessions/metrics.md`, and the page holds week 2026-W47. The Neon usage step was skipped because `NEON_PROJECT_ID` is not set, which is what its `if:` asks for. The facts show the changed step with no job, conclusion or log only because a later change renamed it to \"Write the page of the factory's delivery numbers and the product's usage by week\". The name from #625's diff therefore matched no step in this run. The step itself ran.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/46035662846",
+      "https://github.com/edmulraney/tinyfactory/actions/runs/46035662846/job/140630300332",
+      "https://github.com/edmulraney/tinyfactory/pull/625",
+      "https://github.com/edmulraney/tinyfactory/blob/sessions/metrics.md"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded in about 17 seconds and started no agent session ($0, 0 turns).",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run lost no work, money or time.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
