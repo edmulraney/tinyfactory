@@ -1,0 +1,1592 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "ship-local",
+      "steward",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "ship-local",
+      "steward",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "bca55394-009c-47be-8139-3cbc0d9c068c",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2900.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLTKxNNMawdgmWBjJe",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AW5Y3rXcutHTKNpki571jg",
+          "name": "Bash",
+          "input": {
+            "command": "cat .claude/skills/retro/SKILL.md; echo ----; cat .sessions/facts.json; ls -R .sessions | head -50"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 25482,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 25482
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "aaa9f9a3-3afd-498c-bfcc-34d27172fbbd",
+    "timestamp": "2026-11-27T16:54:21.134Z",
+    "request_id": "req_011ChTnLTBY6acyEsMWTzQJx",
+    "wire_tool_inputs": {
+      "toolu_01AW5Y3rXcutHTKNpki571jg": {
+        "command": "cat .claude/skills/retro/SKILL.md; echo ----; cat .sessions/facts.json; ls -R .sessions | head -50"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1796036400,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.58,
+          "resetsAt": 1796036400,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "a530a85c-b660-4e1d-a994-1dc482b33b85",
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01AW5Y3rXcutHTKNpki571jg",
+          "type": "tool_result",
+          "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it: a check that refused good work is deleted or loosened, never given an exception (`TASTE.md`);\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run, or a request for help\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n----\n{\n  \"run\": 46036747232,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/46036747232\",\n  \"conclusion\": \"success\",\n  \"pr\": 712,\n  \"issue\": 592,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-712/20261127T165003Z-adam-run46036747232.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.3373642,\n      \"turns\": 14,\n      \"seconds\": 35,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-712/20261127T165006Z-ryan-run46036747232.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.33699280000000004,\n      \"turns\": 15,\n      \"seconds\": 31,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.67,\n  \"turns\": 29,\n  \"changed_by\": {\n    \"pr\": 711,\n    \"issue\": 694,\n    \"title\": \"chore: bring in shorter documents and fewer style checks\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": [\n        {\n          \"assumes\": \"Neon's GET …/auth/domains returns `{\\\"domains\\\": []}` for a branch that trusts no address, not a null or missing `domains`.\",\n          \"if_wrong\": \"`jq '.domains[].domain'` fails on a fresh branch. sign-in.sh then stops on every run with \\\"Neon would not show the addresses\\\", and production's address is never trusted.\"\n        },\n        {\n          \"assumes\": \"Neon's POST …/auth/domains accepts `domain` as a full origin with `https://` and `auth_provider`. This matches what vercel.sh stores and the list example in Neon's docs.\",\n          \"if_wrong\": \"Neon refuses the address, or stores it in a different form. Then the read-back match fails and setup stops, so nobody can sign in on production.\"\n        }\n      ]\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"checks\",\n      \"step\": \"Every acceptance criterion has a test, and research output is as its ticket says\",\n      \"conclusion\": \"success\",\n      \"log\": \"ok factory/tests/ship.test.sh\\nfactory tests ok: 1038 passed in 26 files\\nissue=$(factory/scripts/linked-issue.sh \\\"$PR\\\")\\nif [ -n \\\"$issue\\\" ]; then\\n  factory/scripts/check-acceptance.sh \\\"$issue\\\"\\n  # Any ticket that is not research passes (decisions T33c to T33e).\\n  factory/scripts/check-research.sh \\\"$issue\\\" \\\"$PR\\\"\\nelse\\n  echo \\\"This pull request closes no issue; nothing to check.\\\"\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\n  GH_TOKEN: ***\\nIssue #592 has no acceptance criteria to check.\\nIssue #592 is not a research ticket; no research output to check.\\nmain=$(git cat-file -p HEAD | sed -n 's/^parent //p' | head -n 1)\\n[ -n \\\"$main\\\" ]\\necho \\\"$main\\\" > \\\"$RUNNER_TEMP/tested-with-main\\\"\\necho \\\"sha=$main\\\" >> \\\"$GITHUB_OUTPUT\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\nwith:\\n  name: tested-with-main-df3ee0cd480ad13992f5f4e1abdb0237967c62ee\\n  path: /home/runner/work/_temp/tested-with-main\\n  retention-days: 90\\n  overwrite: true\\n  if-no-files-found: warn\\n  compression-level: 6\\n  include-hidden-files: false\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\"\n    },\n    {\n      \"job\": \"e2e\",\n      \"step\": \"Upload screenshots and the test results\",\n      \"conclusion\": \"success\",\n      \"log\": \"https://github.com/edmulraney/tinyfactory/pull/712#issuecomment-7223701796\\nfactory/scripts/redact-secret.sh apps/web/test-results\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  SECRET: \\nwith:\\n  name: playwright-c29b11913cd73f5d85d36faf9e754e073a3a0339-1\\n  path: apps/web/test-results*\\n  retention-days: 30\\n  if-no-files-found: ignore\\n  compression-level: 6\\n  overwrite: false\\n  include-hidden-files: false\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n(node:2223) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\\n(Use `node --trace-deprecation ...` to show where the warning was created)\\nNo files were found with the provided path: apps/web/test-results*. No artifacts will be uploaded.\\nPost job cleanup.\"\n    },\n    {\n      \"job\": \"review\",\n      \"step\": \"Fetch the screenshots the end-to-end tests took\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n.sessions:\napps\nfacts.json\nissue-564\nissue-567\nissue-592\nissue-626\nissue-627\nissue-680\nlessons\nmeasures.jsonl\nmetrics.md\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\npr-655\npr-658\npr-679\npr-685\npr-686\npr-689\npr-693\npr-711\npr-712\ntickets.json\n\n.sessions/apps:\nweb\n\n.sessions/apps/web:\nvercel.json\n\n.sessions/issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n.sessions/issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n.sessions/issue-592:\n20261127T164857Z-fred-run46035702072.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "173d2f75-7834-4409-9190-ebdcc061fe7c",
+    "timestamp": "2026-11-27T16:54:21.482Z",
+    "tool_use_result": {
+      "stdout": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it: a check that refused good work is deleted or loosened, never given an exception (`TASTE.md`);\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run, or a request for help\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n----\n{\n  \"run\": 46036747232,\n  \"workflow\": \"ci\",\n  \"event\": \"pull_request\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/46036747232\",\n  \"conclusion\": \"success\",\n  \"pr\": 712,\n  \"issue\": 592,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [\n    {\n      \"role\": \"adam\",\n      \"file\": \"pr-712/20261127T165003Z-adam-run46036747232.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.3373642,\n      \"turns\": 14,\n      \"seconds\": 35,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    },\n    {\n      \"role\": \"ryan\",\n      \"file\": \"pr-712/20261127T165006Z-ryan-run46036747232.json\",\n      \"model\": \"claude-opus-5-5\",\n      \"cost_usd\": 0.33699280000000004,\n      \"turns\": 15,\n      \"seconds\": 31,\n      \"error\": false,\n      \"terminal_reason\": \"completed\",\n      \"api_error_status\": null,\n      \"api_retries\": 0,\n      \"result\": null\n    }\n  ],\n  \"cost_usd\": 0.67,\n  \"turns\": 29,\n  \"changed_by\": {\n    \"pr\": 711,\n    \"issue\": 694,\n    \"title\": \"chore: bring in shorter documents and fewer style checks\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": [\n        {\n          \"assumes\": \"Neon's GET …/auth/domains returns `{\\\"domains\\\": []}` for a branch that trusts no address, not a null or missing `domains`.\",\n          \"if_wrong\": \"`jq '.domains[].domain'` fails on a fresh branch. sign-in.sh then stops on every run with \\\"Neon would not show the addresses\\\", and production's address is never trusted.\"\n        },\n        {\n          \"assumes\": \"Neon's POST …/auth/domains accepts `domain` as a full origin with `https://` and `auth_provider`. This matches what vercel.sh stores and the list example in Neon's docs.\",\n          \"if_wrong\": \"Neon refuses the address, or stores it in a different form. Then the read-back match fails and setup stops, so nobody can sign in on production.\"\n        }\n      ]\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"checks\",\n      \"step\": \"Every acceptance criterion has a test, and research output is as its ticket says\",\n      \"conclusion\": \"success\",\n      \"log\": \"ok factory/tests/ship.test.sh\\nfactory tests ok: 1038 passed in 26 files\\nissue=$(factory/scripts/linked-issue.sh \\\"$PR\\\")\\nif [ -n \\\"$issue\\\" ]; then\\n  factory/scripts/check-acceptance.sh \\\"$issue\\\"\\n  # Any ticket that is not research passes (decisions T33c to T33e).\\n  factory/scripts/check-research.sh \\\"$issue\\\" \\\"$PR\\\"\\nelse\\n  echo \\\"This pull request closes no issue; nothing to check.\\\"\\nfi\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\n  GH_TOKEN: ***\\nIssue #592 has no acceptance criteria to check.\\nIssue #592 is not a research ticket; no research output to check.\\nmain=$(git cat-file -p HEAD | sed -n 's/^parent //p' | head -n 1)\\n[ -n \\\"$main\\\" ]\\necho \\\"$main\\\" > \\\"$RUNNER_TEMP/tested-with-main\\\"\\necho \\\"sha=$main\\\" >> \\\"$GITHUB_OUTPUT\\\"\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\\nwith:\\n  name: tested-with-main-df3ee0cd480ad13992f5f4e1abdb0237967c62ee\\n  path: /home/runner/work/_temp/tested-with-main\\n  retention-days: 90\\n  overwrite: true\\n  if-no-files-found: warn\\n  compression-level: 6\\n  include-hidden-files: false\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin\"\n    },\n    {\n      \"job\": \"e2e\",\n      \"step\": \"Upload screenshots and the test results\",\n      \"conclusion\": \"success\",\n      \"log\": \"https://github.com/edmulraney/tinyfactory/pull/712#issuecomment-7223701796\\nfactory/scripts/redact-secret.sh apps/web/test-results\\nshell: /usr/bin/bash -e {0}\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n  SECRET: \\nwith:\\n  name: playwright-c29b11913cd73f5d85d36faf9e754e073a3a0339-1\\n  path: apps/web/test-results*\\n  retention-days: 30\\n  if-no-files-found: ignore\\n  compression-level: 6\\n  overwrite: false\\n  include-hidden-files: false\\nenv:\\n  AGENT_MODEL: claude-opus-5-5\\n  AGENT_MODEL_FALLBACK: claude-opus-5-5\\n  PR: 712\\n  AGENT_SETTINGS: {\\\"env\\\":{\\\"CLAUDE_CODE_DISABLE_BACKGROUND_TASKS\\\":\\\"1\\\"}}\\n  DELETE_PEOPLE: do $$\\n(node:2223) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\\n(Use `node --trace-deprecation ...` to show where the warning was created)\\nNo files were found with the provided path: apps/web/test-results*. No artifacts will be uploaded.\\nPost job cleanup.\"\n    },\n    {\n      \"job\": \"review\",\n      \"step\": \"Fetch the screenshots the end-to-end tests took\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n.sessions:\napps\nfacts.json\nissue-564\nissue-567\nissue-592\nissue-626\nissue-627\nissue-680\nlessons\nmeasures.jsonl\nmetrics.md\npr-565\npr-568\npr-586\npr-588\npr-591\npr-594\npr-603\npr-625\npr-639\npr-648\npr-650\npr-651\npr-655\npr-658\npr-679\npr-685\npr-686\npr-689\npr-693\npr-711\npr-712\ntickets.json\n\n.sessions/apps:\nweb\n\n.sessions/apps/web:\nvercel.json\n\n.sessions/issue-564:\n20261120T141920Z-fred-run44752034867.json\n\n.sessions/issue-567:\n20261121T004908Z-fred-run44844260396.json\n\n.sessions/issue-592:\n20261127T164857Z-fred-run46035702072.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01AW5Y3rXcutHTKNpki571jg",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLgqK4tKXB4GYuNjxU",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RfmhFvMEUe2T78M9JeqT5g",
+          "name": "Bash",
+          "input": {
+            "command": "cat .claude/skills/retro/first-run-and-help.md; ls .sessions/lessons | tail -30; ls .sessions/lessons | wc -l"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5174,
+        "cache_read_input_tokens": 25482,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 5174
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "a95354bc-7aee-4266-a65e-9725ec45c39b",
+    "timestamp": "2026-11-27T16:54:23.378Z",
+    "request_id": "req_011ChTnLght13nwLWMyudqXH",
+    "wire_tool_inputs": {
+      "toolu_01RfmhFvMEUe2T78M9JeqT5g": {
+        "command": "cat .claude/skills/retro/first-run-and-help.md; ls .sessions/lessons | tail -30; ls .sessions/lessons | wc -l"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01RfmhFvMEUe2T78M9JeqT5g",
+          "type": "tool_result",
+          "content": "# The retro of a changed workflow's first run, or of a request for help\n\nIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n\n## A changed workflow's first run\n\nIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n\nCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nIn the facts, `ask` holds the comment that asked `@claude` and its link.\n\nThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n20261122T181839Z-lesson-run45054239451.json\n20261122T181848Z-lesson-run45054234586.json\n20261122T181925Z-lesson-run45054245806.json\n20261122T181958Z-lesson-run45054254056.json\n20261122T183129Z-lesson-run45055469382.json\n20261122T183206Z-lesson-run45055478297.json\n20261123T101015Z-lesson-run45153469958.json\n20261123T101016Z-lesson-run45153460798.json\n20261123T101045Z-lesson-run45153487207.json\n20261123T105947Z-lesson-run45160932050.json\n20261123T110138Z-lesson-run45161015456.json\n20261123T122147Z-lesson-run45173360070.json\n20261123T122152Z-lesson-run45173388204.json\n20261123T122252Z-lesson-run45173376081.json\n20261123T123035Z-lesson-run45174787645.json\n20261123T123038Z-lesson-run45174797674.json\n20261123T123043Z-lesson-run45174776105.json\n20261123T123121Z-lesson-run45174818400.json\n20261123T123136Z-lesson-run45174807786.json\n20261125T050351Z-lesson-run45550851664.json\n34",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "592fdf21-409e-426d-876e-0fcf6e7a1e53",
+    "timestamp": "2026-11-27T16:54:23.439Z",
+    "tool_use_result": {
+      "stdout": "# The retro of a changed workflow's first run, or of a request for help\n\nIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n\n## A changed workflow's first run\n\nIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n\nCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nIn the facts, `ask` holds the comment that asked `@claude` and its link.\n\nThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n20261122T181839Z-lesson-run45054239451.json\n20261122T181848Z-lesson-run45054234586.json\n20261122T181925Z-lesson-run45054245806.json\n20261122T181958Z-lesson-run45054254056.json\n20261122T183129Z-lesson-run45055469382.json\n20261122T183206Z-lesson-run45055478297.json\n20261123T101015Z-lesson-run45153469958.json\n20261123T101016Z-lesson-run45153460798.json\n20261123T101045Z-lesson-run45153487207.json\n20261123T105947Z-lesson-run45160932050.json\n20261123T110138Z-lesson-run45161015456.json\n20261123T122147Z-lesson-run45173360070.json\n20261123T122152Z-lesson-run45173388204.json\n20261123T122252Z-lesson-run45173376081.json\n20261123T123035Z-lesson-run45174787645.json\n20261123T123038Z-lesson-run45174797674.json\n20261123T123043Z-lesson-run45174776105.json\n20261123T123121Z-lesson-run45174818400.json\n20261123T123136Z-lesson-run45174807786.json\n20261125T050351Z-lesson-run45550851664.json\n34",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01RfmhFvMEUe2T78M9JeqT5g",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLqCbqvcFMfJLXR7jG",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSwgUKEAgUGAI4AUIIdGhpbmtpbmcSDH05Sl8NtLfQK9BnxRoMkfiZpsNAiZdDF8JsIjBg7nwfEcH1woXFu4MDhKcTU5mqCKi9toLR8C+tamQLTT7pYSVFKW6ArrOnSag8g7Mq3wQ6L4X2al6rF655zrDs0ACMk7Aqfq8HHAbXclc4oLaA4V4BkyMtdkEp+NmWlcW5KPtmHaGZ2dPXSgGVN2Tz3XyKxUBvZ15VNIG8ar6u7bM39GXINXtkUE+dpR9IUBEpTRMhGY/PyoQNEPtulgU7vBoi5vX54JZAzS+AwNSdsrZxwK8RXXGlSKx/2bBT/EchK014SjiNh6Jyo/7aWyComHwqcfi+iTyPUDTN3xQAe5TX/O+FhndJjZaFy9EKpIMdjkFV8bYN2LEbHEVzixlMl/49UDUoE6MZEAx4gIGZMPvpmBeZdCDRSoKiaO2ldfmh5JzTRxTEb1gGVPcw0roMTwoyhP+XUfan2n658ft8IdZzCRiAZrjM1XkLjL1a0cEoVnmV4J3zYYTCxUUnWuznwFCu5arn38PRjED9v8N6S10ZEhF8m8HNPa9/soAt7J1eDMPTdvRM2Tay4YYVFawW1llLaPIW434KSwRCzaYiDlmI+DbcQtbWJvCPi51EqVP0ck3+/8WkApCvYwUBlr0X7Y8fQKVKSq5Y2yM7Aq4yftd5KxWX9ByKlf7lfbD76LGxviQjoxBXNtGwkQi9VUi6eE7YN8MzdAJKGDf6zHLAETiF57WLmSz/t4AOIZOpyW4vJDZ4UcaO2clIS5ZZ63mBmFmRoCmU01/GIpfmflWD9rXmC1oxw+l5JONuylcydrri92Wn0w+BE1YfN1BSXA19fj8sMlPnuhl+ywV8DGasREBacvn3CO43r/0la9+/5MaLqbR/qbWldvyelc2LcWwsBqdoLwlnne7cgZk7+rqh+oQ+GAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1154,
+        "cache_read_input_tokens": 30656,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1154
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "1d546ec4-6844-4189-8ebf-a0f2fcb3bc25",
+    "timestamp": "2026-11-27T16:54:25.174Z",
+    "request_id": "req_011ChTnLq4fnXSAx4reYSAgG",
+    "thinking_duration_ms": 277,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLqCbqvcFMfJLXR7jG",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Su3WfYr1CGANSgS1e3Y9KP",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 711 --name-only 2>&1 | head -50; gh pr diff 711 2>&1 | grep -n \"^diff --git.*workflows\" "
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1154,
+        "cache_read_input_tokens": 30656,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1154
+        },
+        "output_tokens": 3,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "bbda06f3-d478-4a39-9847-b631515357b0",
+    "timestamp": "2026-11-27T16:54:25.640Z",
+    "request_id": "req_011ChTnLq4fnXSAx4reYSAgG",
+    "wire_tool_inputs": {
+      "toolu_01Su3WfYr1CGANSgS1e3Y9KP": {
+        "command": "gh pr diff 711 --name-only 2>&1 | head -50; gh pr diff 711 2>&1 | grep -n \"^diff --git.*workflows\" "
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Su3WfYr1CGANSgS1e3Y9KP",
+          "type": "tool_result",
+          "content": ".claude/skills/bootstrap/scripts/present.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/CLAUDE.md\n.claude/skills/bootstrap/templates/TASTE.md\n.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/README.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/architecture/decisions.md\n.claude/skills/bootstrap/templates/product/decisions.md\n.claude/skills/bootstrap/templates/product/decisions/705.md\n.claude/skills/refine/file.md\n.claude/skills/research/SKILL.md\n.claude/skills/retro/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\n.github/ISSUE_TEMPLATE/bug.md\n.github/ISSUE_TEMPLATE/chore.md\n.github/ISSUE_TEMPLATE/factory.md\n.github/ISSUE_TEMPLATE/initiative.md\n.github/ISSUE_TEMPLATE/research.md\n.github/ISSUE_TEMPLATE/tweak.md\nARCHITECTURE.md\nCLAUDE.md\nTASTE.md\narchitecture/decisions.md\nfactory/README.md\nfactory/decisions.md\nfactory/decisions/170.md\nfactory/decisions/19.md\nfactory/decisions/381.md\nfactory/decisions/47.md\nfactory/decisions/53.md\nfactory/decisions/600.md\nfactory/decisions/607.md\nfactory/decisions/62.md\nfactory/decisions/695.md\nfactory/decisions/696.md\nfactory/decisions/697.md\nfactory/decisions/698.md\nfactory/decisions/699.md\nfactory/decisions/700.md\nfactory/decisions/701.md\nfactory/decisions/702.md\nfactory/decisions/703.md\nfactory/decisions/704.md\nfactory/decisions/705.md\nfactory/decisions/706.md\nfactory/decisions/707.md\nfactory/decisions/708.md\nfactory/decisions/709.md\n3499:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n3543:diff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\n3567:diff --git a/factory/workflows/retro.yml b/factory/workflows/retro.yml",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "4f126bce-6b7d-47e1-8d9c-bb6cdd95c1d8",
+    "timestamp": "2026-11-27T16:54:26.760Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/bootstrap/scripts/present.sh\n.claude/skills/bootstrap/scripts/sign-in.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/CLAUDE.md\n.claude/skills/bootstrap/templates/TASTE.md\n.claude/skills/bootstrap/templates/apps/web/e2e/acceptance/README.md\n.claude/skills/bootstrap/templates/apps/web/eslint.config.mjs\n.claude/skills/bootstrap/templates/architecture/decisions.md\n.claude/skills/bootstrap/templates/product/decisions.md\n.claude/skills/bootstrap/templates/product/decisions/705.md\n.claude/skills/refine/file.md\n.claude/skills/research/SKILL.md\n.claude/skills/retro/SKILL.md\n.claude/skills/review-code/SKILL.md\n.claude/skills/ticket/SKILL.md\n.github/ISSUE_TEMPLATE/bug.md\n.github/ISSUE_TEMPLATE/chore.md\n.github/ISSUE_TEMPLATE/factory.md\n.github/ISSUE_TEMPLATE/initiative.md\n.github/ISSUE_TEMPLATE/research.md\n.github/ISSUE_TEMPLATE/tweak.md\nARCHITECTURE.md\nCLAUDE.md\nTASTE.md\narchitecture/decisions.md\nfactory/README.md\nfactory/decisions.md\nfactory/decisions/170.md\nfactory/decisions/19.md\nfactory/decisions/381.md\nfactory/decisions/47.md\nfactory/decisions/53.md\nfactory/decisions/600.md\nfactory/decisions/607.md\nfactory/decisions/62.md\nfactory/decisions/695.md\nfactory/decisions/696.md\nfactory/decisions/697.md\nfactory/decisions/698.md\nfactory/decisions/699.md\nfactory/decisions/700.md\nfactory/decisions/701.md\nfactory/decisions/702.md\nfactory/decisions/703.md\nfactory/decisions/704.md\nfactory/decisions/705.md\nfactory/decisions/706.md\nfactory/decisions/707.md\nfactory/decisions/708.md\nfactory/decisions/709.md\n3499:diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\n3543:diff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\n3567:diff --git a/factory/workflows/retro.yml b/factory/workflows/retro.yml",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Su3WfYr1CGANSgS1e3Y9KP",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnM5S7DYs5vWyaq7bzt",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PQqBA49T8nakTnxQSkNVGj",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 711 | sed -n 3499,3545p"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1026,
+        "cache_read_input_tokens": 31810,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1026
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "aa4d4203-9909-4201-aecc-9c3f337ed470",
+    "timestamp": "2026-11-27T16:54:28.503Z",
+    "request_id": "req_011ChTnM5GSA4Vb8g98erTCA",
+    "wire_tool_inputs": {
+      "toolu_01PQqBA49T8nakTnxQSkNVGj": {
+        "command": "gh pr diff 711 | sed -n 3499,3545p"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01PQqBA49T8nakTnxQSkNVGj",
+          "type": "tool_result",
+          "content": "diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\nindex 94a4462..db00bc5 100644\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml\n@@ -179,11 +179,10 @@ jobs:\n       - name: Every acceptance criterion has a test, and research output is as its ticket says\n         env:\n           GH_TOKEN: ${{ github.token }}\n-          BRANCH: ${{ github.head_ref }}\n         run: |\n           issue=$(factory/scripts/linked-issue.sh \"$PR\")\n           if [ -n \"$issue\" ]; then\n-            factory/scripts/check-acceptance.sh \"$issue\" \"$BRANCH\"\n+            factory/scripts/check-acceptance.sh \"$issue\"\n             # Any ticket that is not research passes (decisions T33c to T33e).\n             factory/scripts/check-research.sh \"$issue\" \"$PR\"\n           else\n@@ -219,6 +218,7 @@ jobs:\n       run: ${{ steps.needed.outputs.run }}   # `false` when no app code changed (decisions M75a)\n       review: ${{ steps.reviewable.outputs.review }}   # `false` for a build's empty first commit alone (decisions A266a)\n       users: ${{ steps.users.outputs.count }}   # the accounts in production's database, or nothing when they could not be counted\n+      attempt: ${{ github.run_attempt }}   # the attempt whose tests these are, which names their artifact (decisions P703)\n     steps:\n       # Before any checkout and in no script, as the steps of `checks` that hold the key (decisions M15). Adam judges\n       # scale by the number. Here and not in `review`, which may run on the owner's machine (decisions M605a).\n@@ -354,7 +354,7 @@ jobs:\n         if: always() && steps.redacted.outcome == 'success'\n         uses: actions/upload-artifact@v4\n         with:\n-          name: playwright-${{ github.event.pull_request.head.sha }}\n+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ github.run_attempt }}\n           # The wildcard keeps test-results/ as the artifact's top folder, which post-screenshots.sh reads.\n           path: apps/web/test-results*\n           retention-days: 30\n@@ -445,7 +445,8 @@ jobs:\n         continue-on-error: true\n         uses: actions/download-artifact@v4\n         with:\n-          name: playwright-${{ github.event.pull_request.head.sha }}\n+          # The attempt `e2e` last ran in, which is an earlier one when this job alone is run again (decisions P703).\n+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ needs.e2e.outputs.attempt }}\n           path: ${{ runner.temp }}/playwright\n       - name: Show the acceptance tests' screenshots on the pull request\n         if: steps.screenshots.outcome == 'success'\ndiff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\nindex 67ce5bc..c6149ab 100644\n--- a/factory/workflows/fix.yml",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "5e416993-5bc9-4c2b-bf6f-8d3038c8e4a9",
+    "timestamp": "2026-11-27T16:54:29.153Z",
+    "tool_use_result": {
+      "stdout": "diff --git a/factory/workflows/ci.yml b/factory/workflows/ci.yml\nindex 94a4462..db00bc5 100644\n--- a/factory/workflows/ci.yml\n+++ b/factory/workflows/ci.yml\n@@ -179,11 +179,10 @@ jobs:\n       - name: Every acceptance criterion has a test, and research output is as its ticket says\n         env:\n           GH_TOKEN: ${{ github.token }}\n-          BRANCH: ${{ github.head_ref }}\n         run: |\n           issue=$(factory/scripts/linked-issue.sh \"$PR\")\n           if [ -n \"$issue\" ]; then\n-            factory/scripts/check-acceptance.sh \"$issue\" \"$BRANCH\"\n+            factory/scripts/check-acceptance.sh \"$issue\"\n             # Any ticket that is not research passes (decisions T33c to T33e).\n             factory/scripts/check-research.sh \"$issue\" \"$PR\"\n           else\n@@ -219,6 +218,7 @@ jobs:\n       run: ${{ steps.needed.outputs.run }}   # `false` when no app code changed (decisions M75a)\n       review: ${{ steps.reviewable.outputs.review }}   # `false` for a build's empty first commit alone (decisions A266a)\n       users: ${{ steps.users.outputs.count }}   # the accounts in production's database, or nothing when they could not be counted\n+      attempt: ${{ github.run_attempt }}   # the attempt whose tests these are, which names their artifact (decisions P703)\n     steps:\n       # Before any checkout and in no script, as the steps of `checks` that hold the key (decisions M15). Adam judges\n       # scale by the number. Here and not in `review`, which may run on the owner's machine (decisions M605a).\n@@ -354,7 +354,7 @@ jobs:\n         if: always() && steps.redacted.outcome == 'success'\n         uses: actions/upload-artifact@v4\n         with:\n-          name: playwright-${{ github.event.pull_request.head.sha }}\n+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ github.run_attempt }}\n           # The wildcard keeps test-results/ as the artifact's top folder, which post-screenshots.sh reads.\n           path: apps/web/test-results*\n           retention-days: 30\n@@ -445,7 +445,8 @@ jobs:\n         continue-on-error: true\n         uses: actions/download-artifact@v4\n         with:\n-          name: playwright-${{ github.event.pull_request.head.sha }}\n+          # The attempt `e2e` last ran in, which is an earlier one when this job alone is run again (decisions P703).\n+          name: playwright-${{ github.event.pull_request.head.sha }}-${{ needs.e2e.outputs.attempt }}\n           path: ${{ runner.temp }}/playwright\n       - name: Show the acceptance tests' screenshots on the pull request\n         if: steps.screenshots.outcome == 'success'\ndiff --git a/factory/workflows/fix.yml b/factory/workflows/fix.yml\nindex 67ce5bc..c6149ab 100644\n--- a/factory/workflows/fix.yml",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01PQqBA49T8nakTnxQSkNVGj",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "af7df932-c687-4977-b9c2-a8c7ddf12e1e"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 284,
+    "estimated_tokens_delta": 234,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "3409e741-3baf-4465-814e-2a090375957f"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMFrBBEyDRWG4zcRka",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS5ggKEAgUGAI4AUIIdGhpbmtpbmcSDMWh64vQU+WXgfEo9hoM7PLosCCZnQXI6J+cIjCESFny4GcVbOZMLF3XrJKphZtIMIuoQcw0BEGlO3h0UX2P9faBr1jrp/DW8v4Cfpgqgwg9Hsijp8ffsra6XB7gXxTEcm2jTrj8GXZ7f0YgBKbZcMHLPebsoMm80lJq/PxnsaMsvaBbVwX3FvLxCRo7f42+1JAl5zWIGHfM4PdLHJTjGbEBWFK6Cpn/UhnGf/2yiX3CszWDhhqMEYaocFVGfKA/6dEX9XkWzCVyZBkH7/kujjryE3h8fuUCjNxRje8n/DbHJF6Yj0Jtg49DGr0nTF7XOq6nK2qbcScUuPavMkojN3khyaEJ9KgCgQwOq4NNJ3GTfxGOYeHLmChM1URV2U9D5MIEG5R8tMz8EXruY/1fep092GIycmMo3KcPtG9PP5jKZ7Z1JQ1QVab9ngl1UF9r1yYBIrDstiX5de3NNmvFATf/iM4AA+liJFzWepGsH9PhvNbsMA7o/WR8tYGT9HywnUZbzauy3I0th39kq4XpyoR4MMhL9vrAB51+Z6RLE9JLGftwQw4Bj9oaUIzqCaYDsbh2EB5P9nFVVKnkC2UzNPohsaTCm6Qwr5I7Zhcn9w5gWpPK0s3xwm7eojFpeh4evYbXJqhOFzzbEFv+t+wMD9cXO8xLqk23uZ0XIQo5Q7D329QFLnAhblKk3QsobUMIUG8VVxZ0iCvN7CKpJTMsrrEv56pzM++N3jNgI2bwOfuNNeG8HSTPEMRlr21mvcfyDjIvxZoiNkHySc5/jlgDhjnRpVR7WLDnKp/lG8I+oVVlMpP0cyoR7A/FBSEczFUjbPLwmb4sc99BgHEgHZDb8zkHeU2rUb0H3Hj/JQRmX0GmJhi/y/43w51pqEYSK+hiIO6e/W00jLS6rxhx+tnyGH24Mx51yVvrcUbEJ1J8Bzte+UceZL416z0cAea+og7t/pb5ua21sJtONu6Jf9nH0A0BQt1eK/8z0pPPkD9jZzvqaMC2mmUm2ItDhDXebUQXT5H0YesAcpNZuvF51COvXrkfLJbJ1aIa+7escFY7xe0VvTGm7mZg6O5MxaqlPCTslaSxeFHta1dfmELuoSgUw8mKP32VOCJSMhELeSiBbguhrSodyr2cPO/OeCDpgK46aiysQWrdX938DkROJL7cIFoiv1UQbIyN54uj4rTdyuD6uECLKZ4zDpJ1y27JDV8vbf60oYd3Bu13Lr67Pb9FbeOkXKtOxQG+1hiiDt7Jd8XJglPrScXAii5H53bjG14tdEu2PSIQ3XpPps0TwzmbB7uEa5a9OpKLm87rLc0cNJrG1bW38LaRu9r3baFkJVuNOf1Org2paaUYr5xpfinUXRVWfbfENL7/iHXXLi8p53M/MSVvvHbDBHoSC6mHRAYJEK5d+RUKh9Et3laxo5o2EV4+2FxmJPKkXq0m9wP9O6/Y83QT5iYgvpYxbLCz41KqAsbFGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1172,
+        "cache_read_input_tokens": 32836,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1172
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "fc2ac923-7768-4707-b67c-ad7d10a13226",
+    "timestamp": "2026-11-27T16:54:33.727Z",
+    "request_id": "req_011ChTnMFVbDRmbqMMiYhhXL",
+    "thinking_duration_ms": 965,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMFrBBEyDRWG4zcRka",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_018SBtdLGDe6FZyybvJtQDVL",
+          "name": "Bash",
+          "input": {
+            "command": "sed -n 425,460p factory/workflows/ci.yml; gh run view 46036747232 --json jobs --jq '.jobs[]|{name,conclusion}'"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1172,
+        "cache_read_input_tokens": 32836,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1172
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "6f52b06a-548f-43fe-82b5-6cc8b16dc479",
+    "timestamp": "2026-11-27T16:54:34.381Z",
+    "request_id": "req_011ChTnMFVbDRmbqMMiYhhXL",
+    "wire_tool_inputs": {
+      "toolu_018SBtdLGDe6FZyybvJtQDVL": {
+        "command": "sed -n 425,460p factory/workflows/ci.yml; gh run view 46036747232 --json jobs --jq '.jobs[]|{name,conclusion}'"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_018SBtdLGDe6FZyybvJtQDVL",
+          "type": "tool_result",
+          "content": "      pull-requests: write\n      issues: write   # post-verdict.sh keeps the review's notes in a ticket (decisions A241e)\n      actions: read   # to read when the job started, once it is cancelled\n    outputs:\n      cut-short: ${{ steps.limit.outputs.held || steps.verdicts.outputs.cut-short }}   # held, or a review ended with no verdict and none failed (decisions A69e)\n    steps:\n      # No session reads what an earlier one left in the home folder (decisions A426c).\n      - name: Give the job a home folder of its own on the owner's runner\n        if: vars.AGENT_RUNNER\n        run: mkdir -p \"$RUNNER_TEMP/home\" && echo \"HOME=$RUNNER_TEMP/home\" >> \"$GITHUB_ENV\"\n      # The base's files, and none of the pull request's: a session starts here (decisions A427e).\n      - uses: actions/checkout@v4\n        with:\n          ref: ${{ github.base_ref }}\n          fetch-depth: 0\n          persist-credentials: false   # a session reads the checkout's files, so no token is left in them (decisions A541d)\n      # In this job and not in `e2e`, and neither step may fail it (decisions P22, P24).\n      - name: Fetch the screenshots the end-to-end tests took\n        id: screenshots\n        if: needs.e2e.outputs.run != 'false'   # tests that did not run took none\n        continue-on-error: true\n        uses: actions/download-artifact@v4\n        with:\n          # The attempt `e2e` last ran in, which is an earlier one when this job alone is run again (decisions P703).\n          name: playwright-${{ github.event.pull_request.head.sha }}-${{ needs.e2e.outputs.attempt }}\n          path: ${{ runner.temp }}/playwright\n      - name: Show the acceptance tests' screenshots on the pull request\n        if: steps.screenshots.outcome == 'success'\n        continue-on-error: true\n        env:\n          GH_TOKEN: ${{ github.token }}\n          HEAD_SHA: ${{ github.event.pull_request.head.sha }}\n        run: factory/scripts/post-screenshots.sh \"$PR\" \"$HEAD_SHA\" \"$RUNNER_TEMP/playwright\"\n      # If it fails, no pass is carried and review.sh says that each review was not finished.\n      - name: Fetch the pull request's commit, which a checkout of the base lacks\n        continue-on-error: true\n{\"conclusion\":\"success\",\"name\":\"checks\"}\n{\"conclusion\":\"success\",\"name\":\"e2e\"}\n{\"conclusion\":\"success\",\"name\":\"review\"}\n{\"conclusion\":\"skipped\",\"name\":\"delete-preview\"}\n{\"conclusion\":\"success\",\"name\":\"merge\"}\n{\"conclusion\":\"skipped\",\"name\":\"start-fix\"}",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "32b76e55-8857-4b28-aacc-2cf5d38a4c98",
+    "timestamp": "2026-11-27T16:54:35.367Z",
+    "tool_use_result": {
+      "stdout": "      pull-requests: write\n      issues: write   # post-verdict.sh keeps the review's notes in a ticket (decisions A241e)\n      actions: read   # to read when the job started, once it is cancelled\n    outputs:\n      cut-short: ${{ steps.limit.outputs.held || steps.verdicts.outputs.cut-short }}   # held, or a review ended with no verdict and none failed (decisions A69e)\n    steps:\n      # No session reads what an earlier one left in the home folder (decisions A426c).\n      - name: Give the job a home folder of its own on the owner's runner\n        if: vars.AGENT_RUNNER\n        run: mkdir -p \"$RUNNER_TEMP/home\" && echo \"HOME=$RUNNER_TEMP/home\" >> \"$GITHUB_ENV\"\n      # The base's files, and none of the pull request's: a session starts here (decisions A427e).\n      - uses: actions/checkout@v4\n        with:\n          ref: ${{ github.base_ref }}\n          fetch-depth: 0\n          persist-credentials: false   # a session reads the checkout's files, so no token is left in them (decisions A541d)\n      # In this job and not in `e2e`, and neither step may fail it (decisions P22, P24).\n      - name: Fetch the screenshots the end-to-end tests took\n        id: screenshots\n        if: needs.e2e.outputs.run != 'false'   # tests that did not run took none\n        continue-on-error: true\n        uses: actions/download-artifact@v4\n        with:\n          # The attempt `e2e` last ran in, which is an earlier one when this job alone is run again (decisions P703).\n          name: playwright-${{ github.event.pull_request.head.sha }}-${{ needs.e2e.outputs.attempt }}\n          path: ${{ runner.temp }}/playwright\n      - name: Show the acceptance tests' screenshots on the pull request\n        if: steps.screenshots.outcome == 'success'\n        continue-on-error: true\n        env:\n          GH_TOKEN: ${{ github.token }}\n          HEAD_SHA: ${{ github.event.pull_request.head.sha }}\n        run: factory/scripts/post-screenshots.sh \"$PR\" \"$HEAD_SHA\" \"$RUNNER_TEMP/playwright\"\n      # If it fails, no pass is carried and review.sh says that each review was not finished.\n      - name: Fetch the pull request's commit, which a checkout of the base lacks\n        continue-on-error: true\n{\"conclusion\":\"success\",\"name\":\"checks\"}\n{\"conclusion\":\"success\",\"name\":\"e2e\"}\n{\"conclusion\":\"success\",\"name\":\"review\"}\n{\"conclusion\":\"skipped\",\"name\":\"delete-preview\"}\n{\"conclusion\":\"success\",\"name\":\"merge\"}\n{\"conclusion\":\"skipped\",\"name\":\"start-fix\"}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_018SBtdLGDe6FZyybvJtQDVL",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "262f277a-0241-4cfd-bda8-997f72a170cb"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 100,
+    "estimated_tokens_delta": 50,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "36ac22cf-2bb4-47b9-81f2-c36ed39b1f6e"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 312,
+    "estimated_tokens_delta": 212,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "05001d48-9849-4f5c-b754-ba638d16df0e"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMiBx89KcLvgzHPuy2",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS1gkKEAgUGAI4AUIIdGhpbmtpbmcSDMVy2z1FcUjJZ6f8shoMSaQQyyPixkiMRRu3IjB6dW5jLLsN2AetPPDMqM5SrHoal6tob2yADt8idegOMl6RJpZm7EoTHJaGmSL3SA8q8win5JlpGSwxpI0b6ODr1kBqEmYSrkxB2YyTdXEhl1wHu2xfQJ6rbnIsRnQEO3TU9CXm7Add/vVmOZqLDWAoWuQaqtc1cJrisg87E+SgoJAHQpP3T0eas4YCX4Zh9f4NdVr/t/5cT3WBcRFD+wEWSvugUf3yAuAOkyQ1wwISXJXIpsiiinDiZ92BZhrTGftudhwSmoihsuRuufMqKP3Rvi7zAYSZYYTjZJATl198qSQM9v+dMB5hLw0i5bqps21OXy1Fn6pjb046SIxLIszNn1reeCh+Un7vsn30grN/95OwXpErexQUDJQQJShttPAsU1UMT25A6lNMQrPCu9m9Ca8oFA3y84vBs8rlH5hXnK/v7m1vnU+Z3eLWMdibD5LXAGdA6fgvvK82T6LtTaWdYb4BAcgVX+WbltZy03qqGpclB8yWFCWVq7WidtEpbl2e4xmlvgBR/E3mR8MFBWlFxnB5IatXzqWKQPjnZxuFn8jgpowLlg79IhahoQxiex23m/Lwbl2ArfbeRk3hp/sazgLBEy79JWhcxR5A1pyein7pbhfNJluOnzCVAjgFdxNi41OII0R5/im/6Z9a5q9RyR50078oyebLRJ/btnwegbDfENAhx6CoROm0xxdiwZkorglAFmsxAyKrX8fyyBCF6TpCnJ1//Fz30PP/WVCuES2ltBSnxkj2uZcpahU4EafWUJuAX9vUilftXVfyEkktvZM+20CyLKr5tEOViTtAvZznrfdUUrR2wxfnbY6oykC3f1IpEzY+D21WwZbfyeeiplYAB82RNjhjdk0yQi5zS7QBW2MK7tJ9cwynnwRftZCRJnxNqehQrSvwO4PhboU+oCJhTtp/FdeXduJT05d8ChVihvmbYFZE6V41JxJu0kNjnbQaiIqXiG6X6oUNleVvXHgHpC41KtD4OOx5O3RSLGd+jfShODrsHubjPtOPrdqebzqpOXDuO9JlualLYbLNwZH/ArICa7F+LFUQeVxdgnMjiLdj57JK2uTU5Glbcnjnl3iPX96fE6jfsBYDdEUa9TyUSaCZzJjNTuh/W7OmQYznAfKvHse7dgMERy/9OGmtiWPJzrA7jcyOMjkZdv6jPNq+UjvYgHIDaxjAwlZ7pKxQqfuOMb0ojmMjdBxCFDTuKscqgb85/7eQ8LlJKwFayEH7LZTZHnIdDuuVbO1iuyXSjZhSCBzbguYH0aNixp7xTTOVhtW9M76PT+NFOgoeHHf5Jp+1XKGtzKZijGRwD583MsSS1bZby9sS2Hy79i651oLLofChkfEJc7v7f4Fdo9WdkKvnzew9awzDJZzN3fRYdg4JmbVFAamUE8MoFpgVqg3rgIXEVXBKFDhG5l+y6Xjt/qOUUH69uXOwj4VcOdZirLU5Zccaws8mU34s2Htg61lPtNn/Rpnt3la/9xspHpsnAcJN0AA70bEOmvmjNKxcJjnKCq5IqOa//FT5PMGq+DSGPcKvqQc615gj7q5mLlNXjdDnWxZTIyJR07izneWZ7Lv3DRgB"
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1224,
+        "cache_read_input_tokens": 34008,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1224
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "57ac221d-0203-4a18-907f-3f9f98077a88",
+    "timestamp": "2026-11-27T16:54:38.779Z",
+    "request_id": "req_011ChTnMi41ndTuSsn4C4Her",
+    "thinking_duration_ms": 1827,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMiBx89KcLvgzHPuy2",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Run 46036747232 did what PR #711 claimed for the changed steps it reached; the step that downloads the screenshots was skipped. Checking earlier lessons for repeats now."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1224,
+        "cache_read_input_tokens": 34008,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1224
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "4b115a68-14b3-43c5-b4fa-631bb66855e1",
+    "timestamp": "2026-11-27T16:54:38.781Z",
+    "request_id": "req_011ChTnMi41ndTuSsn4C4Her"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMiBx89KcLvgzHPuy2",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TC6r5L1phAgnWgf99SNVMJ",
+          "name": "Bash",
+          "input": {
+            "command": "grep -l -i \"neon\" .sessions/lessons/*.json; grep -l \"first run\\|first-run\\|changed_by\" .sessions/lessons/*.json | head"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1224,
+        "cache_read_input_tokens": 34008,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1224
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "493241c3-dcac-4d49-9aee-1409d6cf9d3d",
+    "timestamp": "2026-11-27T16:54:39.384Z",
+    "request_id": "req_011ChTnMi41ndTuSsn4C4Her",
+    "wire_tool_inputs": {
+      "toolu_01TC6r5L1phAgnWgf99SNVMJ": {
+        "command": "grep -l -i \"neon\" .sessions/lessons/*.json; grep -l \"first run\\|first-run\\|changed_by\" .sessions/lessons/*.json | head"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01TC6r5L1phAgnWgf99SNVMJ",
+          "type": "tool_result",
+          "content": ".sessions/lessons/20261122T002807Z-lesson-run44966640304.json\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json\n.sessions/lessons/20261122T175949Z-lesson-run45052442857.json\n.sessions/lessons/20261122T180049Z-lesson-run45052426449.json\n.sessions/lessons/20261122T183206Z-lesson-run45055478297.json\n.sessions/lessons/20261123T122147Z-lesson-run45173360070.json\n.sessions/lessons/20261125T050351Z-lesson-run45550851664.json\n.sessions/lessons/20261121T115710Z-lesson-run44901406884.json\n.sessions/lessons/20261121T115710Z-lesson-run44901415445.json\n.sessions/lessons/20261121T115715Z-lesson-run44901421212.json\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json\n.sessions/lessons/20261121T192953Z-lesson-run44941119423.json\n.sessions/lessons/20261121T193001Z-lesson-run44941126149.json\n.sessions/lessons/20261121T213812Z-lesson-run44952433006.json\n.sessions/lessons/20261121T213820Z-lesson-run44952439090.json\n.sessions/lessons/20261122T002807Z-lesson-run44966640304.json\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "f13db529-397f-4d42-9600-30034b8d2f45",
+    "timestamp": "2026-11-27T16:54:39.437Z",
+    "tool_use_result": {
+      "stdout": ".sessions/lessons/20261122T002807Z-lesson-run44966640304.json\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json\n.sessions/lessons/20261122T175949Z-lesson-run45052442857.json\n.sessions/lessons/20261122T180049Z-lesson-run45052426449.json\n.sessions/lessons/20261122T183206Z-lesson-run45055478297.json\n.sessions/lessons/20261123T122147Z-lesson-run45173360070.json\n.sessions/lessons/20261125T050351Z-lesson-run45550851664.json\n.sessions/lessons/20261121T115710Z-lesson-run44901406884.json\n.sessions/lessons/20261121T115710Z-lesson-run44901415445.json\n.sessions/lessons/20261121T115715Z-lesson-run44901421212.json\n.sessions/lessons/20261121T115720Z-lesson-run44901411090.json\n.sessions/lessons/20261121T192953Z-lesson-run44941119423.json\n.sessions/lessons/20261121T193001Z-lesson-run44941126149.json\n.sessions/lessons/20261121T213812Z-lesson-run44952433006.json\n.sessions/lessons/20261121T213820Z-lesson-run44952439090.json\n.sessions/lessons/20261122T002807Z-lesson-run44966640304.json\n.sessions/lessons/20261122T100955Z-lesson-run45010965977.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01TC6r5L1phAgnWgf99SNVMJ",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "967195e4-7ae6-4cf9-9044-f15df9c3c0ff"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 251,
+    "estimated_tokens_delta": 201,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "c3747178-c1be-448e-afca-a5a89f78d398"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnN1bww7HQdAfyHqmPJ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQS4gcKEAgUGAI4AUIIdGhpbmtpbmcSDDjNrnDu91rcNS0CRRoMfwzizaoCPYv6TR+vIjCEdrvoTqpEjR3+/MaU3rzUQlqCK3eWDWH5SmaJKsGnsd+T9hbtn1QkyeMp0R2fOQQq/wZIBVH+KGAg1EKBlrCS/AAS443E8w/HCMAg9pKak2/em2h4vZzOEp3RKH2EpjkRkrO3grATy3AbCDHz21ezaYKE6Ev6zqzGjwk6HXBkTd21KmbXuu4S/3fZ+jXtsU/pSdcMXco4JmwAoCxTiPrp6l7wGNxrTfRVTJRMioIboSPw2T65MBK+EU9gC+ywZgHl2ZZ2oTRtKNlFopAfX9lULuAfSYcnpgexP9BvemSHIkrYqZK9mihlfVEpCC7NM8tm8rtvlaaiXutqqYz9qKdbKd8IyY2HcGhvPvkO/XBGguADjJCHKTcRoTzaPJic13Rrpwb1KTA3IG5aCS1bs1Hq73ZlYZIAxe+U93E6SZWj443KEPLBHz/L8qOFUJUH3N/WyGiOphCBn1DS2RhLZ/9L2QXWsoRr60LaVmjwe+EVoKkTeHKq59Aw2ycrrtlIZFkQ62MtAoFOTmhKEFxjIuFlwwicSHz5aY1K00ErhUSCTlghpA+ILLSBGuYtwxYyA8MAtrnHdcy53f1fZuDiqTDO5wdpTGkvoeLuNY+ErHYikMAuAvlphCc7qP8+7VzMgkS9ownx3maKnZHdXvDEaN1IRj/Y4t49G5NZI5rbtCfsP/qfUmfa3vR+f4T3hwAOK+grRoxn4a+B6QT1aX+1SS8vK7UCJL9OrEU2KYt6zcFZFyx7zwQLhLhDni0AciURVocvwKqGPWzo8quWyh7ebNaeeXihHsb8I9kWQ9kXbq7UGi5ZMjXUvVlbUIWhqCqu1DDXFEK+mjY/uwLd4SvU76Gl21yfHhn2UkEsbpRKh3eY8Fmy4b66KiBX8BjJiDCZZOuExwymjtCrzL1326yYLziBvVraOyG3cT8r6HcNbAM0k+UxZj+t6jgMLV5/JkzE0zRTel0/DEbBrj77l2x8tLRAVx3U+E0fet6R8jeCDHai33ZRUZGrlD2M05UXx8kbFFKOIT1AQ8BWxgV8s/de8RejtbW3PvVerlCtT+fG+TwKZ8fyK2rWZDgTpwlbWTstTpRUdv8BJAx+C0i6ld+do48TMZexviGmjy2/mV08P0EbQd4sYnlQtc0MkxXC5MjiI/dEal52fco7cuUZWICRb7JKIQ7rCuwUdYoMSLlCIsjTEvZbDqoUPkjaJ4ZneGeZk0+IuyaRtyBprtzL0+zHaUCUwDFAJuK5v62WgmDKXV/fB/PAGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 835,
+        "cache_read_input_tokens": 35232,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 835
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "ca4fb014-a488-4582-9dd1-c396088b025d",
+    "timestamp": "2026-11-27T16:54:41.429Z",
+    "request_id": "req_011ChTnN1TXFU516nxPN9EZe",
+    "thinking_duration_ms": 450,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnN1bww7HQdAfyHqmPJ",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg",
+          "name": "Bash",
+          "input": {
+            "command": "for f in .sessions/lessons/20261125T050351Z-lesson-run45550851664.json .sessions/lessons/20261123T122147Z-lesson-run45173360070.json; do jq -c '{summary,cause,propose,title,held_by}' $f; done; jq -r '.[]|\"\\(.number) \\(.title)\"' .sessions/tickets.json 2>/dev/null | head -40"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 835,
+        "cache_read_input_tokens": 35232,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 835
+        },
+        "output_tokens": 8,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "31b0ef8f-9ba8-4340-8a21-f0fa1a38292a",
+    "timestamp": "2026-11-27T16:54:42.521Z",
+    "request_id": "req_011ChTnN1TXFU516nxPN9EZe",
+    "wire_tool_inputs": {
+      "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg": {
+        "command": "for f in .sessions/lessons/20261125T050351Z-lesson-run45550851664.json .sessions/lessons/20261123T122147Z-lesson-run45173360070.json; do jq -c '{summary,cause,propose,title,held_by}' $f; done; jq -r '.[]|\"\\(.number) \\(.title)\"' .sessions/tickets.json 2>/dev/null | head -40"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg",
+    "decision_reason_type": "other",
+    "decision_reason": "A variable in this command can't be checked before it runs",
+    "message": "A variable in this command can't be checked before it runs",
+    "uuid": "5b601744-f03d-48aa-94fe-acf29d28ce01",
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "A variable in this command can't be checked before it runs",
+          "is_error": true,
+          "tool_use_id": "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "a14d8da9-90ea-4398-a4b6-561d6639cd88",
+    "timestamp": "2026-11-27T16:54:42.532Z",
+    "tool_use_result": "Error: A variable in this command can't be checked before it runs",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNEsfe81u2YMU1JqWx",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01NL3tnLC2XRnGY4mP9Z7uQ4",
+          "name": "Bash",
+          "input": {
+            "command": "jq -c '{summary,cause,propose,title,held_by}' .sessions/lessons/20261125T050351Z-lesson-run45550851664.json .sessions/lessons/20261123T122147Z-lesson-run45173360070.json; jq -r '.[]|\"\\(.number) \\(.title)\"' .sessions/tickets.json | head -40"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 290,
+        "cache_read_input_tokens": 36067,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 290
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "d6d0200c-787d-4544-90d1-2e1b3c465a77",
+    "timestamp": "2026-11-27T16:54:44.719Z",
+    "request_id": "req_011ChTnNEhzjRqUYyrMjg2NE",
+    "wire_tool_inputs": {
+      "toolu_01NL3tnLC2XRnGY4mP9Z7uQ4": {
+        "command": "jq -c '{summary,cause,propose,title,held_by}' .sessions/lessons/20261125T050351Z-lesson-run45550851664.json .sessions/lessons/20261123T122147Z-lesson-run45173360070.json; jq -r '.[]|\"\\(.number) \\(.title)\"' .sessions/tickets.json | head -40"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01NL3tnLC2XRnGY4mP9Z7uQ4",
+          "type": "tool_result",
+          "content": "{\"summary\":null,\"cause\":null,\"propose\":null,\"title\":null,\"held_by\":null}\n{\"summary\":null,\"cause\":null,\"propose\":null,\"title\":null,\"held_by\":null}\n605 Give Peta and Adam the product's current state to judge by\n606 Have Peta map an idea's journey before she slices it\n607 Post each criterion's screenshot at mobile and desktop width\n608 Apply the review notes of week 47\n609 Have Ryan fail a hand step that code could do\n610 Have Peta say whether an idea should be built\n611 Take the ready label on an idea as the owner's go\n612 Give each pull request a budget of minutes and cost\n613 Chart the factory's delivery numbers over time\n614 Fail lint on a product's name in a file every project gets\n615 Fail a pull request that leaves a document stale\n616 Take design practices for Dara from published skills\n617 Take engineering practices from published agent skills\n618 Decide whether a project builds its interface with ui-sdk\n619 Decide how deepsec scans a project for security faults\n620 Stop two runs filing the same ticket at once\n621 Driving the backlog from 22 November 2026\n622 Wait for a ticket that a build finds it needs\n623 Warn the owner before a queue outruns the budget\n624 Report each failed run once in the watch\n629 Keep the owner's approval through a conflict fix round\n630 Name a countable metric in every initiative\n631 Measure each shipped initiative every week\n632 Make the factory's tests pass on a Mac\n633 Cut `DESIGN.md` to budget\n634 Have Peta correct a criterion she finds wrong\n635 Read usage counts with the database key\n636 Give a new project the recording of what users do\n637 Pin the checksum of the package manager\n638 Fix a new project failing lint on a missing package\n640 Keep the end-to-end job inside its time limit\n641 Fix the weekly measure's four faults found on review\n643 Remove the parsed metric format and its weekly verdict\n644 Switch on Vercel's analytics for a new project\n645 Have Adam ask whether a smaller standard way exists\n646 Store no email address in a new project's usage events\n647 Have Ryan fail personal data a change does not need\n649 Record why new projects pin the shadcn lint package\n653 Read no stranger's issue titles in any agent's list\n654 Keep strangers' text out of the mention agent's tools",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "608db330-8ab2-430a-8d29-0e1dc0beaa76",
+    "timestamp": "2026-11-27T16:54:44.772Z",
+    "tool_use_result": {
+      "stdout": "{\"summary\":null,\"cause\":null,\"propose\":null,\"title\":null,\"held_by\":null}\n{\"summary\":null,\"cause\":null,\"propose\":null,\"title\":null,\"held_by\":null}\n605 Give Peta and Adam the product's current state to judge by\n606 Have Peta map an idea's journey before she slices it\n607 Post each criterion's screenshot at mobile and desktop width\n608 Apply the review notes of week 47\n609 Have Ryan fail a hand step that code could do\n610 Have Peta say whether an idea should be built\n611 Take the ready label on an idea as the owner's go\n612 Give each pull request a budget of minutes and cost\n613 Chart the factory's delivery numbers over time\n614 Fail lint on a product's name in a file every project gets\n615 Fail a pull request that leaves a document stale\n616 Take design practices for Dara from published skills\n617 Take engineering practices from published agent skills\n618 Decide whether a project builds its interface with ui-sdk\n619 Decide how deepsec scans a project for security faults\n620 Stop two runs filing the same ticket at once\n621 Driving the backlog from 22 November 2026\n622 Wait for a ticket that a build finds it needs\n623 Warn the owner before a queue outruns the budget\n624 Report each failed run once in the watch\n629 Keep the owner's approval through a conflict fix round\n630 Name a countable metric in every initiative\n631 Measure each shipped initiative every week\n632 Make the factory's tests pass on a Mac\n633 Cut `DESIGN.md` to budget\n634 Have Peta correct a criterion she finds wrong\n635 Read usage counts with the database key\n636 Give a new project the recording of what users do\n637 Pin the checksum of the package manager\n638 Fix a new project failing lint on a missing package\n640 Keep the end-to-end job inside its time limit\n641 Fix the weekly measure's four faults found on review\n643 Remove the parsed metric format and its weekly verdict\n644 Switch on Vercel's analytics for a new project\n645 Have Adam ask whether a smaller standard way exists\n646 Store no email address in a new project's usage events\n647 Have Ryan fail personal data a change does not need\n649 Record why new projects pin the shadcn lint package\n653 Read no stranger's issue titles in any agent's list\n654 Keep strangers' text out of the mention agent's tools",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01NL3tnLC2XRnGY4mP9Z7uQ4",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "e9f0441a-4425-4289-84c5-450b60571f5a"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 243,
+    "estimated_tokens_delta": 193,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "1cd940be-bab0-445c-8ffb-d8812289a5c8"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNQNfhrCGc3P6AStLy",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSwAcKEAgUGAI4AUIIdGhpbmtpbmcSDKjhDUYkup8sLXQRWhoMtNJkZB9WIVkcoRFGIjD5vJLJQ2dYdOysiIk2pITEdYfh9+d1CWnMY/IAxW816dBkZyUDTPAMJLCJIJrM7z0q3QYFmClV26c56GsFfJMVuZDqjFljzUu9PK3u34VoJKC1GPuCrjjDcMn1GV4C+Gz+45hgn8Fxwvqb51/WYMI+u2dd/P5aP06JhROoODL4ZcXKkuBgx1R18zphlgN+0j8g7qP+VgaguElcVezevVN+56FjqqAaPX7g/BCTv+Bd9rVQuprGZxvidXEawv1I+DiHvbNbr5vOIdD8uyk4JsKyyB/XhKyxyhmaoD8yTAyR51SLQ8vGreFwA4hkUEodjv2tOfMYd8/RhqW71FTe2W6yDvdAIUgxmS0mpjOaWHYmJ9Wj8ZE+r2K+85dRNOQwWTxuqDwKFduRokdbHCwrMuvPA+YXqotty9T8dqSppEdbPxolSLOATqMLoUDtq/ykjayq6pGCPw54sxRUTa6SXyFGs1rVdHyFn7pnFtUXKb+hOSnEdnssb/nqzUI7IZfX3QKUcuKpZeAhJ2ZP0gzfuUPWbWOn3K336cJ67v3d2isR0VAvcuNvA6qKTFQqzywBTu8nmnMkHomLfqXZy5FmLxlWLqYMXX9BJYZL+acHhcBMVkWXl2l2ca+IgHiOIyPWu8dOHOaVI01nzUlBCWgjflS2ipnaB9CC7VGEuhzMdBZVFqXz/NlXf2N3tZLLqGaIxN8CKL348PG2AieXzz5cFPt1cEKmHXv1vw2nFx6pKFIhrOzvwMh3mZ/b2OPniMw2kGmheQfU3NUzXWL11ubiRtUBZAPqoM9mtUriL1k9dyHGC7w1BhkkQ8BwisbR5EHOWVeNHPR8uugC64u8tfDTUD0FvC/vjv9hqyMFVmYn1uYtTV1xNRBLeiDgvG/TERpUkTYTaiohPKmMKVNI/ndfqaLtvcdUoZE7rYPUwOVF0SIlq10aYmpCG9e+0Oh5qcDSmI3L+XLPuS+7//JKvNwqjC2BZHmKpd9+ksVzJk2moTpfORYr29KxwWAPa6G6qgLE77/0Ktm3ZgA3XB1u/5bZv6pOO1u9Md6mEZj6FKDzMccs25UqDH3VLgwj/qkPd2Y+zqrI8m9nKu+5A8T3J6oY3v4pe3+5D0mI7ThQI2FZ0p0PHy55VeT2mcB6dbiS/JIEt8OhQ8gsrM8eDyoD9gE2kOu6vrg9lLFAcx4XSGJfO/gCn9PF5G0cc5vhukJoEZqdzi8YAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 961,
+        "cache_read_input_tokens": 36357,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 961
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "d99b6ae2-6373-47eb-962e-272503690e79",
+    "timestamp": "2026-11-27T16:54:46.661Z",
+    "request_id": "req_011ChTnNQDkKHy6uHSPnNqdh",
+    "thinking_duration_ms": 454,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNQNfhrCGc3P6AStLy",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ry723kky3MrG7eC6Mhxjij",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first run of ci after PR #711 did what that pull request claimed in both changed steps it reached, and it never reached the screenshot download because no app code changed, so nothing needs doing.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "PR #711 changed three steps in factory/workflows/ci.yml. First, it dropped the BRANCH argument from check-acceptance.sh. In run 46036747232 that step passed: the factory tests reported \"1038 passed in 26 files\", and the script ran with only the issue number (\"Issue #592 has no acceptance criteria to check\"). Second, it added the run attempt to the Playwright artifact's name. The upload step used the name playwright-c29b119…-1, as the change intended, and found no files, which is expected in a repository with no app. Third, it made the review job's download use the attempt that e2e reported. That step was skipped because needs.e2e.outputs.run was 'false', so this run never tested the new artifact name end to end. Ryan's two assumptions on #711 are about Neon's auth/domains API in sign-in.sh, not this workflow, and this run could not confirm or refute them.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/46036747232",
+              "https://github.com/edmulraney/tinyfactory/pull/711",
+              "https://github.com/edmulraney/tinyfactory/pull/712"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded, and its two reviews ($0.67, 66 seconds) were the normal cost of PR #712's review, not a fault.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: there was no fault to prevent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 961,
+        "cache_read_input_tokens": 36357,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 961
+        },
+        "output_tokens": 6,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "29f27551-8fc9-4015-a9d6-b2315892fe77",
+    "timestamp": "2026-11-27T16:54:53.269Z",
+    "request_id": "req_011ChTnNQDkKHy6uHSPnNqdh",
+    "wire_tool_inputs": {
+      "toolu_01Ry723kky3MrG7eC6Mhxjij": {
+        "summary": "The first run of ci after PR #711 did what that pull request claimed in both changed steps it reached, and it never reached the screenshot download because no app code changed, so nothing needs doing.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "PR #711 changed three steps in factory/workflows/ci.yml. First, it dropped the BRANCH argument from check-acceptance.sh. In run 46036747232 that step passed: the factory tests reported \"1038 passed in 26 files\", and the script ran with only the issue number (\"Issue #592 has no acceptance criteria to check\"). Second, it added the run attempt to the Playwright artifact's name. The upload step used the name playwright-c29b119…-1, as the change intended, and found no files, which is expected in a repository with no app. Third, it made the review job's download use the attempt that e2e reported. That step was skipped because needs.e2e.outputs.run was 'false', so this run never tested the new artifact name end to end. Ryan's two assumptions on #711 are about Neon's auth/domains API in sign-in.sh, not this workflow, and this run could not confirm or refute them.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/46036747232",
+          "https://github.com/edmulraney/tinyfactory/pull/711",
+          "https://github.com/edmulraney/tinyfactory/pull/712"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded, and its two reviews ($0.67, 66 seconds) were the normal cost of PR #712's review, not a fault.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: there was no fault to prevent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01Ry723kky3MrG7eC6Mhxjij",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "uuid": "901053e0-2190-45e0-96e1-a7c09254217b",
+    "timestamp": "2026-11-27T16:54:53.276Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01Ry723kky3MrG7eC6Mhxjij",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 32638,
+    "stop_reason": "tool_use",
+    "session_id": "bf37d25a-4305-4f97-96ee-5ad6c2aba537",
+    "total_cost_usd": 0.39714760000000005,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 37318,
+      "cache_read_input_tokens": 262448,
+      "output_tokens": 2295,
+      "output_tokens_details": {
+        "thinking_tokens": 458
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 37318,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 933,
+          "cache_read_input_tokens": 36357,
+          "cache_creation_input_tokens": 961,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 961
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2295,
+        "cacheReadInputTokens": 262448,
+        "cacheCreationInputTokens": 37318,
+        "webSearchRequests": 0,
+        "costUSD": 0.39700560000000007,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 458,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 37318,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01Qh7kSGbZ5aYFHh4YVm4wNg",
+        "tool_input": {
+          "command": "for f in .sessions/lessons/20261125T050351Z-lesson-run45550851664.json .sessions/lessons/20261123T122147Z-lesson-run45173360070.json; do jq -c '{summary,cause,propose,title,held_by}' $f; done; jq -r '.[]|\"\\(.number) \\(.title)\"' .sessions/tickets.json 2>/dev/null | head -40"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 10,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first run of ci after PR #711 did what that pull request claimed in both changed steps it reached, and it never reached the screenshot download because no app code changed, so nothing needs doing.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"PR #711 changed three steps in factory/workflows/ci.yml. First, it dropped the BRANCH argument from check-acceptance.sh. In run 46036747232 that step passed: the factory tests reported \\\"1038 passed in 26 files\\\", and the script ran with only the issue number (\\\"Issue #592 has no acceptance criteria to check\\\"). Second, it added the run attempt to the Playwright artifact's name. The upload step used the name playwright-c29b119…-1, as the change intended, and found no files, which is expected in a repository with no app. Third, it made the review job's download use the attempt that e2e reported. That step was skipped because needs.e2e.outputs.run was 'false', so this run never tested the new artifact name end to end. Ryan's two assumptions on #711 are about Neon's auth/domains API in sign-in.sh, not this workflow, and this run could not confirm or refute them.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/46036747232\",\"https://github.com/edmulraney/tinyfactory/pull/711\",\"https://github.com/edmulraney/tinyfactory/pull/712\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run succeeded, and its two reviews ($0.67, 66 seconds) were the normal cost of PR #712's review, not a fault.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: there was no fault to prevent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first run of ci after PR #711 did what that pull request claimed in both changed steps it reached, and it never reached the screenshot download because no app code changed, so nothing needs doing.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "PR #711 changed three steps in factory/workflows/ci.yml. First, it dropped the BRANCH argument from check-acceptance.sh. In run 46036747232 that step passed: the factory tests reported \"1038 passed in 26 files\", and the script ran with only the issue number (\"Issue #592 has no acceptance criteria to check\"). Second, it added the run attempt to the Playwright artifact's name. The upload step used the name playwright-c29b119…-1, as the change intended, and found no files, which is expected in a repository with no app. Third, it made the review job's download use the attempt that e2e reported. That step was skipped because needs.e2e.outputs.run was 'false', so this run never tested the new artifact name end to end. Ryan's two assumptions on #711 are about Neon's auth/domains API in sign-in.sh, not this workflow, and this run could not confirm or refute them.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/46036747232",
+        "https://github.com/edmulraney/tinyfactory/pull/711",
+        "https://github.com/edmulraney/tinyfactory/pull/712"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded, and its two reviews ($0.67, 66 seconds) were the normal cost of PR #712's review, not a fault.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: there was no fault to prevent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 3014,
+    "type": "result",
+    "duration_ms": 35163,
+    "uuid": "8c3e953f-5a16-450b-acf2-a0a5f8dd62f0",
+    "ttft_stream_ms": 2055,
+    "time_to_request_ms": 146,
+    "first_content_frame_ms": 2055,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 2295,
+        "cacheReadInputTokens": 262448,
+        "cacheCreationInputTokens": 37318,
+        "webSearchRequests": 0,
+        "costUSD": 0.39700560000000007,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 458,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 37318,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
