@@ -1,0 +1,67 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 45550821178,
+    "workflow": "install-workflows",
+    "event": "pull_request_target",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/45550821178",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 693,
+      "issue": 690,
+      "title": "chore: bring in links for the owner and the error boundary",
+      "assumptions": {
+        "adam": [],
+        "ryan": []
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "install",
+        "step": "Start the installer for the pull request merged after this one",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "install",
+        "step": "Tell a person when the change was not installed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first install-workflows run after #693 (installing #711's workflows) succeeded but never reached #693's change: both changed steps were skipped by their own conditions, so their new workflow-page links remain unproven until an install fails or a chained dispatch runs.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #693 changed two steps of install-workflows.yml: \"Tell a person when the change was not installed\" and \"Start the installer for the pull request merged after this one\". Both now write the link to the workflow's page inline. Run 45550821178 was started by pull_request_target when #711 closed. It passed the trust check and the approval check, then installed ci.yml, fix.yml and retro.yml, committed the copies and concluded success. The first changed step runs only on failure(), and the second only when the dispatch input `then` is set, which a pull_request_target event never sets. Both were skipped as designed, so this run neither confirms nor refutes the change. The reviewers recorded no assumptions on #693.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/45550821178",
+      "https://github.com/edmulraney/tinyfactory/pull/693",
+      "https://github.com/edmulraney/tinyfactory/pull/711"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded with no agent session, at $0 and 0 turns.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: the run cost $0 and had no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
