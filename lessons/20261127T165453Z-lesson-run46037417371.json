@@ -1,0 +1,81 @@
+{
+  "pr": 712,
+  "issue": 592,
+  "facts": {
+    "run": 46036747232,
+    "workflow": "ci",
+    "event": "pull_request",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/46036747232",
+    "conclusion": "success",
+    "pr": 712,
+    "issue": 592,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0.67,
+    "turns": 29,
+    "changed_by": {
+      "pr": 711,
+      "issue": 694,
+      "title": "chore: bring in shorter documents and fewer style checks",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "Neon's GET …/auth/domains returns `{\"domains\": []}` for a branch that trusts no address, not a null or missing `domains`.",
+            "if_wrong": "`jq '.domains[].domain'` fails on a fresh branch. sign-in.sh then stops on every run with \"Neon would not show the addresses\", and production's address is never trusted."
+          },
+          {
+            "assumes": "Neon's POST …/auth/domains accepts `domain` as a full origin with `https://` and `auth_provider`. This matches what vercel.sh stores and the list example in Neon's docs.",
+            "if_wrong": "Neon refuses the address, or stores it in a different form. Then the read-back match fails and setup stops, so nobody can sign in on production."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "checks",
+        "step": "Every acceptance criterion has a test, and research output is as its ticket says",
+        "conclusion": "success"
+      },
+      {
+        "job": "e2e",
+        "step": "Upload screenshots and the test results",
+        "conclusion": "success"
+      },
+      {
+        "job": "review",
+        "step": "Fetch the screenshots the end-to-end tests took",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first run of ci after PR #711 did what that pull request claimed in both changed steps it reached, and it never reached the screenshot download because no app code changed, so nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #711 changed three steps in factory/workflows/ci.yml. First, it dropped the BRANCH argument from check-acceptance.sh. In run 46036747232 that step passed: the factory tests reported \"1038 passed in 26 files\", and the script ran with only the issue number (\"Issue #592 has no acceptance criteria to check\"). Second, it added the run attempt to the Playwright artifact's name. The upload step used the name playwright-c29b119…-1, as the change intended, and found no files, which is expected in a repository with no app. Third, it made the review job's download use the attempt that e2e reported. That step was skipped because needs.e2e.outputs.run was 'false', so this run never tested the new artifact name end to end. Ryan's two assumptions on #711 are about Neon's auth/domains API in sign-in.sh, not this workflow, and this run could not confirm or refute them.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/46036747232",
+      "https://github.com/edmulraney/tinyfactory/pull/711",
+      "https://github.com/edmulraney/tinyfactory/pull/712"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": ""
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded, and its two reviews ($0.67, 66 seconds) were the normal cost of PR #712's review, not a fault.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent.",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
