@@ -1,0 +1,1789 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "tools": [
+      "Task",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterWorktree",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "ListAgents",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "SendMessage",
+      "Skill",
+      "StructuredOutput",
+      "TaskStop",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Workflow",
+      "Write"
+    ],
+    "mcp_servers": [],
+    "model": "claude-opus-5-5",
+    "permissionMode": "default",
+    "slash_commands": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "ship-local",
+      "steward",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring",
+      "advisor",
+      "agents",
+      "auto-mode-setup",
+      "autocompact",
+      "clear",
+      "color",
+      "compact",
+      "config",
+      "output-style",
+      "context",
+      "effort",
+      "fast",
+      "focus",
+      "heapdump",
+      "init",
+      "mcp",
+      "import",
+      "model",
+      "__remote-workflow",
+      "workflow-launch-exec",
+      "reload-plugins",
+      "reload-skills",
+      "rename",
+      "ultrareview",
+      "security-review",
+      "usage",
+      "insights",
+      "recap",
+      "skill-doctor",
+      "goal",
+      "design-consent",
+      "design-revoke",
+      "list-agents",
+      "team-onboarding"
+    ],
+    "terminal_slash_commands": [
+      "doctor",
+      "color",
+      "focus",
+      "reload-plugins"
+    ],
+    "apiKeySource": "none",
+    "claude_code_version": "2.1.330",
+    "output_style": "default",
+    "agents": [
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
+      "statusline-setup"
+    ],
+    "skills": [
+      "bootstrap",
+      "design",
+      "factory-engineer",
+      "implement",
+      "intake",
+      "operate",
+      "promote",
+      "publicize-repo",
+      "purpose",
+      "refine",
+      "research",
+      "retro",
+      "review-architecture",
+      "review-code",
+      "ticket",
+      "deep-research",
+      "design-sync",
+      "dataviz",
+      "update-config",
+      "verify",
+      "debug",
+      "code-review",
+      "simplify",
+      "ship-local",
+      "steward",
+      "batch",
+      "fewer-permission-prompts",
+      "doctor",
+      "loop",
+      "schedule",
+      "claude-api",
+      "workflow-authoring",
+      "run",
+      "run-skill-generator",
+      "plugin-authoring"
+    ],
+    "plugins": [
+      {
+        "name": "cc-plugin-agents-md",
+        "path": "builtin",
+        "source": "cc-plugin-agents-md@builtin"
+      },
+      {
+        "name": "cc-plugin-telemetry",
+        "path": "builtin",
+        "source": "cc-plugin-telemetry@builtin"
+      },
+      {
+        "name": "cc-plugin-privacy",
+        "path": "builtin",
+        "source": "cc-plugin-privacy@builtin"
+      },
+      {
+        "name": "cc-plugin-plugin-authoring",
+        "path": "builtin",
+        "source": "cc-plugin-plugin-authoring@builtin"
+      }
+    ],
+    "capabilities": [
+      "interrupt_receipt_v1",
+      "interrupt_cancel_queued_v1",
+      "interrupt_send_now_v1",
+      "interrupt_requeue_taken_v1",
+      "msg_lifecycle_v1",
+      "request_marker_lists_v1",
+      "ask_user_question_unanswered_v1",
+      "lifecycle_wakeup_source_v1",
+      "sdk_mcp_tools_list_changed",
+      "sdk_mcp_manifests",
+      "mcp_read_resource_v1",
+      "mcp_tool_ui_meta_v1",
+      "ui_surface_v1",
+      "mcp_call_result_not_for_model_v1",
+      "mcp_call_check_permissions_v1",
+      "voice_call_talk_line_v1",
+      "withdrawn_files_note_v2",
+      "withdrawn_tools_v1",
+      "ui_pane_widget_v1",
+      "reload_plugins_refuse_if_busy_v1",
+      "get_usage_detached_v1",
+      "silent_resend_files_v1"
+    ],
+    "analytics_disabled": false,
+    "product_feedback_disabled": false,
+    "served_by_anthropic": true,
+    "uuid": "26449fba-1675-485a-8098-fae692a56976",
+    "memory_paths": {
+      "auto": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/memory/"
+    },
+    "original_cwd": "/home/runner/work/tinyfactory/tinyfactory",
+    "additional_directories": [],
+    "messaging_socket_path": "/run/user/1001/cc-socks/2816.sock",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "per_turn_effort_active": true,
+    "ultrathink_available": false,
+    "ultrathink_typed_raises": false,
+    "view_mode": "default"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLYTmq7Yad5FPX516Q",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01XhTvrEkf3UXP13M11tV3LB",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 25482,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 25482
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d1152114-4e26-494a-ad5a-7ec01435d3e9",
+    "timestamp": "2026-11-27T16:54:23.114Z",
+    "request_id": "req_011ChTnLYNpX7kTgTno8wN2a",
+    "wire_tool_inputs": {
+      "toolu_01XhTvrEkf3UXP13M11tV3LB": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01XhTvrEkf3UXP13M11tV3LB",
+          "type": "tool_result",
+          "content": "1\t---\n2\tname: retro\n3\tdescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n4\t---\n5\t\n6\t# Retro\n7\t\n8\tFind the cause of the run's friction and write it down. Fix nothing and change no files.\n9\t\n10\t## What you are given\n11\t\n12\t- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n13\t- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n14\t- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n15\t- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n16\t\n17\t## Steps\n18\t\n19\t1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n20\t2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n21\t3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n22\t   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n23\t   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n24\t   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n25\t4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n26\t5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n27\t   1. for `process`, removing or loosening what caused it: a check that refused good work is deleted or loosened, never given an exception (`TASTE.md`);\n28\t   2. a script, lint rule or check that fails earlier;\n29\t   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n30\t   4. removing or rewording an instruction in a skill;\n31\t   5. adding an instruction to a skill.\n32\t\n33\t   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n34\t\n35\t   \"Nothing\" is a valid answer for a one-off the factory handled well.\n36\t6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n37\t   - `lost-work`: as in step 3;\n38\t   - `lost-money`: a session's cost bought nothing;\n39\t   - `stopped`: the run stopped for a person.\n40\t\n41\t## A changed workflow's first run, or a request for help\n42\t\n43\tIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n44\t\n45\t## A defect met in use\n46\t\n47\tIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n48\t\n49\t## When to propose\n50\t\n51\tFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n52\t\n53\t- `cost.kind` is not empty;\n54\t- step 4 lists a lesson.\n55\t\n56\tA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n57\t\n58\t## Output\n59\t\n60\t- `summary`: one sentence a person can act on.\n61\t- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n62\t- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n63\t- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n64\t- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n65\t- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n66\t- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n67\t- `repeats`: the file names of step 4's lessons.\n68\t- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n69\t- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n70\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "0346f5cc-555c-41e2-b73c-5619ef55ccab",
+    "timestamp": "2026-11-27T16:54:23.147Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/.claude/skills/retro/SKILL.md",
+        "content": "---\nname: retro\ndescription: Find the cause of a run's friction (a fix round, a failed review, a stop for a human) or of a failed factory workflow run, check a changed workflow's first run, or learn from a request for help or from a defect met in use. Records a lesson, and proposes a change for a fault that cost enough or repeats. Use with a pull request number, a workflow run id, both, or the number of a defect's ticket.\n---\n\n# Retro\n\nFind the cause of the run's friction and write it down. Fix nothing and change no files.\n\n## What you are given\n\n- **The facts** as JSON, at the path the prompt gives. `owner_rounds` are the fix rounds the owner asked for, in their \"Request changes\" review; `reviews.<name>.assumptions` is what a reviewer could not check; `terminal_reason`, `api_error_status`, `api_retries` and `result` say how a session ended.\n- **The transcripts** the facts list. Never read one end to end: Grep for the failing step, the error text and the moment the agent changed course.\n- **Earlier lessons**, one JSON file each, in the folder the prompt names.\n- `factory/scripts/thread.sh <n>`, the text of a ticket or a pull request, and, for a failed run, `gh run view <id> --log-failed`.\n\n## Steps\n\n1. **Read the facts** for where the friction was. A merged pull request with none went over its budget: the cost comment on its ticket says which, and the cause is what spent it.\n2. **Find the cause, not the symptom.** \"The type check failed\" is a symptom; the cause is why work that failed it was pushed: the ticket left something out, a skill's instruction was missing or wrong, a check does not exist, the agent ignored an instruction, something outside the factory broke, or the factory's own rule, check or step cost more than the work needed (`process`).\n3. **For a failure, separate what broke from what the factory did about it.** A service being down (GitHub answering `502`, the model's API overloaded) is `outside`. Then read what the factory did next, in the workflow or script that was running, the ticket's and pull request's comments and labels, and `main`. `handling` lists each that is true:\n   - `lost-work`: finished work was thrown away, such as a session's changes never pushed;\n   - `left-wrong`: something wrong was left behind, such as a label that no longer fits, a second merge, a half-done step;\n   - `told-nobody`: it stopped without a comment or label that tells a person what happened.\n4. **List the earlier lessons that repeat:** those with the same cause, not the same symptom, and those whose facts hold an assumption (`unverified` in an older lesson) of the same kind as one in this run's (the same tool or service, the same sort of question). The change for the second kind is whatever would let a reviewer or a check confirm such an assumption.\n5. **Decide what would have prevented it.** Ask first what the standard engineering solution to this fault is: where there is one, it is the change, and an instruction in a skill (4 and 5 below) is proposed only when there is none. Otherwise prefer the earliest that works:\n   1. for `process`, removing or loosening what caused it: a check that refused good work is deleted or loosened, never given an exception (`TASTE.md`);\n   2. a script, lint rule or check that fails earlier;\n   3. a change to a ticket template or `check-ticket.sh`, so the gap cannot be filed;\n   4. removing or rewording an instruction in a skill;\n   5. adding an instruction to a skill.\n\n   For a failure outside the factory, first consider trying the failed call again after a wait. `retry` says whether that would have been `enough`, `not-enough` (the service stayed down longer than a retry would wait, or the loss had already happened) or `harmful` (the call may have taken effect before it failed, as a merge can). Propose the retry when `enough`; otherwise what the facts show is needed, such as checking what happened before trying again, or saving the work first. For any other cause it is `not-applicable`.\n\n   \"Nothing\" is a valid answer for a one-off the factory handled well.\n6. **Give what the fault cost and what the change would save,** each with a figure from the facts: a fix round costs about its session's cost and minutes; a session cut short, what it had spent. `cost.kind` lists each that is true:\n   - `lost-work`: as in step 3;\n   - `lost-money`: a session's cost bought nothing;\n   - `stopped`: the run stopped for a person.\n\n## A changed workflow's first run, or a request for help\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/first-run-and-help.md`.\n\n## A defect met in use\n\nIn place of steps 2 and 3, follow `.claude/skills/retro/defect.md`.\n\n## When to propose\n\nFor every kind of retro (`factory/decisions.md` [A223a](../../../factory/decisions/223.md)), `propose` is true only when step 6 gives a figure for the cost and for the saving, and one of these holds:\n\n- `cost.kind` is not empty;\n- step 4 lists a lesson.\n\nA proposal that adds a check needs an earlier lesson with the same cause, unless this run lost work or money.\n\n## Output\n\n- `summary`: one sentence a person can act on.\n- `title`: the change, not what went wrong. Empty when `change.kind` is `none`.\n- `cause`: `ticket`, `skill-missing`, `skill-wrong`, `check-missing`, `agent-ignored`, `process`, `outside` or `one-off`.\n- `detail`: a short paragraph on what happened and why. For a failure: what broke, then what the factory did about it.\n- `evidence`: a link to each run, pull request or comment that shows it, never the story.\n- `change`: `kind`, `target` (the file), `proposal` (the exact change and its one reason, small enough for one edit, in 100 words at most, naming the standard engineering solution to the fault or saying there is none; a change that makes the factory act by itself says what stops it when every run shares the cause) and `removes`.\n- `cost`: `cost.amount` and `cost.kind`, as step 6; `cost.minutes`, from the facts' seconds.\n- `repeats`: the file names of step 4's lessons.\n- `handling`: as step 3; empty for a pull request's friction or a failure handled well.\n- `held_by`: the open ticket the prompt names that holds this change, or `0`.\n",
+        "numLines": 70,
+        "startLine": 1,
+        "totalLines": 70
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01XhTvrEkf3UXP13M11tV3LB",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLYTmq7Yad5FPX516Q",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UG2JjHXigG9koghiGLWEvh",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -la; cat facts.json; ls lessons | head -50; head -c 3000 tickets.json",
+            "description": "Show facts, lessons and tickets"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 25482,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 25482
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "eb6e5141-b87f-4779-9a49-65e80a98208c",
+    "timestamp": "2026-11-27T16:54:24.124Z",
+    "request_id": "req_011ChTnLYNpX7kTgTno8wN2a",
+    "wire_tool_inputs": {
+      "toolu_01UG2JjHXigG9koghiGLWEvh": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory/.sessions; ls -la; cat facts.json; ls lessons | head -50; head -c 3000 tickets.json",
+        "description": "Show facts, lessons and tickets"
+      }
+    }
+  },
+  {
+    "type": "rate_limit_event",
+    "rate_limit_info": {
+      "status": "allowed",
+      "resetsAt": 1796036400,
+      "rateLimitType": "seven_day",
+      "overageStatus": "rejected",
+      "overageDisabledReason": "org_level_disabled_until",
+      "isUsingOverage": false,
+      "unifiedWindows": {
+        "seven_day": {
+          "utilization": 0.58,
+          "resetsAt": 1796036400,
+          "status": "allowed"
+        }
+      }
+    },
+    "uuid": "77608436-8af6-4289-991e-6917747aee4a",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01UG2JjHXigG9koghiGLWEvh",
+          "type": "tool_result",
+          "content": "total 156\ndrwxr-xr-x 32 runner runner 4096 Nov 27 16:54 .\ndrwxr-xr-x 10 runner runner 4096 Nov 27 16:53 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 27 16:54 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 27 16:54 apps\n-rw-r--r--  1 runner runner  873 Nov 27 16:54 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-592\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-626\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-627\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-680\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 lessons\n-rw-r--r--  1 runner runner 6676 Nov 27 16:54 measures.jsonl\n-rw-r--r--  1 runner runner 3162 Nov 27 16:54 metrics.md\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-586\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-588\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-591\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-594\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-603\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-625\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-639\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-648\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-650\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-651\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-655\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-658\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-679\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-685\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-686\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-689\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-693\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-711\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-712\n-rw-r--r--  1 runner runner 9388 Nov 27 16:54 tickets.json\n{\n  \"run\": 45550821178,\n  \"workflow\": \"install-workflows\",\n  \"event\": \"pull_request_target\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45550821178\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 693,\n    \"issue\": 690,\n    \"title\": \"chore: bring in links for the owner and the error boundary\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"install\",\n      \"step\": \"Start the installer for the pull request merged after this one\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Tell a person when the change was not installed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n20261122T181839Z-lesson-run45054239451.json\n20261122T181848Z-lesson-run45054234586.json\n20261122T181925Z-lesson-run45054245806.json\n20261122T181958Z-lesson-run45054254056.json\n20261122T183129Z-lesson-run45055469382.json\n20261122T183206Z-lesson-run45055478297.json\n20261123T101015Z-lesson-run45153469958.json\n20261123T101016Z-lesson-run45153460798.json\n20261123T101045Z-lesson-run45153487207.json\n20261123T105947Z-lesson-run45160932050.json\n20261123T110138Z-lesson-run45161015456.json\n20261123T122147Z-lesson-run45173360070.json\n20261123T122152Z-lesson-run45173388204.json\n20261123T122252Z-lesson-run45173376081.json\n20261123T123035Z-lesson-run45174787645.json\n20261123T123038Z-lesson-run45174797674.json\n20261123T123043Z-lesson-run45174776105.json\n20261123T123121Z-lesson-run45174818400.json\n20261123T123136Z-lesson-run45174807786.json\n20261125T050351Z-lesson-run45550851664.json\n[{\"labels\":[\"factory\"],\"number\":605,\"pull_request\":false,\"title\":\"Give Peta and Adam the product's current state to judge by\"},{\"labels\":[\"factory\"],\"number\":606,\"pull_request\":false,\"title\":\"Have Peta map an idea's journey before she slices it\"},{\"labels\":[\"factory\"],\"number\":607,\"pull_request\":false,\"title\":\"Post each criterion's screenshot at mobile and desktop width\"},{\"labels\":[\"factory\"],\"number\":608,\"pull_request\":false,\"title\":\"Apply the review notes of week 47\"},{\"labels\":[\"factory\"],\"number\":609,\"pull_request\":false,\"title\":\"Have Ryan fail a hand step that code could do\"},{\"labels\":[\"factory\"],\"number\":610,\"pull_request\":false,\"title\":\"Have Peta say whether an idea should be built\"},{\"labels\":[\"factory\"],\"number\":611,\"pull_request\":false,\"title\":\"Take the ready label on an idea as the owner's go\"},{\"labels\":[\"factory\"],\"number\":612,\"pull_request\":false,\"title\":\"Give each pull request a budget of minutes and cost\"},{\"labels\":[\"factory\"],\"number\":613,\"pull_request\":false,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":614,\"pull_request\":false,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":615,\"pull_request\":false,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":616,\"pull_request\":false,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":617,\"pull_request\":false,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":618,\"pull_request\":false,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":619,\"pull_request\":false,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":620,\"pull_request\":false,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":621,\"pull_request\":false,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":622,\"pull_request\":false,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":623,\"pull_request\":false,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":624,\"pull_request\":false,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":629,\"pull_request\":false,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\"],\"number\":630,\"pull_request\":false,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":631,\"pull_request\":false,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":632,\"pull_request\":false,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":633,\"pull_request\":false,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":634,\"pull_request\":false,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"la",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d9ec1d5c-956e-405b-8524-111edca077df",
+    "timestamp": "2026-11-27T16:54:24.484Z",
+    "tool_use_result": {
+      "stdout": "total 156\ndrwxr-xr-x 32 runner runner 4096 Nov 27 16:54 .\ndrwxr-xr-x 10 runner runner 4096 Nov 27 16:53 ..\ndrwxr-xr-x  7 runner runner 4096 Nov 27 16:54 .git\ndrwxr-xr-x  3 runner runner 4096 Nov 27 16:54 apps\n-rw-r--r--  1 runner runner  873 Nov 27 16:54 facts.json\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-564\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-567\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-592\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-626\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-627\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 issue-680\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 lessons\n-rw-r--r--  1 runner runner 6676 Nov 27 16:54 measures.jsonl\n-rw-r--r--  1 runner runner 3162 Nov 27 16:54 metrics.md\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-565\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-568\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-586\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-588\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-591\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-594\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-603\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-625\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-639\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-648\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-650\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-651\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-655\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-658\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-679\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-685\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-686\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-689\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-693\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-711\ndrwxr-xr-x  2 runner runner 4096 Nov 27 16:54 pr-712\n-rw-r--r--  1 runner runner 9388 Nov 27 16:54 tickets.json\n{\n  \"run\": 45550821178,\n  \"workflow\": \"install-workflows\",\n  \"event\": \"pull_request_target\",\n  \"attempt\": 1,\n  \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45550821178\",\n  \"conclusion\": \"success\",\n  \"pr\": null,\n  \"issue\": null,\n  \"failed\": [],\n  \"factory_failure\": false,\n  \"agents\": [],\n  \"cost_usd\": 0,\n  \"turns\": 0,\n  \"changed_by\": {\n    \"pr\": 693,\n    \"issue\": 690,\n    \"title\": \"chore: bring in links for the owner and the error boundary\",\n    \"assumptions\": {\n      \"adam\": [],\n      \"ryan\": []\n    }\n  },\n  \"changed_steps\": [\n    {\n      \"job\": \"install\",\n      \"step\": \"Start the installer for the pull request merged after this one\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    },\n    {\n      \"job\": \"install\",\n      \"step\": \"Tell a person when the change was not installed\",\n      \"conclusion\": \"skipped\",\n      \"log\": null\n    }\n  ]\n}\n20261121T115710Z-lesson-run44901406884.json\n20261121T115710Z-lesson-run44901415445.json\n20261121T115715Z-lesson-run44901421212.json\n20261121T115720Z-lesson-run44901411090.json\n20261121T192953Z-lesson-run44941119423.json\n20261121T193001Z-lesson-run44941126149.json\n20261121T213812Z-lesson-run44952433006.json\n20261121T213820Z-lesson-run44952439090.json\n20261122T002807Z-lesson-run44966640304.json\n20261122T100955Z-lesson-run45010965977.json\n20261122T175945Z-lesson-run45052437960.json\n20261122T175949Z-lesson-run45052442857.json\n20261122T180003Z-lesson-run45052431661.json\n20261122T180049Z-lesson-run45052426449.json\n20261122T181839Z-lesson-run45054239451.json\n20261122T181848Z-lesson-run45054234586.json\n20261122T181925Z-lesson-run45054245806.json\n20261122T181958Z-lesson-run45054254056.json\n20261122T183129Z-lesson-run45055469382.json\n20261122T183206Z-lesson-run45055478297.json\n20261123T101015Z-lesson-run45153469958.json\n20261123T101016Z-lesson-run45153460798.json\n20261123T101045Z-lesson-run45153487207.json\n20261123T105947Z-lesson-run45160932050.json\n20261123T110138Z-lesson-run45161015456.json\n20261123T122147Z-lesson-run45173360070.json\n20261123T122152Z-lesson-run45173388204.json\n20261123T122252Z-lesson-run45173376081.json\n20261123T123035Z-lesson-run45174787645.json\n20261123T123038Z-lesson-run45174797674.json\n20261123T123043Z-lesson-run45174776105.json\n20261123T123121Z-lesson-run45174818400.json\n20261123T123136Z-lesson-run45174807786.json\n20261125T050351Z-lesson-run45550851664.json\n[{\"labels\":[\"factory\"],\"number\":605,\"pull_request\":false,\"title\":\"Give Peta and Adam the product's current state to judge by\"},{\"labels\":[\"factory\"],\"number\":606,\"pull_request\":false,\"title\":\"Have Peta map an idea's journey before she slices it\"},{\"labels\":[\"factory\"],\"number\":607,\"pull_request\":false,\"title\":\"Post each criterion's screenshot at mobile and desktop width\"},{\"labels\":[\"factory\"],\"number\":608,\"pull_request\":false,\"title\":\"Apply the review notes of week 47\"},{\"labels\":[\"factory\"],\"number\":609,\"pull_request\":false,\"title\":\"Have Ryan fail a hand step that code could do\"},{\"labels\":[\"factory\"],\"number\":610,\"pull_request\":false,\"title\":\"Have Peta say whether an idea should be built\"},{\"labels\":[\"factory\"],\"number\":611,\"pull_request\":false,\"title\":\"Take the ready label on an idea as the owner's go\"},{\"labels\":[\"factory\"],\"number\":612,\"pull_request\":false,\"title\":\"Give each pull request a budget of minutes and cost\"},{\"labels\":[\"factory\"],\"number\":613,\"pull_request\":false,\"title\":\"Chart the factory's delivery numbers over time\"},{\"labels\":[\"factory\"],\"number\":614,\"pull_request\":false,\"title\":\"Fail lint on a product's name in a file every project gets\"},{\"labels\":[\"factory\"],\"number\":615,\"pull_request\":false,\"title\":\"Fail a pull request that leaves a document stale\"},{\"labels\":[\"factory\"],\"number\":616,\"pull_request\":false,\"title\":\"Take design practices for Dara from published skills\"},{\"labels\":[\"factory\"],\"number\":617,\"pull_request\":false,\"title\":\"Take engineering practices from published agent skills\"},{\"labels\":[\"factory\"],\"number\":618,\"pull_request\":false,\"title\":\"Decide whether a project builds its interface with ui-sdk\"},{\"labels\":[\"factory\"],\"number\":619,\"pull_request\":false,\"title\":\"Decide how deepsec scans a project for security faults\"},{\"labels\":[\"factory\"],\"number\":620,\"pull_request\":false,\"title\":\"Stop two runs filing the same ticket at once\"},{\"labels\":[\"factory\"],\"number\":621,\"pull_request\":false,\"title\":\"Driving the backlog from 22 November 2026\"},{\"labels\":[\"factory\"],\"number\":622,\"pull_request\":false,\"title\":\"Wait for a ticket that a build finds it needs\"},{\"labels\":[\"factory\"],\"number\":623,\"pull_request\":false,\"title\":\"Warn the owner before a queue outruns the budget\"},{\"labels\":[\"factory\"],\"number\":624,\"pull_request\":false,\"title\":\"Report each failed run once in the watch\"},{\"labels\":[\"factory\"],\"number\":629,\"pull_request\":false,\"title\":\"Keep the owner's approval through a conflict fix round\"},{\"labels\":[\"factory\"],\"number\":630,\"pull_request\":false,\"title\":\"Name a countable metric in every initiative\"},{\"labels\":[\"factory\"],\"number\":631,\"pull_request\":false,\"title\":\"Measure each shipped initiative every week\"},{\"labels\":[\"factory\"],\"number\":632,\"pull_request\":false,\"title\":\"Make the factory's tests pass on a Mac\"},{\"labels\":[\"factory\"],\"number\":633,\"pull_request\":false,\"title\":\"Cut `DESIGN.md` to budget\"},{\"labels\":[\"factory\"],\"number\":634,\"pull_request\":false,\"title\":\"Have Peta correct a criterion she finds wrong\"},{\"la",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01UG2JjHXigG9koghiGLWEvh",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnLuXoofXmo38eF6xnw",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0154gNFKLsnifqktqVRrrcTy",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; cat .claude/skills/retro/first-run-and-help.md; cat .sessions/lessons/20261125T050351Z-lesson-run45550851664.json; ls .sessions/pr-693",
+            "description": "Read first-run guide and latest lesson"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6099,
+        "cache_read_input_tokens": 25482,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 6099
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "be5da998-528b-42fb-b374-248214aa7be1",
+    "timestamp": "2026-11-27T16:54:26.857Z",
+    "request_id": "req_011ChTnLuT6YUqxfFrH4sEab",
+    "wire_tool_inputs": {
+      "toolu_0154gNFKLsnifqktqVRrrcTy": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; cat .claude/skills/retro/first-run-and-help.md; cat .sessions/lessons/20261125T050351Z-lesson-run45550851664.json; ls .sessions/pr-693",
+        "description": "Read first-run guide and latest lesson"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_0154gNFKLsnifqktqVRrrcTy",
+          "type": "tool_result",
+          "content": "# The retro of a changed workflow's first run, or of a request for help\n\nIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n\n## A changed workflow's first run\n\nIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n\nCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nIn the facts, `ask` holds the comment that asked `@claude` and its link.\n\nThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n{\n  \"pr\": null,\n  \"issue\": null,\n  \"facts\": {\n    \"run\": 45296306794,\n    \"workflow\": \"flag-idle\",\n    \"event\": \"schedule\",\n    \"attempt\": 1,\n    \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45296306794\",\n    \"conclusion\": \"success\",\n    \"pr\": null,\n    \"issue\": null,\n    \"failed\": [],\n    \"factory_failure\": false,\n    \"cost_usd\": 0,\n    \"turns\": 0,\n    \"changed_by\": {\n      \"pr\": 679,\n      \"issue\": 659,\n      \"title\": \"chore: bring in the factory changes of 23 November\",\n      \"assumptions\": {\n        \"adam\": [],\n        \"ryan\": [\n          {\n            \"assumes\": \"In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.\",\n            \"if_wrong\": \"Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this.\"\n          },\n          {\n            \"assumes\": \"ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.\",\n            \"if_wrong\": \"Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this.\"\n          }\n        ]\n      }\n    },\n    \"changed_steps\": [\n      {\n        \"job\": \"look\",\n        \"step\": \"Delete the preview database branches of pull requests that are closed\",\n        \"conclusion\": \"skipped\"\n      },\n      {\n        \"job\": \"look\",\n        \"step\": \"Start what the owner's review of a pull request in conflict asks for\",\n        \"conclusion\": \"success\"\n      }\n    ]\n  },\n  \"lesson\": {\n    \"summary\": \"The first scheduled flag-idle run after #679 did what the pull request claimed: the new missed-reviews step ran and found nothing to start, and the preview-database cleanup was skipped by its own condition because this repository sets no NEON_PROJECT_ID, so nothing needs doing.\",\n    \"title\": \"\",\n    \"cause\": \"one-off\",\n    \"detail\": \"PR #679 added two steps to flag-idle.yml. The first, \\\"Delete the preview database branches of pull requests that are closed\\\", runs only when vars.NEON_PROJECT_ID is set. tinyfactory has no app and no Neon project, so the step was skipped as designed, and it can only be exercised in a project. The second, \\\"Start what the owner's review of a pull request in conflict asks for\\\", ran factory/scripts/missed-reviews.sh. It succeeded and logged \\\"no factory pull request in conflict holds an owner's review that GitHub ran nothing for: nothing was started\\\". The later flag-idle.sh step still ran. The run concluded success. Ryan's unverified assumptions on #679 are about ci.yml's drizzle migration check, not this workflow, so this run neither confirms nor refutes them.\",\n    \"evidence\": [\n      \"https://github.com/edmulraney/tinyfactory/actions/runs/45296306794\",\n      \"https://github.com/edmulraney/tinyfactory/pull/679\"\n    ],\n    \"change\": {\n      \"kind\": \"none\",\n      \"target\": \"\",\n      \"proposal\": \"\",\n      \"removes\": \"\"\n    },\n    \"cost\": {\n      \"amount\": \"Nothing: the run succeeded with no agent session, at $0 and 0 turns.\",\n      \"minutes\": 0,\n      \"kind\": []\n    },\n    \"saves\": \"Nothing: the run cost $0 and had no fault to prevent.\",\n    \"repeats\": [],\n    \"handling\": [],\n    \"retry\": \"not-applicable\",\n    \"propose\": false,\n    \"held_by\": 0\n  }\n}\n20261123T131301Z-adam-run45181406185.json\n20261123T131304Z-ryan-run45181406185.json",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "cad7e84e-f2b7-4d52-a966-72ea0b4483f2",
+    "timestamp": "2026-11-27T16:54:26.931Z",
+    "tool_use_result": {
+      "stdout": "# The retro of a changed workflow's first run, or of a request for help\n\nIn place of steps 2 and 3 of the `retro` skill, follow the section for the run you were given.\n\n## A changed workflow's first run\n\nIn the facts, `changed_by` holds the pull request that changed the workflow and its reviewers' assumptions, and `changed_steps` holds each step its diff names in that workflow: its job, its conclusion and the end of its log, or none of them when the run never reached it.\n\nCompare what the pull request in `changed_by` claimed (`gh pr diff`) with what the run did (`changed_steps`). `summary` says whether it did, did not, or never reached the change. Only \"did not\" has a `change`. One that did has `cause` `one-off`, no `handling` and `retry` `not-applicable`.\n\n## A request for help\n\nIn the facts, `ask` holds the comment that asked `@claude` and its link.\n\nThe owner asked `@claude` for what the factory did not do by itself. Find what would have made the ask unneeded: the event that should have started the work, the script that should have done it, or what a comment should have told the owner. An ask that cost the owner time and is likely to come again has `cost.kind` `stopped`. A one-off, such as a setup step, has `cause` `one-off` and proposes nothing.\n{\n  \"pr\": null,\n  \"issue\": null,\n  \"facts\": {\n    \"run\": 45296306794,\n    \"workflow\": \"flag-idle\",\n    \"event\": \"schedule\",\n    \"attempt\": 1,\n    \"url\": \"https://github.com/edmulraney/tinyfactory/actions/runs/45296306794\",\n    \"conclusion\": \"success\",\n    \"pr\": null,\n    \"issue\": null,\n    \"failed\": [],\n    \"factory_failure\": false,\n    \"cost_usd\": 0,\n    \"turns\": 0,\n    \"changed_by\": {\n      \"pr\": 679,\n      \"issue\": 659,\n      \"title\": \"chore: bring in the factory changes of 23 November\",\n      \"assumptions\": {\n        \"adam\": [],\n        \"ryan\": [\n          {\n            \"assumes\": \"In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.\",\n            \"if_wrong\": \"Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this.\"\n          },\n          {\n            \"assumes\": \"ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.\",\n            \"if_wrong\": \"Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this.\"\n          }\n        ]\n      }\n    },\n    \"changed_steps\": [\n      {\n        \"job\": \"look\",\n        \"step\": \"Delete the preview database branches of pull requests that are closed\",\n        \"conclusion\": \"skipped\"\n      },\n      {\n        \"job\": \"look\",\n        \"step\": \"Start what the owner's review of a pull request in conflict asks for\",\n        \"conclusion\": \"success\"\n      }\n    ]\n  },\n  \"lesson\": {\n    \"summary\": \"The first scheduled flag-idle run after #679 did what the pull request claimed: the new missed-reviews step ran and found nothing to start, and the preview-database cleanup was skipped by its own condition because this repository sets no NEON_PROJECT_ID, so nothing needs doing.\",\n    \"title\": \"\",\n    \"cause\": \"one-off\",\n    \"detail\": \"PR #679 added two steps to flag-idle.yml. The first, \\\"Delete the preview database branches of pull requests that are closed\\\", runs only when vars.NEON_PROJECT_ID is set. tinyfactory has no app and no Neon project, so the step was skipped as designed, and it can only be exercised in a project. The second, \\\"Start what the owner's review of a pull request in conflict asks for\\\", ran factory/scripts/missed-reviews.sh. It succeeded and logged \\\"no factory pull request in conflict holds an owner's review that GitHub ran nothing for: nothing was started\\\". The later flag-idle.sh step still ran. The run concluded success. Ryan's unverified assumptions on #679 are about ci.yml's drizzle migration check, not this workflow, so this run neither confirms nor refutes them.\",\n    \"evidence\": [\n      \"https://github.com/edmulraney/tinyfactory/actions/runs/45296306794\",\n      \"https://github.com/edmulraney/tinyfactory/pull/679\"\n    ],\n    \"change\": {\n      \"kind\": \"none\",\n      \"target\": \"\",\n      \"proposal\": \"\",\n      \"removes\": \"\"\n    },\n    \"cost\": {\n      \"amount\": \"Nothing: the run succeeded with no agent session, at $0 and 0 turns.\",\n      \"minutes\": 0,\n      \"kind\": []\n    },\n    \"saves\": \"Nothing: the run cost $0 and had no fault to prevent.\",\n    \"repeats\": [],\n    \"handling\": [],\n    \"retry\": \"not-applicable\",\n    \"propose\": false,\n    \"held_by\": 0\n  }\n}\n20261123T131301Z-adam-run45181406185.json\n20261123T131304Z-ryan-run45181406185.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_0154gNFKLsnifqktqVRrrcTy",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnM62aos1TMSL61zB5Q",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Now the diff of #693 for install-workflows."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2014,
+        "cache_read_input_tokens": 31581,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2014
+        },
+        "output_tokens": 33,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "af9944c8-4c2c-4d2d-9f5d-1106caeb5455",
+    "timestamp": "2026-11-27T16:54:28.282Z",
+    "request_id": "req_011ChTnM5vNwSaPYPwJVJkBD"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnM62aos1TMSL61zB5Q",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01C7gFWsYwZpHKCfS7Qt3VU3",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only 2>&1 | head; gh pr diff 693 2>&1 | awk '/^diff --git/{p=/install-workflows/} p' | head -150",
+            "description": "Show PR 693 changes to install-workflows"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2014,
+        "cache_read_input_tokens": 31581,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2014
+        },
+        "output_tokens": 33,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "ed177af1-acbf-4e00-a8ac-b17d44f756f8",
+    "timestamp": "2026-11-27T16:54:29.429Z",
+    "request_id": "req_011ChTnM5vNwSaPYPwJVJkBD",
+    "wire_tool_inputs": {
+      "toolu_01C7gFWsYwZpHKCfS7Qt3VU3": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only 2>&1 | head; gh pr diff 693 2>&1 | awk '/^diff --git/{p=/install-workflows/} p' | head -150",
+        "description": "Show PR 693 changes to install-workflows"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01C7gFWsYwZpHKCfS7Qt3VU3",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=/install-workflows/} p'",
+    "uuid": "efdfdaea-a784-4379-8c63-4965336e8208",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=/install-workflows/} p'",
+          "is_error": true,
+          "tool_use_id": "toolu_01C7gFWsYwZpHKCfS7Qt3VU3"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d9190387-dfa5-41f3-8c52-d15cb31bc787",
+    "timestamp": "2026-11-27T16:54:29.443Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: awk '/^diff --git/{p=/install-workflows/} p'",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01C7gFWsYwZpHKCfS7Qt3VU3",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMGiWgLfoZoPjjCcCX",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_016hbE3xZgDwU5dL4pc7LKn1",
+          "name": "Bash",
+          "input": {
+            "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only; gh pr diff 693 > /tmp/pr693.diff; wc -l /tmp/pr693.diff",
+            "description": "Save PR 693 diff"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 241,
+        "cache_read_input_tokens": 33595,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 241
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "018461f5-0155-4eea-9f86-3a929576a251",
+    "timestamp": "2026-11-27T16:54:32.934Z",
+    "request_id": "req_011ChTnMGd4u67epGk3DNTwp",
+    "wire_tool_inputs": {
+      "toolu_016hbE3xZgDwU5dL4pc7LKn1": {
+        "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only; gh pr diff 693 > /tmp/pr693.diff; wc -l /tmp/pr693.diff",
+        "description": "Save PR 693 diff"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_016hbE3xZgDwU5dL4pc7LKn1",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 693, wc -l /tmp/pr693.diff",
+    "uuid": "fb96e5ab-7890-443a-8294-152e9a6b7a84",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following parts require approval: gh pr diff 693, wc -l /tmp/pr693.diff",
+          "is_error": true,
+          "tool_use_id": "toolu_016hbE3xZgDwU5dL4pc7LKn1"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "3d3c240d-68f0-45d0-bde9-902e35fe5c05",
+    "timestamp": "2026-11-27T16:54:32.954Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following parts require approval: gh pr diff 693, wc -l /tmp/pr693.diff",
+    "tool_result_meta": [
+      {
+        "id": "toolu_016hbE3xZgDwU5dL4pc7LKn1",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMXhuoAgTk5k7abGRK",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_011k4MYmdGHU2ceAXUiJERuu",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 693 --repo edmulraney/tinyfactory --name-only",
+            "description": "List files PR 693 changed"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 206,
+        "cache_read_input_tokens": 33836,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 206
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "ff73d071-4884-4a80-aa49-07cbd54e33a9",
+    "timestamp": "2026-11-27T16:54:34.611Z",
+    "request_id": "req_011ChTnMXdCRhQ9Py65R6LGJ",
+    "wire_tool_inputs": {
+      "toolu_011k4MYmdGHU2ceAXUiJERuu": {
+        "command": "gh pr diff 693 --repo edmulraney/tinyfactory --name-only",
+        "description": "List files PR 693 changed"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_011k4MYmdGHU2ceAXUiJERuu",
+          "type": "tool_result",
+          "content": ".claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/commit.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/version.browser.test.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/version.tsx\nfactory/README.md\nfactory/decisions/440.md\nfactory/decisions/455.md\nfactory/decisions/691.md\nfactory/decisions/692.md\nfactory/free-tier/691.md\nfactory/scripts/approve-merge.sh\nfactory/scripts/begin-fix-round.sh\nfactory/scripts/check-action-pins.sh\nfactory/scripts/check-factory.sh\nfactory/scripts/fix-rounds.sh\nfactory/scripts/flag-idle.sh\nfactory/scripts/flag-unfinished.sh\nfactory/scripts/merge-queue.sh\nfactory/scripts/missed-reviews.sh\nfactory/scripts/record-fix-round.sh\nfactory/scripts/ship.sh\nfactory/scripts/start-build.sh\nfactory/scripts/usage-limit.sh\nfactory/scripts/workflow-page.sh\nfactory/tests/approve-merge.test.sh\nfactory/tests/begin-fix-round.test.sh\nfactory/tests/check-factory.test.sh\nfactory/tests/fix-rounds.test.sh\nfactory/tests/flag-idle.test.sh\nfactory/tests/flag-unfinished.test.sh\nfactory/tests/install-workflows.test.sh\nfactory/tests/merge-gate.test.sh\nfactory/tests/merge-queue.test.sh\nfactory/tests/missed-reviews.test.sh\nfactory/tests/record-fix-round.test.sh\nfactory/tests/ship.test.sh\nfactory/tests/start-build.test.sh\nfactory/tests/usage-limit.test.sh\nfactory/tests/workflow-page.test.sh\nfactory/workflows/claude.yml\nfactory/workflows/install-workflows.yml",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "2edf747e-d875-4bef-ad29-b945fa6356f4",
+    "timestamp": "2026-11-27T16:54:35.304Z",
+    "tool_use_result": {
+      "stdout": ".claude/skills/bootstrap/scripts/scaffold.sh\n.claude/skills/bootstrap/templates/ARCHITECTURE.md\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/commit.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/version.browser.test.tsx\n.claude/skills/bootstrap/templates/apps/web/src/app/_components/version.tsx\nfactory/README.md\nfactory/decisions/440.md\nfactory/decisions/455.md\nfactory/decisions/691.md\nfactory/decisions/692.md\nfactory/free-tier/691.md\nfactory/scripts/approve-merge.sh\nfactory/scripts/begin-fix-round.sh\nfactory/scripts/check-action-pins.sh\nfactory/scripts/check-factory.sh\nfactory/scripts/fix-rounds.sh\nfactory/scripts/flag-idle.sh\nfactory/scripts/flag-unfinished.sh\nfactory/scripts/merge-queue.sh\nfactory/scripts/missed-reviews.sh\nfactory/scripts/record-fix-round.sh\nfactory/scripts/ship.sh\nfactory/scripts/start-build.sh\nfactory/scripts/usage-limit.sh\nfactory/scripts/workflow-page.sh\nfactory/tests/approve-merge.test.sh\nfactory/tests/begin-fix-round.test.sh\nfactory/tests/check-factory.test.sh\nfactory/tests/fix-rounds.test.sh\nfactory/tests/flag-idle.test.sh\nfactory/tests/flag-unfinished.test.sh\nfactory/tests/install-workflows.test.sh\nfactory/tests/merge-gate.test.sh\nfactory/tests/merge-queue.test.sh\nfactory/tests/missed-reviews.test.sh\nfactory/tests/record-fix-round.test.sh\nfactory/tests/ship.test.sh\nfactory/tests/start-build.test.sh\nfactory/tests/usage-limit.test.sh\nfactory/tests/workflow-page.test.sh\nfactory/workflows/claude.yml\nfactory/workflows/install-workflows.yml",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_011k4MYmdGHU2ceAXUiJERuu",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnMhjfTwr3ndun4JtFC",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01XWWvyvYDdK5xLYZrbt8SBC",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr diff 693 --repo edmulraney/tinyfactory -- factory/workflows/install-workflows.yml 2>&1 | head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+            "description": "View PR 693 body and merge info"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 842,
+        "cache_read_input_tokens": 34042,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 842
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d60f0c12-fea4-4b7a-b966-b478473ed65e",
+    "timestamp": "2026-11-27T16:54:39.415Z",
+    "request_id": "req_011ChTnMhehvUmGnasVCh1tu",
+    "wire_tool_inputs": {
+      "toolu_01XWWvyvYDdK5xLYZrbt8SBC": {
+        "command": "gh pr diff 693 --repo edmulraney/tinyfactory -- factory/workflows/install-workflows.yml 2>&1 | head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+        "description": "View PR 693 body and merge info"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01XWWvyvYDdK5xLYZrbt8SBC",
+    "decision_reason_type": "subcommandResults",
+    "message": "This Bash command contains multiple operations. The following part requires approval: head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+    "uuid": "6e23201c-e01c-4341-8bec-388c05764779",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This Bash command contains multiple operations. The following part requires approval: head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+          "is_error": true,
+          "tool_use_id": "toolu_01XWWvyvYDdK5xLYZrbt8SBC"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "e99dfd02-af48-4eb8-bf4e-9f99f7c77e3c",
+    "timestamp": "2026-11-27T16:54:39.428Z",
+    "tool_use_result": "Error: This Bash command contains multiple operations. The following part requires approval: head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01XWWvyvYDdK5xLYZrbt8SBC",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnN1QHxvkuMKqG5kgrL",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WQY392N16DhZsLgErPG37r",
+          "name": "Bash",
+          "input": {
+            "command": "gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+            "description": "View PR 693 body and merge info"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 243,
+        "cache_read_input_tokens": 34884,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 243
+        },
+        "output_tokens": 20,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "0588375a-184b-4291-b934-d821358451f9",
+    "timestamp": "2026-11-27T16:54:42.716Z",
+    "request_id": "req_011ChTnN1JMWxF5ABrV1K6Ko",
+    "wire_tool_inputs": {
+      "toolu_01WQY392N16DhZsLgErPG37r": {
+        "command": "gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+        "description": "View PR 693 body and merge info"
+      }
+    }
+  },
+  {
+    "type": "system",
+    "subtype": "permission_denied",
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01WQY392N16DhZsLgErPG37r",
+    "decision_reason_type": "other",
+    "decision_reason": "This command requires approval",
+    "message": "This command requires approval",
+    "uuid": "90777a8b-1d6b-4a24-8d75-6701b452633a",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad"
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "content": "This command requires approval",
+          "is_error": true,
+          "tool_use_id": "toolu_01WQY392N16DhZsLgErPG37r"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "325f265a-2092-4bf4-b255-8712e2c48365",
+    "timestamp": "2026-11-27T16:54:42.723Z",
+    "tool_use_result": "Error: This command requires approval",
+    "tool_result_meta": [
+      {
+        "id": "toolu_01WQY392N16DhZsLgErPG37r",
+        "non_execution_kind": "user-rejected",
+        "permission_decision": {
+          "decision": "reject",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnN1QHxvkuMKqG5kgrL",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01KYXpQVTSR77ptc8ZjvNW5h",
+          "name": "Read",
+          "input": {
+            "file_path": "/home/runner/work/tinyfactory/tinyfactory/factory/workflows/install-workflows.yml"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 243,
+        "cache_read_input_tokens": 34884,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 243
+        },
+        "output_tokens": 20,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d917ad87-e88d-4daf-9457-18432dee1d6e",
+    "timestamp": "2026-11-27T16:54:43.125Z",
+    "request_id": "req_011ChTnN1JMWxF5ABrV1K6Ko",
+    "wire_tool_inputs": {
+      "toolu_01KYXpQVTSR77ptc8ZjvNW5h": {
+        "file_path": "/home/runner/work/tinyfactory/tinyfactory/factory/workflows/install-workflows.yml"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01KYXpQVTSR77ptc8ZjvNW5h",
+          "type": "tool_result",
+          "content": "1\t# Installs a merged workflow change the owner approved or need not, from factory/workflows/ into .github/workflows/.\n2\tname: install-workflows\n3\t\n4\ton:\n5\t  # `_target` runs main's copy of this file; a merge by ship.sh starts no workflow, so ship.sh dispatches this instead.\n6\t  pull_request_target:\n7\t    types: [closed]\n8\t    paths: ['factory/workflows/**']\n9\t  workflow_dispatch:\n10\t    inputs:\n11\t      pr:\n12\t        description: Merged pull request whose workflow changes to install\n13\t        required: true\n14\t      then:\n15\t        description: Pull requests merged after it, in the order they merged, to install next. Leave it empty.\n16\t\n17\tconcurrency:\n18\t  group: install-workflows-${{ inputs.pr || github.event.pull_request.number }}\n19\t\n20\tenv:\n21\t  PR: ${{ inputs.pr || github.event.pull_request.number }}\n22\t  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}\n23\t  RULE: 91dcb3882edd0218863244dded9e892791250b6c   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n24\t  CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)\n25\t\n26\tjobs:\n27\t  install:\n28\t    # Only an account that may write merges a pull request, or starts this by number (decisions W563b).\n29\t    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true\n30\t    runs-on: ubuntu-latest\n31\t    timeout-minutes: 5\n32\t    permissions:\n33\t      contents: read\n34\t      pull-requests: write\n35\t      issues: write\n36\t      actions: write   # to start the retro\n37\t    steps:\n38\t      - uses: actions/checkout@v4\n39\t        with:\n40\t          ref: ${{ github.event.repository.default_branch }}\n41\t          fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n42\t          persist-credentials: false   # the push below must use the app's token and no other\n43\t\n44\t      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n45\t      - name: Stop unless the account that started this run may write to the repository\n46\t        id: trusted\n47\t        env:\n48\t          GH_TOKEN: ${{ github.token }}\n49\t          SENDER: ${{ github.event.sender.login }}\n50\t        run: factory/scripts/trusted.sh \"$SENDER\"\n51\t\n52\t      # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n53\t      - name: Check that what would be installed was approved, or needs no approval\n54\t        id: check\n55\t        env:\n56\t          GH_TOKEN: ${{ github.token }}\n57\t          OWNER: ${{ github.repository_owner }}\n58\t        run: |\n59\t          set -euo pipefail\n60\t          refused=\"$RUNNER_TEMP/refused.md\"\n61\t          : > \"$refused\"\n62\t\n63\t          view=$(gh pr view \"$PR\" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)\n64\t          if [ \"$(jq -r .state <<<\"$view\")\" != MERGED ] || [ \"$(jq -r .baseRefName <<<\"$view\")\" != \"$DEFAULT_BRANCH\" ]; then\n65\t            echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"\n66\t            exit 0\n67\t          fi\n68\t          head=$(jq -r .headRefOid <<<\"$view\")\n69\t\n70\t          # The merged branch is deleted, but GitHub keeps the pull request's last commit here.\n71\t          git fetch --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"refs/pull/$PR/head\"\n72\t          [ \"$(git rev-parse FETCH_HEAD)\" = \"$head\" ]\n73\t          # It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).\n74\t          merged=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$view\")\n75\t          git merge-base --is-ancestor \"$merged\" HEAD || {\n76\t            echo \"the merge commit of pull request #$PR, \\\"$merged\\\", is not on $DEFAULT_BRANCH, so what its merge left there is not known\"\n77\t            exit 1\n78\t          }\n79\t          # Installed once: started again, it could bring back a workflow that a later merge undid (decisions W496).\n80\t          # \"approved in\" is the subject of the installs made before an unapproved change could be installed.\n81\t          earlier_install=$(git log --format=%h -E --grep=\"^ci: install the workflow changes (approved|merged) in #$PR\\$\" \"$merged..HEAD\" | tail -1)\n82\t          if [ -n \"$earlier_install\" ]; then\n83\t            echo \"commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again\"\n84\t            exit 0\n85\t          fi\n86\t          base=$(git merge-base \"$merged^\" \"$head\")\n87\t          blob() { git rev-parse --quiet --verify \"$1:$2\" 2>/dev/null || echo absent; }\n88\t          # The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).\n89\t          applies_to_installed() {\n90\t            local work=\"$RUNNER_TEMP/applied\"\n91\t            rm -rf \"$work\"; mkdir -p \"$work\"\n92\t            git cat-file blob \"HEAD:$installed\" > \"$work/installed\" 2>/dev/null &&\n93\t              git cat-file blob \"$base:$source\" > \"$work/base\" 2>/dev/null &&\n94\t              git cat-file blob \"$head:$source\" > \"$work/reviewed\" 2>/dev/null &&\n95\t              git merge-file --quiet \"$work/installed\" \"$work/base\" \"$work/reviewed\" 2>/dev/null &&\n96\t              [ \"$(git hash-object --no-filters \"$work/installed\")\" = \"$at_merge\" ]\n97\t          }\n98\t\n99\t          # Whether it only puts back what main held before a merge the owner made with the merge button, which needs\n100\t          # no approval: the merge gate's test, made again here (decisions M439f, W3).\n101\t          undoes_button_merge() {\n102\t            local issue ticket taken merge commit paths path\n103\t            issue=$(gh pr view \"$PR\" --json body --jq '.body // \"\"' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1) || return 1\n104\t            ticket=$(gh issue view \"$issue\" --json title,author) || return 1\n105\t            # Only a workflow files a ticket as `app/github-actions`, and revert.sh titles it so (decisions M439d).\n106\t            [ \"$(jq -r .author.login <<<\"$ticket\")\" = app/github-actions ] || return 1\n107\t            [[ \"$(jq -r .title <<<\"$ticket\")\" =~ ^\"Take back the button merge of pull request #\"([0-9]+)$ ]] || return 1\n108\t            taken=\"${BASH_REMATCH[1]}\"\n109\t            merge=$(gh pr view \"$taken\" --json mergedBy,mergeCommit) || return 1\n110\t            [ \"$(jq -r '.mergedBy.login // \"\"' <<<\"$merge\")\" = \"$OWNER\" ] || return 1\n111\t            commit=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$merge\")\n112\t            [ -n \"$commit\" ] || return 1\n113\t            paths=$(git -c core.quotePath=false diff --no-renames --name-only \"$base\" \"$head\" &&\n114\t              git -c core.quotePath=false diff --no-renames --name-only \"$commit^\" \"$commit\") && [ -n \"$paths\" ] || return 1\n115\t            # Nothing has changed a file since that merge, and each goes back to what main held before it.\n116\t            while IFS= read -r path; do\n117\t              [ \"$(git ls-tree \"$base\" -- \"$path\")\" = \"$(git ls-tree \"$commit\" -- \"$path\")\" ] &&\n118\t                [ \"$(git ls-tree \"$head\" -- \"$path\")\" = \"$(git ls-tree \"$commit^\" -- \"$path\")\" ] || return 1\n119\t            done <<<\"$paths\"\n120\t          }\n121\t\n122\t          # The owner merging it themselves is the same decision as approving the commit that was merged.\n123\t          approved=$(jq -r --arg owner \"$OWNER\" --arg head \"$head\" '\n124\t            (.mergedBy.login == $owner) or\n125\t            ([.reviews[] | select(.author.login == $owner)] | last | (.state == \"APPROVED\" and .commit.oid == $head))' <<<\"$view\")\n126\t          # An approval of an earlier commit stands when only merges of the default branch followed it (decisions W456).\n127\t          earlier=$(jq -r --arg owner \"$OWNER\" \\\n128\t            '[.reviews[] | select(.author.login == $owner)] | last | select(.state == \"APPROVED\") | .commit.oid // \"\"' <<<\"$view\")\n129\t          if [ \"$approved\" != true ] && [ -n \"$earlier\" ]; then\n130\t            if [ \"$(blob HEAD factory/scripts/only-merged-main.sh)\" != \"$CARRY\" ]; then\n131\t              echo \"factory/scripts/only-merged-main.sh on $DEFAULT_BRANCH is not the script this installer names (${CARRY:0:7}), so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"\n132\t            else\n133\t              git cat-file blob \"$CARRY\" > \"$RUNNER_TEMP/only-merged-main.sh\"\n134\t              # It is given the three commits and nothing else: no token, and nothing of the environment.\n135\t              if env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/only-merged-main.sh\" \"$earlier\" \"$head\" HEAD; then\n136\t                approved=true\n137\t              else\n138\t                echo \"so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"\n139\t              fi\n140\t            fi\n141\t          fi\n142\t          if [ \"$approved\" != true ]; then\n143\t            # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).\n144\t            unapproved=\"\\`$OWNER\\` neither approved commit \\`${head:0:7}\\` nor merged it themselves, and\"\n145\t            # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.\n146\t            if [ \"$(jq -r '.mergedBy.login' <<<\"$view\")\" != app/github-actions ]; then\n147\t              echo \"- $unapproved it was not the merge gate that merged it.\" >> \"$refused\"\n148\t              exit 1\n149\t            fi\n150\t            if [ \"$(blob HEAD factory/scripts/owner-decides.sh)\" != \"$RULE\" ]; then\n151\t              echo \"- $unapproved \\`factory/scripts/owner-decides.sh\\` on \\`$DEFAULT_BRANCH\\` is not the script this installer names (\\`${RULE:0:7}\\`), so nothing the owner approved says whether this change needs them.\" >> \"$refused\"\n152\t              exit 1\n153\t            fi\n154\t            git cat-file blob \"$RULE\" > \"$RUNNER_TEMP/owner-decides.sh\"\n155\t            # It is given the diff and nothing else: no token, and nothing of the environment.\n156\t            if ! theirs=$(git diff \"$base\" \"$head\" | env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/owner-decides.sh\" 2>&1) && ! undoes_button_merge; then\n157\t              {\n158\t                echo \"- $unapproved it changes what only they may decide:\"\n159\t                printf '\\n  ```\\n%s\\n  ```\\n' \"$(sed 's/^/  /' <<<\"$theirs\")\"\n160\t              } >> \"$refused\"\n161\t              exit 1\n162\t            fi\n163\t          fi\n164\t\n165\t          # main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.\n166\t          mkdir -p .github/workflows\n167\t          while IFS= read -r source; do\n168\t            [ -n \"$source\" ] || continue\n169\t            name=\"${source#factory/workflows/}\"\n170\t            installed=\".github/workflows/$name\"\n171\t            read_by_owner=$(blob \"$head\" \"$source\")\n172\t            at_merge=$(blob \"$merged\" \"$source\")\n173\t            if [ \"$(blob HEAD \"$installed\")\" = \"$read_by_owner\" ]; then\n174\t              echo \"$installed is already what was approved\"\n175\t            # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).\n176\t            elif [ \"$(blob HEAD \"$installed\")\" = \"$(blob HEAD \"$source\")\" ]; then\n177\t              echo \"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\"\n178\t            elif [[ \"$name\" == */* ]]; then\n179\t              echo \"- \\`$source\\` is in a folder. GitHub runs only the files directly in \\`.github/workflows/\\`.\" >> \"$refused\"\n180\t            elif [ \"$read_by_owner\" != absent ] && ! git ls-tree \"$head\" -- \"$source\" | grep -qE '^100(644|755) blob '; then\n181\t              echo \"- \\`$source\\` is not an ordinary file (a link, perhaps), so its diff does not show what would run.\" >> \"$refused\"\n182\t            elif [ \"$at_merge\" != \"$read_by_owner\" ] && ! applies_to_installed; then\n183\t              echo \"- \\`$source\\` on \\`$DEFAULT_BRANCH\\`, as this pull request's merge \\`${merged:0:7}\\` left it, is neither what commit \\`${head:0:7}\\` held nor \\`$installed\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\" >> \"$refused\"\n184\t            elif [ \"$at_merge\" = \"$read_by_owner\" ] && [ \"$(blob HEAD \"$installed\")\" != \"$(blob \"$base\" \"$source\")\" ]; then\n185\t              echo \"- \\`$installed\\` is not what this pull request's diff of \\`$source\\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run.\" >> \"$refused\"\n186\t            elif [ \"$at_merge\" = absent ]; then\n187\t              git rm --quiet \"$installed\"\n188\t              echo \"removed $installed\"\n189\t            else\n190\t              # From git, not the checked-out file: copying that would follow a link to bytes nobody approved.\n191\t              git update-index --add --cacheinfo \"100644,$at_merge,$installed\"\n192\t              echo \"installed $source as $installed\"\n193\t            fi\n194\t          done < <(git diff --no-renames --name-only \"$base\" \"$head\" -- factory/workflows)\n195\t\n196\t          # All or nothing: a pull request's workflows are reviewed together.\n197\t          [ ! -s \"$refused\" ] || exit 1\n198\t          if git diff --cached --quiet; then\n199\t            echo \"pull request #$PR has no workflow change left to install\"\n200\t          else\n201\t            echo \"install=true\" >> \"$GITHUB_OUTPUT\"\n202\t          fi\n203\t\n204\t      # The workflow's own token cannot write a workflow file, by GitHub's design; this one is minted after the checks.\n205\t      - name: Get a short-lived token that may write workflow files\n206\t        id: app\n207\t        if: steps.check.outputs.install == 'true'\n208\t        uses: actions/create-github-app-token@v3\n209\t        with:\n210\t          client-id: ${{ vars.WORKFLOW_APP_CLIENT_ID }}\n211\t          private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}\n212\t          permission-contents: write\n213\t          permission-workflows: write\n214\t\n215\t      - name: Commit the copies\n216\t        if: steps.check.outputs.install == 'true'\n217\t        env:\n218\t          GH_TOKEN: ${{ github.token }}\n219\t          APP_TOKEN: ${{ steps.app.outputs.token }}\n220\t          BOT: ${{ steps.app.outputs.app-slug }}[bot]\n221\t        run: |\n222\t          set -euo pipefail\n223\t          # By this subject a later run tells that the pull request is installed (decisions W496).\n224\t          git -c user.name=\"$BOT\" -c user.email=\"$BOT@users.noreply.github.com\" \\\n225\t            commit --quiet -m \"ci: install the workflow changes merged in #$PR\"\n226\t          # If main moved since the checkout this is refused, and the run can simply be started again.\n227\t          git push --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"HEAD:refs/heads/$DEFAULT_BRANCH\"\n228\t          # The record first-runs.sh reads (decisions A185a); a label that could not be added fails nothing.\n229\t          changed=$(git show --diff-filter=AM --name-only --format= HEAD -- .github/workflows | sed 's|^\\.github/workflows/||' | xargs)\n230\t          labelled=yes\n231\t          [ -z \"$changed\" ] || gh pr edit \"$PR\" --add-label proof >/dev/null || labelled=no\n232\t          {\n233\t            printf 'Installed in %s, the workflow changes this pull request merged:\\n\\n```\\n' \"$(git rev-parse --short HEAD)\"\n234\t            git show --name-status --format= HEAD\n235\t            printf '```\\n'\n236\t            if [ -n \"$changed\" ]; then\n237\t              if [ \"$labelled\" = yes ]; then\n238\t                printf '\\nA retro will look at the first run of each and say here whether it did what this pull request claimed.\\n'\n239\t              else\n240\t                printf '\\nThis pull request could not be labelled `proof`, so no retro will look at the first run of each. Add the label by hand to have one.\\n'\n241\t              fi\n242\t              printf '\\n<!-- factory:installed %s -->\\n' \"$changed\"\n243\t            fi\n244\t          } > \"$RUNNER_TEMP/installed.md\"\n245\t          gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/installed.md\"\n246\t\n247\t      # Nothing is said in a run an account that is not trusted started (decisions W563c).\n248\t      - name: Tell a person when the change was not installed\n249\t        if: steps.trusted.outcome != 'failure' && failure()\n250\t        env:\n251\t          GH_TOKEN: ${{ github.token }}\n252\t        run: |\n253\t          # The first line says what a person must do (decisions A371a).\n254\t          {\n255\t            if [ -s \"$RUNNER_TEMP/refused.md\" ]; then\n256\t              printf 'File the two `factory` tickets described below: the factory installs nothing until the second merges.\\n\\n'\n257\t            else\n258\t              # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.\n259\t              printf 'Read the log linked below, then start the installer again on the [`install-workflows` workflow'\"'\"'s page](%s/%s/actions/workflows/install-workflows.yml), where \"Run workflow\" starts it with `pr` set to `%s`. The changes are installed when that run passes.\\n\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$PR\"\n260\t            fi\n261\t            printf 'The workflow changes in this pull request were **not installed**, so `.github/workflows/` still runs the earlier versions and `pnpm lint` fails on `%s` until the two folders match.\\n\\n' \"$DEFAULT_BRANCH\"\n262\t            if [ -s \"$RUNNER_TEMP/refused.md\" ]; then\n263\t              cat \"$RUNNER_TEMP/refused.md\"\n264\t              # A new change on top of main would be refused too: its diff would start from a source never installed.\n265\t              printf '\\nNothing was installed. To recover, in two `factory` tickets: first put each workflow this pull request changed in `factory/workflows/` back to exactly what `.github/workflows/` holds (deleting it if there is none), which makes `pnpm lint` pass again and installs nothing; then make the change again from there, so the whole difference is reviewed in one diff.\\n'\n266\t            else\n267\t              printf 'The checks passed or never finished, and a later step failed: the log says which. If it was the push, start `install-workflows` again with this pull request'\"'\"'s number. If it was the token, the project has no workflow app yet: `.claude/skills/bootstrap/scripts/workflow-app.sh` creates it.\\n'\n268\t            fi\n269\t            printf '\\n%s/%s/actions/runs/%s\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$GITHUB_RUN_ID\"\n270\t          } > \"$RUNNER_TEMP/not-installed.md\"\n271\t          gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/not-installed.md\"\n272\t          # The pull request is merged and its ticket closed, so the label goes on the ticket when there is one.\n273\t          issue=$(gh pr view \"$PR\" --json body --jq '.body // \"\"' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1 || true)\n274\t          if [ -n \"$issue\" ]; then gh issue edit \"$issue\" --add-label needs-human >/dev/null\n275\t          else gh pr edit \"$PR\" --add-label needs-human >/dev/null\n276\t          fi\n277\t\n278\t      # Whatever became of this one: a later merge that changed other sources installs all the same (decisions W469b).\n279\t      - name: Start the installer for the pull request merged after this one\n280\t        if: always() && inputs.then != ''\n281\t        env:\n282\t          GH_TOKEN: ${{ github.token }}\n283\t          GH_REPO: ${{ github.repository }}\n284\t          THEN: ${{ inputs.then }}\n285\t        run: |\n286\t          read -r next rest <<<\"$THEN\"\n287\t          for _ in 1 2 3; do\n288\t            if gh workflow run install-workflows.yml -f pr=\"$next\" ${rest:+-f then=\"$rest\"}; then exit 0; fi\n289\t            sleep 20\n290\t          done\n291\t          {\n292\t            # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.\n293\t            printf 'Start the installer on the [`install-workflows` workflow'\"'\"'s page](%s/%s/actions/workflows/install-workflows.yml), where \"Run workflow\" starts it with `pr` set to `%s`' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$next\"\n294\t            [ -z \"$rest\" ] || printf ' and `then` set to `%s`' \"$rest\"\n295\t            printf '. That run installs the workflow changes this pull request merged.\\n\\n'\n296\t            printf 'They are **not installed**: the installer of pull request #%s, merged before this one, could not start this one'\"'\"'s.\\n' \"$PR\"\n297\t            printf '\\n%s/%s/actions/runs/%s\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$GITHUB_RUN_ID\"\n298\t          } > \"$RUNNER_TEMP/not-started.md\"\n299\t          gh pr comment \"$next\" --body-file \"$RUNNER_TEMP/not-started.md\"\n300\t          gh pr edit \"$next\" --add-label needs-human >/dev/null\n301\t          exit 1\n302\t\n303\t      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n304\t      - name: Tell whether this job stopped at its time limit\n305\t        id: limit\n306\t        if: cancelled()\n307\t        env:\n308\t          GH_TOKEN: ${{ github.token }}\n309\t          GH_REPO: ${{ github.repository }}\n310\t          LIMIT_MINUTES: 5   # this job's timeout-minutes\n311\t        run: |\n312\t          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n313\t            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n314\t            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n315\t            exit 1\n316\t          }\n317\t          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n318\t          # jq reads the time (decisions H632b).\n319\t          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n320\t          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n321\t          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n322\t      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n323\t      # None for a run an account that is not trusted started (decisions W563c).\n324\t      - name: Start a retro when this job failed\n325\t        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n326\t        env:\n327\t          GH_TOKEN: ${{ github.token }}\n328\t          GH_REPO: ${{ github.repository }}\n329\t        run: |\n330\t          for _ in 1 2 3; do\n331\t            if gh workflow run retro.yml -f run=\"$GITHUB_RUN_ID\"; then exit 0; fi\n332\t            sleep 20\n333\t          done\n334\t          exit 1\n335\t"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "00b0125b-13e1-431b-bd4a-115b98146f03",
+    "timestamp": "2026-11-27T16:54:43.140Z",
+    "tool_use_result": {
+      "type": "text",
+      "file": {
+        "filePath": "/home/runner/work/tinyfactory/tinyfactory/factory/workflows/install-workflows.yml",
+        "content": "# Installs a merged workflow change the owner approved or need not, from factory/workflows/ into .github/workflows/.\nname: install-workflows\n\non:\n  # `_target` runs main's copy of this file; a merge by ship.sh starts no workflow, so ship.sh dispatches this instead.\n  pull_request_target:\n    types: [closed]\n    paths: ['factory/workflows/**']\n  workflow_dispatch:\n    inputs:\n      pr:\n        description: Merged pull request whose workflow changes to install\n        required: true\n      then:\n        description: Pull requests merged after it, in the order they merged, to install next. Leave it empty.\n\nconcurrency:\n  group: install-workflows-${{ inputs.pr || github.event.pull_request.number }}\n\nenv:\n  PR: ${{ inputs.pr || github.event.pull_request.number }}\n  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}\n  RULE: 91dcb3882edd0218863244dded9e892791250b6c   # the git id of factory/scripts/owner-decides.sh (decisions W272b)\n  CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270   # the git id of factory/scripts/only-merged-main.sh (decisions W456)\n\njobs:\n  install:\n    # Only an account that may write merges a pull request, or starts this by number (decisions W563b).\n    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true\n    runs-on: ubuntu-latest\n    timeout-minutes: 5\n    permissions:\n      contents: read\n      pull-requests: write\n      issues: write\n      actions: write   # to start the retro\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          ref: ${{ github.event.repository.default_branch }}\n          fetch-depth: 0               # the pull request's diff is measured from where it left main, and judged where it merged\n          persist-credentials: false   # the push below must use the app's token and no other\n\n      # The event's word is no proof that an account may write, so GitHub is asked before anything is done (decisions W563b).\n      - name: Stop unless the account that started this run may write to the repository\n        id: trusted\n        env:\n          GH_TOKEN: ${{ github.token }}\n          SENDER: ${{ github.event.sender.login }}\n        run: factory/scripts/trusted.sh \"$SENDER\"\n\n      # Two scripts from the repo are run, each by its git id above and with no token (decisions W2, W272b, W456).\n      - name: Check that what would be installed was approved, or needs no approval\n        id: check\n        env:\n          GH_TOKEN: ${{ github.token }}\n          OWNER: ${{ github.repository_owner }}\n        run: |\n          set -euo pipefail\n          refused=\"$RUNNER_TEMP/refused.md\"\n          : > \"$refused\"\n\n          view=$(gh pr view \"$PR\" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)\n          if [ \"$(jq -r .state <<<\"$view\")\" != MERGED ] || [ \"$(jq -r .baseRefName <<<\"$view\")\" != \"$DEFAULT_BRANCH\" ]; then\n            echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"\n            exit 0\n          fi\n          head=$(jq -r .headRefOid <<<\"$view\")\n\n          # The merged branch is deleted, but GitHub keeps the pull request's last commit here.\n          git fetch --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"refs/pull/$PR/head\"\n          [ \"$(git rev-parse FETCH_HEAD)\" = \"$head\" ]\n          # It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).\n          merged=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$view\")\n          git merge-base --is-ancestor \"$merged\" HEAD || {\n            echo \"the merge commit of pull request #$PR, \\\"$merged\\\", is not on $DEFAULT_BRANCH, so what its merge left there is not known\"\n            exit 1\n          }\n          # Installed once: started again, it could bring back a workflow that a later merge undid (decisions W496).\n          # \"approved in\" is the subject of the installs made before an unapproved change could be installed.\n          earlier_install=$(git log --format=%h -E --grep=\"^ci: install the workflow changes (approved|merged) in #$PR\\$\" \"$merged..HEAD\" | tail -1)\n          if [ -n \"$earlier_install\" ]; then\n            echo \"commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again\"\n            exit 0\n          fi\n          base=$(git merge-base \"$merged^\" \"$head\")\n          blob() { git rev-parse --quiet --verify \"$1:$2\" 2>/dev/null || echo absent; }\n          # The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).\n          applies_to_installed() {\n            local work=\"$RUNNER_TEMP/applied\"\n            rm -rf \"$work\"; mkdir -p \"$work\"\n            git cat-file blob \"HEAD:$installed\" > \"$work/installed\" 2>/dev/null &&\n              git cat-file blob \"$base:$source\" > \"$work/base\" 2>/dev/null &&\n              git cat-file blob \"$head:$source\" > \"$work/reviewed\" 2>/dev/null &&\n              git merge-file --quiet \"$work/installed\" \"$work/base\" \"$work/reviewed\" 2>/dev/null &&\n              [ \"$(git hash-object --no-filters \"$work/installed\")\" = \"$at_merge\" ]\n          }\n\n          # Whether it only puts back what main held before a merge the owner made with the merge button, which needs\n          # no approval: the merge gate's test, made again here (decisions M439f, W3).\n          undoes_button_merge() {\n            local issue ticket taken merge commit paths path\n            issue=$(gh pr view \"$PR\" --json body --jq '.body // \"\"' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1) || return 1\n            ticket=$(gh issue view \"$issue\" --json title,author) || return 1\n            # Only a workflow files a ticket as `app/github-actions`, and revert.sh titles it so (decisions M439d).\n            [ \"$(jq -r .author.login <<<\"$ticket\")\" = app/github-actions ] || return 1\n            [[ \"$(jq -r .title <<<\"$ticket\")\" =~ ^\"Take back the button merge of pull request #\"([0-9]+)$ ]] || return 1\n            taken=\"${BASH_REMATCH[1]}\"\n            merge=$(gh pr view \"$taken\" --json mergedBy,mergeCommit) || return 1\n            [ \"$(jq -r '.mergedBy.login // \"\"' <<<\"$merge\")\" = \"$OWNER\" ] || return 1\n            commit=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$merge\")\n            [ -n \"$commit\" ] || return 1\n            paths=$(git -c core.quotePath=false diff --no-renames --name-only \"$base\" \"$head\" &&\n              git -c core.quotePath=false diff --no-renames --name-only \"$commit^\" \"$commit\") && [ -n \"$paths\" ] || return 1\n            # Nothing has changed a file since that merge, and each goes back to what main held before it.\n            while IFS= read -r path; do\n              [ \"$(git ls-tree \"$base\" -- \"$path\")\" = \"$(git ls-tree \"$commit\" -- \"$path\")\" ] &&\n                [ \"$(git ls-tree \"$head\" -- \"$path\")\" = \"$(git ls-tree \"$commit^\" -- \"$path\")\" ] || return 1\n            done <<<\"$paths\"\n          }\n\n          # The owner merging it themselves is the same decision as approving the commit that was merged.\n          approved=$(jq -r --arg owner \"$OWNER\" --arg head \"$head\" '\n            (.mergedBy.login == $owner) or\n            ([.reviews[] | select(.author.login == $owner)] | last | (.state == \"APPROVED\" and .commit.oid == $head))' <<<\"$view\")\n          # An approval of an earlier commit stands when only merges of the default branch followed it (decisions W456).\n          earlier=$(jq -r --arg owner \"$OWNER\" \\\n            '[.reviews[] | select(.author.login == $owner)] | last | select(.state == \"APPROVED\") | .commit.oid // \"\"' <<<\"$view\")\n          if [ \"$approved\" != true ] && [ -n \"$earlier\" ]; then\n            if [ \"$(blob HEAD factory/scripts/only-merged-main.sh)\" != \"$CARRY\" ]; then\n              echo \"factory/scripts/only-merged-main.sh on $DEFAULT_BRANCH is not the script this installer names (${CARRY:0:7}), so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"\n            else\n              git cat-file blob \"$CARRY\" > \"$RUNNER_TEMP/only-merged-main.sh\"\n              # It is given the three commits and nothing else: no token, and nothing of the environment.\n              if env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/only-merged-main.sh\" \"$earlier\" \"$head\" HEAD; then\n                approved=true\n              else\n                echo \"so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"\n              fi\n            fi\n          fi\n          if [ \"$approved\" != true ]; then\n            # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).\n            unapproved=\"\\`$OWNER\\` neither approved commit \\`${head:0:7}\\` nor merged it themselves, and\"\n            # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.\n            if [ \"$(jq -r '.mergedBy.login' <<<\"$view\")\" != app/github-actions ]; then\n              echo \"- $unapproved it was not the merge gate that merged it.\" >> \"$refused\"\n              exit 1\n            fi\n            if [ \"$(blob HEAD factory/scripts/owner-decides.sh)\" != \"$RULE\" ]; then\n              echo \"- $unapproved \\`factory/scripts/owner-decides.sh\\` on \\`$DEFAULT_BRANCH\\` is not the script this installer names (\\`${RULE:0:7}\\`), so nothing the owner approved says whether this change needs them.\" >> \"$refused\"\n              exit 1\n            fi\n            git cat-file blob \"$RULE\" > \"$RUNNER_TEMP/owner-decides.sh\"\n            # It is given the diff and nothing else: no token, and nothing of the environment.\n            if ! theirs=$(git diff \"$base\" \"$head\" | env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/owner-decides.sh\" 2>&1) && ! undoes_button_merge; then\n              {\n                echo \"- $unapproved it changes what only they may decide:\"\n                printf '\\n  ```\\n%s\\n  ```\\n' \"$(sed 's/^/  /' <<<\"$theirs\")\"\n              } >> \"$refused\"\n              exit 1\n            fi\n          fi\n\n          # main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.\n          mkdir -p .github/workflows\n          while IFS= read -r source; do\n            [ -n \"$source\" ] || continue\n            name=\"${source#factory/workflows/}\"\n            installed=\".github/workflows/$name\"\n            read_by_owner=$(blob \"$head\" \"$source\")\n            at_merge=$(blob \"$merged\" \"$source\")\n            if [ \"$(blob HEAD \"$installed\")\" = \"$read_by_owner\" ]; then\n              echo \"$installed is already what was approved\"\n            # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).\n            elif [ \"$(blob HEAD \"$installed\")\" = \"$(blob HEAD \"$source\")\" ]; then\n              echo \"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\"\n            elif [[ \"$name\" == */* ]]; then\n              echo \"- \\`$source\\` is in a folder. GitHub runs only the files directly in \\`.github/workflows/\\`.\" >> \"$refused\"\n            elif [ \"$read_by_owner\" != absent ] && ! git ls-tree \"$head\" -- \"$source\" | grep -qE '^100(644|755) blob '; then\n              echo \"- \\`$source\\` is not an ordinary file (a link, perhaps), so its diff does not show what would run.\" >> \"$refused\"\n            elif [ \"$at_merge\" != \"$read_by_owner\" ] && ! applies_to_installed; then\n              echo \"- \\`$source\\` on \\`$DEFAULT_BRANCH\\`, as this pull request's merge \\`${merged:0:7}\\` left it, is neither what commit \\`${head:0:7}\\` held nor \\`$installed\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\" >> \"$refused\"\n            elif [ \"$at_merge\" = \"$read_by_owner\" ] && [ \"$(blob HEAD \"$installed\")\" != \"$(blob \"$base\" \"$source\")\" ]; then\n              echo \"- \\`$installed\\` is not what this pull request's diff of \\`$source\\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run.\" >> \"$refused\"\n            elif [ \"$at_merge\" = absent ]; then\n              git rm --quiet \"$installed\"\n              echo \"removed $installed\"\n            else\n              # From git, not the checked-out file: copying that would follow a link to bytes nobody approved.\n              git update-index --add --cacheinfo \"100644,$at_merge,$installed\"\n              echo \"installed $source as $installed\"\n            fi\n          done < <(git diff --no-renames --name-only \"$base\" \"$head\" -- factory/workflows)\n\n          # All or nothing: a pull request's workflows are reviewed together.\n          [ ! -s \"$refused\" ] || exit 1\n          if git diff --cached --quiet; then\n            echo \"pull request #$PR has no workflow change left to install\"\n          else\n            echo \"install=true\" >> \"$GITHUB_OUTPUT\"\n          fi\n\n      # The workflow's own token cannot write a workflow file, by GitHub's design; this one is minted after the checks.\n      - name: Get a short-lived token that may write workflow files\n        id: app\n        if: steps.check.outputs.install == 'true'\n        uses: actions/create-github-app-token@v3\n        with:\n          client-id: ${{ vars.WORKFLOW_APP_CLIENT_ID }}\n          private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}\n          permission-contents: write\n          permission-workflows: write\n\n      - name: Commit the copies\n        if: steps.check.outputs.install == 'true'\n        env:\n          GH_TOKEN: ${{ github.token }}\n          APP_TOKEN: ${{ steps.app.outputs.token }}\n          BOT: ${{ steps.app.outputs.app-slug }}[bot]\n        run: |\n          set -euo pipefail\n          # By this subject a later run tells that the pull request is installed (decisions W496).\n          git -c user.name=\"$BOT\" -c user.email=\"$BOT@users.noreply.github.com\" \\\n            commit --quiet -m \"ci: install the workflow changes merged in #$PR\"\n          # If main moved since the checkout this is refused, and the run can simply be started again.\n          git push --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"HEAD:refs/heads/$DEFAULT_BRANCH\"\n          # The record first-runs.sh reads (decisions A185a); a label that could not be added fails nothing.\n          changed=$(git show --diff-filter=AM --name-only --format= HEAD -- .github/workflows | sed 's|^\\.github/workflows/||' | xargs)\n          labelled=yes\n          [ -z \"$changed\" ] || gh pr edit \"$PR\" --add-label proof >/dev/null || labelled=no\n          {\n            printf 'Installed in %s, the workflow changes this pull request merged:\\n\\n```\\n' \"$(git rev-parse --short HEAD)\"\n            git show --name-status --format= HEAD\n            printf '```\\n'\n            if [ -n \"$changed\" ]; then\n              if [ \"$labelled\" = yes ]; then\n                printf '\\nA retro will look at the first run of each and say here whether it did what this pull request claimed.\\n'\n              else\n                printf '\\nThis pull request could not be labelled `proof`, so no retro will look at the first run of each. Add the label by hand to have one.\\n'\n              fi\n              printf '\\n<!-- factory:installed %s -->\\n' \"$changed\"\n            fi\n          } > \"$RUNNER_TEMP/installed.md\"\n          gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/installed.md\"\n\n      # Nothing is said in a run an account that is not trusted started (decisions W563c).\n      - name: Tell a person when the change was not installed\n        if: steps.trusted.outcome != 'failure' && failure()\n        env:\n          GH_TOKEN: ${{ github.token }}\n        run: |\n          # The first line says what a person must do (decisions A371a).\n          {\n            if [ -s \"$RUNNER_TEMP/refused.md\" ]; then\n              printf 'File the two `factory` tickets described below: the factory installs nothing until the second merges.\\n\\n'\n            else\n              # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.\n              printf 'Read the log linked below, then start the installer again on the [`install-workflows` workflow'\"'\"'s page](%s/%s/actions/workflows/install-workflows.yml), where \"Run workflow\" starts it with `pr` set to `%s`. The changes are installed when that run passes.\\n\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$PR\"\n            fi\n            printf 'The workflow changes in this pull request were **not installed**, so `.github/workflows/` still runs the earlier versions and `pnpm lint` fails on `%s` until the two folders match.\\n\\n' \"$DEFAULT_BRANCH\"\n            if [ -s \"$RUNNER_TEMP/refused.md\" ]; then\n              cat \"$RUNNER_TEMP/refused.md\"\n              # A new change on top of main would be refused too: its diff would start from a source never installed.\n              printf '\\nNothing was installed. To recover, in two `factory` tickets: first put each workflow this pull request changed in `factory/workflows/` back to exactly what `.github/workflows/` holds (deleting it if there is none), which makes `pnpm lint` pass again and installs nothing; then make the change again from there, so the whole difference is reviewed in one diff.\\n'\n            else\n              printf 'The checks passed or never finished, and a later step failed: the log says which. If it was the push, start `install-workflows` again with this pull request'\"'\"'s number. If it was the token, the project has no workflow app yet: `.claude/skills/bootstrap/scripts/workflow-app.sh` creates it.\\n'\n            fi\n            printf '\\n%s/%s/actions/runs/%s\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$GITHUB_RUN_ID\"\n          } > \"$RUNNER_TEMP/not-installed.md\"\n          gh pr comment \"$PR\" --body-file \"$RUNNER_TEMP/not-installed.md\"\n          # The pull request is merged and its ticket closed, so the label goes on the ticket when there is one.\n          issue=$(gh pr view \"$PR\" --json body --jq '.body // \"\"' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1 || true)\n          if [ -n \"$issue\" ]; then gh issue edit \"$issue\" --add-label needs-human >/dev/null\n          else gh pr edit \"$PR\" --add-label needs-human >/dev/null\n          fi\n\n      # Whatever became of this one: a later merge that changed other sources installs all the same (decisions W469b).\n      - name: Start the installer for the pull request merged after this one\n        if: always() && inputs.then != ''\n        env:\n          GH_TOKEN: ${{ github.token }}\n          GH_REPO: ${{ github.repository }}\n          THEN: ${{ inputs.then }}\n        run: |\n          read -r next rest <<<\"$THEN\"\n          for _ in 1 2 3; do\n            if gh workflow run install-workflows.yml -f pr=\"$next\" ${rest:+-f then=\"$rest\"}; then exit 0; fi\n            sleep 20\n          done\n          {\n            # The link is written here, as workflow-page.sh writes it: this step runs when the checkout failed too.\n            printf 'Start the installer on the [`install-workflows` workflow'\"'\"'s page](%s/%s/actions/workflows/install-workflows.yml), where \"Run workflow\" starts it with `pr` set to `%s`' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$next\"\n            [ -z \"$rest\" ] || printf ' and `then` set to `%s`' \"$rest\"\n            printf '. That run installs the workflow changes this pull request merged.\\n\\n'\n            printf 'They are **not installed**: the installer of pull request #%s, merged before this one, could not start this one'\"'\"'s.\\n' \"$PR\"\n            printf '\\n%s/%s/actions/runs/%s\\n' \"$GITHUB_SERVER_URL\" \"$GITHUB_REPOSITORY\" \"$GITHUB_RUN_ID\"\n          } > \"$RUNNER_TEMP/not-started.md\"\n          gh pr comment \"$next\" --body-file \"$RUNNER_TEMP/not-started.md\"\n          gh pr edit \"$next\" --add-label needs-human >/dev/null\n          exit 1\n\n      # A job stopped at its time limit is cancelled as one a person stops is; only it ran its whole limit (decisions A434b).\n      - name: Tell whether this job stopped at its time limit\n        id: limit\n        if: cancelled()\n        env:\n          GH_TOKEN: ${{ github.token }}\n          GH_REPO: ${{ github.repository }}\n          LIMIT_MINUTES: 5   # this job's timeout-minutes\n        run: |\n          started=$(gh api \"repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs\" \\\n            --jq '.jobs[] | select(.name == env.GITHUB_JOB) | .started_at') && [ -n \"$started\" ] || {\n            echo \"Could not read from GitHub when this job started, so whether it stopped at its time limit is not known.\" >&2\n            exit 1\n          }\n          # The last minute counts as the limit: GitHub's clock and the runner's can differ by seconds.\n          # jq reads the time (decisions H632b).\n          minutes=$(jq -rn --arg started \"$started\" '(now - ($started | fromdate)) / 60 | floor + 1')\n          echo \"this job ran into minute $minutes of $LIMIT_MINUTES\"\n          [ \"$minutes\" -lt \"$LIMIT_MINUTES\" ] || echo \"reached=true\" >> \"$GITHUB_OUTPUT\"\n      # A failed job starts the retro of its own run (decisions A20, A434a, A434b). Asked three times: GitHub may be what failed.\n      # None for a run an account that is not trusted started (decisions W563c).\n      - name: Start a retro when this job failed\n        if: steps.trusted.outcome != 'failure' && (failure() || (cancelled() && steps.limit.outputs.reached == 'true'))\n        env:\n          GH_TOKEN: ${{ github.token }}\n          GH_REPO: ${{ github.repository }}\n        run: |\n          for _ in 1 2 3; do\n            if gh workflow run retro.yml -f run=\"$GITHUB_RUN_ID\"; then exit 0; fi\n            sleep 20\n          done\n          exit 1\n",
+        "numLines": 335,
+        "startLine": 1,
+        "totalLines": 335
+      }
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01KYXpQVTSR77ptc8ZjvNW5h",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "d8b3005f-d15e-4d62-86e0-70fe241d99fe"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 268,
+    "estimated_tokens_delta": 218,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "47711a02-2683-486d-84c1-505becbbc4f7"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNHH2sQPJvrfHnofXT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSpwgKEAgUGAI4AUIIdGhpbmtpbmcSDNm6D1BJNsfBYmopTRoMdWyVblZI+6MsGBXGIjBPGofNQnqxSBTPQr8CWa6XAG+XN8BRRG+qkvRZRXdDTApkLgeF8ec5eFeFoJOIM7AqxAe5epAXaQgHgT7g0sgwiGlY7O2VRhEku+K8j91mGTlRQ+r/QL6TMCGS4NgS6WqCXJPzJjjWNNgtKHxl+TWH9Mc+uOJRSYKx0zGcQhOp5eT/C7+lLipaoLO/kW9HGoayt4WV+Y1Qbml9Uw9nWxJiokvH+KgIUvdNm3v5Y2yp3VSbcUrc3jY+kKgj7SCTXx0RJAkV7HPB0NCT1MclhGAikJLArp/woWyCDJun7NLyOT4mThJvWBmB6xQUCq9YcGVZuDK8Fe71uZ/muOrr2Lh502l9mRH9e/2kxPMqiboDz8P07y9YPak5r/ZpWaN0eU6Fbrd4hLcMQBEI0LnpMruB2l89TCtkDOq9ww1qaGBejpiI5cZLIzcx3rWGHO1EwmJwwovs3AGySksRQUhOPSnodWkG5Bcf0bBkoDr255YjqqXueXrkHzuIZd/Bj3nALRZM8vjV3wV62eZfdy7w2Kjqaqot1AMHZ9Kzkx876B9wdnkCnmTOogi/GvyO9gplenfQ5T5pjbiA9PemgtWva0HsimOavrFopuj7236ueQ98SzVUv1vU9mx6AjBfA6UkWy1O8ymoPV5OgxN3vMmb/a6COUX+4ifkYNO2VsbRTe1rhKd4YGy4HstHexOVKVNBf6pup1/5uWbcNAudPUkGuLp8d0L0zglhzX9NGvJrlwW/If468WIU3yIVTOHW020g3FjF/kiC3mnDUTjrLj4NWlG7PZuQD8H0GNVLmTBhNM6i0ZijOnKDNSdE1f1t7AFp4nqSHbjXck/SWo8+Vb0RWfVuCcgkQQ2/69GqYVGTh7ViO9cswaxYimXxMnAIsDPgXlL+dbnxmnGQVGZCbID/TgHbsiDx0c2WxVmGDSq9p3RCfub7I5A3mcSKifpb+ip/Yd0E6GfWRGHsrPhn6tNcAtALATBJRFiX8PMQ4i9lpkTiLL4K+ViFesewy638fONX0hW09dmFmbCZdl+1hMkwaJXOnxfiEKtXO1Wr6S/yRfRneoMunwiEP9VnP4JihtEXnadFuvhAI1Nbspe35DsJznXXbaUeE4srPc8hlBn7XfBJQ+xpUfPumuj81qThiW8c6VlhAu1HUxLPCwj6+Ih0FxA9gmbe8AUG1NetQsheIRZH4EGx3EVuwI9xyhWrWgizHPS8bcgSBl5UaqlkqlH8/TrfDYNoqhBKsg5UTzlVgKmH0GX+49o5fYG8L7dpsl2jW/ZzR1ddNJbH3ST3qjqgloSe/Ua6H/kJDbi+Tp3hnsPyS5jWj6Lrqv0NagnM7SU0gtzTI8ueAoDaGAE="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9386,
+        "cache_read_input_tokens": 35127,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9386
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "f082a1f4-974e-45d4-821a-6c2683f47ba6",
+    "timestamp": "2026-11-27T16:54:46.983Z",
+    "request_id": "req_011ChTnNHBa2SiHwtYzTPMia",
+    "thinking_duration_ms": 912,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNHH2sQPJvrfHnofXT",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HEfFFQU1M4Qg5LD1GXcyBW",
+          "name": "Bash",
+          "input": {
+            "command": "gh run view 45550821178 --repo edmulraney/tinyfactory --log",
+            "description": "View the install-workflows run log"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9386,
+        "cache_read_input_tokens": 35127,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 9386
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "2bebf4da-bf06-4331-8f7c-d4dc5f3c75c9",
+    "timestamp": "2026-11-27T16:54:47.587Z",
+    "request_id": "req_011ChTnNHBa2SiHwtYzTPMia",
+    "wire_tool_inputs": {
+      "toolu_01HEfFFQU1M4Qg5LD1GXcyBW": {
+        "command": "gh run view 45550821178 --repo edmulraney/tinyfactory --log",
+        "description": "View the install-workflows run log"
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_01HEfFFQU1M4Qg5LD1GXcyBW",
+          "type": "tool_result",
+          "content": "<persisted-output>\nOutput too large (39.1KB). Full output saved to: /home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/86a29542-860d-4f35-a187-a00c1c57c6ad/tool-results/b2wjlmo3o.txt\n\nPreview (first 2KB):\ninstall\tUNKNOWN STEP\t﻿2026-11-25T05:02:39.0574941Z Current runner version: '2.338.2'\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0594341Z ##[group]Runner Image Provisioner\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0595233Z Hosted Compute Agent\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0595874Z Version: 20261111.635\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0596842Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0597578Z Build Date: 2026-11-11T01:49:01Z\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0598270Z Worker ID: {e58a94cc-de9a-492b-81ff-d1aac0d14e24}\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0599003Z Region: us-west-2\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0599603Z Cloud: AWS\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0600298Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0601577Z ##[group]Operating System\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0602236Z Ubuntu\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0602784Z 26.04.1\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0603351Z LTS\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0603879Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0604547Z ##[group]Runner Image\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0605183Z Image: ubuntu-26.04\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0605744Z Version: 20261116.88.1\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0607108Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.88/images/ubuntu/Ubuntu2604-Readme.md\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0608476Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.88\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0609394Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0610738Z ##[group]GITHUB_TOKEN Permissions\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0612886Z Actions: write\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0613487Z Contents: read\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0614062Z Issues: write\n...\n</persisted-output>",
+          "is_error": false
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "b41b204a-1c12-49af-896b-660b2b8a7759",
+    "timestamp": "2026-11-27T16:54:48.862Z",
+    "tool_use_result": {
+      "stdout": "install\tUNKNOWN STEP\t﻿2026-11-25T05:02:39.0574941Z Current runner version: '2.338.2'\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0594341Z ##[group]Runner Image Provisioner\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0595233Z Hosted Compute Agent\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0595874Z Version: 20261111.635\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0596842Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0597578Z Build Date: 2026-11-11T01:49:01Z\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0598270Z Worker ID: {e58a94cc-de9a-492b-81ff-d1aac0d14e24}\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0599003Z Region: us-west-2\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0599603Z Cloud: AWS\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0600298Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0601577Z ##[group]Operating System\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0602236Z Ubuntu\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0602784Z 26.04.1\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0603351Z LTS\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0603879Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0604547Z ##[group]Runner Image\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0605183Z Image: ubuntu-26.04\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0605744Z Version: 20261116.88.1\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0607108Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.88/images/ubuntu/Ubuntu2604-Readme.md\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0608476Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.88\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0609394Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0610738Z ##[group]GITHUB_TOKEN Permissions\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0612886Z Actions: write\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0613487Z Contents: read\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0614062Z Issues: write\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0614696Z Metadata: read\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0615378Z PullRequests: write\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0616221Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0618002Z Secret source: Actions\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0618939Z Cache mode: read\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0619741Z Prepare workflow directory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.0973637Z Prepare all required actions\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.1010982Z Getting action download info\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:39.4509726Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.2043779Z Download action repository 'actions/create-github-app-token@v3' (SHA:f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc)\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.5846198Z Complete job name: install\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6471704Z ##[group]Run actions/checkout@v4\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6472607Z with:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6473177Z   ref: main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6473777Z   fetch-depth: 0\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6474411Z   persist-credentials: false\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6475073Z   repository: edmulraney/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6479155Z   token: ***\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6479851Z   ssh-strict: true\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6480462Z   ssh-user: git\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6481030Z   clean: true\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6481661Z   sparse-checkout-cone-mode: true\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6482322Z   fetch-tags: false\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6482911Z   show-progress: true\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6483556Z   lfs: false\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6484122Z   submodules: false\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6484744Z   set-safe-directory: true\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6485430Z   allow-unsafe-pr-checkout: false\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6486440Z env:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6487168Z   PR: 711\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6487766Z   DEFAULT_BRANCH: main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6488482Z   RULE: 91dcb3882edd0218863244dded9e892791250b6c\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6489288Z   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:41.6489981Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4881468Z Syncing repository: edmulraney/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4883797Z ##[group]Getting Git version info\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4884739Z Working directory is '/home/runner/work/tinyfactory/tinyfactory'\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4886267Z [command]/usr/bin/git version\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4886968Z git version 2.56.1\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4891338Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4902188Z Temporarily overriding HOME='/home/runner/work/_temp/d35f0a96-6488-456f-b10f-b5634ff311c6' before making global git config changes\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4903529Z Adding repository directory to the temporary git global config as a safe directory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.4906215Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tinyfactory/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.5327260Z Deleting the contents of '/home/runner/work/tinyfactory/tinyfactory'\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.5330786Z ##[group]Initializing the repository\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.5333730Z [command]/usr/bin/git init /home/runner/work/tinyfactory/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6156692Z hint: Using 'master' as the name for the initial branch. This default branch name\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6157711Z hint: will change to \"main\" in Git 3.0. To configure the initial branch name\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6158360Z hint: to use in all of your new repositories, which will suppress this warning,\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6158930Z hint: call:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6159857Z hint:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6160387Z hint: \tgit config --global init.defaultBranch <name>\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6160888Z hint:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6161378Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6162025Z hint: 'development'. The just-created branch can be renamed via this command:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6162565Z hint:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6163009Z hint: \tgit branch -m <name>\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6163478Z hint:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6164002Z hint: Disable this message with \"git config set advice.defaultBranchName false\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6179539Z Initialized empty Git repository in /home/runner/work/tinyfactory/tinyfactory/.git/\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6186879Z [command]/usr/bin/git remote add origin https://github.com/edmulraney/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6257621Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6258548Z ##[group]Disabling automatic garbage collection\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6260323Z [command]/usr/bin/git config --local gc.auto 0\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6281133Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6282031Z ##[group]Setting up auth\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6285785Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:44.6306271Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.0882902Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.0909624Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1100184Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1110030Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1280972Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1303750Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1304357Z ##[group]Fetching the repository\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:45.1310965Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1962332Z From https://github.com/edmulraney/tinyfactory\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1963367Z  * [new branch]      fix/502-notes-ticket-factory-filed -> origin/fix/502-notes-ticket-factory-filed\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1964072Z  * [new branch]      main       -> origin/main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1964585Z  * [new branch]      sessions   -> origin/sessions\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1965019Z  * [new tag]         v0.0.2     -> v0.0.2\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1968949Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1969627Z ##[group]Determining the checkout info\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1974762Z [command]/usr/bin/git branch --list --remote origin/main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1993408Z   origin/main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.1997961Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2007547Z [command]/usr/bin/git sparse-checkout disable\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2059649Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2079156Z ##[group]Checking out the ref\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2082689Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2439143Z Switched to a new branch 'main'\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2448689Z branch 'main' set up to track 'origin/main'.\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2453197Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2496503Z [command]/usr/bin/git log -1 --format=%H\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2514038Z acdb80cea630bded9a2f07793f62b3448ed0c7bb\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2520527Z ##[group]Removing auth\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2523200Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2543315Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2727986Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2742984Z http.https://github.com/.extraheader\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2747715Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2767416Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2934788Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.2954037Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3124078Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3290328Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3290912Z ^[[36;1mfactory/scripts/trusted.sh \"$SENDER\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3313152Z shell: /usr/bin/bash -e {0}\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3313626Z env:\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3313985Z   PR: 711\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3314303Z   DEFAULT_BRANCH: main\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3314705Z   RULE: 91dcb3882edd0218863244dded9e892791250b6c\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3315205Z   CARRY: 766cc064a2dddbe9b5de24f33b1689bf1c309270\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3317852Z   GH_TOKEN: ***\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3318201Z   SENDER: edmulraney\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:46.3318579Z ##[endgroup]\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3271251Z ##[group]Run set -euo pipefail\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3272288Z ^[[36;1mset -euo pipefail^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3272718Z ^[[36;1mrefused=\"$RUNNER_TEMP/refused.md\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3273099Z ^[[36;1m: > \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3273517Z ^[[36;1m^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3274082Z ^[[36;1mview=$(gh pr view \"$PR\" --json state,baseRefName,headRefOid,mergeCommit,mergedBy,reviews)^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3274732Z ^[[36;1mif [ \"$(jq -r .state <<<\"$view\")\" != MERGED ] || [ \"$(jq -r .baseRefName <<<\"$view\")\" != \"$DEFAULT_BRANCH\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3275366Z ^[[36;1m  echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3275879Z ^[[36;1m  exit 0^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3276423Z ^[[36;1mfi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3276870Z ^[[36;1mhead=$(jq -r .headRefOid <<<\"$view\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3277297Z ^[[36;1m^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3277827Z ^[[36;1m# The merged branch is deleted, but GitHub keeps the pull request's last commit here.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3278630Z ^[[36;1mgit fetch --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"refs/pull/$PR/head\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3279227Z ^[[36;1m[ \"$(git rev-parse FETCH_HEAD)\" = \"$head\" ]^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3279845Z ^[[36;1m# It is judged against main as its merge left it: a later merge to the same source is the next run's (decisions W469a).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3280463Z ^[[36;1mmerged=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$view\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3280934Z ^[[36;1mgit merge-base --is-ancestor \"$merged\" HEAD || {^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3281572Z ^[[36;1m  echo \"the merge commit of pull request #$PR, \\\"$merged\\\", is not on $DEFAULT_BRANCH, so what its merge left there is not known\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3282240Z ^[[36;1m  exit 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3282579Z ^[[36;1m}^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3283105Z ^[[36;1m# Installed once: started again, it could bring back a workflow that a later merge undid (decisions W496).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3283798Z ^[[36;1m# \"approved in\" is the subject of the installs made before an unapproved change could be installed.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3284568Z ^[[36;1mearlier_install=$(git log --format=%h -E --grep=\"^ci: install the workflow changes (approved|merged) in #$PR\\$\" \"$merged..HEAD\" | tail -1)^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3285218Z ^[[36;1mif [ -n \"$earlier_install\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3285860Z ^[[36;1m  echo \"commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3286676Z ^[[36;1m  exit 0^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3287104Z ^[[36;1mfi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3287508Z ^[[36;1mbase=$(git merge-base \"$merged^\" \"$head\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3288060Z ^[[36;1mblob() { git rev-parse --quiet --verify \"$1:$2\" 2>/dev/null || echo absent; }^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3288714Z ^[[36;1m# The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3289250Z ^[[36;1mapplies_to_installed() {^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3289679Z ^[[36;1m  local work=\"$RUNNER_TEMP/applied\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3290105Z ^[[36;1m  rm -rf \"$work\"; mkdir -p \"$work\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3290579Z ^[[36;1m  git cat-file blob \"HEAD:$installed\" > \"$work/installed\" 2>/dev/null &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3291142Z ^[[36;1m    git cat-file blob \"$base:$source\" > \"$work/base\" 2>/dev/null &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3291681Z ^[[36;1m    git cat-file blob \"$head:$source\" > \"$work/reviewed\" 2>/dev/null &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3292253Z ^[[36;1m    git merge-file --quiet \"$work/installed\" \"$work/base\" \"$work/reviewed\" 2>/dev/null &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3292876Z ^[[36;1m    [ \"$(git hash-object --no-filters \"$work/installed\")\" = \"$at_merge\" ]^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3293341Z ^[[36;1m}^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3293651Z ^[[36;1m^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3294156Z ^[[36;1m# Whether it only puts back what main held before a merge the owner made with the merge button, which needs^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3294905Z ^[[36;1m# no approval: the merge gate's test, made again here (decisions M439f, W3).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3295379Z ^[[36;1mundoes_button_merge() {^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3295838Z ^[[36;1m  local issue ticket taken merge commit paths path^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3296660Z ^[[36;1m  issue=$(gh pr view \"$PR\" --json body --jq '.body // \"\"' | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' | head -1) || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3297316Z ^[[36;1m  ticket=$(gh issue view \"$issue\" --json title,author) || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3298015Z ^[[36;1m  # Only a workflow files a ticket as `app/github-actions`, and revert.sh titles it so (decisions M439d).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3298636Z ^[[36;1m  [ \"$(jq -r .author.login <<<\"$ticket\")\" = app/github-actions ] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3299232Z ^[[36;1m  [[ \"$(jq -r .title <<<\"$ticket\")\" =~ ^\"Take back the button merge of pull request #\"([0-9]+)$ ]] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3299783Z ^[[36;1m  taken=\"${BASH_REMATCH[1]}\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3300251Z ^[[36;1m  merge=$(gh pr view \"$taken\" --json mergedBy,mergeCommit) || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3300793Z ^[[36;1m  [ \"$(jq -r '.mergedBy.login // \"\"' <<<\"$merge\")\" = \"$OWNER\" ] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3301324Z ^[[36;1m  commit=$(jq -r '.mergeCommit.oid // \"\"' <<<\"$merge\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3301763Z ^[[36;1m  [ -n \"$commit\" ] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3302275Z ^[[36;1m  paths=$(git -c core.quotePath=false diff --no-renames --name-only \"$base\" \"$head\" &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3302968Z ^[[36;1m    git -c core.quotePath=false diff --no-renames --name-only \"$commit^\" \"$commit\") && [ -n \"$paths\" ] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3303646Z ^[[36;1m  # Nothing has changed a file since that merge, and each goes back to what main held before it.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3304240Z ^[[36;1m  while IFS= read -r path; do^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3304755Z ^[[36;1m    [ \"$(git ls-tree \"$base\" -- \"$path\")\" = \"$(git ls-tree \"$commit\" -- \"$path\")\" ] &&^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3305354Z ^[[36;1m      [ \"$(git ls-tree \"$head\" -- \"$path\")\" = \"$(git ls-tree \"$commit^\" -- \"$path\")\" ] || return 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3305813Z ^[[36;1m  done <<<\"$paths\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3306341Z ^[[36;1m}^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3306672Z ^[[36;1m^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3307150Z ^[[36;1m# The owner merging it themselves is the same decision as approving the commit that was merged.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3307778Z ^[[36;1mapproved=$(jq -r --arg owner \"$OWNER\" --arg head \"$head\" '^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3308361Z ^[[36;1m  (.mergedBy.login == $owner) or^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3308910Z ^[[36;1m  ([.reviews[] | select(.author.login == $owner)] | last | (.state == \"APPROVED\" and .commit.oid == $head))' <<<\"$view\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3309678Z ^[[36;1m# An approval of an earlier commit stands when only merges of the default branch followed it (decisions W456).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3310247Z ^[[36;1mearlier=$(jq -r --arg owner \"$OWNER\" \\^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3310795Z ^[[36;1m  '[.reviews[] | select(.author.login == $owner)] | last | select(.state == \"APPROVED\") | .commit.oid // \"\"' <<<\"$view\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3311448Z ^[[36;1mif [ \"$approved\" != true ] && [ -n \"$earlier\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3312170Z ^[[36;1m  if [ \"$(blob HEAD factory/scripts/only-merged-main.sh)\" != \"$CARRY\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3312960Z ^[[36;1m    echo \"factory/scripts/only-merged-main.sh on $DEFAULT_BRANCH is not the script this installer names (${CARRY:0:7}), so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3313906Z ^[[36;1m  else^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3314325Z ^[[36;1m    git cat-file blob \"$CARRY\" > \"$RUNNER_TEMP/only-merged-main.sh\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3314905Z ^[[36;1m    # It is given the three commits and nothing else: no token, and nothing of the environment.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3315581Z ^[[36;1m    if env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/only-merged-main.sh\" \"$earlier\" \"$head\" HEAD; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3316285Z ^[[36;1m      approved=true^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3316785Z ^[[36;1m    else^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3317272Z ^[[36;1m      echo \"so the approval of ${earlier:0:7} is not carried to ${head:0:7}\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3317731Z ^[[36;1m    fi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3318148Z ^[[36;1m  fi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3318522Z ^[[36;1mfi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3318869Z ^[[36;1mif [ \"$approved\" != true ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3319409Z ^[[36;1m  # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3320100Z ^[[36;1m  unapproved=\"\\`$OWNER\\` neither approved commit \\`${head:0:7}\\` nor merged it themselves, and\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3320775Z ^[[36;1m  # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3321445Z ^[[36;1m  if [ \"$(jq -r '.mergedBy.login' <<<\"$view\")\" != app/github-actions ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3322018Z ^[[36;1m    echo \"- $unapproved it was not the merge gate that merged it.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3322486Z ^[[36;1m    exit 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3322855Z ^[[36;1m  fi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3323277Z ^[[36;1m  if [ \"$(blob HEAD factory/scripts/owner-decides.sh)\" != \"$RULE\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3324148Z ^[[36;1m    echo \"- $unapproved \\`factory/scripts/owner-decides.sh\\` on \\`$DEFAULT_BRANCH\\` is not the script this installer names (\\`${RULE:0:7}\\`), so nothing the owner approved says whether this change needs them.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3324998Z ^[[36;1m    exit 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3325402Z ^[[36;1m  fi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3325827Z ^[[36;1m  git cat-file blob \"$RULE\" > \"$RUNNER_TEMP/owner-decides.sh\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3326620Z ^[[36;1m  # It is given the diff and nothing else: no token, and nothing of the environment.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3327411Z ^[[36;1m  if ! theirs=$(git diff \"$base\" \"$head\" | env -i PATH=\"$PATH\" bash \"$RUNNER_TEMP/owner-decides.sh\" 2>&1) && ! undoes_button_merge; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3328004Z ^[[36;1m    {^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3328427Z ^[[36;1m      echo \"- $unapproved it changes what only they may decide:\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3328927Z ^[[36;1m      printf '\\n  ```\\n%s\\n  ```\\n' \"$(sed 's/^/  /' <<<\"$theirs\")\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3329387Z ^[[36;1m    } >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3329762Z ^[[36;1m    exit 1^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3330099Z ^[[36;1m  fi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3330436Z ^[[36;1mfi^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3330773Z ^[[36;1m^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3331264Z ^[[36;1m# main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3331835Z ^[[36;1mmkdir -p .github/workflows^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3332252Z ^[[36;1mwhile IFS= read -r source; do^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3332650Z ^[[36;1m  [ -n \"$source\" ] || continue^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3333072Z ^[[36;1m  name=\"${source#factory/workflows/}\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3333467Z ^[[36;1m  installed=\".github/workflows/$name\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3333933Z ^[[36;1m  read_by_owner=$(blob \"$head\" \"$source\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3334367Z ^[[36;1m  at_merge=$(blob \"$merged\" \"$source\")^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3334794Z ^[[36;1m  if [ \"$(blob HEAD \"$installed\")\" = \"$read_by_owner\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3335314Z ^[[36;1m    echo \"$installed is already what was approved\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3336057Z ^[[36;1m  # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3336730Z ^[[36;1m  elif [ \"$(blob HEAD \"$installed\")\" = \"$(blob HEAD \"$source\")\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3337354Z ^[[36;1m    echo \"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3337899Z ^[[36;1m  elif [[ \"$name\" == */* ]]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3338471Z ^[[36;1m    echo \"- \\`$source\\` is in a folder. GitHub runs only the files directly in \\`.github/workflows/\\`.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3339246Z ^[[36;1m  elif [ \"$read_by_owner\" != absent ] && ! git ls-tree \"$head\" -- \"$source\" | grep -qE '^100(644|755) blob '; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3339942Z ^[[36;1m    echo \"- \\`$source\\` is not an ordinary file (a link, perhaps), so its diff does not show what would run.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3340590Z ^[[36;1m  elif [ \"$at_merge\" != \"$read_by_owner\" ] && ! applies_to_installed; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3341642Z ^[[36;1m    echo \"- \\`$source\\` on \\`$DEFAULT_BRANCH\\`, as this pull request's merge \\`${merged:0:7}\\` left it, is neither what commit \\`${head:0:7}\\` held nor \\`$installed\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3342764Z ^[[36;1m  elif [ \"$at_merge\" = \"$read_by_owner\" ] && [ \"$(blob HEAD \"$installed\")\" != \"$(blob \"$base\" \"$source\")\" ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3343641Z ^[[36;1m    echo \"- \\`$installed\\` is not what this pull request's diff of \\`$source\\` was made against, so the diff that was reviewed is not the whole difference between what runs now and what would run.\" >> \"$refused\"^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3344439Z ^[[36;1m  elif [ \"$at_merge\" = absent ]; then^[[0m\ninstall\tUNKNOWN STEP\t2026-11-25T05:02:49.3344850Z ^[[",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "noOutputExpected": false,
+      "persistedOutputPath": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/86a29542-860d-4f35-a187-a00c1c57c6ad/tool-results/b2wjlmo3o.txt",
+      "persistedOutputSize": 40063
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_01HEfFFQU1M4Qg5LD1GXcyBW",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "subcommandResults"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnNhnBGB3DrVmBVirS9",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014A49Ssyh7wJCJHchwP7c6n",
+          "name": "Grep",
+          "input": {
+            "pattern": "installed |nothing|already|PR: |##\\[error\\]|Run factory|push",
+            "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/86a29542-860d-4f35-a187-a00c1c57c6ad/tool-results/b2wjlmo3o.txt",
+            "output_mode": "content",
+            "head_limit": 40
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1532,
+        "cache_read_input_tokens": 44513,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1532
+        },
+        "output_tokens": 16,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "4c3c632c-fb16-417a-bc4b-3c51c0cd7dba",
+    "timestamp": "2026-11-27T16:54:53.121Z",
+    "request_id": "req_011ChTnNhfyX5xPfxAYD3QvR",
+    "wire_tool_inputs": {
+      "toolu_014A49Ssyh7wJCJHchwP7c6n": {
+        "pattern": "installed |nothing|already|PR: |##\\[error\\]|Run factory|push",
+        "path": "/home/runner/.claude/projects/-home-runner-work-tinyfactory-tinyfactory/86a29542-860d-4f35-a187-a00c1c57c6ad/tool-results/b2wjlmo3o.txt",
+        "output_mode": "content",
+        "head_limit": 40
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_014A49Ssyh7wJCJHchwP7c6n",
+          "type": "tool_result",
+          "content": "55:install\tUNKNOWN STEP\t2026-11-25T05:02:41.6487168Z   PR: 711\n131:install\tUNKNOWN STEP\t2026-11-25T05:02:46.3290328Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\n135:install\tUNKNOWN STEP\t2026-11-25T05:02:46.3313985Z   PR: 711\n149:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3275366Z ^[[36;1m  echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"^[[0m\n167:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3285860Z ^[[36;1m  echo \"commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again\"^[[0m\n172:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3288714Z ^[[36;1m# The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).^[[0m\n218:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3314905Z ^[[36;1m    # It is given the three commits and nothing else: no token, and nothing of the environment.^[[0m\n227:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3319409Z ^[[36;1m  # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).^[[0m\n229:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3320775Z ^[[36;1m  # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.^[[0m\n235:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3324148Z ^[[36;1m    echo \"- $unapproved \\`factory/scripts/owner-decides.sh\\` on \\`$DEFAULT_BRANCH\\` is not the script this installer names (\\`${RULE:0:7}\\`), so nothing the owner approved says whether this change needs them.\" >> \"$refused\"^[[0m\n239:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3326620Z ^[[36;1m  # It is given the diff and nothing else: no token, and nothing of the environment.^[[0m\n249:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3331264Z ^[[36;1m# main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.^[[0m\n258:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3335314Z ^[[36;1m    echo \"$installed is already what was approved\"^[[0m\n259:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3336057Z ^[[36;1m  # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).^[[0m\n261:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3337354Z ^[[36;1m    echo \"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\"^[[0m\n267:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3341642Z ^[[36;1m    echo \"- \\`$source\\` on \\`$DEFAULT_BRANCH\\`, as this pull request's merge \\`${merged:0:7}\\` left it, is neither what commit \\`${head:0:7}\\` held nor \\`$installed\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\" >> \"$refused\"^[[0m\n276:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3347408Z ^[[36;1m    echo \"installed $source as $installed\"^[[0m\n280:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3349237Z ^[[36;1m# All or nothing: a pull request's workflows are reviewed together.^[[0m\n289:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3371848Z   PR: 711\n296:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2009276Z installed factory/workflows/ci.yml as .github/workflows/ci.yml\n297:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2137371Z installed factory/workflows/fix.yml as .github/workflows/fix.yml\n298:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2264308Z installed factory/workflows/retro.yml as .github/workflows/retro.yml\n308:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2486783Z   PR: 711\n316:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0134958Z ^[[36;1m# By this subject a later run tells that the pull request is installed (decisions W496).^[[0m\n320:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0137790Z ^[[36;1mgit push --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"HEAD:refs/heads/$DEFAULT_BRANCH\"^[[0m\n321:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0138546Z ^[[36;1m# The record first-runs.sh reads (decisions A185a); a label that could not be added fails nothing.^[[0m\n335:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0146595Z ^[[36;1m    printf '\\n<!-- factory:installed %s -->\\n' \"$changed\"^[[0m\n341:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0165810Z   PR: 711"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "52e25425-d143-4825-bd13-401e8b4075a5",
+    "timestamp": "2026-11-27T16:54:53.150Z",
+    "tool_use_result": {
+      "mode": "content",
+      "numFiles": 0,
+      "filenames": [],
+      "content": "55:install\tUNKNOWN STEP\t2026-11-25T05:02:41.6487168Z   PR: 711\n131:install\tUNKNOWN STEP\t2026-11-25T05:02:46.3290328Z ##[group]Run factory/scripts/trusted.sh \"$SENDER\"\n135:install\tUNKNOWN STEP\t2026-11-25T05:02:46.3313985Z   PR: 711\n149:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3275366Z ^[[36;1m  echo \"pull request #$PR is not merged into $DEFAULT_BRANCH; nothing to install\"^[[0m\n167:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3285860Z ^[[36;1m  echo \"commit $earlier_install on $DEFAULT_BRANCH already installed the workflow changes of pull request #$PR, so nothing is installed for it again\"^[[0m\n172:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3288714Z ^[[36;1m# The merge's source is the installed copy with the reviewed diff of that source applied (decisions W425).^[[0m\n218:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3314905Z ^[[36;1m    # It is given the three commits and nothing else: no token, and nothing of the environment.^[[0m\n227:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3319409Z ^[[36;1m  # Unapproved, it is installed only if the merge gate merged it and would again (decisions W3, W272a).^[[0m\n229:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3320775Z ^[[36;1m  # `app/github-actions` is how gh writes the workflows' own token, which an agent's session does not push with.^[[0m\n235:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3324148Z ^[[36;1m    echo \"- $unapproved \\`factory/scripts/owner-decides.sh\\` on \\`$DEFAULT_BRANCH\\` is not the script this installer names (\\`${RULE:0:7}\\`), so nothing the owner approved says whether this change needs them.\" >> \"$refused\"^[[0m\n239:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3326620Z ^[[36;1m  # It is given the diff and nothing else: no token, and nothing of the environment.^[[0m\n249:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3331264Z ^[[36;1m# main is not locked on the free plan: a source pushed straight to it or an old approval replayed is refused.^[[0m\n258:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3335314Z ^[[36;1m    echo \"$installed is already what was approved\"^[[0m\n259:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3336057Z ^[[36;1m  # A pull request installed earlier and since undone would otherwise bring its old workflow back (decisions W469c).^[[0m\n261:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3337354Z ^[[36;1m    echo \"$installed is already what $source on $DEFAULT_BRANCH holds, so nothing waits to be installed\"^[[0m\n267:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3341642Z ^[[36;1m    echo \"- \\`$source\\` on \\`$DEFAULT_BRANCH\\`, as this pull request's merge \\`${merged:0:7}\\` left it, is neither what commit \\`${head:0:7}\\` held nor \\`$installed\\` with that commit's change of the file applied, so it holds a change that was not reviewed in this pull request, or one not installed yet.\" >> \"$refused\"^[[0m\n276:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3347408Z ^[[36;1m    echo \"installed $source as $installed\"^[[0m\n280:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3349237Z ^[[36;1m# All or nothing: a pull request's workflows are reviewed together.^[[0m\n289:install\tUNKNOWN STEP\t2026-11-25T05:02:49.3371848Z   PR: 711\n296:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2009276Z installed factory/workflows/ci.yml as .github/workflows/ci.yml\n297:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2137371Z installed factory/workflows/fix.yml as .github/workflows/fix.yml\n298:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2264308Z installed factory/workflows/retro.yml as .github/workflows/retro.yml\n308:install\tUNKNOWN STEP\t2026-11-25T05:02:50.2486783Z   PR: 711\n316:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0134958Z ^[[36;1m# By this subject a later run tells that the pull request is installed (decisions W496).^[[0m\n320:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0137790Z ^[[36;1mgit push --quiet \"https://x-access-token:[REDACTED]@github.com/${GITHUB_REPOSITORY}.git\" \"HEAD:refs/heads/$DEFAULT_BRANCH\"^[[0m\n321:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0138546Z ^[[36;1m# The record first-runs.sh reads (decisions A185a); a label that could not be added fails nothing.^[[0m\n335:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0146595Z ^[[36;1m    printf '\\n<!-- factory:installed %s -->\\n' \"$changed\"^[[0m\n341:install\tUNKNOWN STEP\t2026-11-25T05:02:51.0165810Z   PR: 711",
+      "numLines": 28,
+      "totalLines": 28
+    },
+    "tool_result_meta": [
+      {
+        "id": "toolu_014A49Ssyh7wJCJHchwP7c6n",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config",
+          "reason_type": "rule"
+        }
+      }
+    ]
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 50,
+    "estimated_tokens_delta": 50,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "a4623b7d-9dcd-495a-9d9f-b6dd504e95b1"
+  },
+  {
+    "type": "system",
+    "subtype": "thinking_tokens",
+    "estimated_tokens": 294,
+    "estimated_tokens_delta": 244,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "cad266fa-b56d-49d0-af95-44c2a387ec36"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnP26VaWtGQJCpyv9Dc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "",
+          "signature": "CAQSjwkKEAgUGAI4AUIIdGhpbmtpbmcSDO2dLB3FvGPv8O1nMxoMhqU8LhgjyTw3yxQVIjCjp7+MUhIUVLfWzx4AhYptOLNBrB7xOwMGUIf6oqhiOSw8bm2ilPT8EsRO0gLw1tAqrAhX15nru1Z4KXUR3xskR7ipkIOxwTleXg/0vY/JVtwRHLfLtvj8GuKTjAkqaQHhCkkM9zehAsEt8IDAa8Q4hj8B11yCleSA7VPhXjAS4RD/3AdoXPjgVweasX38I/PVqI+aovHlMGCPCBgkr+0FJ/P42z2eRlQqbmU5SEDZsP/5gha1XehHAF8sI58Ayp7JPZ1hYScl21EW29TxEo9tw7NkmIW2LVXg7uhZOF4iSRSvP1oQPbsJ7yMmVkJugiliU57zDslAzgurEvm4fNMUhlWmLLcQ5cTkT0B/ud7rz3tkTGn67rAnZzmu9ZpM6+MiJhinrth6mqoctkp8lXSGUOdjMIlVDhUZ0+q3dU8/RoMhKoQ+WL1BPu5tfkSy2z0QQWqoHJiRYVYJ+wySO+c5CTkt0pNDw0OaFbufqnqSDA2t5PzQ0EEVJG6RYlAc5CbefT7Fn/kIRWOFf2XCSLaw1MnTHUKqbEX2ZuHGzDi4Wreu6HnaMqoiYK5XbwTFxhJ0oJT2Lhw3EOjbilmgg1FQj7FbZM2rDJOyFzKzqo2uckQUQ32QgH8hxaeQzC+WKqi7qqANfwIaaTUfdgkheRX2CvpPoPQMG3JuuQTbb157wO48FOExN3Spll6oUjzisgozObkATNXzpmiOOp6867jyE9hy4MZTwoUYp7QtyRJZ2ce/1Yc7I7VCVtH0EbYFC/T2+20+RIWiXpbPUehX39xoonG+Dki7pkWzQ5k/s0rCX9zdCRwE49IBP4FMjjDcziZO6q41PKEkWa5QBv4tWz9zTVzE5NhSHEYYHw/wdAbVyBQJx0nLh8nd4mrqEmshqUoBL4SkvSq1id4pZMT5yLSrVn6Sj1zSLmCjXfj3AT1vGcrHu0LkQiNo7wUfXKLUn6PXpuwHNQFoMFQZcpwTAKAuDCQOGn/1cLLcAM0d0ttS9g77jTfpGTTBc5HuG6V3E8mFgB0wfuAI38z9MKGIxYvN+yxQgQ5ya6Duv+GGCzAp+L/NZ9cLXu6zzVLXtX4z49qUt6iixd8JOsHhrapc7gePhkNcK4rO21Oof+4wo96DjMn/bmqP27CVjfkg8fLcdMjp5JKHBoBAqgnU1lB0XsFPhvENLlaGihRSXmJMaTnxATjOnwQjKgXSR1sPYMRYsdpsV2eWTMCV9VQwkYzN7oAatEJeKH7HavrslssL4CDOlHMRs/HyUqJ1nsCTyEYne/YG2RXTvhdx/nICeDkso3hgutJAwR+BRssvia6ACuGrhw7c3L4By7dkbDT3XvLvTJMa8YFuNqQDDFGAYUcUe4vAXLnFEx0Er9UPpD3q06LXbEhwbxPtHv9wMJWe4J6VpBfPR1lxbzytcKRjXHXUThTlu2ts/mpq8UUxZeYJVYjWdr4+WJceLFVHC2JCqJrVi7R2qDzQcydPajwYH0phNdwYAQ=="
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2347,
+        "cache_read_input_tokens": 46045,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2347
+        },
+        "output_tokens": 10,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "83f91105-46bd-4e50-848b-87b2db12c7b7",
+    "timestamp": "2026-11-27T16:54:57.653Z",
+    "request_id": "req_011ChTnP1znu96jtXSvdJvty",
+    "thinking_duration_ms": 1068,
+    "thinking_display": "updates"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnP26VaWtGQJCpyv9Dc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'm writing up the retro: the run succeeded, but neither step that #693 changed ran."
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2347,
+        "cache_read_input_tokens": 46045,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2347
+        },
+        "output_tokens": 10,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "3ce1d2c3-add8-4800-a6b7-4e1e812bddfe",
+    "timestamp": "2026-11-27T16:54:57.656Z",
+    "request_id": "req_011ChTnP1znu96jtXSvdJvty"
+  },
+  {
+    "type": "assistant",
+    "message": {
+      "model": "claude-opus-5-5",
+      "id": "msg_011ChTnP26VaWtGQJCpyv9Dc",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0115HLHHwKYidT6Y4AVdbvG7",
+          "name": "StructuredOutput",
+          "input": {
+            "summary": "The first install-workflows run after #693 (installing #711's workflows) succeeded but never reached #693's change: both changed steps were skipped by their own conditions, so their new workflow-page links remain unproven until an install fails or a chained dispatch runs.",
+            "title": "",
+            "cause": "one-off",
+            "detail": "PR #693 changed two steps of install-workflows.yml: \"Tell a person when the change was not installed\" and \"Start the installer for the pull request merged after this one\". Both now write the link to the workflow's page inline. Run 45550821178 was started by pull_request_target when #711 closed. It passed the trust check and the approval check, then installed ci.yml, fix.yml and retro.yml, committed the copies and concluded success. The first changed step runs only on failure(), and the second only when the dispatch input `then` is set, which a pull_request_target event never sets. Both were skipped as designed, so this run neither confirms nor refutes the change. The reviewers recorded no assumptions on #693.",
+            "evidence": [
+              "https://github.com/edmulraney/tinyfactory/actions/runs/45550821178",
+              "https://github.com/edmulraney/tinyfactory/pull/693",
+              "https://github.com/edmulraney/tinyfactory/pull/711"
+            ],
+            "change": {
+              "kind": "none",
+              "target": "",
+              "proposal": "",
+              "removes": ""
+            },
+            "cost": {
+              "amount": "Nothing: the run succeeded with no agent session, at $0 and 0 turns.",
+              "minutes": 0,
+              "kind": []
+            },
+            "saves": "Nothing: the run cost $0 and had no fault to prevent.",
+            "repeats": [],
+            "handling": [],
+            "retry": "not-applicable",
+            "propose": false,
+            "held_by": 0
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ],
+      "container": null,
+      "stop_reason": null,
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2347,
+        "cache_read_input_tokens": 46045,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2347
+        },
+        "output_tokens": 10,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "input_transformations": [],
+      "diagnostics": null,
+      "context_management": null
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "33c79c0f-af5b-492a-8c24-41ef2c1a3fa5",
+    "timestamp": "2026-11-27T16:55:03.415Z",
+    "request_id": "req_011ChTnP1znu96jtXSvdJvty",
+    "wire_tool_inputs": {
+      "toolu_0115HLHHwKYidT6Y4AVdbvG7": {
+        "summary": "The first install-workflows run after #693 (installing #711's workflows) succeeded but never reached #693's change: both changed steps were skipped by their own conditions, so their new workflow-page links remain unproven until an install fails or a chained dispatch runs.",
+        "title": "",
+        "cause": "one-off",
+        "detail": "PR #693 changed two steps of install-workflows.yml: \"Tell a person when the change was not installed\" and \"Start the installer for the pull request merged after this one\". Both now write the link to the workflow's page inline. Run 45550821178 was started by pull_request_target when #711 closed. It passed the trust check and the approval check, then installed ci.yml, fix.yml and retro.yml, committed the copies and concluded success. The first changed step runs only on failure(), and the second only when the dispatch input `then` is set, which a pull_request_target event never sets. Both were skipped as designed, so this run neither confirms nor refutes the change. The reviewers recorded no assumptions on #693.",
+        "evidence": [
+          "https://github.com/edmulraney/tinyfactory/actions/runs/45550821178",
+          "https://github.com/edmulraney/tinyfactory/pull/693",
+          "https://github.com/edmulraney/tinyfactory/pull/711"
+        ],
+        "change": {
+          "kind": "none",
+          "target": "",
+          "proposal": "",
+          "removes": ""
+        },
+        "cost": {
+          "amount": "Nothing: the run succeeded with no agent session, at $0 and 0 turns.",
+          "minutes": 0,
+          "kind": []
+        },
+        "saves": "Nothing: the run cost $0 and had no fault to prevent.",
+        "repeats": [],
+        "handling": [],
+        "retry": "not-applicable",
+        "propose": false,
+        "held_by": 0
+      }
+    }
+  },
+  {
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": [
+        {
+          "tool_use_id": "toolu_0115HLHHwKYidT6Y4AVdbvG7",
+          "type": "tool_result",
+          "content": "Structured output provided successfully"
+        }
+      ]
+    },
+    "parent_tool_use_id": null,
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "uuid": "ab623809-6c4b-44c1-977c-b0f34edacdf7",
+    "timestamp": "2026-11-27T16:55:03.421Z",
+    "tool_use_result": "Structured output provided successfully",
+    "tool_result_meta": [
+      {
+        "id": "toolu_0115HLHHwKYidT6Y4AVdbvG7",
+        "permission_decision": {
+          "decision": "accept",
+          "source": "config"
+        }
+      }
+    ]
+  },
+  {
+    "duration_api_ms": 42250,
+    "stop_reason": "tool_use",
+    "session_id": "86a29542-860d-4f35-a187-a00c1c57c6ad",
+    "total_cost_usd": 0.502839,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 48392,
+      "cache_read_input_tokens": 319105,
+      "output_tokens": 2583,
+      "output_tokens_details": {
+        "thinking_tokens": 232
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 48392,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 961,
+          "cache_read_input_tokens": 46045,
+          "cache_creation_input_tokens": 2347,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2347
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 2583,
+        "cacheReadInputTokens": 319105,
+        "cacheCreationInputTokens": 48392,
+        "webSearchRequests": 0,
+        "costUSD": 0.502697,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 232,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 48392,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01C7gFWsYwZpHKCfS7Qt3VU3",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only 2>&1 | head; gh pr diff 693 2>&1 | awk '/^diff --git/{p=/install-workflows/} p' | head -150",
+          "description": "Show PR 693 changes to install-workflows"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_016hbE3xZgDwU5dL4pc7LKn1",
+        "tool_input": {
+          "command": "cd /home/runner/work/tinyfactory/tinyfactory; gh pr diff 693 --name-only; gh pr diff 693 > /tmp/pr693.diff; wc -l /tmp/pr693.diff",
+          "description": "Save PR 693 diff"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01XWWvyvYDdK5xLYZrbt8SBC",
+        "tool_input": {
+          "command": "gh pr diff 693 --repo edmulraney/tinyfactory -- factory/workflows/install-workflows.yml 2>&1 | head -5; gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+          "description": "View PR 693 body and merge info"
+        }
+      },
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01WQY392N16DhZsLgErPG37r",
+        "tool_input": {
+          "command": "gh pr view 693 --repo edmulraney/tinyfactory --json body,mergedAt,mergeCommit",
+          "description": "View PR 693 body and merge info"
+        }
+      }
+    ],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "safety_stops": 0,
+    "is_error": false,
+    "num_turns": 13,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"summary\":\"The first install-workflows run after #693 (installing #711's workflows) succeeded but never reached #693's change: both changed steps were skipped by their own conditions, so their new workflow-page links remain unproven until an install fails or a chained dispatch runs.\",\"title\":\"\",\"cause\":\"one-off\",\"detail\":\"PR #693 changed two steps of install-workflows.yml: \\\"Tell a person when the change was not installed\\\" and \\\"Start the installer for the pull request merged after this one\\\". Both now write the link to the workflow's page inline. Run 45550821178 was started by pull_request_target when #711 closed. It passed the trust check and the approval check, then installed ci.yml, fix.yml and retro.yml, committed the copies and concluded success. The first changed step runs only on failure(), and the second only when the dispatch input `then` is set, which a pull_request_target event never sets. Both were skipped as designed, so this run neither confirms nor refutes the change. The reviewers recorded no assumptions on #693.\",\"evidence\":[\"https://github.com/edmulraney/tinyfactory/actions/runs/45550821178\",\"https://github.com/edmulraney/tinyfactory/pull/693\",\"https://github.com/edmulraney/tinyfactory/pull/711\"],\"change\":{\"kind\":\"none\",\"target\":\"\",\"proposal\":\"\",\"removes\":\"\"},\"cost\":{\"amount\":\"Nothing: the run succeeded with no agent session, at $0 and 0 turns.\",\"minutes\":0,\"kind\":[]},\"saves\":\"Nothing: the run cost $0 and had no fault to prevent.\",\"repeats\":[],\"handling\":[],\"retry\":\"not-applicable\",\"propose\":false,\"held_by\":0}",
+    "structured_output": {
+      "summary": "The first install-workflows run after #693 (installing #711's workflows) succeeded but never reached #693's change: both changed steps were skipped by their own conditions, so their new workflow-page links remain unproven until an install fails or a chained dispatch runs.",
+      "title": "",
+      "cause": "one-off",
+      "detail": "PR #693 changed two steps of install-workflows.yml: \"Tell a person when the change was not installed\" and \"Start the installer for the pull request merged after this one\". Both now write the link to the workflow's page inline. Run 45550821178 was started by pull_request_target when #711 closed. It passed the trust check and the approval check, then installed ci.yml, fix.yml and retro.yml, committed the copies and concluded success. The first changed step runs only on failure(), and the second only when the dispatch input `then` is set, which a pull_request_target event never sets. Both were skipped as designed, so this run neither confirms nor refutes the change. The reviewers recorded no assumptions on #693.",
+      "evidence": [
+        "https://github.com/edmulraney/tinyfactory/actions/runs/45550821178",
+        "https://github.com/edmulraney/tinyfactory/pull/693",
+        "https://github.com/edmulraney/tinyfactory/pull/711"
+      ],
+      "change": {
+        "kind": "none",
+        "target": "",
+        "proposal": "",
+        "removes": ""
+      },
+      "cost": {
+        "amount": "Nothing: the run succeeded with no agent session, at $0 and 0 turns.",
+        "minutes": 0,
+        "kind": []
+      },
+      "saves": "Nothing: the run cost $0 and had no fault to prevent.",
+      "repeats": [],
+      "handling": [],
+      "retry": "not-applicable",
+      "propose": false,
+      "held_by": 0
+    },
+    "ttft_ms": 3712,
+    "type": "result",
+    "duration_ms": 44025,
+    "uuid": "0f06e715-d50b-4f07-80d1-0aec5a3a69e5",
+    "ttft_stream_ms": 3163,
+    "time_to_request_ms": 158,
+    "first_content_frame_ms": 3163,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "model_usage_since_last_result": {
+      "claude-haiku-5-5": {
+        "inputTokens": 1310,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000142,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 2583,
+        "cacheReadInputTokens": 319105,
+        "cacheCreationInputTokens": 48392,
+        "webSearchRequests": 0,
+        "costUSD": 0.502697,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 232,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 48392,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    }
+  }
+]
