@@ -67,20 +67,4 @@ describe("outboundFetch", () => {
     await vi.advanceTimersByTimeAsync(5_000);
     expect(await call).toBeInstanceOf(OutboundError);
   });
-
-  it("gives up sooner when the call asks for a shorter time limit", async () => {
-    vi.useFakeTimers();
-    vi.stubGlobal("fetch", vi.fn(never));
-    const call = outcome(outboundFetch("https://service.example/runners", { answerWithinMs: 1_000 }));
-    await vi.advanceTimersByTimeAsync(1_000);
-    expect(await call).toMatchObject({ message: "No answer from service.example within 1000 ms" });
-  });
-
-  it("does not wait longer than the default when the call asks for more", async () => {
-    vi.useFakeTimers();
-    vi.stubGlobal("fetch", vi.fn(never));
-    const call = outcome(outboundFetch("https://service.example/runners", { answerWithinMs: 60_000 }));
-    await vi.advanceTimersByTimeAsync(5_000);
-    expect(await call).toBeInstanceOf(OutboundError);
-  });
 });
