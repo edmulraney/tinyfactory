@@ -1,0 +1,75 @@
+{
+  "pr": null,
+  "issue": null,
+  "facts": {
+    "run": 46035662846,
+    "workflow": "review-notes",
+    "event": "schedule",
+    "attempt": 1,
+    "url": "https://github.com/edmulraney/tinyfactory/actions/runs/46035662846",
+    "conclusion": "success",
+    "pr": null,
+    "issue": null,
+    "failed": [],
+    "factory_failure": false,
+    "cost_usd": 0,
+    "turns": 0,
+    "changed_by": {
+      "pr": 679,
+      "issue": 659,
+      "title": "chore: bring in the factory changes of 23 November",
+      "assumptions": {
+        "adam": [],
+        "ryan": [
+          {
+            "assumes": "In ci.yml, applied() selects drizzle.__drizzle_migrations created_at and hash. Drizzle stores created_at as the journal's `when` in milliseconds, and the hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          },
+          {
+            "assumes": "ci.yml's applied() reads drizzle.__drizzle_migrations created_at and hash, taking created_at as the journal's `when` in milliseconds and hash as the SHA-256 of the migration file's raw text.",
+            "if_wrong": "Every preview with its own migration reads as stale, and its branch is reset from production on each push. I did not run this."
+          }
+        ]
+      }
+    },
+    "changed_steps": [
+      {
+        "job": "metrics",
+        "step": "Read production's usage by week",
+        "conclusion": "skipped"
+      },
+      {
+        "job": "metrics",
+        "step": "Write the page of the factory's delivery numbers and the product's usage by week",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "lesson": {
+    "summary": "The first review-notes run after #679 did what the change claimed for a repository with no database: it skipped reading production's usage and still wrote the metrics page, without a usage section. Nothing needs doing.",
+    "title": "",
+    "cause": "one-off",
+    "detail": "PR #679 added a \"Read production's usage by week\" step to review-notes.yml. The step runs only when vars.NEON_PROJECT_ID is set, and it is marked continue-on-error. The PR also passed USAGE_ROWS to metrics.sh. tinyfactory has no app and no Neon project, so the step was skipped and USAGE_ROWS was empty. metrics.sh then left out the usage section, as its `if [ -n \"$USAGE_ROWS\" ]` branch intends, and wrote the page (\"wrote .../sessions/metrics.md\"). The run succeeded, cost nothing and needed no person. The SQL that reads a real usage_events table cannot run in this repository, so its first real test will be in a project that has a database. Ryan's unverified assumptions were about ci.yml's drizzle migration check, not this workflow, so this run neither confirms nor refutes them.",
+    "evidence": [
+      "https://github.com/edmulraney/tinyfactory/actions/runs/46035662846",
+      "https://github.com/edmulraney/tinyfactory/pull/679"
+    ],
+    "change": {
+      "kind": "none",
+      "target": "",
+      "proposal": "",
+      "removes": "nothing"
+    },
+    "cost": {
+      "amount": "Nothing: the run succeeded at $0 and 0 turns, with no fix round and no stop.",
+      "minutes": 0,
+      "kind": []
+    },
+    "saves": "Nothing: there was no fault to prevent ($0 spent).",
+    "repeats": [],
+    "handling": [],
+    "retry": "not-applicable",
+    "propose": false,
+    "held_by": 0
+  }
+}
